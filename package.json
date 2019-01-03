@@ -1,0 +1,32 @@
+{
+  "name": "trade",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "client-install": "npm install --prefix client",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Flash-Git/Trade.git"
+  },
+  "author": "Flash",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^4.1.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.15"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.7"
+  },
+  "bugs": {
+    "url": "https://github.com/Flash-Git/Trade/issues"
+  },
+  "homepage": "https://github.com/Flash-Git/Trade#readme"
+}
