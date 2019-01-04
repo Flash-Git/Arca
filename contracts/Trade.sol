@@ -15,8 +15,31 @@ contract Trade {
         int256 ethOffer;//intentionally not a uint
         FuncCall[] funcOffers;
         bool satisfied;
-    } 
+    }
+    
+//                arg = bytesToAddress(bytes(_argument));
 
+    function getEncFunc() public view returns (bytes memory) {
+        return tradeWindows[msg.sender].funcOffers[0].encodedFunc;
+    }
+
+    function getCAdd() public view returns (address) {
+        return tradeWindows[msg.sender].funcOffers[0].contractAd;
+    }
+    
+    function setEncFunc(string memory _encodedFunc) public {
+        tradeWindows[msg.sender].funcOffers[0].encodedFunc = bytes(_encodedFunc);
+    }
+
+/*    function getEncBytes(string memory _function, string memory _arg) public pure returns (bytes memory) {
+        return abi.encodePacked(bytesToBytes4(bytes(_function), 0), bytes(_arg));
+    }*/
+   
+    function testbEncode(string memory _arg) public pure returns (address addr) {
+        addr = bytesToAddressTwo(bytes(_arg));
+    }
+
+    
     function openTrade(address _tradePartner) public {
         require(trades[msg.sender]==address(0) && trades[_tradePartner]==address(0));
         trades[msg.sender] = _tradePartner;
@@ -30,7 +53,7 @@ contract Trade {
         trades[msg.sender] = address(0);
     }
 
-    function pushOffer(int256 _ethOffer, address _contract, bytes4 _function, bytes32[] memory _args, uint8[] memory _argIndex) public payable {
+    function pushOffer(int256 _ethOffer, address _contract, string memory _function, string memory _args, uint8[] memory _argIndex) public payable {
         pushEthOffer(_ethOffer);
         pushFuncOffer(_contract, _function, _args, _argIndex);
     }
@@ -54,59 +77,82 @@ contract Trade {
     * 5 - address
     * 
     */
+    
+    function bytesToBytes4(bytes memory b, uint offset) public pure returns (bytes4) {
+      bytes4 out;
+    
+      for (uint i = 0; i < 4; i++) {
+        out |= bytes4(b[offset + i] & 0xFF) >> (i * 8);
+      }
+      return out;
+    }
 
-    function pushFuncOffer(address _contract, bytes4 _function, bytes32[] memory _args, uint8[] memory _argIndex) public {
+    function pushFuncOffer(address _contract, string memory _function, string memory _args, uint8[] memory _argIndex) public {
         require(_contract != address(this), "no");
-        require(_args.length < 3, "Too many arguments");//TODO does it work with 0?
-
-
-        if(_args.length == 1){
-            encodeFunctionCall(_contract, _function, _args[0]);
-        }
-        if(_args.length == 2){
-            encodeFunctionCall(_contract, _function, _args[0], _args[1]);
-        }
-        if(_args.length == 3){
-            encodeFunctionCall(_contract, _function, _args[0], _args[1], _args[2]);
-        }
+        
+        bytes4 funcName =  bytesToBytes4(bytes(_function), 0);
+        encodeFunctionCall(_contract, funcName, _args, _argIndex[0]);
         
         tradeWindows[trades[msg.sender]].satisfied = false;
         tradeWindows[msg.sender].satisfied = false;
     }
   
-    function getBytes4(bytes memory _data) public pure returns (bytes4 funcHash) {
-        funcHash = bytes4(keccak256(_data));//"setSquish(uint256)"
+    function getBytes4(string memory _data) public pure returns (bytes4 funcHash) {
+        funcHash = bytes4(keccak256(bytes(_data)));//"setSquish(uint256)"
     }
+    
+    /*The size must now be adjusted within the type before the conversion.
+    For example, you can convert a bytes4 (4 bytes) to a uint64 (8 bytes)
+    by first converting the bytes4 variable to bytes8 and then to uint64.
+    You get the opposite padding when converting through uint32.*/
 
-    function bytesToAddress(bytes32 _data) private pure returns (address addr) {
-        assembly {
-            addr := mload(add(_data, 20))
-        } 
+    /*function bytesToAddr (bytes b) constant returns (address) {
+        uint result = 0;
+        for (uint i = b.length-1; i+1 > 0; i--) {
+            uint c = uint(b[i]);
+            uint to_inc = c * ( 16 ** ((b.length - i-1) * 2));
+            result += to_inc;
+        }
+        return address(result);
+    }*/
+    
+    //outputs 0
+    function bytesToAddress(bytes memory b) public pure returns (address) {
+        uint result = 0;
+        for (uint i = b.length-1; i+1 > 0; i--) {
+            uint256 c = uint256(bytes32(b[i]));
+            uint to_inc = c * ( 16 ** ((b.length - i-1) * 2));
+            result += to_inc;
+        }
+        return address(result);
+    }
+    
+    function bytesToAddressTwo(bytes memory b) public pure returns (address) {
+        uint result = 0;
+        for (uint i = b.length-1; i+1 > 0; i--) {
+            uint256 c = uint256(uint8(bytes1(b[i])));
+            uint to_inc = c * ( 16 ** ((b.length - i-1) * 2));
+            result += to_inc;
+        }
+        return address(result);
     }
 
     //TODO Remove funcOffer
     //function 
 
-    function encodeFunctionCall(address _contract, bytes4 _function, bytes32 _argument) private {
+    function encodeFunctionCall(address _contract, bytes4 _function, string memory _argument, uint8 _argIndex) private {
         FuncCall memory fCall;
         fCall.contractAd = _contract;
-        fCall.encodedFunc = abi.encodePacked(_function, _argument);
-        tradeWindows[msg.sender].funcOffers.push(fCall);
-        //log updated offer
-    }
-
-    function encodeFunctionCall(address _contract, bytes4 _function, bytes32 _argumentOne, bytes32 _argumentTwo) private {
-        FuncCall memory fCall;
-        fCall.contractAd = _contract;
-        fCall.encodedFunc = abi.encodePacked(_function, _argumentOne, _argumentTwo);
-        tradeWindows[msg.sender].funcOffers.push(fCall);
-        //log updated offer
-    }
-    
-    function encodeFunctionCall(address _contract, bytes4 _function, bytes32 _argumentOne, bytes32 _argumentTwo, bytes32 _argumentThree) private {
-        FuncCall memory fCall;
-        fCall.contractAd = _contract;
-        fCall.encodedFunc = abi.encodePacked(_function, _argumentOne, _argumentTwo, _argumentThree);
+        
+        address arg;
+        //array
+        if(_argIndex==5){
+            arg = bytesToAddress(bytes(_argument));
+        }else{
+            revert();
+        }
+        
+        fCall.encodedFunc = abi.encodePacked(_function, arg);
         tradeWindows[msg.sender].funcOffers.push(fCall);
         //log updated offer
     }
