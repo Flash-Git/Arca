@@ -198,3 +198,11 @@ contract Trade {
         }
     }
 }
+
+contract Squish {
+    address public squishy = address(0);
+    
+    function setSquishy(address _squishy) public {
+        squishy = _squishy;
+    }
+}
