@@ -11,6 +11,8 @@ class Summary extends Component {
 }
 
 const methodStyle = {
+  gridColumn: "1 / 3",
+  gridRow: "1",
   textAlign: "center",
   justifyContent: "center",
   background: "#222",

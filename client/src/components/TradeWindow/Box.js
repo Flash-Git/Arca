@@ -1,23 +1,24 @@
 import React, { Component } from "react";
 import Summary from "./Summary";
-import EthOffer from "./EthOffer";
-import MethodOffer from "./MethodOffer";
+import OfferContainer from "./OfferContainer";
+import Satisfied from "./Satisfied";
 
 class Box extends Component {
   render(){
     return(
       <div className="box" style={ boxStyle }>
         <Summary />
-        <EthOffer />
-        <MethodOffer />
-        <MethodOffer />
-        <MethodOffer />
+        <OfferContainer />
+        <Satisfied />
       </div>
     );
   }
 }
 
 const boxStyle = {
+  display: "grid",
+  gridColumnGap: "3px",
+  gridTemplateColumns: "3fr 1fr",
   textAlign: "center",
   justifyContent: "center",
   margin: "4px",
