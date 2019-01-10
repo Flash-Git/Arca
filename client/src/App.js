@@ -7,12 +7,21 @@ import TradeWindow from "./components/TradeWindow";
 import "./App.css";
 
 class App extends Component {
+
+  state = {
+    methods: []
+  }
+  
+  addMethod = (method) => {
+    this.setState({ methods: [...this.state.methods, method] });
+  }
+
   render(){
     return(
       <div className="App">
         <Header />
         <Web3Status />
-        <TradeWindow />
+        <TradeWindow addMethod={ this.addMethod } />
       </div>
     );
   }

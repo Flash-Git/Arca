@@ -12,7 +12,7 @@ class Box extends Component {
 
   addMethod = (method) => {
     this.setState({ methods: [...this.state.methods, method] });
-    console.log(this.state);
+    this.props.addMethod(method);
   }
 
   render(){
