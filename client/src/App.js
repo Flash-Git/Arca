@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 
-import Main from "./components/main/Landing";
+import Header from "./components/Header";
+import Web3Status from "./components/Web3Status";
+import TradeWindow from "./components/TradeWindow";
 
 import "./App.css";
 
@@ -8,7 +10,9 @@ class App extends Component {
   render(){
     return(
       <div className="App">
-        <Main />
+        <Header />
+        <Web3Status />
+        <TradeWindow />
       </div>
     );
   }
