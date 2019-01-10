@@ -13,15 +13,16 @@ class Box extends Component {
   //Add Todo
   addMethod = (method) => {
     this.setState({ methods: [...this.state.methods, method] });
+    console.log(this.state);
   }
 
   render(){
     return(
       <div className="box" style={ boxStyle }>
         <Summary />
-        <OfferContainer methods={this.state.methods} />
+        <OfferContainer methods={ this.state.methods } />
         <Satisfied />
-        <SubmitBox addMethod={this.addMethod} />
+        <SubmitBox addMethod={ this.addMethod } />
       </div>
     );
   }

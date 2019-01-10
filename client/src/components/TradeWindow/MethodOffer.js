@@ -1,15 +1,20 @@
 import React, { Component } from "react";
 
 class Method extends Component {
+
+  state = {
+
+  }
+
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        Method
+        { console.log(this.props.method) }
       </div>
     );
   }
 }
-
+//this.props.method.contract
 const methodStyle = {
   textAlign: "center",
   justifyContent: "center",

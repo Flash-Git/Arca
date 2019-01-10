@@ -12,7 +12,7 @@ class OfferContainer extends Component {
     return(
       <div className="container" style={ style }>
         <EthOffer />
-        { this.props.methods.map((object, i) => <MethodOffer />) }
+        { this.props.methods.map((object, i) => <MethodOffer method={ this.state.methods[i] } />) }
       </div>
     );
   }

@@ -16,32 +16,39 @@ class SubmitBox extends Component {
     this.props.addMethod(this.state.method);
   }
 
-  onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+  onChangeContract = (e) => this.setState({
+    [e.target.name]: e.target.value
+  });
 
+  onChangeMethodName = (e) => this.setState({
+    [e.target.name]: e.target.value
+  });
+
+  onChangeMethodType = (e) => console.log([e.target.name]);
 
   render(){
     return(
-      <form onSubmit={this.onSubmit} className="method" style={ methodStyle }>
+      <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
         <input 
           type="text" 
-          name="contract" 
+          name="method.contract" 
           placeholder="Contract Address" 
-          value={ this.state.contract }
-          onChange={ this.onChange }
+          value={ this.state.method.contract }
+          onChange={ this.onChangeContract }
         />
         <input 
           type="text" 
-          name="methodName" 
+          name="method.methodName" 
           placeholder="Function Name" 
-          value={ this.state.methodType }
-          onChange={ this.onChange }
+          value={ this.state.method.methodName }
+          onChange={ this.onChangeMethodName }
         />
         <input 
           type="text" 
-          name="methodType" 
+          name="method.methodType" 
           placeholder="Function Type" 
-          value={ this.state.methodType }
-          onChange={ this.onChange }
+          value={ this.state.method.methodType }
+          onChange={ this.onChangeMethodType }
         />
         <input 
           type="submit" 
