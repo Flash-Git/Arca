@@ -2,14 +2,26 @@ import React, { Component } from "react";
 import Summary from "./Summary";
 import OfferContainer from "./OfferContainer";
 import Satisfied from "./Satisfied";
+import SubmitBox from "./SubmitBox";
 
 class Box extends Component {
+
+  state = {
+    methods: []
+  }
+
+  //Add Todo
+  addMethod = (method) => {
+    this.setState({ methods: [...this.state.methods, method] });
+  }
+
   render(){
     return(
       <div className="box" style={ boxStyle }>
         <Summary />
-        <OfferContainer />
+        <OfferContainer methods={this.state.methods} />
         <Satisfied />
+        <SubmitBox addMethod={this.addMethod} />
       </div>
     );
   }

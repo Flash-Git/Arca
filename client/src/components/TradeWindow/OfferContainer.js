@@ -3,13 +3,16 @@ import EthOffer from "./EthOffer";
 import MethodOffer from "./MethodOffer";
 
 class OfferContainer extends Component {
+
+  state = {
+    methods: []
+  }
+
   render(){
     return(
       <div className="container" style={ style }>
         <EthOffer />
-        <MethodOffer />
-        <MethodOffer />
-        <MethodOffer />
+        { this.props.methods.map((object, i) => <MethodOffer />) }
       </div>
     );
   }
