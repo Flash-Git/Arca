@@ -9,7 +9,7 @@ class Method extends Component {
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        { console.log(this.props.method) }
+        { this.props.method.contract }
       </div>
     );
   }

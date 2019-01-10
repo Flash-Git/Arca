@@ -10,7 +10,6 @@ class Box extends Component {
     methods: []
   }
 
-  //Add Todo
   addMethod = (method) => {
     this.setState({ methods: [...this.state.methods, method] });
     console.log(this.state);
