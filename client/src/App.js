@@ -10,9 +10,18 @@ import "./App.css";
 class App extends Component {
 
   state = {
+    connected: false,
     web3: Object,
     methods: [],
     satisfied: false
+  }
+
+  checkConnected = () => {
+    if(this.state.web3===undefined){
+      this.setState({ connected: false })
+    }else{
+      this.setState({ connected: true })
+    }
   }
 
   enableWeb3 = () => {
@@ -54,7 +63,7 @@ class App extends Component {
     return(
       <div className="App">
         <Header />
-        <Web3Status enableWeb3={ this.enableWeb3 } />
+        <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
         <TradeWindow addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } toggleSatisfied={ this.toggleSatisfied } />
       </div>
     );

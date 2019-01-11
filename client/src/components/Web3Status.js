@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 
 class Web3Status extends Component {
+
+  componentDidMount(){
+    this.props.checkConnected();
+  }
+
+  onClick = () => {
+    this.props.enableWeb3();
+    this.props.checkConnected();
+  }
+
   render(){
     return(
       <div id="section-web3Status" className="section" style={ web3StatusStyle }>
-        <button onClick={ this.props.enableWeb3 } style={ btnStyle }>Connect to Web3</button>
+        <button onClick={ this.onClick } style={ btnStyle }>{ (this.props.connected ? "Connected" : "Connect to Web3") }</button>
       </div>
     );
   }
