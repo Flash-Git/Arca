@@ -13,7 +13,6 @@ class SubmitBox extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.setState();
     const method = this.state;
     method.id = uuid();
     this.setState(method);

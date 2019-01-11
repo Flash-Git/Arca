@@ -3,17 +3,11 @@ import EthOffer from "./EthOffer";
 import MethodOffer from "./MethodOffer";
 
 class OfferContainer extends Component {
-
-  state = {
-    methods: []
-  }
-  // method={ this.state.methods[i] }
   render(){
-    //this.setState(methods = this.props.methods);
     return(
       <div className="container" style={ style }>
         <EthOffer />
-        { this.props.methods.map((object, i) => <MethodOffer method={ this.props.methods[i] } />) }
+        { this.props.methods.map((object, i) => <MethodOffer key= { this.props.methods[i].id } method={ this.props.methods[i] } addMethodArgument={ this.props.addMethodArgument } />) }
       </div>
     );
   }
