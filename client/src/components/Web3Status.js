@@ -2,13 +2,8 @@ import React, { Component } from "react";
 
 class Web3Status extends Component {
 
-  componentDidMount(){
-    this.props.checkConnected();
-  }
-
   onClick = () => {
     this.props.enableWeb3();
-    this.props.checkConnected();
   }
 
   render(){

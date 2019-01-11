@@ -9,18 +9,22 @@ import "./App.css";
 
 class App extends Component {
 
+  componentDidUpdate(){ 
+    this.checkConnected();
+  }
+
   state = {
     connected: false,
-    web3: Object,
+    web3: undefined,
     methods: [],
     satisfied: false
   }
 
   checkConnected = () => {
-    if(this.state.web3===undefined){
-      this.setState({ connected: false })
-    }else{
-      this.setState({ connected: true })
+    if(this.state.web3===undefined&&this.state.connected===true){
+      this.setState({ connected: false} );
+    }else if(this.state.web3!==undefined&&this.state.connected!==true){
+      this.setState({ connected: true });
     }
   }
 
@@ -28,12 +32,12 @@ class App extends Component {
     let web3;
     if(window.ethereum) { //Modern DApp Browsers
       web3 = new Web3(window.ethereum);
-      try { 
+      try {
         window.ethereum.enable().then(
           function() {
             console.log("Web3 Enabled");
           }
-        );
+        )
       } catch(e) {
         console.log(e);
       }
@@ -43,6 +47,7 @@ class App extends Component {
     } else { //Non-DApp Browsers
       alert('Please install MetaMask');
     }
+    this.setState({ web3 })
   }
 
   addMethod = (method) => {
