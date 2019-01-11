@@ -18,8 +18,17 @@ class Box extends Component {
   addMethodArguments = (id, args) => {
     const newMethods = this.state.methods;
     newMethods.filter(method => method.id === id).args = args;
-    console.log("Box " + id + " " + args);
+    console.log(this.state.methods[0].args)
+    console.log(newMethods.filter(method => method.id === id).args);
+    console.log(this.state.methods);
     this.setState({ methods: newMethods });
+    console.log(newMethods);
+    console.log(this.state.methods);
+    this.props.addMethodArguments(id, args);
+  }
+
+  toggleSatisfied = () => {
+    this.props.toggleSatisfied();
   }
 
   render(){
@@ -27,7 +36,7 @@ class Box extends Component {
       <div className="box" style={ boxStyle }>
         <Summary />
         <OfferContainer methods={ this.state.methods } addMethodArguments={ this.addMethodArguments } />
-        <Satisfied />
+        <Satisfied toggleSatisfied={ this.toggleSatisfied } />
         <SubmitBox addMethod={ this.addMethod } />
       </div>
     );
