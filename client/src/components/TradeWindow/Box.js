@@ -15,19 +15,18 @@ class Box extends Component {
     this.props.addMethod(method);
   }
 
-  addMethodArgument = (method) => {
-    console.log(method.id + " " + method.args);
-    const methods = this.state.methods;
-    const oldMethod = methods.filter(method => oldMethod.id === method.id);
-    oldMethod.args = method.args;
-    this.setState({ methods: [...this.state.methods, method] });
+  addMethodArguments = (id, args) => {
+    const newMethods = this.state.methods;
+    newMethods.filter(method => method.id === id).args = args;
+    console.log("Box " + id + " " + args);
+    this.setState({ methods: newMethods });
   }
 
   render(){
     return(
       <div className="box" style={ boxStyle }>
         <Summary />
-        <OfferContainer methods={ this.state.methods } addMethodArgument={ this.addMethodArgument } />
+        <OfferContainer methods={ this.state.methods } addMethodArguments={ this.addMethodArguments } />
         <Satisfied />
         <SubmitBox addMethod={ this.addMethod } />
       </div>

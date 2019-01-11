@@ -3,22 +3,19 @@ import React, { Component } from "react";
 class Method extends Component {
 
   state = {
-    id: "",
-    contract: "",
-    methodName: "",
-    methodType: "",
-    args: [],
+    args: []
   }
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.setState({ args: [...this.state.args, this.state.newArgA[this.state.newArgB]] });
+    const args = this.state.args;
+    args.push([this.state.newArgA, this.state.newArgB]);
     const state = this.state;
     delete state.newArgA;
     delete state.newArgB;
-    this.setState({ state });
+    this.setState({ state, args });
 
-    this.props.addMethodArgument(this.state);
+    this.props.addMethodArguments(this.props.method.id, this.state.args);
   }
 
    onChange = (e) => this.setState({
@@ -28,7 +25,7 @@ class Method extends Component {
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        { this.props.method.contract }
+        { this.props.method.contract + " " + this.props.method.methodName + " " + this.props.method.methodType + " " + this.state.args}
         <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
           <input 
             type="text" 
