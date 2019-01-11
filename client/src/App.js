@@ -20,6 +20,30 @@ class App extends Component {
     satisfied: false
   }
 
+  addMethod = (method) => {
+    this.setState({ methods: [...this.state.methods, method] });
+  }
+
+  addMethodArguments = (id, args) => {
+    const newMethods = this.state.methods;
+    newMethods.filter(method => method.id === id).args = args;
+    this.setState({ methods: newMethods });
+  }
+
+  toggleSatisfied = () => {
+    this.setState({ satisfied: !this.state.satisfied });
+  }
+
+  sendMethod = (id) => {
+    if(this.state.satisfied&&this.state.connected){
+      let methIndex;
+      this.state.methods.forEach(function(method, index) {
+        methIndex = index;
+      });
+      this.sendAddMethod(methIndex);
+    }
+  }
+
   checkConnected = () => {
     if(this.state.web3===undefined&&this.state.connected===true){
       this.setState({ connected: false} );
@@ -27,7 +51,7 @@ class App extends Component {
       this.setState({ connected: true });
     }
   }
-
+  
   enableWeb3 = () => {
     let web3;
     if(window.ethereum) { //Modern DApp Browsers
@@ -50,18 +74,40 @@ class App extends Component {
     this.setState({ web3 })
   }
 
-  addMethod = (method) => {
-    this.setState({ methods: [...this.state.methods, method] });
+  addinput = (_type, _name) => {
+    const input = {
+      type: "",
+      name: ""
+    }
+    input.type = _type;
+    input.name = _name;
+    return input;
   }
 
-  addMethodArguments = (id, args) => {
-    const newMethods = this.state.methods;
-    newMethods.filter(method => method.id === id).args = args;
-    this.setState({ methods: newMethods });
+  formJson = (_name, _type, _args) => {
+    let argInputs = [];
+    for(let i = 0; i < _args.length; i++){
+      argInputs.push(this.addinput(_args[i][0], _args[i][1]));
+    }
+    let jsonObj = { name: _name, type: _type, inputs: argInputs};
+    console.log(jsonObj);
+    return jsonObj;
   }
 
-  toggleSatisfied = () => {
-    this.setState({ satisfied: !this.state.satisfied });
+  generateEncodedCall = (_name, _type, _args) => {
+    let argValues = [];
+    for(let i = 0; i < _args.length; i++){
+      argValues.push(_args[i][2]);
+    }
+    return this.state.web3.eth.abi.encodeFunctionCall(
+      this.formJson(_name, _type, _args), argValues
+    );
+  }
+
+  //(arg="_value", coderType="uint256", value={"type":"858"})
+  sendAddMethod = (i) => {
+    const encodedCall = this.generateEncodedCall(this.state.methods[i].methodName, this.state.methods[i].methodType, this.state.methods[i].args);
+    console.log(this.state.methods[i].contract + encodedCall);
   }
 
   render(){
@@ -69,48 +115,10 @@ class App extends Component {
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <TradeWindow addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } toggleSatisfied={ this.toggleSatisfied } />
+        <TradeWindow addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
       </div>
     );
   }
 }
 
 export default App;
-
-// //var json = '{"name": "", "type": "function", "inputs": [{"type": "", "name": ""}]}';
-
-// function formJson(_name, _type, _inputs){
-//   //todo validate inputs
-//   let innerInputs = [];
-//   for(let i = 0; i < _inputs.length; i++){
-//     innerInputs.push(addinput(_inputs[i][0], _inputs[i][1]));
-//   }
-  
-//   let jsonObj = { name: _name, type: _type, inputs: innerInputs};
-//   return jsonObj;
-// }
-
-// function addinput(_type, _name) {
-//   const input = {
-//     type: "",
-//     name: ""
-//   }
-//   input.type = _type;
-//   input.name = _name;
-//   return input;
-// }
-
-// const name = "setSquish";
-// const funct = "function";
-// const inputs = [
-//   ["uint256", "_value"]
-// ];
-
-// function generateEncodedCall(_name, _type, _inputs, _args){
-//   return web3.eth.abi.encodeFunctionCall(
-//     formJson(name, funct, inputs), _args
-//   );
-// }
-
-// const encodedCall = generateEncodedCall(name, funct, inputs, ["5"]);
-// console.log(encodedCall);

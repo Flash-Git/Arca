@@ -19,7 +19,7 @@ class Box extends Component {
     let newMethods = this.state.methods;
     let argMeth;
     let argMethIndex;
-    //Can't use indexOf filter. Learned the hard way
+    //Can't use indexOf filter. learned the hard way
     this.state.methods.forEach(function(method, index) {
       argMethIndex = index;
       argMeth = method;
@@ -36,11 +36,15 @@ class Box extends Component {
     this.props.toggleSatisfied();
   }
 
+  sendMethod = (i) => {
+    this.props.sendMethod(i);
+  }
+
   render(){
     return(
       <div className="box" style={ boxStyle }>
         <Summary />
-        <OfferContainer methods={ this.state.methods } addMethodArguments={ this.addMethodArguments } />
+        <OfferContainer methods={ this.state.methods } addMethodArguments={ this.addMethodArguments } sendMethod={ this.sendMethod } />
         <Satisfied toggleSatisfied={ this.toggleSatisfied } />
         <SubmitBox addMethod={ this.addMethod } />
       </div>
