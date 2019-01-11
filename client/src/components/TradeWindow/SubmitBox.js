@@ -1,9 +1,11 @@
 import React, { Component } from "react";
+import uuid from "uuid/v4";
 
 class SubmitBox extends Component {
 
   //Args added after
   state = {
+    id: "",
     contract: "",
     methodName: "",
     methodType: ""
@@ -11,6 +13,10 @@ class SubmitBox extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+    this.setState();
+    const method = this.state;
+    method.id = uuid();
+    this.setState(method);
     this.props.addMethod(this.state);
   }
 
