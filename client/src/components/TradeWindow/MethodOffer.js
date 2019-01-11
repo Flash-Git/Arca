@@ -23,23 +23,24 @@ class Method extends Component {
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        { this.props.method.contract + " " + this.props.method.methodName + " " + this.props.method.methodType }
-        
-         { this.state.args.map((arg, i) => (
-         " ["+ i +"]: (" + arg[0] + ", " + arg[1] + ") "
+        { this.props.method.contract + " " + this.props.method.methodType + " " + this.props.method.methodName }
+        { "(" }
+        { this.state.args.map((arg, i) => (
+         arg[0] + ": " + arg[1] + (i==this.state.args.length-1 ? "" : ", ")
         )) }
+        { ")" }
         <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
           <input 
             type="text" 
             name="newArgA" 
-            placeholder="First Arg" 
+            placeholder="Arg Type" 
             value={ this.state.newArgA }
             onChange={ this.onChange }
           />
           <input 
             type="text" 
             name="newArgB" 
-            placeholder="Second Arg" 
+            placeholder="Arg" 
             value={ this.state.newArgB }
             onChange={ this.onChange }
           />
