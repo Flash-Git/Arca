@@ -8,7 +8,8 @@ class SubmitBox extends Component {
     id: "",
     contract: "",
     methodName: "",
-    methodType: ""
+    methodType: "",
+    args: []
   }
 
   onSubmit = (e) => {

@@ -2,21 +2,23 @@ import React, { Component } from "react";
 import Box from "./TradeWindow/Box";
 
 class TradeWindow extends Component {
-  
-  state = {
-    methods: []
-  }
-  
   addMethod = (method) => {
-    this.setState({ methods: [...this.state.methods, method] });
     this.props.addMethod(method);
+  }
+
+  addMethodArguments = (id, args) => {
+    this.props.addMethodArguments(id, args);
+  }
+
+  toggleSatisfied = () => {
+    this.props.toggleSatisfied();
   }
 
   render(){
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
-        <Box addMethod={ this.addMethod } />
-        <Box addMethod={ this.addMethod } />
+        <Box addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } toggleSatisfied={ this.toggleSatisfied } />
+        <Box addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } toggleSatisfied={ this.toggleSatisfied } />
       </div>
     );
   }

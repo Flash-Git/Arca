@@ -12,8 +12,7 @@ class Method extends Component {
     e.preventDefault();
     const args = this.state.args;
     args.push([this.state.newArgA, this.state.newArgB]);
-    const state = this.state;
-    this.setState({ state, args });
+    this.setState({ args });
     this.props.addMethodArguments(this.props.method.id, this.state.args);
   }
 

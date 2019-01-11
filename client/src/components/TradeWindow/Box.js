@@ -16,14 +16,19 @@ class Box extends Component {
   }
 
   addMethodArguments = (id, args) => {
-    const newMethods = this.state.methods;
-    newMethods.filter(method => method.id === id).args = args;
-    console.log(this.state.methods[0].args)
-    console.log(newMethods.filter(method => method.id === id).args);
-    console.log(this.state.methods);
+    let newMethods = this.state.methods;
+    let argMeth;
+    let argMethIndex;
+    //Can't use indexOf filter. Learned the hard way
+    this.state.methods.forEach(function(method, index) {
+      argMethIndex = index;
+      argMeth = method;
+      argMeth.args = args;
+    });
+
+    newMethods[argMethIndex] = argMeth;
+
     this.setState({ methods: newMethods });
-    console.log(newMethods);
-    console.log(this.state.methods);
     this.props.addMethodArguments(id, args);
   }
 
