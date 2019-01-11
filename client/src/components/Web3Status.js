@@ -4,7 +4,7 @@ class Web3Status extends Component {
   render(){
     return(
       <div id="section-web3Status" className="section" style={ web3StatusStyle }>
-        <button style={ btnStyle }>Connect to Web3</button>
+        <button onClick={ this.props.enableWeb3 } style={ btnStyle }>Connect to Web3</button>
       </div>
     );
   }
