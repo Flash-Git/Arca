@@ -3,7 +3,9 @@ import React, { Component } from "react";
 class Method extends Component {
 
   state = {
-    args: []
+    args: [],
+    newArgA: "",
+    newArgB: ""
   }
 
   onSubmit = (e) => {
@@ -11,10 +13,7 @@ class Method extends Component {
     const args = this.state.args;
     args.push([this.state.newArgA, this.state.newArgB]);
     const state = this.state;
-    delete state.newArgA;
-    delete state.newArgB;
     this.setState({ state, args });
-
     this.props.addMethodArguments(this.props.method.id, this.state.args);
   }
 
@@ -25,7 +24,11 @@ class Method extends Component {
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        { this.props.method.contract + " " + this.props.method.methodName + " " + this.props.method.methodType + " " + this.state.args}
+        { this.props.method.contract + " " + this.props.method.methodName + " " + this.props.method.methodType }
+        
+         { this.state.args.map((arg, i) => (
+         " ["+ i +"]: (" + arg[0] + ", " + arg[1] + ") "
+        )) }
         <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
           <input 
             type="text" 
