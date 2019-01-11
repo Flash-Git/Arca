@@ -4,8 +4,8 @@ import MethodOffer from "./MethodOffer";
 
 class OfferContainer extends Component {
   
-  addMethodArguments = (id, args) => {
-    this.props.addMethodArguments(id, args);
+  addMethodArguments = (id, args, sent) => {
+    this.props.addMethodArguments(id, args, sent);
   }
 
   sendMethod = (i) => {

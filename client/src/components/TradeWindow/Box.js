@@ -15,7 +15,7 @@ class Box extends Component {
     this.props.addMethod(method);
   }
 
-  addMethodArguments = (id, args) => {
+  addMethodArguments = (id, args, sent) => {
     let newMethods = this.state.methods;
     let argMeth;
     let argMethIndex;
@@ -24,6 +24,7 @@ class Box extends Component {
       argMethIndex = index;
       argMeth = method;
       argMeth.args = args;
+      argMeth.sent = sent;
     });
 
     newMethods[argMethIndex] = argMeth;

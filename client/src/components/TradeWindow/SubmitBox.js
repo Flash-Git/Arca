@@ -3,13 +3,13 @@ import uuid from "uuid/v4";
 
 class SubmitBox extends Component {
 
-  //Args added after
   state = {
     id: "",
     contract: "",
     methodName: "",
     methodType: "",
-    args: []
+    args: [],
+    sent: false
   }
 
   onSubmit = (e) => {

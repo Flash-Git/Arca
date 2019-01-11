@@ -35,12 +35,17 @@ class App extends Component {
   }
 
   sendMethod = (id) => {
-    if(this.state.satisfied&&this.state.connected){
+    if(this.state.connected){
       let methIndex;
       this.state.methods.forEach(function(method, index) {
         methIndex = index;
       });
-      this.sendAddMethod(methIndex);
+      if(this.state.methods[methIndex].sent===false){//TODO check
+        const methods = this.state.methods;
+        methods[methIndex].sent = true;
+        this.setState({ methods });
+        this.sendAddMethod(methIndex);
+      }
     }
   }
 
@@ -90,7 +95,6 @@ class App extends Component {
       argInputs.push(this.addinput(_args[i][0], _args[i][1]));
     }
     let jsonObj = { name: _name, type: _type, inputs: argInputs};
-    console.log(jsonObj);
     return jsonObj;
   }
 

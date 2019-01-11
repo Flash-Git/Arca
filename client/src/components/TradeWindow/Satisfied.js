@@ -31,7 +31,6 @@ const methodStyle = {
   margin: "0.2rem",
 }
 
-
 const btnStyle = {
   background: "#660000",
   padding: "26px 26px",
