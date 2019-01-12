@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import Summary from "./Summary";
 import OfferContainer from "./OfferContainer";
 import Satisfied from "./Satisfied";

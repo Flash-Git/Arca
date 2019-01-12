@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import Box from "./TradeWindow/Box";
 
 class TradeWindow extends Component {

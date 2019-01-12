@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+
 import EthOffer from "./EthOffer";
 import MethodOffer from "./MethodOffer";
 
