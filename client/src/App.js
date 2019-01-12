@@ -44,7 +44,8 @@ class App extends Component {
         const methods = this.state.methods;
         methods[methIndex].sent = true;
         this.setState({ methods });
-        this.sendAddMethod(methIndex);
+        const web3 = this.state.web3;
+        this.sendAddMethod(web3, methIndex);
       }
     }
   }
@@ -79,7 +80,7 @@ class App extends Component {
     this.setState({ web3 })
   }
 
-  addinput = (_type, _name) => {
+  addinput(_type, _name) {
     const input = {
       type: "",
       name: ""
@@ -89,7 +90,7 @@ class App extends Component {
     return input;
   }
 
-  formJson = (_name, _type, _args) => {
+  formJson(_name, _type, _args) {
     let argInputs = [];
     for(let i = 0; i < _args.length; i++){
       argInputs.push(this.addinput(_args[i][0], _args[i][1]));
@@ -103,16 +104,66 @@ class App extends Component {
     for(let i = 0; i < _args.length; i++){
       argValues.push(_args[i][2]);
     }
-    return this.state.web3.eth.abi.encodeFunctionCall(
-      this.formJson(_name, _type, _args), argValues
-    );
+    try{
+      const call = this.state.web3.eth.abi.encodeFunctionCall(
+        this.formJson(_name, _type, _args), argValues
+      )
+      return call;
+    }catch(error){
+      console.error(error);
+      const methods = this.state.methods;
+      methods.forEach(function(method, index) {
+        method.sent = false;
+      });
+      this.setState({ methods });
+    }
   }
 
-  //(arg="_value", coderType="uint256", value={"type":"858"})
-  sendAddMethod = (i) => {
-    const encodedCall = this.generateEncodedCall(this.state.methods[i].methodName, this.state.methods[i].methodType, this.state.methods[i].args);
-    console.log(this.state.methods[i].contract + encodedCall);
+  encodeAddMethod = (i) => {
+    return this.generateEncodedCall(this.state.methods[i].methodName, this.state.methods[i].methodType, this.state.methods[i].args);
   }
+
+  getContract(_web3, _abi, _address) {
+    return _web3.eth.Contract(_abi, _address);
+  }
+
+  getAccount(_web3) {
+    return _web3.eth.getAccounts((error, accounts) => {
+      return accounts[0];
+    });
+  }
+
+  async sendAddMethod(_web3, _i) {
+    const encodedCall = this.encodeAddMethod(_i);
+    console.log("Encoded Call: " + encodedCall);
+    
+    const account = await this.getAccount(_web3);
+    console.log("Account: " + account);
+    
+    const abi = "";//TODO
+    const address = this.state.methods[_i].contract;
+  }
+    // const contract = setContract(web3, abi, address);
+
+    // const args = { account, encodedCall };
+
+    // contract.methods.pushMethod(args).send({
+    //   from: account
+    //   //TODO estimate gas
+    // })
+    //   .on('transactionHash', function(hash){
+    //     console.log(hash);
+    //   })
+    //   .on('receipt', function(receipt){
+    //   })
+    //   .on('confirmation', function(confirmationNumber, receipt){
+    //     if(confirmationNumber == 3){
+    //       console.log(receipt);
+    //     }
+    //   })
+    //   .on('error', console.error);
+    //   }
+    // }
 
   render(){
     return(
