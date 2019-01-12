@@ -34,38 +34,41 @@ class Method extends Component {
           { this.props.method.contract + " " + this.props.method.methodType + " " + this.props.method.methodName }
           { "(" }
           { this.state.args.map((arg, i) => (
-          arg[0] + ": " + arg[1] + " = " + arg[2] + (i===this.state.args.length-1 ? "" : ", ")
+            arg[0] + ": " + arg[1] + " = " + arg[2] + (i===this.state.args.length-1 ? "" : ", ")
           )) }
           { ")" }
         </div>
-        <form onSubmit={ this.onSubmit } className="form" style={ formStyle }>
-          <input 
-            type="text" 
-            name="type" 
-            placeholder="Arg Type" 
-            value={ this.state.type }
-            onChange={ this.onChange }
-          />
-          <input 
-            type="text" 
-            name="name" 
-            placeholder="Arg name" 
-            value={ this.state.name }
-            onChange={ this.onChange }
-          />
-          <input 
-          type="text" 
-          name="value" 
-          placeholder="Arg value" 
-          value={ this.state.value }
-          onChange={ this.onChange }
-        />
-          <input 
-            type="submit" 
-            value="Add Args" 
-            className="btn"
-          />
-        </form>
+        { this.props.method.sent ? "" : 
+          (
+          <form onSubmit={ this.onSubmit } className="form" style={ formStyle }>
+            <input 
+              type="text" 
+              name="type" 
+              placeholder="Arg Type" 
+              value={ this.state.type }
+              onChange={ this.onChange }
+            />
+            <input 
+              type="text" 
+              name="name" 
+              placeholder="Arg name" 
+              value={ this.state.name }
+              onChange={ this.onChange }
+            />
+            <input 
+              type="text" 
+              name="value" 
+              placeholder="Arg value" 
+              value={ this.state.value }
+              onChange={ this.onChange }
+            />
+            <input 
+              type="submit" 
+              value="Add Args" 
+              className="btn"
+            />
+          </form>
+        ) }
         <button onClick={ this.sendMethod } style={ btnStyle }>{ (this.props.method.sent ? "Sent" : "Send Method") }</button>
       </div>
     );
