@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class Satisfied extends Component {
 
@@ -39,6 +40,11 @@ const btnStyle = {
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold"
+}
+
+//PropTypes
+Satisfied.propTypes = {
+  toggleSatisfied: PropTypes.func.isRequired
 }
 
 export default Satisfied;

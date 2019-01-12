@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import uuid from "uuid/v4";
+import PropTypes from "prop-types";
 
 class SubmitBox extends Component {
 
@@ -65,6 +66,11 @@ const methodStyle = {
   justifyContent: "center",
   background: "#222",
   color: "#fff"
+}
+
+//PropTypes
+SubmitBox.propTypes = {
+  addMethod: PropTypes.func.isRequired
 }
 
 export default SubmitBox;

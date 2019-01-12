@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import Box from "./TradeWindow/Box";
 
@@ -33,6 +34,14 @@ const tradeWindowStyle = {
   textAlign: "center",
   justifyContent: "center",
   padding: "1rem"
+}
+
+//PropTypes
+TradeWindow.propTypes = {
+  addMethod: PropTypes.func.isRequired,
+  addMethodArgument: PropTypes.func.isRequired,
+  toggleSatisfied: PropTypes.func.isRequired,
+  sendMethod: PropTypes.func.isRequired
 }
 
 export default TradeWindow;

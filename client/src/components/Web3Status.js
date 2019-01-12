@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class Web3Status extends Component {
 
@@ -29,6 +30,12 @@ const btnStyle = {
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold"
+}
+
+//PropTypes
+Web3Status.propTypes = {
+  connected: PropTypes.bool.isRequired,
+  enableWeb3: PropTypes.func.isRequired
 }
 
 export default Web3Status;

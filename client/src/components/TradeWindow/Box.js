@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import Summary from "./Summary";
 import OfferContainer from "./OfferContainer";
@@ -65,6 +66,14 @@ const boxStyle = {
   border: "solid",
   minHeight: "10rem",
   fontWeight: "bold"
+}
+
+//PropTypes
+Box.propTypes = {
+  addMethod: PropTypes.func.isRequired,
+  addMethodArguments: PropTypes.func.isRequired,
+  toggleSatisfied: PropTypes.func.isRequired,
+  sendMethod: PropTypes.func.isRequired
 }
 
 export default Box;

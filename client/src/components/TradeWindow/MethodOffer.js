@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class Method extends Component {
 
@@ -116,6 +117,11 @@ const btnStyle = {
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold"
+}
+
+//PropTypes
+Method.propTypes = {
+  method: PropTypes.object.isRequired
 }
 
 export default Method;

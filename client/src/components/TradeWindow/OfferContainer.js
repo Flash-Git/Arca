@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import EthOffer from "./EthOffer";
 import MethodOffer from "./MethodOffer";
@@ -29,6 +30,12 @@ class OfferContainer extends Component {
 const style = {
   gridColumn: "1 auto",
   gridRow: "2 auto"
+}
+
+//PropTypes
+OfferContainer.propTypes = {
+  addMethodArgument: PropTypes.func.isRequired,
+  sendMethod: PropTypes.func.isRequired
 }
 
 export default OfferContainer;
