@@ -38,7 +38,9 @@ class App extends Component {
     if(this.state.connected){
       let methIndex;
       this.state.methods.forEach(function(method, index) {
-        methIndex = index;
+        if(method.id===id){
+          methIndex = index;
+        }
       });
       if(this.state.methods[methIndex].sent===false){//TODO check
         const methods = this.state.methods;
@@ -99,7 +101,7 @@ class App extends Component {
     return jsonObj;
   }
 
-  generateEncodedCall = (_name, _type, _args) => {
+  generateEncodedCall = (_i, _name, _type, _args) => {
     let argValues = [];
     for(let i = 0; i < _args.length; i++){
       argValues.push(_args[i][2]);
@@ -112,15 +114,13 @@ class App extends Component {
     }catch(error){
       console.error(error);
       const methods = this.state.methods;
-      methods.forEach(function(method, index) {
-        method.sent = false;
-      });
+      methods[_i].sent = false;
       this.setState({ methods });
     }
   }
 
-  encodeAddMethod = (i) => {
-    return this.generateEncodedCall(this.state.methods[i].methodName, this.state.methods[i].methodType, this.state.methods[i].args);
+  encodeAddMethod = (_i) => {
+    return this.generateEncodedCall(_i, this.state.methods[_i].methodName, this.state.methods[_i].methodType, this.state.methods[_i].args);
   }
 
   getContract(_web3, _abi, _address) {
