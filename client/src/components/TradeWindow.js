@@ -39,7 +39,6 @@ const tradeWindowStyle = {
 //PropTypes
 TradeWindow.propTypes = {
   addMethod: PropTypes.func.isRequired,
-  addMethodArgument: PropTypes.func.isRequired,
   toggleSatisfied: PropTypes.func.isRequired,
   sendMethod: PropTypes.func.isRequired
 }
