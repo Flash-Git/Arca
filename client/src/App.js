@@ -9,15 +9,16 @@ import "./App.css";
 
 class App extends Component {
 
-  componentDidUpdate(){ 
-    this.checkConnected();
-  }
-
   state = {
     connected: false,
     web3: undefined,
     methods: [],
-    satisfied: false
+    satisfied: false,
+    tradePartner
+  }
+
+  componentDidUpdate(){ 
+    this.checkConnected();
   }
 
   addMethod = (method) => {
@@ -34,6 +35,7 @@ class App extends Component {
     if(this.state.connected){
       satisfied = !satisfied;
       this.setState({ satisfied });
+      this.sendToggleSatisfied(this.state.web3);
     }
   }
 
@@ -49,8 +51,7 @@ class App extends Component {
         const methods = this.state.methods;
         methods[methIndex].sent = true;
         this.setState({ methods });
-        const web3 = this.state.web3;
-        this.sendAddMethod(web3, methIndex);
+        this.sendAddMethod(this.state.web3, methIndex);
       }
     }
   }
@@ -61,6 +62,10 @@ class App extends Component {
     }else if(this.state.web3!==undefined&&this.state.connected!==true){
       this.setState({ connected: true });
     }
+  }
+
+  setTradePartner = (tradePartner) => {
+    this.setState({ tradePartner });
   }
   
   enableWeb3 = () => {
@@ -136,22 +141,49 @@ class App extends Component {
     });
   }
 
+  async sendToggleSatisfied(_web3) {
+    const account = await this.getAccount(_web3);
+    const abi = "";//TODO
+    const tradePartner = "";//TODO
+    const satisfied = this.state.satisfied;
+
+    //const contract = await this.getContract(web3, abi, address);
+
+    const args = { tradePartner, satisfied };
+
+    // contract.methods.setSatisfied(args).send({
+    //   from: account
+    //   //TODO estimate gas
+    // })
+    //   .on('transactionHash', function(hash){
+    //     console.log(hash);
+    //   })
+    //   .on('receipt', function(receipt){
+    //   })
+    //   .on('confirmation', function(confirmationNumber, receipt){
+    //     if(confirmationNumber == 3){
+    //       console.log(receipt);
+    //     }
+    //   })
+    //   .on('error', console.error);
+    //   }
+    // }
+  }
+
   async sendAddMethod(_web3, _i) {    
     const account = await this.getAccount(_web3);
-    
     const abi = "";//TODO
   
     const tradePartner = "";//TODO
-    const address = this.state.methods[_i].contract;
+    const contractAddress = this.state.methods[_i].contract;
     const encodedCall = this.encodeAddMethod(_i);
 
     //const contract = await this.getContract(web3, abi, address);
 
-    const args = { tradePartner, address, encodedCall };
-    console.log(args);
+    const args = { tradePartner, contractAddress, encodedCall };
   }
 
-    // contract.methods.pushMethod(args).send({
+    // contract.methods.pushFuncOffer(args).send({
     //   from: account
     //   //TODO estimate gas
     // })
