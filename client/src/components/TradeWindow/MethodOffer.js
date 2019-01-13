@@ -69,7 +69,7 @@ class Method extends Component {
             />
           </form>
         ) }
-        <button onClick={ this.sendMethod } style={ btnStyle }>{ (this.props.method.sent ? "Sent" : "Send Method") }</button>
+        <button onClick={ this.sendMethod } style={ (this.props.method.sent ? btnStyleSent : btnStyleUnsent) }>{ (this.props.method.sent ? "Sent" : "Send Method") }</button>
       </div>
     );
   }
@@ -110,7 +110,7 @@ const formStyle = {
   fontSize: "0.85em"
 }
 
-const btnStyle = {
+const btnStyleUnsent = {
   gridColumn: "2",
   gridRow: "1 / 3",
   background: "#660000",
@@ -120,6 +120,17 @@ const btnStyle = {
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold"
+}
+
+const btnStyleSent = {
+  gridColumn: "2",
+  gridRow: "1 / 3",
+  background: "#441111",
+  padding: "6px 26px",
+  border: "none",
+  borderRadius: "5%",
+  color: "#fff",
+  fontWeight: "bold",
 }
 
 //PropTypes

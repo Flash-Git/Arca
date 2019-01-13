@@ -35,8 +35,8 @@ class Box extends Component {
     this.props.addMethodArguments(id, args);
   }
 
-  toggleSatisfied = () => {
-    this.props.toggleSatisfied();
+  toggleSatisfied = (satisfied) => {
+    this.props.toggleSatisfied(satisfied);
   }
 
   sendMethod = (i) => {

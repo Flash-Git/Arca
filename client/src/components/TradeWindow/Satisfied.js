@@ -8,13 +8,14 @@ class Satisfied extends Component {
   }
 
   toggleSatisfied = (e) => {
-    this.setState({ satisfied: !this.state.satisfied });
-    this.props.toggleSatisfied();
+    const satisfied = !this.state.satisfied;
+    this.setState({ satisfied });
+    this.props.toggleSatisfied(satisfied);
   }
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        <button onClick={ this.toggleSatisfied } style={ btnStyle }>{this.state.satisfied ? "Satisfied" : "Unsatisifed"}</button>
+        <button onClick={ this.toggleSatisfied } style={ (this.state.satisfied ? btnStyleSent : btnStyleUnsent) }>{this.state.satisfied ? "Satisfied" : "Unsatisifed"}</button>
       </div>
     );
   }
@@ -32,7 +33,9 @@ const methodStyle = {
   margin: "0.2rem",
 }
 
-const btnStyle = {
+const btnStyleUnsent = {
+  gridColumn: "2",
+  gridRow: "1 / 3",
   background: "#660000",
   padding: "26px 26px",
   border: "none",
@@ -40,6 +43,17 @@ const btnStyle = {
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold"
+}
+
+const btnStyleSent = {
+  gridColumn: "2",
+  gridRow: "1 / 3",
+  background: "#441111",
+  padding: "26px 26px",
+  border: "none",
+  borderRadius: "5%",
+  color: "#fff",
+  fontWeight: "bold",
 }
 
 //PropTypes

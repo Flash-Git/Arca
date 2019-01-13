@@ -30,8 +30,8 @@ class App extends Component {
     this.setState({ methods: newMethods });
   }
 
-  toggleSatisfied = () => {
-    this.setState({ satisfied: !this.state.satisfied });
+  toggleSatisfied = (satisfied) => {
+    this.setState({ satisfied });
   }
 
   sendMethod = (id) => {
@@ -133,19 +133,20 @@ class App extends Component {
     });
   }
 
-  async sendAddMethod(_web3, _i) {
-    const encodedCall = this.encodeAddMethod(_i);
-    console.log("Encoded Call: " + encodedCall);
-    
+  async sendAddMethod(_web3, _i) {    
     const account = await this.getAccount(_web3);
-    console.log("Account: " + account);
     
     const abi = "";//TODO
+  
+    const tradePartner = "";//TODO
     const address = this.state.methods[_i].contract;
-  }
-    // const contract = setContract(web3, abi, address);
+    const encodedCall = this.encodeAddMethod(_i);
 
-    // const args = { account, encodedCall };
+    //const contract = await this.getContract(web3, abi, address);
+
+    const args = { tradePartner, address, encodedCall };
+    console.log(args);
+  }
 
     // contract.methods.pushMethod(args).send({
     //   from: account
