@@ -6,6 +6,7 @@ import Web3Status from "./components/Web3Status";
 import TradeWindow from "./components/TradeWindow";
 
 import "./App.css";
+import PreTrade from "./components/PreTrade";
 
 class App extends Component {
 
@@ -14,11 +15,15 @@ class App extends Component {
     web3: undefined,
     methods: [],
     satisfied: false,
-    tradePartner
+    tradePartner: ""
   }
 
   componentDidUpdate(){ 
     this.checkConnected();
+  }
+
+  setTradePartner = (tradePartner) => {
+    this.setState({ tradePartner });
   }
 
   addMethod = (method) => {
@@ -62,10 +67,6 @@ class App extends Component {
     }else if(this.state.web3!==undefined&&this.state.connected!==true){
       this.setState({ connected: true });
     }
-  }
-
-  setTradePartner = (tradePartner) => {
-    this.setState({ tradePartner });
   }
   
   enableWeb3 = () => {
@@ -144,7 +145,7 @@ class App extends Component {
   async sendToggleSatisfied(_web3) {
     const account = await this.getAccount(_web3);
     const abi = "";//TODO
-    const tradePartner = "";//TODO
+    const tradePartner = this.state.tradePartner;
     const satisfied = this.state.satisfied;
 
     //const contract = await this.getContract(web3, abi, address);
@@ -174,7 +175,7 @@ class App extends Component {
     const account = await this.getAccount(_web3);
     const abi = "";//TODO
   
-    const tradePartner = "";//TODO
+    const tradePartner = this.state.tradePartner;
     const contractAddress = this.state.methods[_i].contract;
     const encodedCall = this.encodeAddMethod(_i);
 
@@ -205,6 +206,7 @@ class App extends Component {
     return(
       <div className="App">
         <Header />
+        <PreTrade setTradePartner={ this.setTradePartner } />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
         <TradeWindow addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.state.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
       </div>
