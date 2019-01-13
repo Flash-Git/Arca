@@ -4,18 +4,16 @@ import PropTypes from "prop-types";
 class Satisfied extends Component {
 
   state = {
-    satisfied: false
   }
 
   toggleSatisfied = (e) => {
-    const satisfied = !this.state.satisfied;
-    this.setState({ satisfied });
-    this.props.toggleSatisfied(satisfied);
+    this.props.toggleSatisfied(this.props.satisfied);
   }
+
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        <button onClick={ this.toggleSatisfied } style={ (this.state.satisfied ? btnStyleSent : btnStyleUnsent) }>{this.state.satisfied ? "Satisfied" : "Unsatisifed"}</button>
+        <button onClick={ this.toggleSatisfied } style={ (this.props.satisfied ? btnStyleSent : btnStyleUnsent) }>{this.props.satisfied ? "Satisfied" : "Unsatisifed"}</button>
       </div>
     );
   }

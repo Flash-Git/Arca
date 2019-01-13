@@ -31,7 +31,10 @@ class App extends Component {
   }
 
   toggleSatisfied = (satisfied) => {
-    this.setState({ satisfied });
+    if(this.state.connected){
+      satisfied = !satisfied;
+      this.setState({ satisfied });
+    }
   }
 
   sendMethod = (id) => {
@@ -171,7 +174,7 @@ class App extends Component {
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <TradeWindow addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
+        <TradeWindow addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.state.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
       </div>
     );
   }

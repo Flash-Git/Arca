@@ -48,7 +48,7 @@ class Box extends Component {
       <div className="box" style={ boxStyle }>
         <Summary />
         <OfferContainer methods={ this.state.methods } addMethodArguments={ this.addMethodArguments } sendMethod={ this.sendMethod } />
-        <Satisfied toggleSatisfied={ this.toggleSatisfied } />
+        <Satisfied satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } />
         <SubmitBox addMethod={ this.addMethod } />
       </div>
     );
