@@ -24,7 +24,7 @@ class TradeWindow extends Component {
   render(){
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
-        <Box addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
+        <Box tradePartner={ this.props.tradePartner }  addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
       </div>
     );
   }

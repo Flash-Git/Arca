@@ -20,12 +20,13 @@ class PreTrade extends Component {
     return(
       <div id="section-preTrade" className="section" style={ preTradeStyle }>
         <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
-          <input 
+          <input
             type="text" 
             name="tradePartner" 
             placeholder="Trade Partner Address" 
             value={ this.state.tradePartner }
             onChange={ this.onChange }
+            style={ (this.props.validInput ? inputStyle : badInputStyle) }
           />
         </form>
         <button onClick={ this.onSubmit } style={ btnStyle }>Open Trade Box</button>
@@ -38,7 +39,18 @@ const methodStyle = {
   textAlign: "center",
   justifyContent: "center",
   background: "#888",
-  color: "#fff"
+  color: "#fff",
+}
+
+const inputStyle= {
+  width: "24em",
+  textAlign: "center"
+}
+
+const badInputStyle= {
+  width: "24em",
+  textAlign: "center",
+  border: "solid red"
 }
 
 const preTradeStyle = {

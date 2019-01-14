@@ -15,7 +15,8 @@ class App extends Component {
     web3: undefined,
     methods: [],
     satisfied: false,
-    tradePartner: ""
+    tradePartner: "",
+    validInput: false
   }
 
   componentDidUpdate(){ 
@@ -23,7 +24,19 @@ class App extends Component {
   }
 
   setTradePartner = (tradePartner) => {
-    this.setState({ tradePartner });
+    if(this.state.connected){
+      try{
+        tradePartner = this.state.web3.utils.toChecksumAddress(tradePartner);
+      } catch {
+        this.setState({ tradePartner, validInput: false });
+        return;
+      }
+      if(this.state.web3.utils.isAddress(tradePartner)){
+        this.setState({ tradePartner, validInput: true });
+      } else {
+        this.setState({ tradePartner, validInput: false });
+      }
+    }
   }
 
   addMethod = (method) => {
@@ -206,9 +219,9 @@ class App extends Component {
     return(
       <div className="App">
         <Header />
-        <PreTrade setTradePartner={ this.setTradePartner } />
+        <PreTrade setTradePartner={ this.setTradePartner } tradePartner={ this.state.tradePartner } validInput={ this.state.validInput } />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <TradeWindow addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.state.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
+        <TradeWindow tradePartner={ this.state.tradePartner } addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.state.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
       </div>
     );
   }

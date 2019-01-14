@@ -4,7 +4,7 @@ class Summary extends Component {
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        ENS - Address - Blockie
+        ENS - { this.props.tradePartner } - Blockie
       </div>
     );
   }

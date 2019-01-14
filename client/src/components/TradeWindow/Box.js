@@ -46,7 +46,7 @@ class Box extends Component {
   render(){
     return(
       <div className="box" style={ boxStyle }>
-        <Summary />
+        <Summary tradePartner={ this.props.tradePartner } />
         <OfferContainer methods={ this.state.methods } addMethodArguments={ this.addMethodArguments } sendMethod={ this.sendMethod } />
         <Satisfied satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } />
         <SubmitBox addMethod={ this.addMethod } />
