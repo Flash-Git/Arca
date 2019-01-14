@@ -16,7 +16,8 @@ class App extends Component {
     methods: [],
     satisfied: false,
     tradePartner: "",
-    validInput: false
+    validInput: false,
+    executed: false
   }
 
   componentDidUpdate(){ 
@@ -53,7 +54,7 @@ class App extends Component {
     if(this.state.connected){
       satisfied = !satisfied;
       this.setState({ satisfied });
-      this.sendToggleSatisfied(this.state.web3);
+      this.sendSetSatisfied(this.state.web3);
     }
   }
 
@@ -79,6 +80,13 @@ class App extends Component {
       this.setState({ connected: false} );
     }else if(this.state.web3!==undefined&&this.state.connected!==true){
       this.setState({ connected: true });
+    }
+  }
+
+  execute = () => {
+    if(this.state.connected){
+      this.sendExecute(this.state.web3);
+      this.setState({ executed: true })
     }
   }
   
@@ -155,7 +163,7 @@ class App extends Component {
     });
   }
 
-  async sendToggleSatisfied(_web3) {
+  async sendSetSatisfied(_web3) {
     const account = await this.getAccount(_web3);
     const abi = "";//TODO
     const tradePartner = this.state.tradePartner;
@@ -215,13 +223,42 @@ class App extends Component {
     //   }
     // }
 
+    async sendExecute(_web3) {    
+      const account = await this.getAccount(_web3);
+      const abi = "";//TODO
+    
+      const tradePartner = this.state.tradePartner;
+  
+      //const contract = await this.getContract(web3, abi, address);
+  
+      const args = { tradePartner };
+    }
+  
+      // contract.methods.executeTrade(args).send({
+      //   from: account
+      //   //TODO estimate gas
+      // })
+      //   .on('transactionHash', function(hash){
+      //     console.log(hash);
+      //   })
+      //   .on('receipt', function(receipt){
+      //   })
+      //   .on('confirmation', function(confirmationNumber, receipt){
+      //     if(confirmationNumber == 3){
+      //       console.log(receipt);
+      //     }
+      //   })
+      //   .on('error', console.error);
+      //   }
+      // }
+
   render(){
     return(
       <div className="App">
         <Header />
-        <PreTrade setTradePartner={ this.setTradePartner } tradePartner={ this.state.tradePartner } validInput={ this.state.validInput } />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <TradeWindow tradePartner={ this.state.tradePartner } addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.state.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
+        <PreTrade setTradePartner={ this.setTradePartner } tradePartner={ this.state.tradePartner } validInput={ this.state.validInput } />
+        <TradeWindow execute={ this.execute } executed={ this.state.executed } tradePartner={ this.state.tradePartner } addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.state.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
       </div>
     );
   }
