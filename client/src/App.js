@@ -4,9 +4,10 @@ import Web3 from "web3";
 import Header from "./components/Header";
 import Web3Status from "./components/Web3Status";
 import TradeWindow from "./components/TradeWindow";
+import PreTrade from "./components/PreTrade";
 
 import "./App.css";
-import PreTrade from "./components/PreTrade";
+import abi from "./abi";
 
 class App extends Component {
 
@@ -153,10 +154,6 @@ class App extends Component {
     return this.generateEncodedCall(_i, this.state.methods[_i].methodName, this.state.methods[_i].methodType, this.state.methods[_i].args);
   }
 
-  getContract(_web3, _abi, _address) {
-    return _web3.eth.Contract(_abi, _address);
-  }
-
   getAccount(_web3) {
     return _web3.eth.getAccounts((error, accounts) => {
       return accounts[0];
@@ -165,50 +162,53 @@ class App extends Component {
 
   async sendSetSatisfied(_web3) {
     const account = await this.getAccount(_web3);
-    const abi = "";//TODO
     const tradePartner = this.state.tradePartner;
     const satisfied = this.state.satisfied;
 
-    //const contract = await this.getContract(web3, abi, address);
+    const contract = new _web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
 
-    const args = { tradePartner, satisfied };
-
-    // contract.methods.setSatisfied(args).send({
-    //   from: account
-    //   //TODO estimate gas
-    // })
-    //   .on('transactionHash', function(hash){
-    //     console.log(hash);
-    //   })
-    //   .on('receipt', function(receipt){
-    //   })
-    //   .on('confirmation', function(confirmationNumber, receipt){
-    //     if(confirmationNumber == 3){
-    //       console.log(receipt);
-    //     }
-    //   })
-    //   .on('error', console.error);
-    //   }
-    // }
+    contract.methods.setSatisfied(tradePartner, satisfied).send({
+      from: account
+      //TODO estimate gas
+    })
+      .on('transactionHash', function(hash){
+        console.log(hash);
+      })
+      .on('receipt', function(receipt){
+      })
+      .on('confirmation', function(confirmationNumber, receipt){
+        if(confirmationNumber == 3){
+          console.log(receipt);
+        }
+      })
+      .on('error', console.error);
   }
-
+  //0xC0DE71a553f178245878E86ce8cB2C1F775B72B2
   async sendAddMethod(_web3, _i) {    
     const account = await this.getAccount(_web3);
-    const abi = "";//TODO
   
     const tradePartner = this.state.tradePartner;
     const contractAddress = this.state.methods[_i].contract;
     const encodedCall = this.encodeAddMethod(_i);
 
-    //const contract = await this.getContract(web3, abi, address);
 
-    const args = { tradePartner, contractAddress, encodedCall };
-  }
+    const contract = new _web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
+    console.log(contract);
 
-    // contract.methods.pushFuncOffer(args).send({
-    //   from: account
-    //   //TODO estimate gas
-    // })
+
+    console.log(tradePartner + " " + contractAddress + " " + encodedCall);
+    contract.methods.pushFuncOffer(tradePartner, contractAddress, encodedCall).send({
+      from: account,
+      to: "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc",
+      gasPrice: 250000000
+    },function(error, data) {
+      if(!error){
+        console.log(data);
+      }else{
+        console.log(error);
+      }
+    });
+
     //   .on('transactionHash', function(hash){
     //     console.log(hash);
     //   })
@@ -220,37 +220,31 @@ class App extends Component {
     //     }
     //   })
     //   .on('error', console.error);
-    //   }
-    // }
+  }
 
-    async sendExecute(_web3) {    
-      const account = await this.getAccount(_web3);
-      const abi = "";//TODO
+  async sendExecute(_web3) {    
+    const account = await this.getAccount(_web3);
+  
+    const tradePartner = this.state.tradePartner;
+
+    const contract = await this.getContract(_web3, abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
     
-      const tradePartner = this.state.tradePartner;
-  
-      //const contract = await this.getContract(web3, abi, address);
-  
-      const args = { tradePartner };
-    }
-  
-      // contract.methods.executeTrade(args).send({
-      //   from: account
-      //   //TODO estimate gas
-      // })
-      //   .on('transactionHash', function(hash){
-      //     console.log(hash);
-      //   })
-      //   .on('receipt', function(receipt){
-      //   })
-      //   .on('confirmation', function(confirmationNumber, receipt){
-      //     if(confirmationNumber == 3){
-      //       console.log(receipt);
-      //     }
-      //   })
-      //   .on('error', console.error);
-      //   }
-      // }
+    contract.methods.executeTrade(tradePartner).send({
+      from: account
+      //TODO estimate gas
+    })
+      .on('transactionHash', function(hash){
+        console.log(hash);
+      })
+      .on('receipt', function(receipt){
+      })
+      .on('confirmation', function(confirmationNumber, receipt){
+        if(confirmationNumber == 3){
+          console.log(receipt);
+        }
+      })
+      .on('error', console.error);
+  }
 
   render(){
     return(
