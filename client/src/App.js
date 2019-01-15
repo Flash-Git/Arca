@@ -92,26 +92,71 @@ class App extends Component {
   }
   
   enableWeb3 = () => {
-    let web3;
-    if(window.ethereum) { //Modern DApp Browsers
-      web3 = new Web3(window.ethereum);
-      try {
-        window.ethereum.enable().then(
-          function() {
-            console.log("Web3 Enabled");
-          }
-        )
-      } catch(e) {
-        console.log(e);
-      }
-    } else if(window.web3) { //Legacy DApp Browsers
-      web3 = new Web3(web3.currentProvider);
-      console.log("Legacy web3 enabled");
-    } else { //Non-DApp Browsers
-      alert('Please install MetaMask');
-    }
-    this.setState({ web3 })
+    window.ethereum.enable();
+    window.web3 = new Web3(window.ethereum);
+    console.log("web3 " + window.web3);
+    console.log("ethereum " + window.ethereum);
+    const web3 = window.web3;
+    web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc")
+      .then(num => console.log(num));
+    this.setState({ web3 });
   }
+
+    // if(typeof window.ethereum === 'undefined'){
+    //   alert('Looks like you need a Dapp browser to get started.')
+    //   alert('Consider installing MetaMask!')
+    // } else {
+
+    //   // In the case the user has MetaMask installed, you can easily
+    //   // ask them to sign in and reveal their accounts:
+    //   window.ethereum.enable()
+    
+    //   // Remember to handle the case they reject the request:
+    //   .catch(function (reason) {
+    //     if(reason === 'User rejected provider access') {
+    //       // The user didn't want to sign in!
+    //     } else {
+    //       // This shouldn't happen, so you might want to log this...
+    //       alert('There was an issue signing you in.')
+    //     }
+    //   })
+    
+    //   // In the case they approve the log-in request, you'll receive their accounts:
+    //   .then(function (accounts) {
+    //     //console.log("ethereum: " + ethereum);
+    //     // You also should verify the user is on the correct network:
+
+    //     // if(ethereum.networkVersion !== 4) {
+    //     //   alert('This application requires the rinkeby network, please switch it in your MetaMask UI.')
+    //     // }
+    //     const account = accounts[0];
+    //     console.log("Account " + account);
+    //   });
+    // }
+
+
+
+    // let web3;
+    // if(window.ethereum) { //Modern DApp Browsers
+    //   web3 = new Web3(window.ethereum);
+    //   try {
+    //     window.ethereum.enable().then(
+    //       function() {
+    //         console.log("Web3 Enabled");
+    //       }
+    //     )
+    //   } catch(e) {
+    //     console.log(e);
+    //   }
+    // } else if(window.web3) { //Legacy DApp Browsers
+    //   web3 = new Web3(web3.currentProvider);
+    //   console.log("Legacy web3 enabled");
+    // } else { //Non-DApp Browsers
+    //   alert('Please install MetaMask');
+    // }
+    // this.setState({ web3 });
+  //   }
+  // }
 
   addinput(_type, _name) {
     const input = {
@@ -160,6 +205,17 @@ class App extends Component {
     });
   }
 
+  getTxCount(_web3, _account){
+    console.log("add: " + _account);
+//    return _web3.eth.getTransactionCount(_account,_web3.eth.defaultBlock, function(error, count) {
+    
+    return _web3.eth.getTransactionCount(_account => (error, count) => {
+      console.log(count);
+      console.log(error);
+      return "error";
+    });
+  }
+
   async sendSetSatisfied(_web3) {
     const account = await this.getAccount(_web3);
     const tradePartner = this.state.tradePartner;
@@ -183,31 +239,82 @@ class App extends Component {
       })
       .on('error', console.error);
   }
+
+  // txX(_contract, _account, _tradePartner, _contractAddress, _encodedCall) {
+  //   try{
+  //     return _contract.methods.pushFuncOffer(_tradePartner, _contractAddress, _encodedCall).send({
+  //         from: _account,
+  //       }, function(error, data){
+  //         if(!error){
+  //           console.log(data);
+  //         }else{
+  //         }
+  //       }
+  //     );
+  //   }catch(error){
+  //     console.log(error);
+  //   }
+  // }
+
+  // sendTx(_promise){
+  //   return new Promise(
+  //     function(resolve, reject){
+  //       _promise.on("confirmation",
+  //         function(confirmationNumber, receipt){
+  //         }
+  //       ).on("receipt",
+  //         function(receipt){
+  //           resolve(true);
+  //         }
+  //       ).on("error",
+  //         function(error){
+  //           resolve(false);
+  //         }
+  //       );
+  //     }
+  //   );
+  //   return(false);
+  // }
+
+
+
   //0xC0DE71a553f178245878E86ce8cB2C1F775B72B2
-  async sendAddMethod(_web3, _i) {    
+  async sendAddMethod(_web3, _i) {
     const account = await this.getAccount(_web3);
-  
+    console.log("Account: " + account);
+    // const ct = await this.getTxCount(_web3, account);
+    // console.log("ct: " + ct);
+
+    window.ethereum.enable();
+    window.web3 = new Web3(window.ethereum);
+    
+    window.web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc")
+      .then(num => console.log(num));
+    
+    const cunt = await _web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
+    await console.log(cunt);
+    return;
+
+
     const tradePartner = this.state.tradePartner;
     const contractAddress = this.state.methods[_i].contract;
     const encodedCall = this.encodeAddMethod(_i);
 
-
     const contract = new _web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
-    console.log(contract);
-
+    console.log(contract.options);
+    console.log(_web3.utils.isAddress("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc"));
+    console.log(_web3.utils.isAddress(tradePartner));
+    console.log(_web3.utils.isAddress(contractAddress));
 
     console.log(tradePartner + " " + contractAddress + " " + encodedCall);
+
+
     contract.methods.pushFuncOffer(tradePartner, contractAddress, encodedCall).send({
-      from: account,
-      to: "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc",
-      gasPrice: 250000000
-    },function(error, data) {
-      if(!error){
-        console.log(data);
-      }else{
-        console.log(error);
-      }
-    });
+      from: account
+    })
+      .then(function(receipt){
+        console.log(receipt);
+      });
 
     //   .on('transactionHash', function(hash){
     //     console.log(hash);
@@ -222,10 +329,15 @@ class App extends Component {
     //   .on('error', console.error);
   }
 
-  async sendExecute(_web3) {    
+  async sendExecute(_web3) {
     const account = await this.getAccount(_web3);
   
     const tradePartner = this.state.tradePartner;
+    console.log("NUMBER:");
+    console.log(this.getAccount(_web3));
+    console.log(account);
+    console.log(_web3.eth.getTransactionCount(account));
+    return;
 
     const contract = await this.getContract(_web3, abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
     
