@@ -56,7 +56,8 @@ const btnStyleSent = {
 
 //PropTypes
 Satisfied.propTypes = {
-  toggleSatisfied: PropTypes.func.isRequired
+  toggleSatisfied: PropTypes.func.isRequired,
+  satisfied: PropTypes.bool.isRequired
 }
 
 export default Satisfied;

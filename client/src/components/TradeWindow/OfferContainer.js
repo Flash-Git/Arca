@@ -34,7 +34,9 @@ const style = {
 
 //PropTypes
 OfferContainer.propTypes = {
-  sendMethod: PropTypes.func.isRequired
+  addMethodArguments: PropTypes.func.isRequired,
+  sendMethod: PropTypes.func.isRequired,
+  methods: PropTypes.array.isRequired
 }
 
 export default OfferContainer;

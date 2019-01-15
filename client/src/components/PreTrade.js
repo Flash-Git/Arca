@@ -71,7 +71,8 @@ const btnStyle = {
 
 //PropTypes
 PreTrade.propTypes = {
-
+  setTradePartner: PropTypes.func.isRequired,
+  validInput: PropTypes.bool.isRequired
 }
 
 export default PreTrade;

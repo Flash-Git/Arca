@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class Summary extends Component {
   render(){
@@ -17,6 +18,11 @@ const methodStyle = {
   justifyContent: "center",
   background: "#222",
   color: "#fff"
+}
+
+//PropTypes
+Summary.propTypes = {
+  tradePartner: PropTypes.string.isRequired
 }
 
 export default Summary;

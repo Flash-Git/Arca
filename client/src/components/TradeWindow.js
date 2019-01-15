@@ -59,6 +59,7 @@ const btnStyleSent = {
 //PropTypes
 TradeWindow.propTypes = {
   addMethod: PropTypes.func.isRequired,
+  addMethodArguments: PropTypes.func.isRequired,
   toggleSatisfied: PropTypes.func.isRequired,
   sendMethod: PropTypes.func.isRequired
 }
