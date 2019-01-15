@@ -13,7 +13,6 @@ class App extends Component {
 
   state = {
     connected: false,
-    web3: undefined,
     methods: [],
     satisfied: false,
     tradePartner: "",
@@ -28,12 +27,12 @@ class App extends Component {
   setTradePartner = (tradePartner) => {
     if(this.state.connected){
       try{
-        tradePartner = this.state.web3.utils.toChecksumAddress(tradePartner);
+        tradePartner = window.web3.utils.toChecksumAddress(tradePartner);
       } catch {
         this.setState({ tradePartner, validInput: false });
         return;
       }
-      if(this.state.web3.utils.isAddress(tradePartner)){
+      if(window.web3.utils.isAddress(tradePartner)){
         this.setState({ tradePartner, validInput: true });
       } else {
         this.setState({ tradePartner, validInput: false });
@@ -55,7 +54,7 @@ class App extends Component {
     if(this.state.connected){
       satisfied = !satisfied;
       this.setState({ satisfied });
-      this.sendSetSatisfied(this.state.web3);
+      this.sendSetSatisfied();
     }
   }
 
@@ -71,22 +70,25 @@ class App extends Component {
         const methods = this.state.methods;
         methods[methIndex].sent = true;
         this.setState({ methods });
-        this.sendAddMethod(this.state.web3, methIndex);
+        this.sendAddMethod(methIndex);
       }
     }
   }
 
   checkConnected = () => {
-    if(this.state.web3===undefined&&this.state.connected===true){
-      this.setState({ connected: false} );
-    }else if(this.state.web3!==undefined&&this.state.connected!==true){
+    if(!this.state.connected){
       this.setState({ connected: true });
     }
+    // if(this.state.web3===undefined&&this.state.connected===true){
+    //   this.setState({ connected: false} );
+    // }else if(this.state.web3!==undefined&&this.state.connected!==true){
+    //   this.setState({ connected: true });
+    // }
   }
 
   execute = () => {
     if(this.state.connected){
-      this.sendExecute(this.state.web3);
+      this.sendExecute();
       this.setState({ executed: true })
     }
   }
@@ -96,10 +98,9 @@ class App extends Component {
     window.web3 = new Web3(window.ethereum);
     console.log("web3 " + window.web3);
     console.log("ethereum " + window.ethereum);
-    const web3 = window.web3;
-    web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc")
-      .then(num => console.log(num));
-    this.setState({ web3 });
+    this.checkConnected();
+    // web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc")
+    //   .then(num => console.log(num));
   }
 
     // if(typeof window.ethereum === 'undefined'){
@@ -183,7 +184,7 @@ class App extends Component {
       argValues.push(_args[i][2]);
     }
     try{
-      const call = this.state.web3.eth.abi.encodeFunctionCall(
+      const call = window.web3.eth.abi.encodeFunctionCall(
         this.formJson(_name, _type, _args), argValues
       )
       return call;
@@ -199,29 +200,21 @@ class App extends Component {
     return this.generateEncodedCall(_i, this.state.methods[_i].methodName, this.state.methods[_i].methodType, this.state.methods[_i].args);
   }
 
-  getAccount(_web3) {
-    return _web3.eth.getAccounts((error, accounts) => {
-      return accounts[0];
-    });
+  async getAccount() {
+    let account = "";
+    await window.web3.eth.getAccounts((error, accounts) => {
+        account = accounts[0];
+      }
+    );
+    return account;
   }
 
-  getTxCount(_web3, _account){
-    console.log("add: " + _account);
-//    return _web3.eth.getTransactionCount(_account,_web3.eth.defaultBlock, function(error, count) {
-    
-    return _web3.eth.getTransactionCount(_account => (error, count) => {
-      console.log(count);
-      console.log(error);
-      return "error";
-    });
-  }
-
-  async sendSetSatisfied(_web3) {
-    const account = await this.getAccount(_web3);
+  async sendSetSatisfied() {
+    const account = window.web3.currentProvider.selectedAddress;
     const tradePartner = this.state.tradePartner;
-    const satisfied = this.state.satisfied;
+    const satisfied = true;
 
-    const contract = new _web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
+    const contract = new window.web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
 
     contract.methods.setSatisfied(tradePartner, satisfied).send({
       from: account
@@ -233,114 +226,49 @@ class App extends Component {
       .on('receipt', function(receipt){
       })
       .on('confirmation', function(confirmationNumber, receipt){
-        if(confirmationNumber == 3){
-          console.log(receipt);
+        if(confirmationNumber === 3){
+          console.log("receipt: " + receipt);
         }
       })
       .on('error', console.error);
   }
 
-  // txX(_contract, _account, _tradePartner, _contractAddress, _encodedCall) {
-  //   try{
-  //     return _contract.methods.pushFuncOffer(_tradePartner, _contractAddress, _encodedCall).send({
-  //         from: _account,
-  //       }, function(error, data){
-  //         if(!error){
-  //           console.log(data);
-  //         }else{
-  //         }
-  //       }
-  //     );
-  //   }catch(error){
-  //     console.log(error);
-  //   }
-  // }
-
-  // sendTx(_promise){
-  //   return new Promise(
-  //     function(resolve, reject){
-  //       _promise.on("confirmation",
-  //         function(confirmationNumber, receipt){
-  //         }
-  //       ).on("receipt",
-  //         function(receipt){
-  //           resolve(true);
-  //         }
-  //       ).on("error",
-  //         function(error){
-  //           resolve(false);
-  //         }
-  //       );
-  //     }
-  //   );
-  //   return(false);
-  // }
-
-
-
-  //0xC0DE71a553f178245878E86ce8cB2C1F775B72B2
-  async sendAddMethod(_web3, _i) {
-    const account = await this.getAccount(_web3);
-    console.log("Account: " + account);
-    // const ct = await this.getTxCount(_web3, account);
-    // console.log("ct: " + ct);
-
-    window.ethereum.enable();
-    window.web3 = new Web3(window.ethereum);
-    
-    window.web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc")
-      .then(num => console.log(num));
-    
-    const cunt = await _web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
-    await console.log(cunt);
-    return;
-
+  async sendAddMethod(_i) {
+    const account = window.web3.currentProvider.selectedAddress;
 
     const tradePartner = this.state.tradePartner;
     const contractAddress = this.state.methods[_i].contract;
     const encodedCall = this.encodeAddMethod(_i);
 
-    const contract = new _web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
-    console.log(contract.options);
-    console.log(_web3.utils.isAddress("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc"));
-    console.log(_web3.utils.isAddress(tradePartner));
-    console.log(_web3.utils.isAddress(contractAddress));
+    const contract = await new window.web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
 
-    console.log(tradePartner + " " + contractAddress + " " + encodedCall);
+    console.log("account: " + account);
+    console.log("tradePartner: " + tradePartner);
+    console.log("contractAddress: " + contractAddress);
+    console.log("encodedCall: " + encodedCall);
 
-
-    contract.methods.pushFuncOffer(tradePartner, contractAddress, encodedCall).send({
-      from: account
+    await contract.methods.pushFuncOffer(tradePartner, contractAddress, encodedCall).send({
+       from: account
     })
-      .then(function(receipt){
-        console.log(receipt);
-      });
-
-    //   .on('transactionHash', function(hash){
-    //     console.log(hash);
-    //   })
-    //   .on('receipt', function(receipt){
-    //   })
-    //   .on('confirmation', function(confirmationNumber, receipt){
-    //     if(confirmationNumber == 3){
-    //       console.log(receipt);
-    //     }
-    //   })
-    //   .on('error', console.error);
+      .on('transactionHash', function(hash){
+        console.log("hash: " + hash);
+      })
+      .on('receipt', function(receipt){
+        // console.log("receipt: " + receipt);
+      })
+      .on('confirmation', function(confirmationNumber, receipt){
+        if(confirmationNumber === 3){
+          console.log("receipt: " + receipt);
+        }
+      })
+      .on('error', console.error);
   }
 
-  async sendExecute(_web3) {
-    const account = await this.getAccount(_web3);
-  
+  async sendExecute() {
+    const account = window.web3.currentProvider.selectedAddress;
     const tradePartner = this.state.tradePartner;
-    console.log("NUMBER:");
-    console.log(this.getAccount(_web3));
-    console.log(account);
-    console.log(_web3.eth.getTransactionCount(account));
-    return;
+    const contract = await new window.web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
 
-    const contract = await this.getContract(_web3, abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
-    
     contract.methods.executeTrade(tradePartner).send({
       from: account
       //TODO estimate gas
@@ -351,8 +279,8 @@ class App extends Component {
       .on('receipt', function(receipt){
       })
       .on('confirmation', function(confirmationNumber, receipt){
-        if(confirmationNumber == 3){
-          console.log(receipt);
+        if(confirmationNumber === 3){
+          console.log("receipt: " + receipt);
         }
       })
       .on('error', console.error);
