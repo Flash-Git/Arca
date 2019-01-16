@@ -6,14 +6,15 @@ contract Trade {
 * TODO
 * Hella Security
 * Add gas cost estimator for front end
-* Front end in general
 * Front end support for ENS
 * Test ERC20s, ERC721s, ENS... transfers
 * Optimisations
 * Events
 * Sort out data overwriting
+* Sort out escrow architecture
 */
 
+  address public escrow;
   mapping(address => mapping(address => Box)) public boxes;
   mapping(address => uint256) public ethBalances;
 
@@ -29,6 +30,10 @@ contract Trade {
     bool satisfied;//Could add a hash of both boxes so that race conditions don't come into play
   }
 
+  constructor(address _escrow) public {
+    escrow = _escrow;
+  }
+
   function clearBox(address _tradePartner) public {//TODO test that this works as expected
     delete boxes[msg.sender][_tradePartner];
   }
@@ -40,23 +45,23 @@ contract Trade {
   }
 
   function pushOffer(address _tradePartner, int256 _ethOffer, address _contract, bytes memory _encodedFunction) public payable {
-      pushEthOffer(_tradePartner, _ethOffer);
-      pushFuncOffer(_tradePartner, _contract, _encodedFunction);
+    pushEthOffer(_tradePartner, _ethOffer);
+    pushFuncOffer(_tradePartner, _contract, _encodedFunction);
   }
 
   function pushEthOffer(address _tradePartner, int256 _ethOffer) public payable {
-      ethBalances[msg.sender] += msg.value;
-      require(int256(ethBalances[msg.sender]) >= _ethOffer, "Insufficient eth balance");
-      boxes[msg.sender][_tradePartner].ethOffer += _ethOffer;
-      
-      boxes[msg.sender][_tradePartner].satisfied = false;
-      boxes[_tradePartner][msg.sender].satisfied = false;
-      //log updated offer
+    ethBalances[msg.sender] += msg.value;
+    require(int256(ethBalances[msg.sender]) >= _ethOffer, "Insufficient eth balance");
+    boxes[msg.sender][_tradePartner].ethOffer += _ethOffer;
+    
+    boxes[msg.sender][_tradePartner].satisfied = false;
+    boxes[_tradePartner][msg.sender].satisfied = false;
+    //log updated offer
   }
 
   //TODO add reversal
   function pushFuncOffer(address _tradePartner, address _contract, bytes memory _encodedFunction) public {
-    require(_contract != address(this), "no");
+    require(_contract != address(this) && _contract != escrow, "no");
     FuncCall memory call;
     call.encodedFunc = _encodedFunction;
     call.contractAd = _contract;
