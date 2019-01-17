@@ -117,28 +117,45 @@ contract Trade {
   * Trade Execution
   */
 
+  function combineFuncs(bytes memory _bitty1, bytes memory _bitty2, uint8 _count, address _add1, address _add2) public view returns (bytes memory) {
+    bytes memory combined = abi.encodePacked(_bitty1, _bitty2);
+    _count--;
+    if(_count > 0){
+      combineFuncs(combined, boxes[_add2][_add1].funcOffers[_count].encodedFunc, _count, _add1, _add2);
+    }else{
+      return combined;
+    }
+  }
+
   function executeTrade(address _tradePartner) public payable {
     require(boxes[msg.sender][_tradePartner].satisfied == true, "Sender not satisfied");
     require(boxes[_tradePartner][msg.sender].satisfied == true, "Trade partner not satisfied");
 
-    /*
-    * TODO Fix incredible inefficiency
-    */
     //Only one of these is technically necessary to prevent front running
     bytes32 funcHashes1 = boxes[msg.sender][_tradePartner].funcsHash;
     bytes32 funcHashes2 = boxes[_tradePartner][msg.sender].funcsHash;
+    
+    //Option 1
+    uint8 count1 = boxes[_tradePartner][msg.sender].count;
+    bytes memory combinedFunc1 = combineFuncs(boxes[_tradePartner][msg.sender].funcOffers[count1-1].encodedFunc, boxes[_tradePartner][msg.sender].funcOffers[count1-2].encodedFunc, count1-2, msg.sender, _tradePartner);
+    require(keccak256(combinedFunc1) == funcHashes1, "Hash mismatch");
 
-    bytes32[] memory funcArr1 = new bytes32[](boxes[msg.sender][_tradePartner].count);
-    for(uint8 i = 0; i < boxes[msg.sender][_tradePartner].count; i++){
-      funcArr1[i] = keccak256(abi.encodePacked(boxes[msg.sender][_tradePartner].funcOffers[i].encodedFunc));
-    }
-    require(keccak256(abi.encodePacked(funcArr)) == funcHashes1, "Sender calls don't match");
+    uint8 count2 = boxes[msg.sender][_tradePartner].count;
+    bytes memory combinedFunc2 = combineFuncs(boxes[msg.sender][_tradePartner].funcOffers[count2-1].encodedFunc, boxes[msg.sender][_tradePartner].funcOffers[count2-2].encodedFunc, count2-2, _tradePartner, msg.sender);
+    require(keccak256(combinedFunc2) == funcHashes2, "Hash mismatch");
 
-    bytes32[] memory funcArr1 = new bytes32[](boxes[_tradePartner][msg.sender].count);
-    for(uint8 i = 0; i < boxes[_tradePartner][msg.sender].count; i++){
-      funcArr1[i] = keccak256(abi.encodePacked(boxes[_tradePartner][msg.sender].funcOffers[i].encodedFunc));
-    }
-    require(keccak256(abi.encodePacked(funcArr)) == funcHashes2, "Partner calls don't match");
+      //Option2
+//    bytes32[] memory funcArr1 = new bytes32[](boxes[msg.sender][_tradePartner].count);
+//    for(uint8 i = 0; i < boxes[msg.sender][_tradePartner].count; i++){
+//      funcArr1[i] = keccak256(abi.encodePacked(boxes[msg.sender][_tradePartner].funcOffers[i].encodedFunc));
+//    }
+//    require(keccak256(abi.encodePacked(funcArr)) == funcHashes1, "Sender calls don't match");
+
+//    bytes32[] memory funcArr1 = new bytes32[](boxes[_tradePartner][msg.sender].count);
+//    for(uint8 i = 0; i < boxes[_tradePartner][msg.sender].count; i++){
+//      funcArr1[i] = keccak256(abi.encodePacked(boxes[_tradePartner][msg.sender].funcOffers[i].encodedFunc));
+//    }
+//    require(keccak256(abi.encodePacked(funcArr)) == funcHashes2, "Partner calls don't match");
 
     ethBalances[msg.sender] += msg.value;
     int256 senderBalance = int256(ethBalances[msg.sender]);
