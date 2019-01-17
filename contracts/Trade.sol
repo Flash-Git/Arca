@@ -91,7 +91,7 @@ contract Trade {
     require(int256(ethBalances[msg.sender]) >= _ethOffer, "Insufficient eth balance");
     boxes[msg.sender][_tradePartner].ethOffer += _ethOffer;
     
-    dropSatisfcation(msg.sender, _tradePartner);
+    dropSatisfaction(msg.sender, _tradePartner);
     //log updated offer
   }
 
@@ -104,7 +104,7 @@ contract Trade {
     boxes[msg.sender][_tradePartner].funcOffers.push(call);
     boxes[msg.sender][_tradePartner].count += 1;
 
-    dropSatisfcation(msg.sender, _tradePartner);
+    dropSatisfaction(msg.sender, _tradePartner);
     //log updated offer
   }
 
@@ -122,7 +122,8 @@ contract Trade {
   * Trade Execution
   */
 
-  function executeTrade(address _tradePartner) public payable {
+  //TODO Make payable for last sec eth update
+  function executeTrade(address _tradePartner) public {
     require(boxes[msg.sender][_tradePartner].satisfied == true, "Sender not satisfied");
     require(boxes[_tradePartner][msg.sender].satisfied == true, "Trade partner not satisfied");
 
@@ -145,7 +146,7 @@ contract Trade {
     }
   }
 
-  function checkHashes(address _tradePartner) public returns (bool) {
+  function checkHashes(address _tradePartner) public view returns (bool) {
     //Only one of these is technically necessary to prevent front running
     bytes32 funcHashes1 = boxes[msg.sender][_tradePartner].funcsHash;
     bytes32 funcHashes2 = boxes[_tradePartner][msg.sender].funcsHash;
@@ -177,8 +178,7 @@ contract Trade {
 //    require(keccak256(abi.encodePacked(funcArr)) == funcHashes2, "Partner calls don't match");
   }
 
-  function updateBalances(address _tradePartner) public returns (bool) {
-    ethBalances[msg.sender] += msg.value;
+  function updateBalances(address _tradePartner) private returns (bool) {
     int256 senderBalance = int256(ethBalances[msg.sender]);
     int256 partnerBalance = int256(ethBalances[_tradePartner]);
 
