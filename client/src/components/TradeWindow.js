@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import Box from "./TradeWindow/Box";
+import PartnerBox from "./TradeWindow/PartnerBox";
 
 class TradeWindow extends Component {
 
@@ -24,6 +25,7 @@ class TradeWindow extends Component {
   render(){
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
+        <PartnerBox tradePartner={ this.props.tradePartner }  addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
         <Box tradePartner={ this.props.tradePartner }  addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
         <button onClick={ this.props.execute } style={ (this.props.executed ? btnStyleSent : btnStyleUnsent) }>{ (this.props.executed ? "Executed" : "Execute") }</button>
       </div>

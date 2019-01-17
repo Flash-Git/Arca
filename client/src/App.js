@@ -214,7 +214,7 @@ class App extends Component {
     const tradePartner = this.state.tradePartner;
     const satisfied = true;
 
-    const contract = new window.web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
+    const contract = new window.web3.eth.Contract(abi, "0x34d418E6019704815F626578eb4df5839f1a445d");
 
     contract.methods.setSatisfied(tradePartner, satisfied).send({
       from: account
@@ -240,7 +240,7 @@ class App extends Component {
     const contractAddress = this.state.methods[_i].contract;
     const encodedCall = this.encodeAddMethod(_i);
 
-    const contract = await new window.web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
+    const contract = await new window.web3.eth.Contract(abi, "0x34d418E6019704815F626578eb4df5839f1a445d");
 
     console.log("account: " + account);
     console.log("tradePartner: " + tradePartner);
@@ -267,7 +267,7 @@ class App extends Component {
   async sendExecute() {
     const account = window.web3.currentProvider.selectedAddress;
     const tradePartner = this.state.tradePartner;
-    const contract = await new window.web3.eth.Contract(abi, "0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc");
+    const contract = await new window.web3.eth.Contract(abi, "0x34d418E6019704815F626578eb4df5839f1a445d");
 
     contract.methods.executeTrade(tradePartner).send({
       from: account
@@ -284,6 +284,28 @@ class App extends Component {
         }
       })
       .on('error', console.error);
+  }
+
+  async getFuncCalls() {
+    const account = window.web3.currentProvider.selectedAddress;
+    const tradePartner = this.state.tradePartner;
+    const contract = await new window.web3.eth.Contract(abi, "0x34d418E6019704815F626578eb4df5839f1a445d");
+
+    console.log("account: " + account);
+    console.log("tradePartner: " + tradePartner);
+
+    const count = await contract.methods.getCount(account, tradePartner).call({
+      from: account
+    });
+    console.log("Count: " + count);
+
+    for(let i = 0; i < count; i++){
+      const result = await contract.methods.getFuncCall(account, tradePartner, 0).call({
+        from: account
+      });
+      const [address, func] = [result[0], result[1]];
+      console.log("Address: " + address + ", Func: " + func);
+    }
   }
 
   render(){
