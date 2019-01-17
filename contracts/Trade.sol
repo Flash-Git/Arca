@@ -91,8 +91,7 @@ contract Trade {
     require(int256(ethBalances[msg.sender]) >= _ethOffer, "Insufficient eth balance");
     boxes[msg.sender][_tradePartner].ethOffer += _ethOffer;
     
-    boxes[msg.sender][_tradePartner].satisfied = false;
-    boxes[_tradePartner][msg.sender].satisfied = false;
+    dropSatisfcation(msg.sender, _tradePartner);
     //log updated offer
   }
 
@@ -104,18 +103,37 @@ contract Trade {
     call.contractAd = _contract;
     boxes[msg.sender][_tradePartner].funcOffers.push(call);
     boxes[msg.sender][_tradePartner].count += 1;
-    boxes[msg.sender][_tradePartner].satisfied = false;
-    boxes[_tradePartner][msg.sender].satisfied = false;
+
+    dropSatisfcation(msg.sender, _tradePartner);
+    //log updated offer
   }
 
   function clearBox(address _tradePartner) public {//TODO test that this works as expected
     delete boxes[msg.sender][_tradePartner];
+  }
+  
+  function dropSatisfaction(address _add1, address _add2) private {
+    boxes[_add1][_add2].satisfied = false;
+    boxes[_add2][_add1].satisfied = false;
   }
 
 
   /*
   * Trade Execution
   */
+
+  function executeTrade(address _tradePartner) public payable {
+    require(boxes[msg.sender][_tradePartner].satisfied == true, "Sender not satisfied");
+    require(boxes[_tradePartner][msg.sender].satisfied == true, "Trade partner not satisfied");
+
+    require(checkHashes(_tradePartner));
+    require(updateBalances(_tradePartner));
+
+    executeFunctionCalls(msg.sender, _tradePartner);
+    executeFunctionCalls(_tradePartner, msg.sender);
+
+    dropSatisfaction(msg.sender, _tradePartner);
+  }
 
   function combineFuncs(bytes memory _bitty1, bytes memory _bitty2, uint8 _count, address _add1, address _add2) public view returns (bytes memory) {
     bytes memory combined = abi.encodePacked(_bitty1, _bitty2);
@@ -127,23 +145,24 @@ contract Trade {
     }
   }
 
-  function executeTrade(address _tradePartner) public payable {
-    require(boxes[msg.sender][_tradePartner].satisfied == true, "Sender not satisfied");
-    require(boxes[_tradePartner][msg.sender].satisfied == true, "Trade partner not satisfied");
-
+  function checkHashes(address _tradePartner) public returns (bool) {
     //Only one of these is technically necessary to prevent front running
     bytes32 funcHashes1 = boxes[msg.sender][_tradePartner].funcsHash;
     bytes32 funcHashes2 = boxes[_tradePartner][msg.sender].funcsHash;
-    
+
     //Option 1
     uint8 count1 = boxes[_tradePartner][msg.sender].count;
     bytes memory combinedFunc1 = combineFuncs(boxes[_tradePartner][msg.sender].funcOffers[count1-1].encodedFunc, boxes[_tradePartner][msg.sender].funcOffers[count1-2].encodedFunc, count1-2, msg.sender, _tradePartner);
+    //TODO add address into combo
     require(keccak256(combinedFunc1) == funcHashes1, "Hash mismatch");
 
     uint8 count2 = boxes[msg.sender][_tradePartner].count;
     bytes memory combinedFunc2 = combineFuncs(boxes[msg.sender][_tradePartner].funcOffers[count2-1].encodedFunc, boxes[msg.sender][_tradePartner].funcOffers[count2-2].encodedFunc, count2-2, _tradePartner, msg.sender);
+    //TODO add address into combo
+    
     require(keccak256(combinedFunc2) == funcHashes2, "Hash mismatch");
 
+    return true;
       //Option2
 //    bytes32[] memory funcArr1 = new bytes32[](boxes[msg.sender][_tradePartner].count);
 //    for(uint8 i = 0; i < boxes[msg.sender][_tradePartner].count; i++){
@@ -156,7 +175,9 @@ contract Trade {
 //      funcArr1[i] = keccak256(abi.encodePacked(boxes[_tradePartner][msg.sender].funcOffers[i].encodedFunc));
 //    }
 //    require(keccak256(abi.encodePacked(funcArr)) == funcHashes2, "Partner calls don't match");
+  }
 
+  function updateBalances(address _tradePartner) public returns (bool) {
     ethBalances[msg.sender] += msg.value;
     int256 senderBalance = int256(ethBalances[msg.sender]);
     int256 partnerBalance = int256(ethBalances[_tradePartner]);
@@ -171,14 +192,8 @@ contract Trade {
     require(newSenderBalance >= 0 && newPartnerBalance >= 0, "Insufficient balance");        
     ethBalances[msg.sender] = uint256(newSenderBalance);
     ethBalances[_tradePartner] = uint256(newPartnerBalance);
-
-    executeFunctionCalls(msg.sender, _tradePartner);
-    //event Calls sent
-    executeFunctionCalls(_tradePartner, msg.sender);
-    //event Calls sent
-
-    boxes[msg.sender][_tradePartner].satisfied = false;
-    boxes[_tradePartner][msg.sender].satisfied = false;
+    
+    return true;
   }
 
   function executeFunctionCalls(address _add1, address _add2) private {
@@ -192,6 +207,11 @@ contract Trade {
     }
   }
 
+
+  /*
+  * Withdrawal
+  */
+
   function withdraw(uint256 _amt) public {
     if(_amt > ethBalances[msg.sender]){
       _amt = ethBalances[msg.sender];
@@ -199,5 +219,4 @@ contract Trade {
     msg.sender.transfer(_amt);
     ethBalances[msg.sender] -= _amt;
   }
-
 }
