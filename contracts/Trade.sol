@@ -70,17 +70,6 @@ contract Trade {
   * Box State Change
   */
 
-  function setSatisfied(address _tradePartner, bytes32 _funcsHash) public {
-    require(address(msg.sender) != address(_tradePartner), "Can't be satisfied with yourself");
-    boxes[msg.sender][_tradePartner].funcsHash = _funcsHash;
-    boxes[msg.sender][_tradePartner].satisfied = true;
-  }
-
-  function setNotSatisfied(address _tradePartner) public {
-    require(address(msg.sender) != address(_tradePartner), "Can't be satisfied with yourself");
-    boxes[msg.sender][_tradePartner].satisfied = false;
-  }
-
   function pushOffer(address _tradePartner, int256 _ethOffer, address _contract, bytes memory _encodedFunction) public payable {
     pushEthOffer(_tradePartner, _ethOffer);
     pushFuncOffer(_tradePartner, _contract, _encodedFunction);
@@ -108,13 +97,28 @@ contract Trade {
     //log updated offer
   }
 
-  function clearBox(address _tradePartner) public {//TODO test that this works as expected
-    delete boxes[msg.sender][_tradePartner];
+  function setCount(address _tradePartner, uint8 _count) public {
+    boxes[msg.sender][_tradePartner].count = _count;
   }
-  
+
+  function setSatisfied(address _tradePartner, bytes32 _funcsHash) public {
+    require(address(msg.sender) != address(_tradePartner), "Can't be satisfied with yourself");
+    boxes[msg.sender][_tradePartner].funcsHash = _funcsHash;
+    boxes[msg.sender][_tradePartner].satisfied = true;
+  }
+
+  function setNotSatisfied(address _tradePartner) public {
+    require(address(msg.sender) != address(_tradePartner), "Can't be satisfied with yourself");
+    boxes[msg.sender][_tradePartner].satisfied = false;
+  }
+
   function dropSatisfaction(address _add1, address _add2) private {
     boxes[_add1][_add2].satisfied = false;
     boxes[_add2][_add1].satisfied = false;
+  }
+
+  function clearBox(address _tradePartner) public {//TODO test that this works as expected
+    delete boxes[msg.sender][_tradePartner];
   }
 
 
