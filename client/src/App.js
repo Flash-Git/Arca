@@ -16,6 +16,7 @@ class App extends Component {
   state = {
     connected: false,
     methods: [],
+    partnerMethods: [],
     satisfied: false,
     tradePartner: "",
     validInput: false,
@@ -44,6 +45,10 @@ class App extends Component {
 
   addMethod = (method) => {
     this.setState({ methods: [...this.state.methods, method] });
+  }
+
+  addPartnerMethod = (method) => {
+    this.setState({ partnerMethods: [...this.state.partnerMethods, method] });
   }
 
   addMethodArguments = (id, args) => {
@@ -170,6 +175,11 @@ class App extends Component {
   async showMethods(_account, _tradePartner) {
     const methods1 = await this.getFuncCalls(_account, _tradePartner);
     const methods2 = await this.getFuncCalls(_tradePartner, _account);
+    const method = {
+      contract: methods1[0][0],
+      methodName: methods1[0][1]
+    }
+    this.addMethod(method);
     console.log(methods1);
     console.log(methods2);
   }
@@ -321,7 +331,7 @@ class App extends Component {
         arr.push(address);
         arr.push(func);
         array.push(arr);
-      } catch (e) {
+      } catch(e) {
         console.error(e);
       }
     }
