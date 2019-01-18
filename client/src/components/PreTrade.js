@@ -21,15 +21,16 @@ class PreTrade extends Component {
       <div id="section-preTrade" className="section" style={ preTradeStyle }>
         <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
           <input
-            type="text" 
-            name="tradePartner" 
-            placeholder="Trade Partner Address" 
+            type="text"
+            name="tradePartner"
+            placeholder="Trade Partner Address"
             value={ this.state.tradePartner }
             onChange={ this.onChange }
             style={ (this.props.validInput ? inputStyle : badInputStyle) }
           />
         </form>
         <button onClick={ this.onSubmit } style={ btnStyle }>Open Trade Box</button>
+        <button onClick={ this.props.refresh } style={ btnStyle }>Refresh</button>
       </div>
     );
   }
@@ -66,13 +67,16 @@ const btnStyle = {
   borderRadius: "5%",
   cursor: "pointer",
   color: "#fff",
-  fontWeight: "bold"
+  fontWeight: "bold",
+  margin: "0 1rem",
+  width: "13em"
 }
 
 //PropTypes
 PreTrade.propTypes = {
   setTradePartner: PropTypes.func.isRequired,
-  validInput: PropTypes.bool.isRequired
+  validInput: PropTypes.bool.isRequired,
+  refresh: PropTypes.func.isRequired
 }
 
 export default PreTrade;

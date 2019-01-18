@@ -9,6 +9,8 @@ import PreTrade from "./components/PreTrade";
 import "./App.css";
 import abi from "./abi";
 
+const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
+
 class App extends Component {
 
   state = {
@@ -61,7 +63,7 @@ class App extends Component {
   sendMethod = (id) => {
     if(this.state.connected){
       let methIndex;
-      this.state.methods.forEach(function(method, index) {
+      this.state.methods.forEach(function(method, index){
         if(method.id===id){
           methIndex = index;
         }
@@ -159,6 +161,19 @@ class App extends Component {
   //   }
   // }
 
+  refresh = () => {
+    const account = window.web3.currentProvider.selectedAddress;
+    const tradePartner = this.state.tradePartner;
+    this.showMethods(account, tradePartner);
+  }
+
+  async showMethods(_account, _tradePartner) {
+    const methods1 = await this.getFuncCalls(_account, _tradePartner);
+    const methods2 = await this.getFuncCalls(_tradePartner, _account);
+    console.log(methods1);
+    console.log(methods2);
+  }
+
   addinput(_type, _name) {
     const input = {
       type: "",
@@ -214,7 +229,7 @@ class App extends Component {
     const tradePartner = this.state.tradePartner;
     const satisfied = true;
 
-    const contract = new window.web3.eth.Contract(abi, "0x34d418E6019704815F626578eb4df5839f1a445d");
+    const contract = new window.web3.eth.Contract(abi, AppAddress);
 
     contract.methods.setSatisfied(tradePartner, satisfied).send({
       from: account
@@ -240,7 +255,7 @@ class App extends Component {
     const contractAddress = this.state.methods[_i].contract;
     const encodedCall = this.encodeAddMethod(_i);
 
-    const contract = await new window.web3.eth.Contract(abi, "0x34d418E6019704815F626578eb4df5839f1a445d");
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
 
     console.log("account: " + account);
     console.log("tradePartner: " + tradePartner);
@@ -267,7 +282,7 @@ class App extends Component {
   async sendExecute() {
     const account = window.web3.currentProvider.selectedAddress;
     const tradePartner = this.state.tradePartner;
-    const contract = await new window.web3.eth.Contract(abi, "0x34d418E6019704815F626578eb4df5839f1a445d");
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
 
     contract.methods.executeTrade(tradePartner).send({
       from: account
@@ -286,26 +301,31 @@ class App extends Component {
       .on('error', console.error);
   }
 
-  async getFuncCalls() {
-    const account = window.web3.currentProvider.selectedAddress;
-    const tradePartner = this.state.tradePartner;
-    const contract = await new window.web3.eth.Contract(abi, "0x34d418E6019704815F626578eb4df5839f1a445d");
+  async getFuncCalls(_add1, _add2) {
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
 
-    console.log("account: " + account);
-    console.log("tradePartner: " + tradePartner);
-
-    const count = await contract.methods.getCount(account, tradePartner).call({
-      from: account
+    const count = await contract.methods.getCount(_add1, _add2).call({
+      from: _add1
     });
     console.log("Count: " + count);
 
+    const array = [];
     for(let i = 0; i < count; i++){
-      const result = await contract.methods.getFuncCall(account, tradePartner, 0).call({
-        from: account
-      });
-      const [address, func] = [result[0], result[1]];
-      console.log("Address: " + address + ", Func: " + func);
+      try {
+        const result = await contract.methods.getFuncCall(_add1, _add2, 0).call({
+          from: _add1
+        });
+        const arr = [];
+        const [address, func] = [result[0], result[1]];
+        console.log("Address: " + address + ", Func: " + func);
+        arr.push(address);
+        arr.push(func);
+        array.push(arr);
+      } catch (e) {
+        console.error(e);
+      }
     }
+    return array;
   }
 
   render(){
@@ -313,7 +333,7 @@ class App extends Component {
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <PreTrade setTradePartner={ this.setTradePartner } tradePartner={ this.state.tradePartner } validInput={ this.state.validInput } />
+        <PreTrade refresh={ this.refresh } setTradePartner={ this.setTradePartner } tradePartner={ this.state.tradePartner } validInput={ this.state.validInput } />
         <TradeWindow execute={ this.execute } executed={ this.state.executed } tradePartner={ this.state.tradePartner } addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.state.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
       </div>
     );
