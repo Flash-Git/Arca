@@ -73,7 +73,7 @@ class App extends Component {
           methIndex = index;
         }
       });
-      if(this.state.methods[methIndex].sent===false){//TODO check
+      if(this.state.methods[methIndex].sent===false){
         const methods = this.state.methods;
         methods[methIndex].sent = true;
         this.setState({ methods });
