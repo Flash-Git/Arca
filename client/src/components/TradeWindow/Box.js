@@ -2,20 +2,23 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import Summary from "./Summary";
-import OfferContainer from "./OfferContainer";
 import Satisfied from "./Satisfied";
 import SubmitBox from "./SubmitBox";
-
+import EthOffer from "./EthOffer";
+import MethodOffer from "./MethodOffer";
 class Box extends Component {
 
   state = {
-    methods: []
+    methods: [],
+    isUser: false,
+    isSatisfied: false,
+    addresses: ["", ""]
   }
 
   addMethod = (method) => {
     this.setState({ methods: [...this.state.methods, method] });
-    this.props.addMethod(method);
   }
+
 
   addMethodArguments = (id, args, sent) => {
     let newMethods = this.state.methods;
@@ -30,29 +33,41 @@ class Box extends Component {
     });
 
     newMethods[argMethIndex] = argMeth;
-
     this.setState({ methods: newMethods });
-    this.props.addMethodArguments(id, args);
   }
 
-  toggleSatisfied = (satisfied) => {
-    this.props.toggleSatisfied(satisfied);
+  toggleSatisfied = (satisfied) => {//TODO test for web3
+    satisfied = !satisfied;
+    this.setState({ satisfied });
+    //this.sendSetSatisfied();
   }
 
-  sendMethod = (i) => {
-    this.props.sendMethod(i);
+  sendMethod = (id) => {
+    
   }
 
   render(){
     return(
       <div className="box" style={ boxStyle }>
         <Summary tradePartner={ this.props.tradePartner } />
-        <OfferContainer methods={ this.state.methods } addMethodArguments={ this.addMethodArguments } sendMethod={ this.sendMethod } />
-        <Satisfied satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } />
+        <div className="container" style={ containerStyle }>
+          <EthOffer />
+          { 
+            this.props.methods.map((method) => 
+              <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments } sendMethod={ this.sendMethod } />)
+          }
+        </div>
+        <Satisfied satisfied={ this.state.isSatisfied } toggleSatisfied={ this.toggleSatisfied } />
         <SubmitBox addMethod={ this.addMethod } />
       </div>
     );
   }
+}
+
+
+const containerStyle = {
+  gridColumn: "1 auto",
+  gridRow: "2 auto"
 }
 
 const boxStyle = {

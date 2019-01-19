@@ -57,14 +57,6 @@ class App extends Component {
     this.setState({ methods: newMethods });
   }
 
-  toggleSatisfied = (satisfied) => {
-    if(this.state.connected){
-      satisfied = !satisfied;
-      this.setState({ satisfied });
-      this.sendSetSatisfied();
-    }
-  }
-
   sendMethod = (id) => {
     if(this.state.connected){
       let methIndex;
