@@ -43,17 +43,20 @@ class Box extends Component {
 
     switch(this.state.isSatisfied){
       case satisfiedStatus.TRUE:
-        satisfied = satisfiedStatus.TOFALSE;
+        isSatisfied = satisfiedStatus.TOFALSE;
         break;
       case satisfiedStatus.FALSE:
-        satisfied = satisfiedStatus.TOTRUE;
+        isSatisfied = satisfiedStatus.TOTRUE;
         break;
       case satisfiedStatus.TOTRUE:
-        satisfied = satisfiedStatus.TOFALSE;
+        isSatisfied = satisfiedStatus.TOFALSE;
         break;
       case satisfiedStatus.TOFALSE:
-        satisfied = satisfiedStatus.TOTRUE;
+        isSatisfied = satisfiedStatus.TOTRUE;
         break;
+      default:
+        console.log("Error in toggleSatisfied");
+        return;
     }
 
     this.setState({ isSatisfied });
@@ -71,7 +74,7 @@ class Box extends Component {
         <div className="container" style={ containerStyle }>
           <EthOffer />
           { 
-            this.props.methods.map((method) => 
+            this.state.methods.map((method) => 
               <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments } sendMethod={ this.sendMethod } />)
           }
         </div>
