@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import abi from "../../abi";
+
+const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
 const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
+
 class MethodOffer extends Component {
 
   state = {
@@ -20,10 +24,54 @@ class MethodOffer extends Component {
     this.props.addMethodArguments(this.props.method.id, [this.state.argType, this.state.argName, this.state.argValue], this.state.sendStatus);
   }
 
-  sendMethod = (e) => {
-    this.props.sendMethod(this.props.method.id);
+  generateEncodedCall = (_name, _type, _args) => {
+    let argValues = [];
+    for(let i = 0; i < _args.length; i++){
+      argValues.push(_args[i][2]);
+    }
+    try{
+      const call = window.web3.eth.abi.encodeFunctionCall(
+        this.formJson(_name, _type, _args), argValues
+      )
+      this.setState({ sendStatus: sendStatus.SENDING });
+      return call;
+    }catch(error){
+      console.error(error);
+      this.setState({ sendStatus: sendStatus.UNSENT });
+    }
   }
 
+  async sendMethod() {
+    const method = this.props.method;
+
+    //TODO add checks
+    const add1 = this.props.addresses[0];
+    const add2 = this.props.addresses[1];
+
+    const contractAdd = method.contractAdd;
+    const encodedCall = this.generateEncodedCall(method.methodName, method.methodType, method.args);
+
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+    console.log("add1: " + add1);
+    console.log("add2: " + add2);
+    console.log("contractAddress: " + contractAdd);
+    console.log("encodedCall: " + encodedCall);
+
+    await contract.methods.pushFuncOffer(add2, contractAdd, encodedCall).send({
+      from: add1
+   })
+     .on("transactionHash", function(hash){
+       console.log("txHash: " + hash);
+     })
+     .on("receipt", function(receipt){
+     })
+     .on("confirmation", function(confirmationNumber, receipt){
+       if(confirmationNumber === 3){
+         console.log("receipt: " + receipt);
+       }
+     })
+     .on('error', console.error);
+  }
 
   render(){
     const method = this.props.method;
@@ -135,7 +183,9 @@ const btnStyleSent = {
 
 //PropTypes
 MethodOffer.propTypes = {
-  method: PropTypes.object.isRequired
+  method: PropTypes.object.isRequired,
+  addresses: PropTypes.array.isRequired,
+  addMethodArguments: PropTypes.func.isRequired
 }
 
 export default MethodOffer;
