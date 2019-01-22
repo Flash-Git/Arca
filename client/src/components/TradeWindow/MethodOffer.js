@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-class Method extends Component {
+const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
+class MethodOffer extends Component {
 
   state = {
-    args: [],
-    type: "",
-    name: "",
-    value: "",
-    sent: false
+    argType: "",
+    argName: "",
+    argValue: "",
+    sendStatus: sendStatus.UNSENT
   }
 
   onChange = (e) => this.setState({
@@ -17,49 +17,49 @@ class Method extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const args = this.state.args;
-    args.push([this.state.type, this.state.name, this.state.value]);
-    this.setState({ args });
-    this.props.addMethodArguments(this.props.method.id, this.state.args, this.state.sent);
+    this.props.addMethodArguments(this.props.method.id, [this.state.argType, this.state.argName, this.state.argValue], this.state.sendStatus);
   }
 
   sendMethod = (e) => {
     this.props.sendMethod(this.props.method.id);
   }
 
+
   render(){
+    const method = this.props.method;
+
     return(
       <div className="method" style={ methodStyle }>
         <div className="display" style={ displayStyle }>
-          { this.props.method.contract + " " + this.props.method.methodType + " " + this.props.method.methodName }
+          { method.contract + " " + method.methodType + " " + method.methodName }
           { "(" }
-          { this.state.args.map((arg, i) => (
-            arg[0] + ": " + arg[1] + " = " + arg[2] + (i===this.state.args.length-1 ? "" : ", ")
+          { this.props.method.args.map((arg, i) => (
+            arg[0] + ": " + arg[1] + " = " + arg[2] + (i===method.args.length-1 ? "" : ", ")
           )) }
           { ")" }
         </div>
-        { this.props.method.sent ? "" : 
+        { method.sendStatus ? "" : 
           (
           <form onSubmit={ this.onSubmit } className="form" style={ formStyle }>
             <input 
               type="text" 
-              name="type" 
+              name="argType" 
               placeholder="Arg Type" 
-              value={ this.state.type }
+              value={ this.state.argType }
               onChange={ this.onChange }
             />
             <input 
               type="text" 
-              name="name" 
+              name="argName" 
               placeholder="Arg name" 
-              value={ this.state.name }
+              value={ this.state.argName }
               onChange={ this.onChange }
             />
             <input 
               type="text" 
-              name="value" 
+              name="argValue" 
               placeholder="Arg value" 
-              value={ this.state.value }
+              value={ this.state.argValue }
               onChange={ this.onChange }
             />
             <input 
@@ -69,7 +69,7 @@ class Method extends Component {
             />
           </form>
         ) }
-        <button onClick={ this.sendMethod } style={ (this.props.method.sent ? btnStyleSent : btnStyleUnsent) }>{ (this.props.method.sent ? "Sent" : "Send Method") }</button>
+        <button onClick={ this.sendMethod } style={ (method.sendStatus!==sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>{ (method.sendStatus!==sendStatus.SENT ? "Sent" : "Send Method") }</button>
       </div>
     );
   }
@@ -134,8 +134,8 @@ const btnStyleSent = {
 }
 
 //PropTypes
-Method.propTypes = {
+MethodOffer.propTypes = {
   method: PropTypes.object.isRequired
 }
 
-export default Method;
+export default MethodOffer;
