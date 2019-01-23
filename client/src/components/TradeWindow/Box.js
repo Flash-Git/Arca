@@ -7,19 +7,29 @@ import SubmitBox from "./SubmitBox";
 import EthOffer from "./EthOffer";
 import MethodOffer from "./MethodOffer";
 
+import abi from "../../abi";
+
 const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
 const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
+const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
 
 class Box extends Component {
 
   state = {
     methods: [],
     isUser: false,
-    isSatisfied: false,
+    isSatisfied: satisfiedStatus.FALSE,
     addresses: ["", ""]
   }
 
-  addMethod = (method) => {
+  constructor(props) {
+    super(props);
+    
+    //TODO check
+    this.state.addresses = props.addresses;
+   }
+   
+   addMethod = (method) => {
     this.setState({ methods: [...this.state.methods, method] });
   }
 
@@ -38,7 +48,24 @@ class Box extends Component {
     this.setState({ methods: newMethods });
   }
 
+  //Keep sendStatus of methods up to date for safety on execution checks later
+  setMethodSendStatus = (id, sendStatus) => {
+    const newMethods = this.state.methods;
+    
+    this.state.methods.forEach((method, index) => {
+      if(method.id === id) {
+        newMethods[index] = method;
+        newMethods[index].sendStatus = sendStatus;
+      }
+    });
+
+    this.setState({ methods: newMethods });
+  }
+
   toggleSatisfied = () => {//TODO test for web3
+    if(!this.state.isUser){
+      return;
+    }
     let isSatisfied;
 
     switch(this.state.isSatisfied){
@@ -63,8 +90,27 @@ class Box extends Component {
     //this.sendSetSatisfied();
   }
 
-  sendMethod = (id) => {
-    
+  async getMethods(_add1, _add2) {
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+
+    const count = await contract.methods.getCount(_add1, _add2).call({
+      from: _add1
+    });
+    console.log("Count: " + count);
+
+    for(let i = 0; i < count; i++){
+      try {
+        const result = await contract.methods.getFuncCall(_add1, _add2, i).call({
+          from: _add1
+        });
+        let method;
+        [method.address, method.func] = [result[0], result[1]];
+        this.addMethod(method);
+        console.log("Address: " + method.address + ", Func: " + method.func);
+      } catch(e) {
+        console.error(e);
+      }
+    }
   }
 
   render(){
@@ -75,11 +121,11 @@ class Box extends Component {
           <EthOffer />
           { 
             this.state.methods.map((method) => 
-              <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments } sendMethod={ this.sendMethod } />)
+              <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments } setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.state.addresses } />)
           }
         </div>
         <Satisfied satisfied={ this.state.isSatisfied } toggleSatisfied={ this.toggleSatisfied } />
-        <SubmitBox addMethod={ this.addMethod } />
+        { (this.props.isUser ? <SubmitBox addMethod={ this.addMethod } /> : "") }
       </div>
     );
   }
