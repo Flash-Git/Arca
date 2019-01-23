@@ -1,33 +1,59 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
 import Box from "./TradeWindow/Box";
-import PartnerBox from "./TradeWindow/PartnerBox";
+
+import abi from "../abi";
+
+const executedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
+const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
 
 class TradeWindow extends Component {
-
-  addMethod = (method) => {
-    this.props.addMethod(method);
+  
+  state = {
+    executedStatus: executedStatus.FALSE
+  }
+  
+  execute = () => {
+    this.sendExecute();
+    this.setState({ executedStatus: executedStatus.TOTRUE })
   }
 
-  addMethodArguments = (id, args) => {
-    this.props.addMethodArguments(id, args);
-  }
+  async sendExecute(_add1, _add2) {
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
 
-  toggleSatisfied = (satisfied) => {
-    this.props.toggleSatisfied(satisfied);
+    try{
+      this.setState({ executedStatus: executedStatus.TOTRUE });
+      contract.methods.executeTrade(_add2).send({
+        from: _add1
+        //TODO estimate gas
+      })
+        .on('transactionHash', function(hash){
+          console.log(hash);
+        })
+        .on('receipt', function(receipt){
+          this.setState({ executedStatus: executedStatus.TRUE });
+        })
+        .on('confirmation', function(confirmationNumber, receipt){
+          if(confirmationNumber === 3){
+            console.log("receipt: " + receipt);
+          }
+        })
+        .on('error', function(error){
+          console.error(error);
+          this.setState({ executedStatus: executedStatus.FALSE });
+        });
+    } catch(e){
+      console.error(e);
+      this.setState({ executedStatus: executedStatus.TRUE });
+    }
   }
-
-  sendMethod = (i) => {
-    this.props.sendMethod(i);
-  }
-
+  
   render(){
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
-        <PartnerBox tradePartner={ this.props.tradePartner }  addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
-        <Box tradePartner={ this.props.tradePartner }  addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
-        <button onClick={ this.props.execute } style={ (this.props.executed ? btnStyleSent : btnStyleUnsent) }>{ (this.props.executed ? "Executed" : "Execute") }</button>
+        <Box isUser={ false } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
+        <Box isUser={ this.props.isUser } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
+        { (this.props.isUser ? <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>{ (this.executed ? "Executed" : "Execute") }</button>: "") }
       </div>
     );
   }
