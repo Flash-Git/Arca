@@ -87,7 +87,7 @@ class MethodOffer extends Component {
           )) }
           { ")" }
         </div>
-        { method.sendStatus ? "" : 
+        { ((method.sendStatus === sendStatus.UNSENT)||(!this.props.isUser)) ? "" : //TODO
           (
           <form onSubmit={ this.onSubmit } className="form" style={ formStyle }>
             <input 
@@ -118,7 +118,7 @@ class MethodOffer extends Component {
             />
           </form>
         ) }
-        <button onClick={ this.sendMethod } style={ (method.sendStatus!==sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>{ (method.sendStatus!==sendStatus.SENT ? "Sent" : "Send Method") }</button>
+        <button onClick={ this.sendMethod } style={ (method.sendStatus===sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>{ (method.sendStatus===sendStatus.SENT ? "Sent" : "Send Method") }</button>
       </div>
     );
   }
@@ -186,6 +186,7 @@ const btnStyleSent = {
 MethodOffer.propTypes = {
   method: PropTypes.object.isRequired,
   addresses: PropTypes.array.isRequired,
+  isUser: PropTypes.bool.isRequired,
   addMethodArguments: PropTypes.func.isRequired,
   setMethodSendStatus: PropTypes.func.isRequired
 }
