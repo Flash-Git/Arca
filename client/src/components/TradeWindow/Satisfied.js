@@ -1,19 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
+
 class Satisfied extends Component {
 
-  state = {
-  }
-
   toggleSatisfied = (e) => {
-    this.props.toggleSatisfied(this.props.satisfied);
+    this.props.toggleSatisfied();
   }
 
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        <button onClick={ this.toggleSatisfied } style={ (this.props.satisfied ? btnStyleSent : btnStyleUnsent) }>{this.props.satisfied ? "Satisfied" : "Unsatisifed"}</button>
+        <button onClick={ this.toggleSatisfied } style={ (this.props.satisfied === satisfiedStatus.TRUE ? btnStyleSent : btnStyleUnsent) }>{this.props.satisfied === satisfiedStatus.TRUE ? "Satisfied" : "Unsatisifed"}</button>
       </div>
     );
   }
@@ -57,7 +56,7 @@ const btnStyleSent = {
 //PropTypes
 Satisfied.propTypes = {
   toggleSatisfied: PropTypes.func.isRequired,
-  satisfied: PropTypes.bool.isRequired
+  satisfied: PropTypes.number.isRequired
 }
 
 export default Satisfied;

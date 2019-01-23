@@ -18,9 +18,10 @@ class App extends Component {
     methods: [],
     partnerMethods: [],
     satisfied: false,
-    tradePartner: "",
+    addresses: ["", ""],
     validInput: false,
-    executed: false
+    executed: false,
+    isUser: true
   }
 
   componentDidUpdate(){ 
@@ -336,7 +337,7 @@ class App extends Component {
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
         <PreTrade refresh={ this.refresh } setTradePartner={ this.setTradePartner } tradePartner={ this.state.tradePartner } validInput={ this.state.validInput } />
-        <TradeWindow execute={ this.execute } executed={ this.state.executed } tradePartner={ this.state.tradePartner } addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.state.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
+        <TradeWindow addresses={ this.state.addresses } isUser={ this.state.isUser } />
       </div>
     );
   }
