@@ -60,17 +60,18 @@ class MethodOffer extends Component {
     await contract.methods.pushFuncOffer(add2, contractAdd, encodedCall).send({
       from: add1
    })
-     .on("transactionHash", function(hash){
-       console.log("txHash: " + hash);
-     })
-     .on("receipt", function(receipt){
-     })
-     .on("confirmation", function(confirmationNumber, receipt){
-       if(confirmationNumber === 3){
-         console.log("receipt: " + receipt);
-       }
-     })
-     .on('error', console.error);
+    .on("transactionHash", function(hash){
+      console.log("txHash: " + hash);
+    })
+    .on("receipt", function(receipt){
+      this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
+    })
+    .on("confirmation", function(confirmationNumber, receipt){
+      if(confirmationNumber === 3){
+        console.log("receipt: " + receipt);
+      }
+    })
+    .on('error', console.error);
   }
 
   render(){
@@ -185,7 +186,8 @@ const btnStyleSent = {
 MethodOffer.propTypes = {
   method: PropTypes.object.isRequired,
   addresses: PropTypes.array.isRequired,
-  addMethodArguments: PropTypes.func.isRequired
+  addMethodArguments: PropTypes.func.isRequired,
+  setMethodSendStatus: PropTypes.func.isRequired
 }
 
 export default MethodOffer;
