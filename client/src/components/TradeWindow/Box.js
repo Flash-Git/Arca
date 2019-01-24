@@ -17,7 +17,6 @@ class Box extends Component {
 
   state = {
     methods: [],
-    isUser: false,
     isSatisfied: satisfiedStatus.FALSE,
     addresses: ["", ""]
   }
@@ -62,32 +61,8 @@ class Box extends Component {
     this.setState({ methods: newMethods });
   }
 
-  toggleSatisfied = () => {//TODO test for web3
-    if(!this.state.isUser){
-      return;
-    }
-    let isSatisfied;
-
-    switch(this.state.isSatisfied){
-      case satisfiedStatus.TRUE:
-        isSatisfied = satisfiedStatus.TOFALSE;
-        break;
-      case satisfiedStatus.FALSE:
-        isSatisfied = satisfiedStatus.TOTRUE;
-        break;
-      case satisfiedStatus.TOTRUE:
-        isSatisfied = satisfiedStatus.TOFALSE;
-        break;
-      case satisfiedStatus.TOFALSE:
-        isSatisfied = satisfiedStatus.TOTRUE;
-        break;
-      default:
-        console.log("Error in toggleSatisfied");
-        return;
-    }
-
+  setSatisfied = (isSatisfied) => {
     this.setState({ isSatisfied });
-    //this.sendSetSatisfied();
   }
 
   async getMethods(_add1, _add2) {
@@ -116,15 +91,15 @@ class Box extends Component {
   render(){
     return(
       <div className="box" style={ boxStyle }>
-        <Summary tradePartner={ this.props.tradePartner } />
+        <Summary address={ this.props.isUser ? this.state.addresses[0] : this.state.addresses[1] } />
         <div className="container" style={ containerStyle }>
           <EthOffer />
-          { 
+          {
             this.state.methods.map((method) => 
-              <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments } setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.state.addresses } />)
+              <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments } setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.state.addresses } isUser={ this.props.isUser } />)
           }
         </div>
-        <Satisfied satisfied={ this.state.isSatisfied } toggleSatisfied={ this.toggleSatisfied } />
+        <Satisfied isSatisfied={ this.state.isSatisfied } setSatisfied={ this.setSatisfied } isUser={ this.state.isUser } />
         { (this.props.isUser ? <SubmitBox addMethod={ this.addMethod } /> : "") }
       </div>
     );

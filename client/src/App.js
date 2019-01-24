@@ -28,6 +28,10 @@ class App extends Component {
     this.checkConnected();
   }
 
+  setAddresses = (addresses) => {
+    this.setState({ addresses });
+  }
+
   setTradePartner = (tradePartner) => {
     if(this.state.connected){
       try{
@@ -177,166 +181,14 @@ class App extends Component {
     console.log(methods2);
   }
 
-  addinput(_type, _name) {
-    const input = {
-      type: "",
-      name: ""
-    }
-    input.type = _type;
-    input.name = _name;
-    return input;
-  }
 
-  formJson(_name, _type, _args) {
-    let argInputs = [];
-    for(let i = 0; i < _args.length; i++){
-      argInputs.push(this.addinput(_args[i][0], _args[i][1]));
-    }
-    let jsonObj = { name: _name, type: _type, inputs: argInputs};
-    return jsonObj;
-  }
-
-  generateEncodedCall = (_i, _name, _type, _args) => {
-    let argValues = [];
-    for(let i = 0; i < _args.length; i++){
-      argValues.push(_args[i][2]);
-    }
-    try{
-      const call = window.web3.eth.abi.encodeFunctionCall(
-        this.formJson(_name, _type, _args), argValues
-      )
-      return call;
-    }catch(error){
-      console.error(error);
-      const methods = this.state.methods;
-      methods[_i].sent = false;
-      this.setState({ methods });
-    }
-  }
-
-  encodeAddMethod = (_i) => {
-    return this.generateEncodedCall(_i, this.state.methods[_i].methodName, this.state.methods[_i].methodType, this.state.methods[_i].args);
-  }
-
-  async getAccount() {
-    let account = "";
-    await window.web3.eth.getAccounts((error, accounts) => {
-        account = accounts[0];
-      }
-    );
-    return account;
-  }
-
-  async sendSetSatisfied() {
-    const account = window.web3.currentProvider.selectedAddress;
-    const tradePartner = this.state.tradePartner;
-    const satisfied = true;
-
-    const contract = new window.web3.eth.Contract(abi, AppAddress);
-
-    contract.methods.setSatisfied(tradePartner, satisfied).send({
-      from: account
-      //TODO estimate gas
-    })
-      .on('transactionHash', function(hash){
-        console.log(hash);
-      })
-      .on('receipt', function(receipt){
-      })
-      .on('confirmation', function(confirmationNumber, receipt){
-        if(confirmationNumber === 3){
-          console.log("receipt: " + receipt);
-        }
-      })
-      .on('error', console.error);
-  }
-
-  async sendAddMethod(_i) {
-    const account = window.web3.currentProvider.selectedAddress;
-
-    const tradePartner = this.state.tradePartner;
-    const contractAddress = this.state.methods[_i].contract;
-    const encodedCall = this.encodeAddMethod(_i);
-
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
-
-    console.log("account: " + account);
-    console.log("tradePartner: " + tradePartner);
-    console.log("contractAddress: " + contractAddress);
-    console.log("encodedCall: " + encodedCall);
-
-    await contract.methods.pushFuncOffer(tradePartner, contractAddress, encodedCall).send({
-       from: account
-    })
-      .on('transactionHash', function(hash){
-        console.log("hash: " + hash);
-      })
-      .on('receipt', function(receipt){
-        // console.log("receipt: " + receipt);
-      })
-      .on('confirmation', function(confirmationNumber, receipt){
-        if(confirmationNumber === 3){
-          console.log("receipt: " + receipt);
-        }
-      })
-      .on('error', console.error);
-  }
-
-  async sendExecute() {
-    const account = window.web3.currentProvider.selectedAddress;
-    const tradePartner = this.state.tradePartner;
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
-
-    contract.methods.executeTrade(tradePartner).send({
-      from: account
-      //TODO estimate gas
-    })
-      .on('transactionHash', function(hash){
-        console.log(hash);
-      })
-      .on('receipt', function(receipt){
-      })
-      .on('confirmation', function(confirmationNumber, receipt){
-        if(confirmationNumber === 3){
-          console.log("receipt: " + receipt);
-        }
-      })
-      .on('error', console.error);
-  }
-
-  async getFuncCalls(_add1, _add2) {
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
-
-    const count = await contract.methods.getCount(_add1, _add2).call({
-      from: _add1
-    });
-    console.log("Count: " + count);
-
-    const array = [];
-    for(let i = 0; i < count; i++){
-      try {
-        const result = await contract.methods.getFuncCall(_add1, _add2, 0).call({
-          from: _add1
-        });
-        const arr = [];
-        const [address, func] = [result[0], result[1]];
-        console.log("Address: " + address + ", Func: " + func);
-        arr.push(address);
-        arr.push(func);
-        array.push(arr);
-      } catch(e) {
-        console.error(e);
-      }
-    }
-    return array;
-  }
 
   render(){
     return(
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <PreTrade refresh={ this.refresh } setTradePartner={ this.setTradePartner } tradePartner={ this.state.tradePartner } validInput={ this.state.validInput } />
+        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } validInput={ this.state.validInput } isUser={ this.state.isUser } />
         <TradeWindow addresses={ this.state.addresses } isUser={ this.state.isUser } />
       </div>
     );

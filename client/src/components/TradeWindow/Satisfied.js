@@ -1,12 +1,66 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import abi from "../../abi";
+
 const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
+const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
 
 class Satisfied extends Component {
 
-  toggleSatisfied = (e) => {
-    this.props.toggleSatisfied();
+  toggleSatisfied = (e) => {//TODO test for web3
+    if(!this.props.isUser){
+      return;
+    }
+    let isSatisfied;
+
+    switch(this.props.isSatisfied){
+      case satisfiedStatus.TRUE:
+        isSatisfied = satisfiedStatus.TOFALSE;
+        break;
+      case satisfiedStatus.FALSE:
+        isSatisfied = satisfiedStatus.TOTRUE;
+        break;
+      case satisfiedStatus.TOTRUE:
+        isSatisfied = satisfiedStatus.TOFALSE;
+        break;
+      case satisfiedStatus.TOFALSE:
+        isSatisfied = satisfiedStatus.TOTRUE;
+        break;
+      default:
+        console.log("Error in toggleSatisfied");
+        return;
+    }
+
+    this.props.setSatisfied(isSatisfied);
+    //this.sendSetSatisfied();
+  }
+
+  async sendSetSatisfied() {
+    const add1 = this.props.addresses[0];
+    const add2 = this.props.addresses[1];
+
+    const contract = new window.web3.eth.Contract(abi, AppAddress);
+
+    contract.methods.setSatisfied(add2, true).send({
+      from: add1
+      //TODO estimate gas
+    })
+      .on('transactionHash', function(hash){
+        console.log(hash);
+      })
+      .on('receipt', function(receipt){
+        this.props.setSatisfied(satisfiedStatus.TRUE);
+      })
+      .on('confirmation', function(confirmationNumber, receipt){
+        if(confirmationNumber === 3){
+          console.log("receipt: " + receipt);
+        }
+      })
+      .on('error', function(error){
+        this.props.setSatisfied(satisfiedStatus.FALSE);
+        console.error(error);
+      });
   }
 
   render(){

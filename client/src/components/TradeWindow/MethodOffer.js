@@ -24,23 +24,6 @@ class MethodOffer extends Component {
     this.props.addMethodArguments(this.props.method.id, [this.state.argType, this.state.argName, this.state.argValue], this.state.sendStatus);
   }
 
-  generateEncodedCall = (_name, _type, _args) => {
-    let argValues = [];
-    for(let i = 0; i < _args.length; i++){
-      argValues.push(_args[i][2]);
-    }
-    try{
-      const call = window.web3.eth.abi.encodeFunctionCall(
-        this.formJson(_name, _type, _args), argValues
-      )
-      this.setState({ sendStatus: sendStatus.SENDING });
-      return call;
-    }catch(error){
-      console.error(error);
-      this.setState({ sendStatus: sendStatus.UNSENT });
-    }
-  }
-
   async sendMethod() {
     const method = this.props.method;
 
@@ -72,6 +55,42 @@ class MethodOffer extends Component {
       }
     })
     .on('error', console.error);
+  }
+
+  generateEncodedCall = (_name, _type, _args) => {
+    let argValues = [];
+    for(let i = 0; i < _args.length; i++){
+      argValues.push(_args[i][2]);
+    } 
+    try{
+      const call = window.web3.eth.abi.encodeFunctionCall(
+        this.formJson(_name, _type, _args), argValues
+      )
+      this.setState({ sendStatus: sendStatus.SENDING });
+      return call;
+    }catch(error){
+      console.error(error);
+      this.setState({ sendStatus: sendStatus.UNSENT });
+    }
+  }
+
+  formJson(_name, _type, _args) {
+    let argInputs = [];
+    for(let i = 0; i < _args.length; i++){
+      argInputs.push(this.addinput(_args[i][0], _args[i][1]));
+    }
+    let jsonObj = { name: _name, type: _type, inputs: argInputs};
+    return jsonObj;
+  }
+
+  addinput(_type, _name) {
+    const input = {
+      type: "",
+      name: ""
+    }
+    input.type = _type;
+    input.name = _name;
+    return input;
   }
 
   render(){
