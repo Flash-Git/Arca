@@ -21,15 +21,30 @@ class App extends Component {
     addresses: ["", ""],
     validInput: false,
     executed: false,
-    isUser: true
+    isUser: false
   }
 
   componentDidUpdate(){ 
-    this.checkConnected();
   }
 
   setAddresses = (addresses) => {
     this.setState({ addresses });
+  }
+
+  isUser = () => {
+    try{
+      if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
+        this.setState({ isUser: true });//TODO make this a 0 1 or 2
+      }else{
+        this.setState({ isUser: true });//TODO make this a 0 1 or 2
+      }
+    } catch(e){
+      console.log(e);
+      window.web3 = new Web3(window.ethereum);
+      window.ethereum.enable()
+      .then(accounts => this.checkConnected())
+      .catch(e => this.checkConnected());
+    }
   }
 
   setTradePartner = (tradePartner) => {
@@ -80,14 +95,20 @@ class App extends Component {
   }
 
   checkConnected = () => {
-    if(!this.state.connected){
-      this.setState({ connected: true });
+    window.web3 = new Web3(window.ethereum);
+    this.isUser();
+    console.log("Checking");
+    try{
+      if(window.web3.utils.isAddress(window.web3.currentProvider.selectedAddress)){
+        this.setState({ connected: true });
+        return true;
+      }
+      this.setState({ connected: false });
+      return false;
+    } catch(e){
+      this.setState({ connected: false });
+      return false;
     }
-    // if(this.state.web3===undefined&&this.state.connected===true){
-    //   this.setState({ connected: false} );
-    // }else if(this.state.web3!==undefined&&this.state.connected!==true){
-    //   this.setState({ connected: true });
-    // }
   }
 
   execute = () => {
@@ -98,14 +119,35 @@ class App extends Component {
   }
   
   enableWeb3 = () => {
-    window.ethereum.enable();
+    if(this.checkConnected()){
+      return;
+    }
+
+    if(typeof window.ethereum === 'undefined'){
+      alert("Please install MetaMask");
+    }
     window.web3 = new Web3(window.ethereum);
-    console.log("web3 " + window.web3);
-    console.log("ethereum " + window.ethereum);
-    this.checkConnected();
-    // web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc")
-    //   .then(num => console.log(num));
+    window.ethereum.enable()
+    .then(accounts => this.checkConnected())
+    .catch(e => this.checkConnected());
+
   }
+
+
+  //   .then(accounts => {
+  //     // You now have an array of accounts!
+  //     // Currently only ever one:
+  //     // ['0xFDEa65C8e26263F6d9A1B5de9555D2931A33b825']
+  //     console.log(accounts[0]);
+  //   })
+  //   .catch(reason => {
+  //     console.error(reason);
+  //   });
+  //   this.checkConnected();
+  //   // web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc")
+  //   //   .then(num => console.log(num));
+  // }
+
 
     // if(typeof window.ethereum === 'undefined'){
     //   alert('Looks like you need a Dapp browser to get started.')
@@ -180,8 +222,6 @@ class App extends Component {
     console.log(methods1);
     console.log(methods2);
   }
-
-
 
   render(){
     return(
