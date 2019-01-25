@@ -6,6 +6,7 @@ import Satisfied from "./Satisfied";
 import SubmitBox from "./SubmitBox";
 import EthOffer from "./EthOffer";
 import MethodOffer from "./MethodOffer";
+import uuid from "uuid/v4";
 
 import abi from "../../abi";
 
@@ -17,18 +18,13 @@ class Box extends Component {
 
   state = {
     methods: [],
-    isSatisfied: satisfiedStatus.FALSE,
-    addresses: ["", ""]
+  }
+  
+  componentDidMount() {
+    setInterval( () => this.getMethods(), 10000);
   }
 
-  constructor(props) {
-    super(props);
-    
-    //TODO check
-    this.state.addresses = props.addresses;
-   }
-   
-   addMethod = (method) => {
+  addMethod = (method) => {
     this.setState({ methods: [...this.state.methods, method] });
   }
 
@@ -61,11 +57,22 @@ class Box extends Component {
     this.setState({ methods: newMethods });
   }
 
-  setSatisfied = (isSatisfied) => {
-    this.setState({ isSatisfied });
+  setSatisfied = (isSatisfied) => {//TODO
+    
   }
 
-  async getMethods(_add1, _add2) {
+  async getMethods() {
+    const _add1 = this.props.addresses[0];
+    const _add2 = this.props.addresses[1];
+    
+    try{
+      if(!window.web3.utils.isAddress(_add1) && !window.web3.utils.isAddress(_add2)){
+        return;
+      }
+    }catch(e){
+      return;
+    }
+
     const contract = await new window.web3.eth.Contract(abi, AppAddress);
 
     const count = await contract.methods.getCount(_add1, _add2).call({
@@ -78,8 +85,12 @@ class Box extends Component {
         const result = await contract.methods.getFuncCall(_add1, _add2, i).call({
           from: _add1
         });
-        let method;
-        [method.address, method.func] = [result[0], result[1]];
+        let method={};
+        method.id = uuid();
+        method.methodName = "";
+        method.args = [];
+        method.sent = sendStatus.SENT;
+        [method.contract, method.methodType] = [result[0], result[1]];
         this.addMethod(method);
         console.log("Address: " + method.address + ", Func: " + method.func);
       } catch(e) {
@@ -91,15 +102,15 @@ class Box extends Component {
   render(){
     return(
       <div className="box" style={ boxStyle }>
-        <Summary address={ this.props.isUser ? this.state.addresses[0] : this.state.addresses[1] } />
+        <Summary address={ this.props.addresses[0] } />
         <div className="container" style={ containerStyle }>
           <EthOffer />
-          {
-            this.state.methods.map((method) => 
-              <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments } setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.state.addresses } isUser={ this.props.isUser } />)
-          }
+          { this.state.methods.map(method => 
+            <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments } 
+              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } />
+          ) }
         </div>
-        <Satisfied isSatisfied={ this.state.isSatisfied } setSatisfied={ this.setSatisfied } isUser={ this.state.isUser } />
+        <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.state.isUser } />
         { (this.props.isUser ? <SubmitBox addMethod={ this.addMethod } /> : "") }
       </div>
     );
@@ -127,10 +138,8 @@ const boxStyle = {
 
 //PropTypes
 Box.propTypes = {
-  addMethod: PropTypes.func.isRequired,
-  addMethodArguments: PropTypes.func.isRequired,
-  toggleSatisfied: PropTypes.func.isRequired,
-  sendMethod: PropTypes.func.isRequired
+  isUser: PropTypes.bool.isRequired,
+  addresses: PropTypes.array.isRequired
 }
 
 export default Box;
