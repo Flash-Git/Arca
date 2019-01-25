@@ -10,7 +10,9 @@ class Web3Status extends Component {
   render(){
     return(
       <div id="section-web3Status" className="section" style={ web3StatusStyle }>
-        <button onClick={ this.onClick } style={ (this.props.connected ? btnStyleSent : btnStyleUnsent) }>{ (this.props.connected ? "Connected" : "Connect to Web3") }</button>
+        <button onClick={ this.onClick } style={ (this.props.connected ? btnStyleSent : btnStyleUnsent) }>
+          { (this.props.connected ? "Connected" : "Connect to Web3") }
+        </button>
       </div>
     );
   }

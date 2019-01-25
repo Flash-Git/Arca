@@ -24,7 +24,7 @@ class MethodOffer extends Component {
     this.props.addMethodArguments(this.props.method.id, [this.state.argType, this.state.argName, this.state.argValue], this.state.sendStatus);
   }
 
-  async sendMethod() {
+  sendMethod = () => {
     const method = this.props.method;
 
     //TODO add checks
@@ -34,22 +34,27 @@ class MethodOffer extends Component {
     const contractAdd = method.contractAdd;
     const encodedCall = this.generateEncodedCall(method.methodName, method.methodType, method.args);
 
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
     console.log("add1: " + add1);
     console.log("add2: " + add2);
     console.log("contractAddress: " + contractAdd);
     console.log("encodedCall: " + encodedCall);
 
+    this.broadcast(add1, add2, contractAdd, encodedCall);  
+  }
+
+  async broadcast(add1, add2, contractAdd, encodedCall) {
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+
     await contract.methods.pushFuncOffer(add2, contractAdd, encodedCall).send({
       from: add1
    })
-    .on("transactionHash", function(hash){
+    .on("transactionHash", (hash) => {
       console.log("txHash: " + hash);
     })
-    .on("receipt", function(receipt){
+    .on("receipt", (receipt) => {
       this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
     })
-    .on("confirmation", function(confirmationNumber, receipt){
+    .on("confirmation", (confirmationNumber, receipt) => {
       if(confirmationNumber === 3){
         console.log("receipt: " + receipt);
       }
@@ -137,7 +142,9 @@ class MethodOffer extends Component {
             />
           </form>
         ) }
-        <button onClick={ this.sendMethod } style={ (method.sendStatus===sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>{ (method.sendStatus===sendStatus.SENT ? "Sent" : "Send Method") }</button>
+        <button onClick={ this.sendMethod } style={ (method.sendStatus===sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
+          { (method.sendStatus===sendStatus.SENT ? "Sent" : "Send Method") }
+        </button>
       </div>
     );
   }

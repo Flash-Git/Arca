@@ -51,7 +51,8 @@ class TradeWindow extends Component {
   render(){
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
-        <Box isUser={ false } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
+        {/* <h3>{ AppAddress }</h3> */}
+        <Box isUser={ false } addresses={ [this.props.addresses[1], this.props.addresses[0]] } />
         <Box isUser={ this.props.isUser } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
         { (this.props.isUser ? <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>{ (this.executed ? "Executed" : "Execute") }</button>: "") }
       </div>
@@ -86,10 +87,8 @@ const btnStyleSent = {
 
 //PropTypes
 TradeWindow.propTypes = {
-  addMethod: PropTypes.func.isRequired,
-  addMethodArguments: PropTypes.func.isRequired,
-  toggleSatisfied: PropTypes.func.isRequired,
-  sendMethod: PropTypes.func.isRequired
+  isUser: PropTypes.bool.isRequired,
+  addresses: PropTypes.array.isRequired
 }
 
 export default TradeWindow;

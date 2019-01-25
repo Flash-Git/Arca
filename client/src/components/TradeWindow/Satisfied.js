@@ -8,6 +8,10 @@ const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
 
 class Satisfied extends Component {
 
+  state = {
+    isSatisfied: satisfiedStatus.FALSE
+  }
+
   toggleSatisfied = (e) => {//TODO test for web3
     if(!this.props.isUser){
       return;
@@ -32,6 +36,7 @@ class Satisfied extends Component {
         return;
     }
 
+    this.setState({ isSatisfied });
     this.props.setSatisfied(isSatisfied);
     //this.sendSetSatisfied();
   }
@@ -46,19 +51,21 @@ class Satisfied extends Component {
       from: add1
       //TODO estimate gas
     })
-      .on('transactionHash', function(hash){
+      .on('transactionHash', (hash) => {
         console.log(hash);
       })
-      .on('receipt', function(receipt){
+      .on('receipt', (receipt) => {
         this.props.setSatisfied(satisfiedStatus.TRUE);
+        this.setState({ isSatisfied: satisfiedStatus.TRUE });
       })
-      .on('confirmation', function(confirmationNumber, receipt){
+      .on('confirmation', (confirmationNumber, receipt) => {
         if(confirmationNumber === 3){
           console.log("receipt: " + receipt);
         }
       })
-      .on('error', function(error){
+      .on('error', (error) => {
         this.props.setSatisfied(satisfiedStatus.FALSE);
+        this.setState({ isSatisfied: satisfiedStatus.FALSE });
         console.error(error);
       });
   }
@@ -66,7 +73,9 @@ class Satisfied extends Component {
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        <button onClick={ this.toggleSatisfied } style={ (this.props.satisfied === satisfiedStatus.TRUE ? btnStyleSent : btnStyleUnsent) }>{this.props.satisfied === satisfiedStatus.TRUE ? "Satisfied" : "Unsatisifed"}</button>
+        <button onClick={ this.toggleSatisfied } style={ (this.state.isSatisfied === satisfiedStatus.TRUE ? btnStyleSent : btnStyleUnsent) }>
+          {this.state.isSatisfied === satisfiedStatus.TRUE ? "Satisfied" : "Unsatisifed"}
+        </button>
       </div>
     );
   }
@@ -109,8 +118,8 @@ const btnStyleSent = {
 
 //PropTypes
 Satisfied.propTypes = {
-  toggleSatisfied: PropTypes.func.isRequired,
-  satisfied: PropTypes.number.isRequired
+  setSatisfied: PropTypes.func.isRequired,
+  addresses: PropTypes.array.isRequired
 }
 
 export default Satisfied;

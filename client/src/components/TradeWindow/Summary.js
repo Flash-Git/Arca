@@ -5,7 +5,7 @@ class Summary extends Component {
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        ENS - { this.props.tradePartner } - Blockie
+        ENS - { this.props.address } - Blockie
       </div>
     );
   }
@@ -22,7 +22,7 @@ const methodStyle = {
 
 //PropTypes
 Summary.propTypes = {
-  tradePartner: PropTypes.string.isRequired
+  address: PropTypes.string.isRequired
 }
 
 export default Summary;
