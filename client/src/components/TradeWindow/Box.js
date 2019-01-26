@@ -11,28 +11,33 @@ import uuid from "uuid/v4";
 import abi from "../../abi";
 
 const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
-const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
+//const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
 const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
 
 class Box extends Component {
 
   state = {
-    methods: [],
+    localMethods: [],
+    chainMethods: []
   }
   
   componentDidMount() {
     setInterval( () => this.getMethods(), 10000);
   }
 
-  addMethod = (method) => {
-    this.setState({ methods: [...this.state.methods, method] });
+  addLocalMethod = (method) => {
+    this.setState({ localMethods: [...this.state.localMethods, method] });
+  }
+
+  addChainMethod = (method) => {
+    this.setState({ chainMethods: [...this.state.chainMethods, method] });
   }
 
   addMethodArguments = (id, args) => {
-    const newMethods = this.state.methods;
+    const newMethods = this.state.localMethods;
     
     //Can't use indexOf filter. learned the hard way
-    this.state.methods.forEach((method, index) => {
+    this.state.localMethods.forEach((method, index) => {
       if(method.id === id) {
         newMethods[index] = method;
         newMethods[index].args = args;
@@ -40,12 +45,12 @@ class Box extends Component {
       }
     });
 
-    this.setState({ methods: newMethods });
+    this.setState({ localMethods: newMethods });
   }
 
   //Keep sendStatus of methods up to date for safety on execution checks later
   setMethodSendStatus = (id, sendStatus) => {
-    const newMethods = this.state.methods;
+    const newMethods = this.state.localMethods;
     
     this.state.methods.forEach((method, index) => {
       if(method.id === id) {
@@ -54,11 +59,11 @@ class Box extends Component {
       }
     });
 
-    this.setState({ methods: newMethods });
+    this.setState({ localMethods: newMethods });
   }
 
   setSatisfied = (isSatisfied) => {//TODO
-    
+
   }
 
   async getMethods() {
@@ -78,7 +83,8 @@ class Box extends Component {
     const count = await contract.methods.getCount(_add1, _add2).call({
       from: _add1
     });
-    console.log("Count: " + count);
+    
+    const arr = [];
 
     for(let i = 0; i < count; i++){
       try {
@@ -89,29 +95,38 @@ class Box extends Component {
         method.id = uuid();
         method.methodName = "";
         method.args = [];
-        method.sent = sendStatus.SENT;
+        method.sendStatus = sendStatus.SENT;
         [method.contract, method.methodType] = [result[0], result[1]];
-        this.addMethod(method);
-        console.log("Address: " + method.address + ", Func: " + method.func);
+        
+        arr.push(method);
       } catch(e) {
         console.error(e);
       }
     }
+    
+    this.setState({ chainMethods: [] });
+    arr.forEach((method) => {
+      this.addChainMethod(method);
+    });
   }
 
-  render(){
+  render() {
     return(
       <div className="box" style={ boxStyle }>
         <Summary address={ this.props.addresses[0] } />
         <div className="container" style={ containerStyle }>
           <EthOffer />
-          { this.state.methods.map(method => 
-            <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments } 
+          { this.state.chainMethods.map(method =>
+            <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments }
+              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } />
+          ) }
+          { this.state.localMethods.map(method =>
+            <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments }
               setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } />
           ) }
         </div>
         <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.state.isUser } />
-        { (this.props.isUser ? <SubmitBox addMethod={ this.addMethod } /> : "") }
+        { (this.props.isUser ? <SubmitBox addMethod={ this.addLocalMethod } /> : "") }
       </div>
     );
   }
