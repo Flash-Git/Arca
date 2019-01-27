@@ -27,18 +27,18 @@ class TradeWindow extends Component {
         from: _add1
         //TODO estimate gas
       })
-        .on('transactionHash', function(hash){
+        .on('transactionHash', hash => {
           console.log(hash);
         })
-        .on('receipt', function(receipt){
+        .on('receipt', receipt => {
           this.setState({ executedStatus: executedStatus.TRUE });
         })
-        .on('confirmation', function(confirmationNumber, receipt){
+        .on('confirmation', (confirmationNumber, receipt) => {
           if(confirmationNumber === 3){
             console.log("receipt: " + receipt);
           }
         })
-        .on('error', function(error){
+        .on('error', error => {
           console.error(error);
           this.setState({ executedStatus: executedStatus.FALSE });
         });
@@ -54,7 +54,11 @@ class TradeWindow extends Component {
         {/* <h3>{ AppAddress }</h3> */}
         <Box isUser={ false } addresses={ [this.props.addresses[1], this.props.addresses[0]] } />
         <Box isUser={ this.props.isUser } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
-        { (this.props.isUser ? <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>{ (this.executed ? "Executed" : "Execute") }</button>: "") }
+        { (this.props.isUser ?
+        <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
+          { (this.executed ? "Executed" : "Execute") }
+        </button>
+        : "") }
       </div>
     );
   }
