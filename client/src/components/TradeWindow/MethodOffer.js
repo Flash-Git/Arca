@@ -28,54 +28,28 @@ class MethodOffer extends Component {
     const method = this.props.method;
 
     //TODO add checks
-    const add1 = this.props.addresses[0];
-    const add2 = this.props.addresses[1];
-
-    const contractAdd = method.contractAdd;
-    const encodedCall = this.generateEncodedCall(method.methodName, method.methodType, method.args);
-
-    console.log("add1: " + add1);
-    console.log("add2: " + add2);
-    console.log("contractAddress: " + contractAdd);
-    console.log("encodedCall: " + encodedCall);
-
-    this.broadcast(add1, add2, contractAdd, encodedCall);  
+    this.generateEncodedCall(method.methodName, method.methodType, method.args)
+    .then(encodedCall => this.broadcast(this.props.addresses[0], this.props.addresses[1], method.contractAdd, encodedCall),
+        this.setState({ sendStatus: sendStatus.SENDING })
+      )
+    .catch(e => this.setState({ sendStatus: sendStatus.UNSENT }));
   }
 
-  async broadcast(add1, add2, contractAdd, encodedCall) {
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
-
-    await contract.methods.pushFuncOffer(add2, contractAdd, encodedCall).send({
-      from: add1
-   })
-    .on("transactionHash", (hash) => {
-      console.log("txHash: " + hash);
-    })
-    .on("receipt", (receipt) => {
-      this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
-    })
-    .on("confirmation", (confirmationNumber, receipt) => {
-      if(confirmationNumber === 3){
-        console.log("receipt: " + receipt);
-      }
-    })
-    .on('error', console.error);
-  }
-
-  generateEncodedCall = (_name, _type, _args) => {
+  async generateEncodedCall(_name, _type, _args) {
     let argValues = [];
     for(let i = 0; i < _args.length; i++){
       argValues.push(_args[i][2]);
-    } 
+    }
     try{
-      const call = window.web3.eth.abi.encodeFunctionCall(
+      const call = await window.web3.eth.abi.encodeFunctionCall(
         this.formJson(_name, _type, _args), argValues
-      )
-      this.setState({ sendStatus: sendStatus.SENDING });
+      );
+      //this.setState({ sendStatus: sendStatus.SENDING });
       return call;
     }catch(error){
       console.error(error);
-      this.setState({ sendStatus: sendStatus.UNSENT });
+      return false;
+      //this.setState({ sendStatus: sendStatus.UNSENT });
     }
   }
 
@@ -98,6 +72,30 @@ class MethodOffer extends Component {
     return input;
   }
 
+  async broadcast(_add1, _add2, _contractAdd, _encodedCall) {
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+
+    try{
+      await contract.methods.pushFuncOffer(_add2, _contractAdd, _encodedCall).send({
+        from: _add1
+    })
+      .on("transactionHash", (hash) => {
+        console.log("txHash: " + hash);
+      })
+      .on("receipt", (receipt) => {
+        this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
+      })
+      .on("confirmation", (confirmationNumber, receipt) => {
+        if(confirmationNumber === 3){
+          console.log("receipt: " + receipt);
+        }
+      })
+      .on('error', console.error);
+    } catch(e){
+      console.log(e);
+    }
+  }
+
   render(){
     const method = this.props.method;
 
@@ -107,11 +105,11 @@ class MethodOffer extends Component {
           { method.contract + " " + method.methodType + " " + method.methodName }
           { "(" }
           { this.props.method.args.map((arg, i) => (
-            arg[0] + ": " + arg[1] + " = " + arg[2] + (i===method.args.length-1 ? "" : ", ")
+            arg[0] + ": " + arg[1] + " = " + arg[2] + (i === method.args.length-1 ? "" : ", ")
           )) }
           { ")" }
         </div>
-        { ((method.sendStatus === sendStatus.UNSENT)||(!this.props.isUser)) ? "" : //TODO
+        { ((method.sendStatus === sendStatus.SENT)||(!this.props.isUser)) ? "" : //TODO
           (
           <form onSubmit={ this.onSubmit } className="form" style={ formStyle }>
             <input 
@@ -142,8 +140,8 @@ class MethodOffer extends Component {
             />
           </form>
         ) }
-        <button onClick={ this.sendMethod } style={ (method.sendStatus===sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
-          { (method.sendStatus===sendStatus.SENT ? "Sent" : "Send Method") }
+        <button onClick={ this.sendMethod } style={ (method.sendStatus === sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
+          { (method.sendStatus === sendStatus.SENT ? "Sent" : "Send Method") }
         </button>
       </div>
     );
