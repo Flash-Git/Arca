@@ -7,9 +7,6 @@ import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
 
 import "./App.css";
-import abi from "./abi";
-
-const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
 
 class App extends Component {
 
@@ -24,7 +21,7 @@ class App extends Component {
     isUser: false
   }
 
-  componentDidUpdate(){ 
+  componentDidUpdate(){
   }
 
   setAddresses = (addresses) => {
@@ -71,29 +68,6 @@ class App extends Component {
     this.setState({ partnerMethods: [...this.state.partnerMethods, method] });
   }
 
-  addMethodArguments = (id, args) => {
-    const newMethods = this.state.methods;
-    newMethods.filter(method => method.id === id).args = args;
-    this.setState({ methods: newMethods });
-  }
-
-  sendMethod = (id) => {
-    if(this.state.connected){
-      let methIndex;
-      this.state.methods.forEach(function(method, index){
-        if(method.id===id){
-          methIndex = index;
-        }
-      });
-      if(this.state.methods[methIndex].sent===false){//TODO check
-        const methods = this.state.methods;
-        methods[methIndex].sent = true;
-        this.setState({ methods });
-        this.sendAddMethod(methIndex);
-      }
-    }
-  }
-
   checkConnected = () => {
     window.web3 = new Web3(window.ethereum);
     this.isUser();
@@ -108,13 +82,6 @@ class App extends Component {
     } catch(e){
       this.setState({ connected: false });
       return false;
-    }
-  }
-
-  execute = () => {
-    if(this.state.connected){
-      this.sendExecute();
-      this.setState({ executed: true })
     }
   }
   
@@ -209,18 +176,6 @@ class App extends Component {
     const account = window.web3.currentProvider.selectedAddress;
     const tradePartner = this.state.tradePartner;
     this.showMethods(account, tradePartner);
-  }
-
-  async showMethods(_account, _tradePartner) {
-    const methods1 = await this.getFuncCalls(_account, _tradePartner);
-    const methods2 = await this.getFuncCalls(_tradePartner, _account);
-    const method = {
-      contract: methods1[0][0],
-      methodName: methods1[0][1]
-    }
-    this.addMethod(method);
-    console.log(methods1);
-    console.log(methods2);
   }
 
   render(){
