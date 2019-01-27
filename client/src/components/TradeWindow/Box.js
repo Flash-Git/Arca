@@ -40,7 +40,7 @@ class Box extends Component {
     this.state.localMethods.forEach((method, index) => {
       if(method.id === id) {
         newMethods[index] = method;
-        newMethods[index].args = args;
+        newMethods[index].args.push(args);
         newMethods[index].sendStatus = sendStatus.SENDING;
       }
     });
@@ -96,7 +96,7 @@ class Box extends Component {
         method.methodName = "";
         method.args = [];
         method.sendStatus = sendStatus.SENT;
-        [method.contract, method.methodType] = [result[0], result[1]];
+        [method.contractAdd, method.methodType] = [result[0], result[1]];
         
         arr.push(method);
       } catch(e) {
