@@ -27,18 +27,18 @@ class TradeWindow extends Component {
         from: _add1
         //TODO estimate gas
       })
-        .on('transactionHash', hash => {
+        .on("transactionHash", hash => {
           console.log(hash);
         })
-        .on('receipt', receipt => {
+        .on("receipt", receipt => {
           this.setState({ executedStatus: executedStatus.TRUE });
         })
-        .on('confirmation', (confirmationNumber, receipt) => {
+        .on("confirmation", (confirmationNumber, receipt) => {
           if(confirmationNumber === 3){
             console.log("receipt: " + receipt);
           }
         })
-        .on('error', error => {
+        .on("error", error => {
           console.error(error);
           this.setState({ executedStatus: executedStatus.FALSE });
         });
