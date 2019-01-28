@@ -12,12 +12,8 @@ class App extends Component {
 
   state = {
     connected: false,
-    methods: [],
-    partnerMethods: [],
     satisfied: false,
     addresses: ["", ""],
-    validInput: false,
-    executed: false,
     isUser: false
   }
 
@@ -30,10 +26,14 @@ class App extends Component {
 
   isUser = () => {
     try{
-      if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
+      if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()||
+        this.state.addresses[1].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
         this.setState({ isUser: true });//TODO make this a 0 1 or 2
+        console.log("true")
       }else{
-        this.setState({ isUser: true });//TODO make this a 0 1 or 2
+        console.log("false")
+
+        this.setState({ isUser: false });//TODO make this a 0 1 or 2
       }
     } catch(e){
       console.log(e);
@@ -42,30 +42,6 @@ class App extends Component {
       .then(accounts => this.checkConnected())
       .catch(e => this.checkConnected());
     }
-  }
-
-  setTradePartner = (tradePartner) => {
-    if(this.state.connected){
-      try{
-        tradePartner = window.web3.utils.toChecksumAddress(tradePartner);
-      } catch {
-        this.setState({ tradePartner, validInput: false });
-        return;
-      }
-      if(window.web3.utils.isAddress(tradePartner)){
-        this.setState({ tradePartner, validInput: true });
-      } else {
-        this.setState({ tradePartner, validInput: false });
-      }
-    }
-  }
-
-  addMethod = (method) => {
-    this.setState({ methods: [...this.state.methods, method] });
-  }
-
-  addPartnerMethod = (method) => {
-    this.setState({ partnerMethods: [...this.state.partnerMethods, method] });
   }
 
   checkConnected = () => {
@@ -173,9 +149,7 @@ class App extends Component {
   // }
 
   refresh = () => {
-    const account = window.web3.currentProvider.selectedAddress;
-    const tradePartner = this.state.tradePartner;
-    this.showMethods(account, tradePartner);
+
   }
 
   render(){
@@ -183,7 +157,7 @@ class App extends Component {
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } validInput={ this.state.validInput } isUser={ this.state.isUser } />
+        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.isUser } connected={ this.state.connected }/>
         <TradeWindow addresses={ this.state.addresses } isUser={ this.state.isUser } />
       </div>
     );
