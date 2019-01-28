@@ -5,7 +5,9 @@ class PreTrade extends Component {
 
   state = {
     address1: "",
-    address2: ""
+    address2: "",
+    validInput1: false,
+    validInput2: false
   }
 
   async componentDidMount() {
@@ -23,7 +25,31 @@ class PreTrade extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    this.props.setAddresses([this.state.address1, this.state.address2]);
+    if(this.checkAddresses(this.state.address1, 0) && this.checkAddresses(this.state.address1, 1)){
+      this.props.setAddresses([this.state.address1, this.state.address2]);
+    }
+  }
+
+  checkAddresses = (_address, _i) => {
+    if(this.props.connected){
+      try{
+        _address = window.web3.utils.toChecksumAddress(_address);
+      } catch(e) {
+        if(_i===0) this.setState({ validInput1: false });
+        if(_i===1) this.setState({ validInput2: false });
+        return false;
+      }
+      if(window.web3.utils.isAddress(_address)){
+        if(_i===0) this.setState({ validInput1: true });
+        if(_i===1) this.setState({ validInput2: true });
+        return true;
+      } else {
+        if(_i===0) this.setState({ validInput: false });
+        if(_i===1) this.setState({ validInput: false });
+        return false;
+      }
+    }
+    return false;
   }
 
    onChange = (e) => this.setState({
@@ -38,17 +64,17 @@ class PreTrade extends Component {
             type="text"
             name="address1"
             placeholder="Address 1"
-            value={ this.state.tradePartner }
+            value={ this.state.address1 }
             onChange={ this.onChange }
-            style={ (this.props.validInput ? inputStyle : badInputStyle) }
+            style={ (this.state.validInput1 ? inputStyle : badInputStyle) }
           />
         <input
           type="text"
           name="address2"
           placeholder="Address 2"
-          value={ this.state.tradePartner }
+          value={ this.state.address2 }
           onChange={ this.onChange }
-          style={ (this.props.validInput ? inputStyle : badInputStyle) }
+          style={ (this.state.validInput2 ? inputStyle : badInputStyle) }
         />
         </form>
         <button onClick={ this.onSubmit } style={ btnStyle }>Open Trade Box</button>
@@ -100,8 +126,8 @@ const btnStyle = {
 PreTrade.propTypes = {
   isUser: PropTypes.bool.isRequired,
   setAddresses: PropTypes.func.isRequired,
-  validInput: PropTypes.bool.isRequired,
-  refresh: PropTypes.func.isRequired
+  refresh: PropTypes.func.isRequired,
+  connected: PropTypes.bool.isRequired
 }
 
 export default PreTrade;
