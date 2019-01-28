@@ -8,11 +8,11 @@ class SubmitBox extends Component {
 
   state = {
     id: "",
-    contract: "",
+    contractAdd: "",
     methodName: "",
     methodType: "",
     args: [],
-    sent: sendStatus.UNSENT
+    sendStatus: sendStatus.UNSENT
   }
 
   onSubmit = (e) => {
@@ -32,26 +32,26 @@ class SubmitBox extends Component {
       <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
         <input 
           type="text" 
-          name="contract" 
+          name="contractAdd" 
           placeholder="Contract Address" 
-          value={ this.state.contract }
+          value={ this.state.contractAdd }
           onChange={ this.onChange }
         />
-        <input 
+        <input
           type="text" 
           name="methodName" 
           placeholder="Function Name" 
           value={ this.state.methodName }
           onChange={ this.onChange }
         />
-        <input 
+        <input
           type="text" 
           name="methodType" 
           placeholder="Function Type" 
           value={ this.state.methodType }
           onChange={ this.onChange }
         />
-        <input 
+        <input
           type="submit" 
           value="Add Function" 
           className="btn"
