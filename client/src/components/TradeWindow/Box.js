@@ -22,7 +22,7 @@ class Box extends Component {
   }
   
   componentDidMount() {
-    setInterval( () => this.getMethods(), 10000);
+    setInterval( () => this.getMethods(), 1000);
   }
 
   addLocalMethod = (method) => {
@@ -39,7 +39,6 @@ class Box extends Component {
     //Can't use indexOf filter. learned the hard way
     this.state.localMethods.forEach((method, index) => {
       if(method.id === id) {
-        newMethods[index] = method;
         newMethods[index].args.push(args);
         newMethods[index].sendStatus = sendStatus.SENDING;
       }
@@ -52,13 +51,12 @@ class Box extends Component {
   setMethodSendStatus = (id, sendStatus) => {
     const newMethods = this.state.localMethods;
     
-    this.state.methods.forEach((method, index) => {
+    this.state.localMethods.forEach((method, index) => {
       if(method.id === id) {
-        newMethods[index] = method;
         newMethods[index].sendStatus = sendStatus;
       }
     });
-
+    
     this.setState({ localMethods: newMethods });
   }
 
@@ -92,7 +90,7 @@ class Box extends Component {
           from: _add1
         });
         let method={};
-        method.id = uuid();
+        method.id = uuid();//TODO get ID from server
         method.methodName = "";
         method.args = [];
         method.sendStatus = sendStatus.SENT;
@@ -108,6 +106,7 @@ class Box extends Component {
     arr.forEach((method) => {
       this.addChainMethod(method);
     });
+    //TODO check and remove duplicates from both method lists
   }
 
   render() {
