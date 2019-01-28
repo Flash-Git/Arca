@@ -11,7 +11,7 @@ class PreTrade extends Component {
   }
 
   async componentDidMount() {
-    if(this.props.isUser){
+    if(this.props.isUser!==0){
       let address1 = "";
       try{
         address1 = await window.web3.currentProvider.selectedAddress;
@@ -25,36 +25,47 @@ class PreTrade extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    if(this.checkAddresses(this.state.address1, 0) && this.checkAddresses(this.state.address1, 1)){
-      this.props.setAddresses([this.state.address1, this.state.address2]);
+    if(this.checkAddresses() === false){
+      return;
     }
+    this.props.setAddresses([this.state.address1, this.state.address2]);
   }
 
-  checkAddresses = (_address, _i) => {
+  checkAddresses = () => {
     if(this.props.connected){
+      let sumAdd1 = "";
+      let sumAdd2 = "";
+
       try{
-        _address = window.web3.utils.toChecksumAddress(_address);
+        sumAdd1 = window.web3.utils.toChecksumAddress(this.state.address1);
       } catch(e) {
-        if(_i===0) this.setState({ validInput1: false });
-        if(_i===1) this.setState({ validInput2: false });
+        this.setState({ validInput1: false });
         return false;
       }
-      if(window.web3.utils.isAddress(_address)){
-        if(_i===0) this.setState({ validInput1: true });
-        if(_i===1) this.setState({ validInput2: true });
-        return true;
-      } else {
-        if(_i===0) this.setState({ validInput: false });
-        if(_i===1) this.setState({ validInput: false });
+      try{
+        sumAdd2 = window.web3.utils.toChecksumAddress(this.state.address2);
+      } catch(e) {
+        this.setState({ validInput2: false });
         return false;
+      }
+      if(window.web3.utils.isAddress(sumAdd1)){
+        this.setState({ validInput1: true });
+      } else {
+        this.setState({ validInput1: false });
+      }
+      if(window.web3.utils.isAddress(sumAdd2)){
+          this.setState({ validInput2: true });
+      } else {
+        this.setState({ validInput2: false });
       }
     }
-    return false;
   }
 
-   onChange = (e) => this.setState({
+   onChange = (e) => {this.setState({
      [e.target.name]: e.target.value
    });
+   this.checkAddresses();//TODO race condition(?)
+  }
 
   render(){
     return(
@@ -124,7 +135,7 @@ const btnStyle = {
 
 //PropTypes
 PreTrade.propTypes = {
-  isUser: PropTypes.bool.isRequired,
+  isUser: PropTypes.number.isRequired,
   setAddresses: PropTypes.func.isRequired,
   refresh: PropTypes.func.isRequired,
   connected: PropTypes.bool.isRequired

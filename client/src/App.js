@@ -14,7 +14,7 @@ class App extends Component {
     connected: false,
     satisfied: false,
     addresses: ["", ""],
-    isUser: false
+    isUser: 0 //0 no user, 1 first box, 2 second box
   }
 
   componentDidUpdate(){
@@ -26,14 +26,14 @@ class App extends Component {
 
   isUser = () => {
     try{
-      if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()||
-        this.state.addresses[1].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
-        this.setState({ isUser: true });//TODO make this a 0 1 or 2
-        console.log("true")
-      }else{
-        console.log("false")
-
-        this.setState({ isUser: false });//TODO make this a 0 1 or 2
+      if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
+        this.setState({ isUser: 1 });
+      }
+      else if(this.state.addresses[1].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
+        this.setState({ isUser: 2 });
+      }
+      else{
+        this.setState({ isUser: 0 });
       }
     } catch(e){
       console.log(e);
