@@ -102,7 +102,7 @@ class MethodOffer extends Component {
     return(
       <div className="method" style={ methodStyle }>
         <div className="display" style={ displayStyle }>
-          { method.contract + " " + method.methodType + " " + method.methodName }
+          { method.contractAdd + " " + method.methodType + " " + method.methodName }
           { "(" }
           { this.props.method.args.map((arg, i) => (
             arg[0] + ": " + arg[1] + " = " + arg[2] + (i === method.args.length-1 ? "" : ", ")
