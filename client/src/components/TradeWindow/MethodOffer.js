@@ -107,35 +107,36 @@ class MethodOffer extends Component {
           { this.props.method.args.map((arg, i) => (
             arg[0] + ": " + arg[1] + " = " + arg[2] + (i === method.args.length-1 ? "" : ", ")
           )) }
-          { ")" }
+          { ")\n" }
+          { method.func }
         </div>
         { ((method.sendStatus === sendStatus.SENT)||(!this.props.isUser)) ? "" : //TODO
           (
           <form onSubmit={ this.onSubmit } className="form" style={ formStyle }>
             <input 
-              type="text" 
-              name="argType" 
-              placeholder="Arg Type" 
+              type="text"
+              name="argType"
+              placeholder="Arg Type"
               value={ this.state.argType }
               onChange={ this.onChange }
             />
-            <input 
-              type="text" 
-              name="argName" 
-              placeholder="Arg name" 
+            <input
+              type="text"
+              name="argName"
+              placeholder="Arg name"
               value={ this.state.argName }
               onChange={ this.onChange }
             />
             <input 
-              type="text" 
-              name="argValue" 
+              type="text"
+              name="argValue"
               placeholder="Arg value" 
               value={ this.state.argValue }
               onChange={ this.onChange }
             />
             <input 
-              type="submit" 
-              value="Add Args" 
+              type="submit"
+              value="Add Args"
               className="btn"
             />
           </form>

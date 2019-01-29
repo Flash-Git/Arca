@@ -12,7 +12,8 @@ class SubmitBox extends Component {
     methodName: "",
     methodType: "",
     args: [],
-    sendStatus: sendStatus.UNSENT
+    sendStatus: sendStatus.UNSENT,
+    func: ""
   }
 
   onSubmit = (e) => {
