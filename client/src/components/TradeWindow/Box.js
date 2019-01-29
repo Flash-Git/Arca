@@ -77,11 +77,16 @@ class Box extends Component {
     }
 
     const contract = await new window.web3.eth.Contract(abi, AppAddress);
-
-    const count = await contract.methods.getCount(_add1, _add2).call({
-      from: _add1
-    });
     
+    let count = 0;
+    try{
+      count = await contract.methods.getCount(_add1, _add2).call({
+        from: _add1
+      });
+    } catch(e){
+      return;
+    }
+
     const arr = [];
 
     for(let i = 0; i < count; i++){
@@ -94,7 +99,8 @@ class Box extends Component {
         method.methodName = "";
         method.args = [];
         method.sendStatus = sendStatus.SENT;
-        [method.contractAdd, method.methodType] = [result[0], result[1]];
+        method.methodType = "function";
+        [method.contractAdd, method.func] = [result[0], result[1]];
         
         arr.push(method);
       } catch(e) {
@@ -124,17 +130,17 @@ class Box extends Component {
               setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } />
           ) }
         </div>
-        <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.state.isUser } />
+        <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.props.isUser } />
         { (this.props.isUser ? <SubmitBox addMethod={ this.addLocalMethod } /> : "") }
       </div>
     );
   }
 }
 
-
 const containerStyle = {
   gridColumn: "1 auto",
-  gridRow: "2 auto"
+  gridRow: "2 auto",
+  margin: "0.1rem"
 }
 
 const boxStyle = {
@@ -143,7 +149,7 @@ const boxStyle = {
   gridTemplateColumns: "3fr 1fr",
   textAlign: "center",
   justifyContent: "center",
-  margin: "4px",
+  margin: "0.1rem",
   background: "#666",
   border: "solid",
   minHeight: "10rem",
