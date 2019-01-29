@@ -14,8 +14,14 @@ class TradeWindow extends Component {
   }
   
   execute = () => {
-    this.sendExecute();
-    this.setState({ executedStatus: executedStatus.TOTRUE })
+    if(this.props.isUser===1){
+      this.sendExecute(this.props.addresses[0], this.props.addresses[1]);
+    } else if(this.props.isUser===2){
+      this.sendExecute(this.props.addresses[1], this.props.addresses[0]);
+    } else {
+      return;
+    }
+    this.setState({ executedStatus: executedStatus.TOTRUE });
   }
 
   async sendExecute(_add1, _add2) {
@@ -48,16 +54,16 @@ class TradeWindow extends Component {
     }
   }
   
-  render(){
+  render() {
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
         {/* <h3>{ AppAddress }</h3> */}
         <Box isUser={ (this.props.isUser === 2 ? true : false) } addresses={ [this.props.addresses[1], this.props.addresses[0]] } />
         <Box isUser={ (this.props.isUser === 1 ? true : false) } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
         { (this.props.isUser ?
-        <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
-          { (this.executed ? "Executed" : "Execute") }
-        </button>
+          <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
+            { (this.executed ? "Executed" : "Execute") }
+          </button>
         : "") }
       </div>
     );
@@ -67,7 +73,8 @@ class TradeWindow extends Component {
 const tradeWindowStyle = {
   textAlign: "center",
   justifyContent: "center",
-  padding: "1rem"
+  padding: "1rem",
+  margin: "1rem"
 }
 
 const btnStyleUnsent = {
