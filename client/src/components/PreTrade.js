@@ -10,18 +10,6 @@ class PreTrade extends Component {
     validInput2: false
   }
 
-  async componentDidMount() {
-    if(this.props.isUser!==0){
-      let address1 = "";
-      try{
-        address1 = await window.web3.currentProvider.selectedAddress;
-        console.log(address1);
-        this.setState({ address1 });//TODO doesn't update input field
-      } catch(e){
-        console.error(e);
-      }
-    }
-  }
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -54,7 +42,7 @@ class PreTrade extends Component {
         this.setState({ validInput1: false });
       }
       if(window.web3.utils.isAddress(sumAdd2)){
-          this.setState({ validInput2: true });
+        this.setState({ validInput2: true });
       } else {
         this.setState({ validInput2: false });
       }
