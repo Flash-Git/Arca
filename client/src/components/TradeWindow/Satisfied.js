@@ -12,13 +12,13 @@ class Satisfied extends Component {
     isSatisfied: satisfiedStatus.FALSE
   }
 
-  toggleSatisfied = (e) => {//TODO test for web3
+  toggleSatisfied = (e) => {
     if(!this.props.isUser){
       return;
     }
     let isSatisfied;
 
-    switch(this.props.isSatisfied){
+    switch(this.state.isSatisfied){
       case satisfiedStatus.TRUE:
         isSatisfied = satisfiedStatus.TOFALSE;
         break;
@@ -38,32 +38,32 @@ class Satisfied extends Component {
 
     this.setState({ isSatisfied });
     this.props.setSatisfied(isSatisfied);
-    //this.sendSetSatisfied();
+    this.sendSetSatisfied();
   }
 
   async sendSetSatisfied() {
     const add1 = this.props.addresses[0];
     const add2 = this.props.addresses[1];
 
-    const contract = new window.web3.eth.Contract(abi, AppAddress);
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
 
-    contract.methods.setSatisfied(add2, true).send({
+    contract.methods.setSatisfied(add2, true).send({//TODO
       from: add1
       //TODO estimate gas
     })
-      .on('transactionHash', (hash) => {
+      .on("transactionHash", hash => {
         console.log(hash);
       })
-      .on('receipt', (receipt) => {
+      .on("receipt", receipt => {
         this.props.setSatisfied(satisfiedStatus.TRUE);
         this.setState({ isSatisfied: satisfiedStatus.TRUE });
       })
-      .on('confirmation', (confirmationNumber, receipt) => {
+      .on("confirmation", (confirmationNumber, receipt) => {
         if(confirmationNumber === 3){
           console.log("receipt: " + receipt);
         }
       })
-      .on('error', (error) => {
+      .on("error", error => {
         this.props.setSatisfied(satisfiedStatus.FALSE);
         this.setState({ isSatisfied: satisfiedStatus.FALSE });
         console.error(error);
@@ -119,7 +119,8 @@ const btnStyleSent = {
 //PropTypes
 Satisfied.propTypes = {
   setSatisfied: PropTypes.func.isRequired,
-  addresses: PropTypes.array.isRequired
+  addresses: PropTypes.array.isRequired,
+  isUser: PropTypes.bool.isRequired
 }
 
 export default Satisfied;
