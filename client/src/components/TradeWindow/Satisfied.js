@@ -47,27 +47,31 @@ class Satisfied extends Component {
 
     const contract = await new window.web3.eth.Contract(abi, AppAddress);
 
-    contract.methods.setSatisfied(add2, true).send({//TODO
-      from: add1
-      //TODO estimate gas
-    })
-      .on("transactionHash", hash => {
-        console.log(hash);
+    try{
+      contract.methods.setSatisfied(add2, "0x").send({//TODO hash other box
+        from: add1
+        //TODO estimate gas
       })
-      .on("receipt", receipt => {
-        this.props.setSatisfied(satisfiedStatus.TRUE);
-        this.setState({ isSatisfied: satisfiedStatus.TRUE });
-      })
-      .on("confirmation", (confirmationNumber, receipt) => {
-        if(confirmationNumber === 3){
-          console.log("receipt: " + receipt);
-        }
-      })
-      .on("error", error => {
-        this.props.setSatisfied(satisfiedStatus.FALSE);
-        this.setState({ isSatisfied: satisfiedStatus.FALSE });
-        console.error(error);
-      });
+        .on("transactionHash", hash => {
+          console.log(hash);
+        })
+        .on("receipt", receipt => {
+          this.props.setSatisfied(satisfiedStatus.TRUE);
+          this.setState({ isSatisfied: satisfiedStatus.TRUE });
+        })
+        .on("confirmation", (confirmationNumber, receipt) => {
+          if(confirmationNumber === 3){
+            console.log("receipt: " + receipt);
+          }
+        })
+        .on("error", error => {
+          this.props.setSatisfied(satisfiedStatus.FALSE);
+          this.setState({ isSatisfied: satisfiedStatus.FALSE });
+          console.error(error);
+        });
+    } catch(e){
+      console.error(e);
+    }
   }
 
   render(){
