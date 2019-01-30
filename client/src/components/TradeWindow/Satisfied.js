@@ -74,6 +74,43 @@ class Satisfied extends Component {
     }
   }
 
+  //TODO set up updating
+  async getSatisfied() {
+    const add1 = this.props.addresses[0];
+    const add2 = this.props.addresses[1];
+
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+    
+    let satisfied = false;
+    try{
+      satisfied = await contract.methods.getSatisfied(_add1, _add2).call({
+        from: _add1
+      });
+    } catch(e){
+      return;
+    }
+
+    //TODO
+    /////
+    switch(this.state.isSatisfied){
+      case satisfiedStatus.TRUE:
+        isSatisfied = satisfiedStatus.TOFALSE;
+        break;
+      case satisfiedStatus.FALSE:
+        isSatisfied = satisfiedStatus.TOTRUE;
+        break;
+      case satisfiedStatus.TOTRUE:
+        isSatisfied = satisfiedStatus.TOFALSE;
+        break;
+      case satisfiedStatus.TOFALSE:
+        isSatisfied = satisfiedStatus.TOTRUE;
+        break;
+      default:
+        return;
+    }
+    ///////
+  }
+
   render(){
     return(
       <div className="method" style={ methodStyle }>
