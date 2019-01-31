@@ -16,8 +16,6 @@ mongoose
   .then(() => console.log("MongoDB connected..."))
   .catch((err) => console.log(err));
 
-//Use routes
-
 //Serve static assets if in prod
 if(process.env.NODE_ENV === "production"){
   //Set static folder
