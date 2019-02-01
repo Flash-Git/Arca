@@ -12,6 +12,7 @@ contract Trade {
 * Events
 * Sort out data overwriting
 * Sort out escrow architecture
+* Huge amount of cleanup
 */
 
   address public escrow;
@@ -131,8 +132,8 @@ contract Trade {
     require(boxes[msg.sender][_tradePartner].satisfied == true, "Sender not satisfied");
     require(boxes[_tradePartner][msg.sender].satisfied == true, "Trade partner not satisfied");
 
-    require(checkHashes(_tradePartner));
-    require(updateBalances(_tradePartner));
+    require(checkHashes(_tradePartner), "Sender hashes failed to match");
+    require(updateBalances(_tradePartner), "Trade partner hashes failed to match");
 
     executeFunctionCalls(msg.sender, _tradePartner);
     executeFunctionCalls(_tradePartner, msg.sender);
