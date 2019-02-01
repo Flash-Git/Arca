@@ -22,7 +22,7 @@ class Box extends Component {
   }
   
   componentDidMount() {
-    setInterval( () => this.getMethods(), 1000);
+    setInterval( () => this.getMethods(), 5000);
   }
 
   addLocalMethod = (method) => {
