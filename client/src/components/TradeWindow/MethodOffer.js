@@ -1,14 +1,18 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-class Method extends Component {
+import abi from "../../abi";
+
+const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
+const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
+
+class MethodOffer extends Component {
 
   state = {
-    args: [],
-    type: "",
-    name: "",
-    value: "",
-    sent: false
+    argType: "",
+    argName: "",
+    argValue: "",
+    sendStatus: sendStatus.UNSENT
   }
 
   onChange = (e) => this.setState({
@@ -17,59 +21,129 @@ class Method extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const args = this.state.args;
-    args.push([this.state.type, this.state.name, this.state.value]);
-    this.setState({ args });
-    this.props.addMethodArguments(this.props.method.id, this.state.args, this.state.sent);
+    this.props.addMethodArguments(this.props.method.id, [this.state.argType, this.state.argName, this.state.argValue], this.state.sendStatus);
   }
 
-  sendMethod = (e) => {
-    this.props.sendMethod(this.props.method.id);
+  sendMethod = () => {
+    const method = this.props.method;
+
+    //TODO add checks
+    this.generateEncodedCall(method.methodName, method.methodType, method.args)
+    .then(encodedCall => this.broadcast(this.props.addresses[0], this.props.addresses[1], method.contractAdd, encodedCall),
+        this.setState({ sendStatus: sendStatus.SENDING })
+      )
+    .catch(e => this.setState({ sendStatus: sendStatus.UNSENT }));
+  }
+
+  async generateEncodedCall(_name, _type, _args) {
+    let argValues = [];
+    for(let i = 0; i < _args.length; i++){
+      argValues.push(_args[i][2]);
+    }
+    try{
+      const call = await window.web3.eth.abi.encodeFunctionCall(
+        this.formJson(_name, _type, _args), argValues
+      );
+      //this.setState({ sendStatus: sendStatus.SENDING });
+      return call;
+    }catch(error){
+      console.error(error);
+      return false;
+      //this.setState({ sendStatus: sendStatus.UNSENT });
+    }
+  }
+
+  formJson(_name, _type, _args) {
+    let argInputs = [];
+    for(let i = 0; i < _args.length; i++){
+      argInputs.push(this.addinput(_args[i][0], _args[i][1]));
+    }
+    let jsonObj = { name: _name, type: _type, inputs: argInputs};
+    return jsonObj;
+  }
+
+  addinput(_type, _name) {
+    const input = {
+      type: "",
+      name: ""
+    }
+    input.type = _type;
+    input.name = _name;
+    return input;
+  }
+
+  async broadcast(_add1, _add2, _contractAdd, _encodedCall) {
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+
+    try{
+      await contract.methods.pushFuncOffer(_add2, _contractAdd, _encodedCall).send({
+        from: _add1
+    })
+      .on("transactionHash", (hash) => {
+        console.log("txHash: " + hash);
+      })
+      .on("receipt", (receipt) => {
+        this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
+      })
+      .on("confirmation", (confirmationNumber, receipt) => {
+        if(confirmationNumber === 3){
+          console.log("receipt: " + receipt);
+        }
+      })
+      .on('error', console.error);
+    } catch(e){
+      console.log(e);
+    }
   }
 
   render(){
+    const method = this.props.method;
+
     return(
       <div className="method" style={ methodStyle }>
         <div className="display" style={ displayStyle }>
-          { this.props.method.contract + " " + this.props.method.methodType + " " + this.props.method.methodName }
+          { method.contractAdd + " " + method.methodType + " " + method.methodName }
           { "(" }
-          { this.state.args.map((arg, i) => (
-            arg[0] + ": " + arg[1] + " = " + arg[2] + (i===this.state.args.length-1 ? "" : ", ")
+          { this.props.method.args.map((arg, i) => (
+            arg[0] + ": " + arg[1] + " = " + arg[2] + (i === method.args.length-1 ? "" : ", ")
           )) }
-          { ")" }
+          { ")\n" }
+          { method.func }
         </div>
-        { this.props.method.sent ? "" : 
+        { ((method.sendStatus === sendStatus.SENT)||(!this.props.isUser)) ? "" : //TODO
           (
           <form onSubmit={ this.onSubmit } className="form" style={ formStyle }>
             <input 
-              type="text" 
-              name="type" 
-              placeholder="Arg Type" 
-              value={ this.state.type }
+              type="text"
+              name="argType"
+              placeholder="Arg Type"
+              value={ this.state.argType }
+              onChange={ this.onChange }
+            />
+            <input
+              type="text"
+              name="argName"
+              placeholder="Arg name"
+              value={ this.state.argName }
               onChange={ this.onChange }
             />
             <input 
-              type="text" 
-              name="name" 
-              placeholder="Arg name" 
-              value={ this.state.name }
-              onChange={ this.onChange }
-            />
-            <input 
-              type="text" 
-              name="value" 
+              type="text"
+              name="argValue"
               placeholder="Arg value" 
-              value={ this.state.value }
+              value={ this.state.argValue }
               onChange={ this.onChange }
             />
             <input 
-              type="submit" 
-              value="Add Args" 
+              type="submit"
+              value="Add Args"
               className="btn"
             />
           </form>
         ) }
-        <button onClick={ this.sendMethod } style={ (this.props.method.sent ? btnStyleSent : btnStyleUnsent) }>{ (this.props.method.sent ? "Sent" : "Send Method") }</button>
+        <button onClick={ this.sendMethod } style={ (method.sendStatus === sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
+          { (method.sendStatus === sendStatus.SENT ? "Sent" : "Send Method") }
+        </button>
       </div>
     );
   }
@@ -134,8 +208,12 @@ const btnStyleSent = {
 }
 
 //PropTypes
-Method.propTypes = {
-  method: PropTypes.object.isRequired
+MethodOffer.propTypes = {
+  method: PropTypes.object.isRequired,
+  addresses: PropTypes.array.isRequired,
+  isUser: PropTypes.bool.isRequired,
+  addMethodArguments: PropTypes.func.isRequired,
+  setMethodSendStatus: PropTypes.func.isRequired
 }
 
-export default Method;
+export default MethodOffer;

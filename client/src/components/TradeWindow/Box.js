@@ -2,57 +2,145 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import Summary from "./Summary";
-import OfferContainer from "./OfferContainer";
 import Satisfied from "./Satisfied";
 import SubmitBox from "./SubmitBox";
+import EthOffer from "./EthOffer";
+import MethodOffer from "./MethodOffer";
+import uuid from "uuid/v4";
+
+import abi from "../../abi";
+
+const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
+//const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
+const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
 
 class Box extends Component {
 
   state = {
-    methods: []
+    localMethods: [],
+    chainMethods: []
+  }
+  
+  componentDidMount() {
+    setInterval( () => this.getMethods(), 5000);
   }
 
-  addMethod = (method) => {
-    this.setState({ methods: [...this.state.methods, method] });
-    this.props.addMethod(method);
+  addLocalMethod = (method) => {
+    this.setState({ localMethods: [...this.state.localMethods, method] });
   }
 
-  addMethodArguments = (id, args, sent) => {
-    let newMethods = this.state.methods;
-    let argMeth;
-    let argMethIndex;
+  addChainMethod = (method) => {
+    this.setState({ chainMethods: [...this.state.chainMethods, method] });
+  }
+
+  addMethodArguments = (id, args) => {
+    const newMethods = this.state.localMethods;
+    
     //Can't use indexOf filter. learned the hard way
-    this.state.methods.forEach(function(method, index) {
-      argMethIndex = index;
-      argMeth = method;
-      argMeth.args = args;
-      argMeth.sent = sent;
+    this.state.localMethods.forEach((method, index) => {
+      if(method.id === id) {
+        newMethods[index].args.push(args);
+        newMethods[index].sendStatus = sendStatus.SENDING;
+      }
     });
 
-    newMethods[argMethIndex] = argMeth;
-
-    this.setState({ methods: newMethods });
-    this.props.addMethodArguments(id, args);
+    this.setState({ localMethods: newMethods });
   }
 
-  toggleSatisfied = (satisfied) => {
-    this.props.toggleSatisfied(satisfied);
+  //Keep sendStatus of methods up to date for safety on execution checks later
+  setMethodSendStatus = (id, sendStatus) => {
+    const newMethods = this.state.localMethods;
+    
+    this.state.localMethods.forEach((method, index) => {
+      if(method.id === id) {
+        newMethods[index].sendStatus = sendStatus;
+      }
+    });
+    
+    this.setState({ localMethods: newMethods });
   }
 
-  sendMethod = (i) => {
-    this.props.sendMethod(i);
+  setSatisfied = (isSatisfied) => {//TODO
+
   }
 
-  render(){
+  async getMethods() {
+    const _add1 = this.props.addresses[0];
+    const _add2 = this.props.addresses[1];
+    
+    try{
+      if(!window.web3.utils.isAddress(_add1) && !window.web3.utils.isAddress(_add2)){
+        return;
+      }
+    }catch(e){
+      return;
+    }
+
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+    
+    let count = 0;
+    try{
+      count = await contract.methods.getCount(_add1, _add2).call({
+        from: _add1
+      });
+    } catch(e){
+      return;
+    }
+
+    const arr = [];
+
+    for(let i = 0; i < count; i++){
+      try {
+        const result = await contract.methods.getFuncCall(_add1, _add2, i).call({
+          from: _add1
+        });
+        let method={};
+        method.id = uuid();//TODO get ID from server
+        method.methodName = "";
+        method.args = [];
+        method.sendStatus = sendStatus.SENT;
+        method.methodType = "function";
+        [method.contractAdd, method.func] = [result[0], result[1]];
+        
+        arr.push(method);
+      } catch(e) {
+        console.error(e);
+      }
+    }
+    
+    this.setState({ chainMethods: [] });
+    arr.forEach((method) => {
+      this.addChainMethod(method);
+    });
+    //TODO check and remove duplicates from both method lists
+  }
+
+  render() {
     return(
       <div className="box" style={ boxStyle }>
-        <Summary tradePartner={ this.props.tradePartner } />
-        <OfferContainer methods={ this.state.methods } addMethodArguments={ this.addMethodArguments } sendMethod={ this.sendMethod } />
-        <Satisfied satisfied={ this.props.satisfied } toggleSatisfied={ this.toggleSatisfied } />
-        <SubmitBox addMethod={ this.addMethod } />
+        <Summary address={ this.props.addresses[0] } />
+        <div className="container" style={ containerStyle }>
+          <EthOffer />
+          { this.state.chainMethods.map(method =>
+            <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments }
+              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } />
+          ) }
+          { this.state.localMethods.map(method =>
+            <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments }
+              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } />
+          ) }
+        </div>
+        <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.props.isUser } />
+        { (this.props.isUser ? <SubmitBox addMethod={ this.addLocalMethod } /> : "") }
       </div>
     );
   }
+}
+
+const containerStyle = {
+  gridColumn: "1 auto",
+  gridRow: "2 auto",
+  margin: "0.1rem"
 }
 
 const boxStyle = {
@@ -61,7 +149,7 @@ const boxStyle = {
   gridTemplateColumns: "3fr 1fr",
   textAlign: "center",
   justifyContent: "center",
-  margin: "4px",
+  margin: "0.1rem",
   background: "#666",
   border: "solid",
   minHeight: "10rem",
@@ -70,10 +158,8 @@ const boxStyle = {
 
 //PropTypes
 Box.propTypes = {
-  addMethod: PropTypes.func.isRequired,
-  addMethodArguments: PropTypes.func.isRequired,
-  toggleSatisfied: PropTypes.func.isRequired,
-  sendMethod: PropTypes.func.isRequired
+  isUser: PropTypes.bool.isRequired,
+  addresses: PropTypes.array.isRequired
 }
 
 export default Box;

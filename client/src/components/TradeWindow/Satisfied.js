@@ -1,19 +1,122 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import abi from "../../abi";
+
+const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
+const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
+
 class Satisfied extends Component {
 
   state = {
+    isSatisfied: satisfiedStatus.FALSE
   }
 
   toggleSatisfied = (e) => {
-    this.props.toggleSatisfied(this.props.satisfied);
+    if(!this.props.isUser){
+      return;
+    }
+    let isSatisfied;
+
+    switch(this.state.isSatisfied){
+      case satisfiedStatus.TRUE:
+        isSatisfied = satisfiedStatus.TOFALSE;
+        break;
+      case satisfiedStatus.FALSE:
+        isSatisfied = satisfiedStatus.TOTRUE;
+        break;
+      case satisfiedStatus.TOTRUE:
+        isSatisfied = satisfiedStatus.TOFALSE;
+        break;
+      case satisfiedStatus.TOFALSE:
+        isSatisfied = satisfiedStatus.TOTRUE;
+        break;
+      default:
+        console.log("Error in toggleSatisfied");
+        return;
+    }
+
+    this.setState({ isSatisfied });
+    this.props.setSatisfied(isSatisfied);
+    this.sendSetSatisfied();
+  }
+
+  async sendSetSatisfied() {
+    const add1 = this.props.addresses[0];
+    const add2 = this.props.addresses[1];
+
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+
+    try{
+      contract.methods.setSatisfied(add2, "0x").send({//TODO hash other box
+        from: add1
+        //TODO estimate gas
+      })
+        .on("transactionHash", hash => {
+          console.log(hash);
+        })
+        .on("receipt", receipt => {
+          this.props.setSatisfied(satisfiedStatus.TRUE);
+          this.setState({ isSatisfied: satisfiedStatus.TRUE });
+        })
+        .on("confirmation", (confirmationNumber, receipt) => {
+          if(confirmationNumber === 3){
+            console.log("receipt: " + receipt);
+          }
+        })
+        .on("error", error => {
+          this.props.setSatisfied(satisfiedStatus.FALSE);
+          this.setState({ isSatisfied: satisfiedStatus.FALSE });
+          console.error(error);
+        });
+    } catch(e){
+      console.error(e);
+    }
+  }
+
+  //TODO set up updating
+  async getSatisfied() {
+    const add1 = this.props.addresses[0];
+    const add2 = this.props.addresses[1];
+
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+    
+    let satisfied = false;
+    try{
+      satisfied = await contract.methods.getSatisfied(add1, add2).call({
+        from: add1
+      });
+    } catch(e){
+      return;
+    }
+
+    //TODO
+    /////
+    // switch(this.state.isSatisfied){
+    //   case satisfiedStatus.TRUE:
+    //     isSatisfied = satisfiedStatus.TOFALSE;
+    //     break;
+    //   case satisfiedStatus.FALSE:
+    //     isSatisfied = satisfiedStatus.TOTRUE;
+    //     break;
+    //   case satisfiedStatus.TOTRUE:
+    //     isSatisfied = satisfiedStatus.TOFALSE;
+    //     break;
+    //   case satisfiedStatus.TOFALSE:
+    //     isSatisfied = satisfiedStatus.TOTRUE;
+    //     break;
+    //   default:
+    //     return;
+    // }
+    ///////
   }
 
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        <button onClick={ this.toggleSatisfied } style={ (this.props.satisfied ? btnStyleSent : btnStyleUnsent) }>{this.props.satisfied ? "Satisfied" : "Unsatisifed"}</button>
+        <button onClick={ this.toggleSatisfied } style={ (this.state.isSatisfied === satisfiedStatus.TRUE ? btnStyleSent : btnStyleUnsent) }>
+          {this.state.isSatisfied === satisfiedStatus.TRUE ? "Satisfied" : "Unsatisifed"}
+        </button>
       </div>
     );
   }
@@ -56,8 +159,9 @@ const btnStyleSent = {
 
 //PropTypes
 Satisfied.propTypes = {
-  toggleSatisfied: PropTypes.func.isRequired,
-  satisfied: PropTypes.bool.isRequired
+  setSatisfied: PropTypes.func.isRequired,
+  addresses: PropTypes.array.isRequired,
+  isUser: PropTypes.bool.isRequired
 }
 
 export default Satisfied;

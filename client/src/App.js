@@ -7,108 +7,90 @@ import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
 
 import "./App.css";
-import abi from "./abi";
-
-const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
 
 class App extends Component {
 
   state = {
     connected: false,
-    methods: [],
-    partnerMethods: [],
     satisfied: false,
-    tradePartner: "",
-    validInput: false,
-    executed: false
+    addresses: ["", ""],
+    isUser: 0 //0 no user, 1 first box, 2 second box
   }
 
-  componentDidUpdate(){ 
-    this.checkConnected();
+  componentDidUpdate(){
   }
 
-  setTradePartner = (tradePartner) => {
-    if(this.state.connected){
-      try{
-        tradePartner = window.web3.utils.toChecksumAddress(tradePartner);
-      } catch {
-        this.setState({ tradePartner, validInput: false });
-        return;
+  setAddresses = (addresses) => {
+    this.setState({ addresses });
+  }
+
+  isUser = () => {
+    try{
+      if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
+        this.setState({ isUser: 1 });
       }
-      if(window.web3.utils.isAddress(tradePartner)){
-        this.setState({ tradePartner, validInput: true });
-      } else {
-        this.setState({ tradePartner, validInput: false });
+      else if(this.state.addresses[1].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
+        this.setState({ isUser: 2 });
       }
-    }
-  }
-
-  addMethod = (method) => {
-    this.setState({ methods: [...this.state.methods, method] });
-  }
-
-  addPartnerMethod = (method) => {
-    this.setState({ partnerMethods: [...this.state.partnerMethods, method] });
-  }
-
-  addMethodArguments = (id, args) => {
-    const newMethods = this.state.methods;
-    newMethods.filter(method => method.id === id).args = args;
-    this.setState({ methods: newMethods });
-  }
-
-  toggleSatisfied = (satisfied) => {
-    if(this.state.connected){
-      satisfied = !satisfied;
-      this.setState({ satisfied });
-      this.sendSetSatisfied();
-    }
-  }
-
-  sendMethod = (id) => {
-    if(this.state.connected){
-      let methIndex;
-      this.state.methods.forEach(function(method, index){
-        if(method.id===id){
-          methIndex = index;
-        }
-      });
-      if(this.state.methods[methIndex].sent===false){
-        const methods = this.state.methods;
-        methods[methIndex].sent = true;
-        this.setState({ methods });
-        this.sendAddMethod(methIndex);
+      else{
+        this.setState({ isUser: 0 });
       }
+    } catch(e){
+      console.log(e);
+      window.web3 = new Web3(window.ethereum);
+      window.ethereum.enable()
+      .then(accounts => this.checkConnected())
+      .catch(e => this.checkConnected());
     }
   }
 
   checkConnected = () => {
-    if(!this.state.connected){
-      this.setState({ connected: true });
-    }
-    // if(this.state.web3===undefined&&this.state.connected===true){
-    //   this.setState({ connected: false} );
-    // }else if(this.state.web3!==undefined&&this.state.connected!==true){
-    //   this.setState({ connected: true });
-    // }
-  }
-
-  execute = () => {
-    if(this.state.connected){
-      this.sendExecute();
-      this.setState({ executed: true })
+    window.web3 = new Web3(window.ethereum);
+    this.isUser();
+    console.log("Checking");
+    try{
+      if(window.web3.utils.isAddress(window.web3.currentProvider.selectedAddress)){
+        this.setState({ connected: true });
+        return true;
+      }
+      this.setState({ connected: false });
+      return false;
+    } catch(e){
+      this.setState({ connected: false });
+      return false;
     }
   }
   
   enableWeb3 = () => {
-    window.ethereum.enable();
+    if(this.checkConnected()){
+      return;
+    }
+
+    if(typeof window.ethereum === 'undefined'){
+      alert("Please install MetaMask");
+    }
     window.web3 = new Web3(window.ethereum);
-    console.log("web3 " + window.web3);
-    console.log("ethereum " + window.ethereum);
-    this.checkConnected();
-    // web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc")
-    //   .then(num => console.log(num));
+    window.ethereum.enable()
+    .then(accounts => this.checkConnected())
+    .catch(e => this.checkConnected());
+
   }
+
+
+  //   .then(accounts => {
+  //     // You now have an array of accounts!
+  //     // Currently only ever one:
+  //     // ['0xFDEa65C8e26263F6d9A1B5de9555D2931A33b825']
+  //     console.log(accounts[0]);
+  //   })
+  //   .catch(reason => {
+  //     console.error(reason);
+  //   });
+  //   this.checkConnected();
+  //   // web3.eth.getTransactionCount("0x2558aDC54E307Bef0c2B8D5bAcc4Bc9c53154EAc")
+  //   //   .then(num => console.log(num));
+  // }
+
 
     // if(typeof window.ethereum === 'undefined'){
     //   alert('Looks like you need a Dapp browser to get started.')
@@ -167,175 +149,7 @@ class App extends Component {
   // }
 
   refresh = () => {
-    const account = window.web3.currentProvider.selectedAddress;
-    const tradePartner = this.state.tradePartner;
-    this.showMethods(account, tradePartner);
-  }
 
-  async showMethods(_account, _tradePartner) {
-    const methods1 = await this.getFuncCalls(_account, _tradePartner);
-    const methods2 = await this.getFuncCalls(_tradePartner, _account);
-    const method = {
-      contract: methods1[0][0],
-      methodName: methods1[0][1]
-    }
-    this.addMethod(method);
-    console.log(methods1);
-    console.log(methods2);
-  }
-
-  addinput(_type, _name) {
-    const input = {
-      type: "",
-      name: ""
-    }
-    input.type = _type;
-    input.name = _name;
-    return input;
-  }
-
-  formJson(_name, _type, _args) {
-    let argInputs = [];
-    for(let i = 0; i < _args.length; i++){
-      argInputs.push(this.addinput(_args[i][0], _args[i][1]));
-    }
-    let jsonObj = { name: _name, type: _type, inputs: argInputs};
-    return jsonObj;
-  }
-
-  generateEncodedCall = (_i, _name, _type, _args) => {
-    let argValues = [];
-    for(let i = 0; i < _args.length; i++){
-      argValues.push(_args[i][2]);
-    }
-    try{
-      const call = window.web3.eth.abi.encodeFunctionCall(
-        this.formJson(_name, _type, _args), argValues
-      )
-      return call;
-    }catch(error){
-      console.error(error);
-      const methods = this.state.methods;
-      methods[_i].sent = false;
-      this.setState({ methods });
-    }
-  }
-
-  encodeAddMethod = (_i) => {
-    return this.generateEncodedCall(_i, this.state.methods[_i].methodName, this.state.methods[_i].methodType, this.state.methods[_i].args);
-  }
-
-  async getAccount() {
-    let account = "";
-    await window.web3.eth.getAccounts((error, accounts) => {
-        account = accounts[0];
-      }
-    );
-    return account;
-  }
-
-  async sendSetSatisfied() {
-    const account = window.web3.currentProvider.selectedAddress;
-    const tradePartner = this.state.tradePartner;
-    const satisfied = true;
-
-    const contract = new window.web3.eth.Contract(abi, AppAddress);
-
-    contract.methods.setSatisfied(tradePartner, satisfied).send({
-      from: account
-      //TODO estimate gas
-    })
-      .on('transactionHash', function(hash){
-        console.log(hash);
-      })
-      .on('receipt', function(receipt){
-      })
-      .on('confirmation', function(confirmationNumber, receipt){
-        if(confirmationNumber === 3){
-          console.log("receipt: " + receipt);
-        }
-      })
-      .on('error', console.error);
-  }
-
-  async sendAddMethod(_i) {
-    const account = window.web3.currentProvider.selectedAddress;
-
-    const tradePartner = this.state.tradePartner;
-    const contractAddress = this.state.methods[_i].contract;
-    const encodedCall = this.encodeAddMethod(_i);
-
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
-
-    console.log("account: " + account);
-    console.log("tradePartner: " + tradePartner);
-    console.log("contractAddress: " + contractAddress);
-    console.log("encodedCall: " + encodedCall);
-
-    await contract.methods.pushFuncOffer(tradePartner, contractAddress, encodedCall).send({
-       from: account
-    })
-      .on('transactionHash', function(hash){
-        console.log("hash: " + hash);
-      })
-      .on('receipt', function(receipt){
-        // console.log("receipt: " + receipt);
-      })
-      .on('confirmation', function(confirmationNumber, receipt){
-        if(confirmationNumber === 3){
-          console.log("receipt: " + receipt);
-        }
-      })
-      .on('error', console.error);
-  }
-
-  async sendExecute() {
-    const account = window.web3.currentProvider.selectedAddress;
-    const tradePartner = this.state.tradePartner;
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
-
-    contract.methods.executeTrade(tradePartner).send({
-      from: account
-      //TODO estimate gas
-    })
-      .on('transactionHash', function(hash){
-        console.log(hash);
-      })
-      .on('receipt', function(receipt){
-      })
-      .on('confirmation', function(confirmationNumber, receipt){
-        if(confirmationNumber === 3){
-          console.log("receipt: " + receipt);
-        }
-      })
-      .on('error', console.error);
-  }
-
-  async getFuncCalls(_add1, _add2) {
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
-
-    const count = await contract.methods.getCount(_add1, _add2).call({
-      from: _add1
-    });
-    console.log("Count: " + count);
-
-    const array = [];
-    for(let i = 0; i < count; i++){
-      try {
-        const result = await contract.methods.getFuncCall(_add1, _add2, 0).call({
-          from: _add1
-        });
-        const arr = [];
-        const [address, func] = [result[0], result[1]];
-        console.log("Address: " + address + ", Func: " + func);
-        arr.push(address);
-        arr.push(func);
-        array.push(arr);
-      } catch(e) {
-        console.error(e);
-      }
-    }
-    return array;
   }
 
   render(){
@@ -343,8 +157,8 @@ class App extends Component {
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <PreTrade refresh={ this.refresh } setTradePartner={ this.setTradePartner } tradePartner={ this.state.tradePartner } validInput={ this.state.validInput } />
-        <TradeWindow execute={ this.execute } executed={ this.state.executed } tradePartner={ this.state.tradePartner } addMethod={ this.addMethod } addMethodArguments={ this.addMethodArguments } satisfied={ this.state.satisfied } toggleSatisfied={ this.toggleSatisfied } sendMethod={ this.sendMethod } />
+        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.isUser } connected={ this.state.connected }/>
+        <TradeWindow addresses={ this.state.addresses } isUser={ this.state.isUser } />
       </div>
     );
   }
