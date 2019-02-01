@@ -83,8 +83,8 @@ class Satisfied extends Component {
     
     let satisfied = false;
     try{
-      satisfied = await contract.methods.getSatisfied(_add1, _add2).call({
-        from: _add1
+      satisfied = await contract.methods.getSatisfied(add1, add2).call({
+        from: add1
       });
     } catch(e){
       return;
@@ -92,22 +92,22 @@ class Satisfied extends Component {
 
     //TODO
     /////
-    switch(this.state.isSatisfied){
-      case satisfiedStatus.TRUE:
-        isSatisfied = satisfiedStatus.TOFALSE;
-        break;
-      case satisfiedStatus.FALSE:
-        isSatisfied = satisfiedStatus.TOTRUE;
-        break;
-      case satisfiedStatus.TOTRUE:
-        isSatisfied = satisfiedStatus.TOFALSE;
-        break;
-      case satisfiedStatus.TOFALSE:
-        isSatisfied = satisfiedStatus.TOTRUE;
-        break;
-      default:
-        return;
-    }
+    // switch(this.state.isSatisfied){
+    //   case satisfiedStatus.TRUE:
+    //     isSatisfied = satisfiedStatus.TOFALSE;
+    //     break;
+    //   case satisfiedStatus.FALSE:
+    //     isSatisfied = satisfiedStatus.TOTRUE;
+    //     break;
+    //   case satisfiedStatus.TOTRUE:
+    //     isSatisfied = satisfiedStatus.TOFALSE;
+    //     break;
+    //   case satisfiedStatus.TOFALSE:
+    //     isSatisfied = satisfiedStatus.TOTRUE;
+    //     break;
+    //   default:
+    //     return;
+    // }
     ///////
   }
 
