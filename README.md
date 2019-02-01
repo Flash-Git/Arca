@@ -4,7 +4,7 @@
 
 ### SUMMARY
 Through a set of autonomous contracts I'm going to to enable video game style trading boxes between all Ethereum accounts.
-All tradeable assets and individual actions.
+All tradeable assets and individual actions will be tradeable.
 
 Want to buy a cryptokitty but don't have the up front Eth?
 
