@@ -17,15 +17,13 @@ class App extends Component {
     isUser: 0 //0 no user, 1 first box, 2 second box
   }
 
-  componentDidUpdate(){
-  }
-
   setAddresses = (addresses) => {
     this.setState({ addresses });
   }
 
   isUser = () => {
     try{
+      console.log(window.web3.currentProvider);
       if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
         this.setState({ isUser: 1 });
       }
@@ -38,9 +36,10 @@ class App extends Component {
     } catch(e){
       console.log(e);
       window.web3 = new Web3(window.ethereum);
-      window.ethereum.enable()
-      .then(accounts => this.checkConnected())
-      .catch(e => this.checkConnected());
+      window.ethereum.enable();
+      // .then(accounts => this.checkConnected())
+      // .catch(e => this.checkConnected());
+
     }
   }
 
