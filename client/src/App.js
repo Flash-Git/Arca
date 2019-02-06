@@ -8,27 +8,31 @@ import PreTrade from "./components/PreTrade";
 
 import "./App.css";
 
+const userBoxStatus = Object.freeze({ "NO_BOX":0, "FIRST_BOX":2, "SECOND_BOX":3 });
+
+
 class App extends Component {
 
   state = {
     connected: false,
-    satisfied: false,
     addresses: ["", ""],
-    isUser: 0 //0 no user, 1 first box, 2 second box
+    userBox: 0 //0 no user, 1 first box, 2 second box
   }
 
   setAddresses = (addresses) => {
-    this.setState({ addresses });
+    this.setState({ addresses }, () => {
+      this.isUser();
+    });
   }
 
   isUser = () => {
     try{
       if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
-        this.setState({ isUser: 1 });
+        this.setState({ userBox: userBoxStatus.FIRST_BOX });
       } else if(this.state.addresses[1].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
-        this.setState({ isUser: 2 });
+        this.setState({ userBox: userBoxStatus.SECOND_BOX });
       } else{
-        this.setState({ isUser: 0 });
+        this.setState({ userBox: userBoxStatus.NO_BOX });
       }
     } catch(e){
       console.log(e);
@@ -42,7 +46,7 @@ class App extends Component {
   checkConnected = () => {
     window.web3 = new Web3(window.ethereum);
     this.isUser();
-    console.log("Checking");
+    //console.log("Checking");
     try{
       if(window.web3.utils.isAddress(window.web3.currentProvider.selectedAddress)){
         this.setState({ connected: true });
@@ -152,8 +156,8 @@ class App extends Component {
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.isUser } connected={ this.state.connected }/>
-        <TradeWindow addresses={ this.state.addresses } isUser={ this.state.isUser } />
+        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.userBox } connected={ this.state.connected }/>
+        <TradeWindow addresses={ this.state.addresses } userBox={ this.state.userBox } />
       </div>
     );
   }
