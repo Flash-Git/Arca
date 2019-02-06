@@ -7,8 +7,7 @@ import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
 
 import "./App.css";
-
-const userBoxStatus = Object.freeze({ "NO_BOX":0, "FIRST_BOX":2, "SECOND_BOX":3 });
+import { userBoxStatus } from "./Static";
 
 
 class App extends Component {

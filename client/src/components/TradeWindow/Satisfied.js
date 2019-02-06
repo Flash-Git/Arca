@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import abi from "../../abi";
-
-const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
-const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
+import { AppAddress, satisfiedStatus } from "../../Static";
 
 class Satisfied extends Component {
 
