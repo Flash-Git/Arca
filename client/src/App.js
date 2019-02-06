@@ -15,7 +15,7 @@ class App extends Component {
   state = {
     connected: false,
     addresses: ["", ""],
-    userBox: 0 //0 no user, 1 first box, 2 second box
+    userBox: userBoxStatus.NO_BOX
   }
 
   setAddresses = (addresses) => {

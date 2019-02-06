@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Box from "./TradeWindow/Box";
 
 import abi from "../abi";
-import { AppAddress, executedStatus } from "../Static";
+import { AppAddress, executedStatus, userBoxStatus } from "../Static";
 
 class TradeWindow extends Component {
   
@@ -56,8 +56,8 @@ class TradeWindow extends Component {
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
         {/* <h3>{ AppAddress }</h3> */}
-        <Box isUser={ (this.props.userBox === 2 ? true : false) } addresses={ [this.props.addresses[1], this.props.addresses[0]] } />
-        <Box isUser={ (this.props.userBox === 1 ? true : false) } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
+        <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) } addresses={ [this.props.addresses[1], this.props.addresses[0]] } />
+        <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
         { (this.props.userBox !== 0 ?
           <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
             { (this.executed ? "Executed" : "Execute") }
