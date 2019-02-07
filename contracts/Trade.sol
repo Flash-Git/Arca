@@ -15,9 +15,15 @@ contract Trade {
 * Huge amount of cleanup
 */
 
+  //Web3 DApp will check the status of secure before making transactions  
+  bool public secure;
   address public escrow;
   mapping(address => mapping(address => Box)) public boxes;
   mapping(address => uint256) public ethBalances;
+  mapping(address => bool) public trustedAddresses;
+  //Web3 DApp will list this number that anyone can increment
+  uint256 public insecurityCount;
+  mapping(address => bool) public markedInsecure;
 
   struct FuncCall {
     address contractAd;
@@ -39,8 +45,34 @@ contract Trade {
 
   constructor(address _escrow) public {
     escrow = _escrow;
+    secure = true;
+    trustedAddresses[msg.sender] = true;
   }
 
+  function setTrustedAddress(address _trustedAddress) public {
+    require(trustedAddresses[msg.sender] == true, "Untrusted address");
+    trustedAddresses[_trustedAddress] = true;
+  }
+
+  function removeTrust() public {
+    require(trustedAddresses[msg.sender] == true, "Untrusted address");
+    trustedAddresses[msg.sender] = false;
+  }
+
+  function setSecure(bool _secure) public {
+    require(trustedAddresses[msg.sender] == true, "Untrusted address");
+    secure = _secure;
+  }
+
+  function markSecurity(bool _secure) public {
+    require(markedInsecure[msg.sender] == !_secure, "Already marked");
+    markedInsecure[msg.sender] = _secure;
+    if(_security == true){
+      insecurityCount += 1;
+    } else {
+      insecurityCount -= 1;
+    }
+  }
 
   /*
   * Box Getters
