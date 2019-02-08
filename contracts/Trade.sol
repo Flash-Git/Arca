@@ -15,7 +15,7 @@ contract Trade {
 * Huge amount of cleanup
 */
 
-  //Web3 DApp will check the status of secure before making transactions  
+  //Web3 DApp will check the status of secure before making transactions
   bool public secure;
   address public escrow;
   mapping(address => mapping(address => Box)) public boxes;
@@ -73,6 +73,7 @@ contract Trade {
       insecurityCount -= 1;
     }
   }
+
 
   /*
   * Box Getters
@@ -136,12 +137,14 @@ contract Trade {
 
   function setSatisfied(address _tradePartner, bytes32 _funcsHash) public {
     require(address(msg.sender) != address(_tradePartner), "Can't be satisfied with yourself");
+    require(boxes[msg.sender][_tradePartner].satisfied != true, "Already Satisfied");
     boxes[msg.sender][_tradePartner].funcsHash = _funcsHash;
     boxes[msg.sender][_tradePartner].satisfied = true;
   }
 
-  function setNotSatisfied(address _tradePartner) public {
+  function setUnsatisfied(address _tradePartner) public {
     require(address(msg.sender) != address(_tradePartner), "Can't be satisfied with yourself");
+    require(boxes[msg.sender][_tradePartner].satisfied != false, "Already Unsatisfied");
     boxes[msg.sender][_tradePartner].satisfied = false;
   }
 
