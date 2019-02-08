@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-
+import makeBlockie from "ethereum-blockies-base64";
 class Summary extends Component {
+
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        ENS - { this.props.address } - Blockie
+        ENS - { this.props.address } - { this.props.address !== "" ? <img src={makeBlockie(this.props.address)} width="22px" alt="blockie" /> : "" }
       </div>
     );
   }
