@@ -4,7 +4,7 @@ class Header extends Component {
   render(){
     return(
       <header id="section-header" className="section" style={ headerStyle }>
-        <h2>Trade Box</h2>
+        <h2>DApp Box</h2>
       </header>
     );
   }
