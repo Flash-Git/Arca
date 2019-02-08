@@ -13,6 +13,28 @@ class PreTrade extends Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+    let count = 0;
+    
+    if(this.state.address1.includes(".eth")){
+      window.web3.eth.ens.getAddress(this.state.address1).then(address1 =>
+        this.setState({ address1 }, () => this.handleNewAddresses)
+      );
+      count++;
+    }
+    
+    if(this.state.address2.includes(".eth")){
+      window.web3.eth.ens.getAddress(this.state.address2).then(address2 =>
+        this.setState({ address2 }, () => this.handleNewAddresses)
+      );
+      count++;
+    }
+    
+    else if(count === 0){
+      this.handleNewAddresses();
+    }
+  }
+
+  handleNewAddresses = () => {
     if(this.checkAddresses() === false){
       return;
     }
