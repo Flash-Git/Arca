@@ -7,13 +7,14 @@ class Header extends Component {
   render(){
     return(
       <header id="section-header" className="section" style={ headerStyle }>
-        <h2>DApp Box { AppAddress !== "" ? <img src={makeBlockie(AppAddress)} width="28px" alt="blockie" /> : "" } </h2>
+        <h2>DApp Box </h2> { AppAddress !== "" ? <img src={makeBlockie(AppAddress)} width="32px" height="32px" alt="blockie" style={{ marginLeft:"1em", marginTop:"1.15em" }} /> : "" }
       </header>
     );
   }
 }
 
 const headerStyle = {
+  display: "flex",
   background: "#333",
   color: "#fff",
   textAlign: "center",
