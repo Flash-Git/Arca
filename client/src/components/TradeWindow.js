@@ -12,9 +12,9 @@ class TradeWindow extends Component {
   }
   
   execute = () => {
-    if(this.props.userBox === 1){
+    if(this.props.userBox === userBoxStatus.FIRST_BOX){
       this.sendExecute(this.props.addresses[0], this.props.addresses[1]);
-    } else if(this.props.userBox === 2){
+    } else if(this.props.userBox === userBoxStatus.SECOND_BOX){
       this.sendExecute(this.props.addresses[1], this.props.addresses[0]);
     } else {
       return;
@@ -23,7 +23,13 @@ class TradeWindow extends Component {
   }
 
   async sendExecute(_add1, _add2) {
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+
+    let contract;
+    try{
+      contract = await new window.web3.eth.Contract(abi, AppAddress);
+    } catch(e){
+      console.log(e);
+    }
 
     try{
       this.setState({ executedStatus: executedStatus.TOTRUE });
@@ -32,7 +38,7 @@ class TradeWindow extends Component {
         //TODO estimate gas
       })
         .on("transactionHash", hash => {
-          console.log(hash);
+          console.log("Hash: " + hash);
         })
         .on("receipt", receipt => {
           this.setState({ executedStatus: executedStatus.TRUE });
