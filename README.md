@@ -3,12 +3,12 @@
 ## UNFINISHED/UNAUDITED - DO NOT USE
 
 ### SUMMARY
-Through a set of autonomous contracts I'm going to to enable video game style trading boxes between all Ethereum accounts.
-All tradeable assets and individual actions will be tradeable.
+Through a set of autonomous contracts I'm going to enable video game style trading boxes between all Ethereum accounts.
+This includes the manipulation of any Ethereum asset as well as individual actions available through 2nd party function calls.
 
 Want to buy a cryptokitty but don't have the up front Eth?
 
-Maybe the seller will accept 3 of your kitties, a tank, 3ICO tokens and a signed message of his choice.
+Maybe the seller will give it to you in exchange for 3 of your kitties, a tank, 3ICO tokens and a signed message of his choice.
 
 ### WHAT CAN BE TRADED?
 Ether:
@@ -25,3 +25,5 @@ A lot of contracts require you to be the owner in order to call certain function
 
 ### FUTURE
 I can imagine a whole market based on these features but I have neither the money nor the time to work on this aspect of the project myself.
+
+### Current TODO List
