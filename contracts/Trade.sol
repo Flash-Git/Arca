@@ -1,7 +1,7 @@
-pragma solidity ^0.5.2;
+pragma solidity ^0.5.4;
 //Preliminary Code - WIP
 
-contract Trade {
+contract DAppBox {
 /*
 * TODO
 * Hella Security
