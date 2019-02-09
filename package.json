@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Flash-Git/Trade.git"
+    "url": "git+https://github.com/Flash-Git/DAppBox.git"
   },
   "author": "Flash",
   "license": "ISC",
@@ -23,10 +23,10 @@
     "mongoose": "^5.4.10"
   },
   "devDependencies": {
-    "nodemon": "^1.18.7"
+    "nodemon": "^1.18.10"
   },
   "bugs": {
-    "url": "https://github.com/Flash-Git/Trade/issues"
+    "url": "https://github.com/Flash-Git/DAppBox/issues"
   },
-  "homepage": "https://github.com/Flash-Git/Trade#readme"
+  "homepage": "https://github.com/Flash-Git/DAppBox#readme"
 }
