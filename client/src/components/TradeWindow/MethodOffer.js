@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import abi from "../../abi";
+import { AppAddress, sendStatus } from "../../Static";
 
-const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
-const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
 
 class MethodOffer extends Component {
 

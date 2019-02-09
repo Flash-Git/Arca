@@ -3,9 +3,7 @@ import PropTypes from "prop-types";
 import Box from "./TradeWindow/Box";
 
 import abi from "../abi";
-
-const executedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
-const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
+import { AppAddress, executedStatus, userBoxStatus } from "../Static";
 
 class TradeWindow extends Component {
   
@@ -14,9 +12,9 @@ class TradeWindow extends Component {
   }
   
   execute = () => {
-    if(this.props.isUser===1){
+    if(this.props.userBox === userBoxStatus.FIRST_BOX){
       this.sendExecute(this.props.addresses[0], this.props.addresses[1]);
-    } else if(this.props.isUser===2){
+    } else if(this.props.userBox === userBoxStatus.SECOND_BOX){
       this.sendExecute(this.props.addresses[1], this.props.addresses[0]);
     } else {
       return;
@@ -25,7 +23,13 @@ class TradeWindow extends Component {
   }
 
   async sendExecute(_add1, _add2) {
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+
+    let contract;
+    try{
+      contract = await new window.web3.eth.Contract(abi, AppAddress);
+    } catch(e){
+      console.log(e);
+    }
 
     try{
       this.setState({ executedStatus: executedStatus.TOTRUE });
@@ -34,7 +38,7 @@ class TradeWindow extends Component {
         //TODO estimate gas
       })
         .on("transactionHash", hash => {
-          console.log(hash);
+          console.log("Hash: " + hash);
         })
         .on("receipt", receipt => {
           this.setState({ executedStatus: executedStatus.TRUE });
@@ -58,9 +62,9 @@ class TradeWindow extends Component {
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
         {/* <h3>{ AppAddress }</h3> */}
-        <Box isUser={ (this.props.isUser === 2 ? true : false) } addresses={ [this.props.addresses[1], this.props.addresses[0]] } />
-        <Box isUser={ (this.props.isUser === 1 ? true : false) } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
-        { (this.props.isUser ?
+        <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) } addresses={ [this.props.addresses[1], this.props.addresses[0]] } />
+        <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
+        { (this.props.userBox !== 0 ?
           <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
             { (this.executed ? "Executed" : "Execute") }
           </button>
@@ -98,7 +102,7 @@ const btnStyleSent = {
 
 //PropTypes
 TradeWindow.propTypes = {
-  isUser: PropTypes.number.isRequired,
+  userBox: PropTypes.number.isRequired,
   addresses: PropTypes.array.isRequired
 }
 

@@ -9,10 +9,7 @@ import MethodOffer from "./MethodOffer";
 import uuid from "uuid/v4";
 
 import abi from "../../abi";
-
-const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
-//const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
-const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
+import { AppAddress, sendStatus } from "../../Static";
 
 class Box extends Component {
 
@@ -20,10 +17,18 @@ class Box extends Component {
     localMethods: [],
     chainMethods: []
   }
-  
-  componentDidMount() {
-    setInterval( () => this.getMethods(), 5000);
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.addresses===this.props.addresses){
+      return;
+    }
+    this.setState({
+    }, () => this.getMethods());
   }
+  
+   componentDidMount() {
+     setInterval( () => this.getMethods(), 30000);
+   }
 
   addLocalMethod = (method) => {
     this.setState({ localMethods: [...this.state.localMethods, method] });
@@ -75,9 +80,12 @@ class Box extends Component {
     }catch(e){
       return;
     }
-
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
-    
+    let contract;
+    try{
+      contract = await new window.web3.eth.Contract(abi, AppAddress);
+    }catch(e){//UNCLEAN
+      console.log(e);
+    }    
     let count = 0;
     try{
       count = await contract.methods.getCount(_add1, _add2).call({

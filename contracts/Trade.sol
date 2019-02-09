@@ -15,9 +15,15 @@ contract DAppBox {
 * Huge amount of cleanup
 */
 
+  //Web3 DApp will check the status of secure before making transactions
+  bool public secure;
   address public escrow;
   mapping(address => mapping(address => Box)) public boxes;
   mapping(address => uint256) public ethBalances;
+  mapping(address => bool) public trustedAddresses;
+  //Web3 DApp will list this number that anyone can increment
+  uint256 public insecurityCount;
+  mapping(address => bool) public markedInsecure;
 
   struct FuncCall {
     address contractAd;
@@ -39,6 +45,33 @@ contract DAppBox {
 
   constructor(address _escrow) public {
     escrow = _escrow;
+    secure = true;
+    trustedAddresses[msg.sender] = true;
+  }
+
+  function setTrustedAddress(address _trustedAddress) public {
+    require(trustedAddresses[msg.sender] == true, "Untrusted address");
+    trustedAddresses[_trustedAddress] = true;
+  }
+
+  function removeTrust() public {
+    require(trustedAddresses[msg.sender] == true, "Untrusted address");
+    trustedAddresses[msg.sender] = false;
+  }
+
+  function setSecure(bool _secure) public {
+    require(trustedAddresses[msg.sender] == true, "Untrusted address");
+    secure = _secure;
+  }
+
+  function markSecurity(bool _secure) public {
+    require(markedInsecure[msg.sender] == !_secure, "Already marked");
+    markedInsecure[msg.sender] = _secure;
+    if(_security == true){
+      insecurityCount += 1;
+    } else {
+      insecurityCount -= 1;
+    }
   }
 
 
@@ -104,12 +137,14 @@ contract DAppBox {
 
   function setSatisfied(address _tradePartner, bytes32 _funcsHash) public {
     require(address(msg.sender) != address(_tradePartner), "Can't be satisfied with yourself");
+    require(boxes[msg.sender][_tradePartner].satisfied != true, "Already Satisfied");
     boxes[msg.sender][_tradePartner].funcsHash = _funcsHash;
     boxes[msg.sender][_tradePartner].satisfied = true;
   }
 
-  function setNotSatisfied(address _tradePartner) public {
+  function setUnsatisfied(address _tradePartner) public {
     require(address(msg.sender) != address(_tradePartner), "Can't be satisfied with yourself");
+    require(boxes[msg.sender][_tradePartner].satisfied != false, "Already Unsatisfied");
     boxes[msg.sender][_tradePartner].satisfied = false;
   }
 

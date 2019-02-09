@@ -7,47 +7,45 @@ import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
 
 import "./App.css";
+import { userBoxStatus } from "./Static";
+
 
 class App extends Component {
 
   state = {
     connected: false,
-    satisfied: false,
     addresses: ["", ""],
-    isUser: 0 //0 no user, 1 first box, 2 second box
-  }
-
-  componentDidUpdate(){
+    userBox: userBoxStatus.NO_BOX
   }
 
   setAddresses = (addresses) => {
-    this.setState({ addresses });
+    this.setState({ addresses }, () => {
+      this.isUser();
+    });
   }
 
   isUser = () => {
     try{
       if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
-        this.setState({ isUser: 1 });
-      }
-      else if(this.state.addresses[1].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
-        this.setState({ isUser: 2 });
-      }
-      else{
-        this.setState({ isUser: 0 });
+        this.setState({ userBox: userBoxStatus.FIRST_BOX });
+      } else if(this.state.addresses[1].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
+        this.setState({ userBox: userBoxStatus.SECOND_BOX });
+      } else{
+        this.setState({ userBox: userBoxStatus.NO_BOX });
       }
     } catch(e){
       console.log(e);
       window.web3 = new Web3(window.ethereum);
       window.ethereum.enable()
-      .then(accounts => this.checkConnected())
-      .catch(e => this.checkConnected());
+        .then(accounts => console.log(accounts))
+        .catch(e => console.log(e + "Failed to connect"));
     }
   }
 
   checkConnected = () => {
     window.web3 = new Web3(window.ethereum);
     this.isUser();
-    console.log("Checking");
+    //console.log("Checking");
     try{
       if(window.web3.utils.isAddress(window.web3.currentProvider.selectedAddress)){
         this.setState({ connected: true });
@@ -157,8 +155,8 @@ class App extends Component {
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
-        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.isUser } connected={ this.state.connected }/>
-        <TradeWindow addresses={ this.state.addresses } isUser={ this.state.isUser } />
+        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.userBox } connected={ this.state.connected }/>
+        <TradeWindow addresses={ this.state.addresses } userBox={ this.state.userBox } />
       </div>
     );
   }

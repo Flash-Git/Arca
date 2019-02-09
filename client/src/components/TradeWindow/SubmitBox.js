@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import uuid from "uuid/v4";
 import PropTypes from "prop-types";
 
-const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
+import { sendStatus } from "../../Static";
 
 class SubmitBox extends Component {
 

@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import abi from "../../abi";
-
-const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
-const AppAddress = "0x34d418E6019704815F626578eb4df5839f1a445d";
+import { AppAddress, satisfiedStatus } from "../../Static";
 
 class Satisfied extends Component {
 
@@ -12,7 +10,14 @@ class Satisfied extends Component {
     isSatisfied: satisfiedStatus.FALSE
   }
 
-  toggleSatisfied = (e) => {
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.addresses===this.props.addresses){
+      return;
+    }
+    this.getSatisfied();
+  }
+
+  toggleSatisfied = (e) => {//TODO ADD STUFF FOR TRANSITIONAL STATES
     if(!this.props.isUser){
       return;
     }
@@ -21,15 +26,19 @@ class Satisfied extends Component {
     switch(this.state.isSatisfied){
       case satisfiedStatus.TRUE:
         isSatisfied = satisfiedStatus.TOFALSE;
+        this.sendSetUnsatisfied();
         break;
       case satisfiedStatus.FALSE:
         isSatisfied = satisfiedStatus.TOTRUE;
+        this.sendSetSatisfied();
         break;
       case satisfiedStatus.TOTRUE:
         isSatisfied = satisfiedStatus.TOFALSE;
+        this.sendSetUnsatisfied();
         break;
       case satisfiedStatus.TOFALSE:
         isSatisfied = satisfiedStatus.TOTRUE;
+        this.sendSetSatisfied();
         break;
       default:
         console.log("Error in toggleSatisfied");
@@ -38,15 +47,18 @@ class Satisfied extends Component {
 
     this.setState({ isSatisfied });
     this.props.setSatisfied(isSatisfied);
-    this.sendSetSatisfied();
   }
 
   async sendSetSatisfied() {
     const add1 = this.props.addresses[0];
     const add2 = this.props.addresses[1];
+    let contract;
 
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
-
+    try{
+      contract = await new window.web3.eth.Contract(abi, AppAddress);
+    }catch(e){//UNCLEAN
+      console.log(e);
+    }
     try{
       contract.methods.setSatisfied(add2, "0x").send({//TODO hash other box
         from: add1
@@ -74,13 +86,57 @@ class Satisfied extends Component {
     }
   }
 
-  //TODO set up updating
+
+  async sendSetUnsatisfied() {
+    const add1 = this.props.addresses[0];
+    const add2 = this.props.addresses[1];
+    let contract;
+
+    try{
+      contract = await new window.web3.eth.Contract(abi, AppAddress);
+    }catch(e){//UNCLEAN
+      console.log(e);
+    }
+
+    try{
+      contract.methods.setUnsatisfied(add2).send({//TODO hash other box
+        from: add1
+        //TODO estimate gas
+      })
+        .on("transactionHash", hash => {
+          console.log(hash);
+        })
+        .on("receipt", receipt => {
+          this.props.setSatisfied(satisfiedStatus.FALSE);
+          this.setState({ isSatisfied: satisfiedStatus.FALSE });
+        })
+        .on("confirmation", (confirmationNumber, receipt) => {
+          if(confirmationNumber === 3){
+            console.log("receipt: " + receipt);
+          }
+        })
+        .on("error", error => {
+          console.error(error);
+        });
+    } catch(e){
+      console.error(e);
+    }
+  }
+  
+   componentDidMount() {
+     setInterval( () => this.getSatisfied(), 30000);
+   }
+
   async getSatisfied() {
     const add1 = this.props.addresses[0];
     const add2 = this.props.addresses[1];
-
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
     
+    let contract;
+    try{
+      contract = await new window.web3.eth.Contract(abi, AppAddress);
+    }catch(e){//UNCLEAN
+      console.log(e);
+    }    
     let satisfied = false;
     try{
       satisfied = await contract.methods.getSatisfied(add1, add2).call({
@@ -90,25 +146,16 @@ class Satisfied extends Component {
       return;
     }
 
-    //TODO
-    /////
-    // switch(this.state.isSatisfied){
-    //   case satisfiedStatus.TRUE:
-    //     isSatisfied = satisfiedStatus.TOFALSE;
-    //     break;
-    //   case satisfiedStatus.FALSE:
-    //     isSatisfied = satisfiedStatus.TOTRUE;
-    //     break;
-    //   case satisfiedStatus.TOTRUE:
-    //     isSatisfied = satisfiedStatus.TOFALSE;
-    //     break;
-    //   case satisfiedStatus.TOFALSE:
-    //     isSatisfied = satisfiedStatus.TOTRUE;
-    //     break;
-    //   default:
-    //     return;
-    // }
-    ///////
+    switch(satisfied){
+      case false:
+        this.setState({ isSatisfied: satisfiedStatus.FALSE} );
+        break;
+      case true:
+      this.setState({ isSatisfied: satisfiedStatus.TRUE} );
+      break;
+      default:
+        return;
+    }
   }
 
   render(){
