@@ -26,9 +26,9 @@ class App extends Component {
 
   isUser = () => {
     try{
-      if(this.state.addresses[0].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
+      if(this.state.addresses[0].toUpperCase() === window.ethereum.selectedAddress.toUpperCase()){
         this.setState({ userBox: userBoxStatus.FIRST_BOX });
-      } else if(this.state.addresses[1].toUpperCase() === window.web3.currentProvider.selectedAddress.toUpperCase()){
+      } else if(this.state.addresses[1].toUpperCase() === window.ethereum.selectedAddress.toUpperCase()){
         this.setState({ userBox: userBoxStatus.SECOND_BOX });
       } else{
         this.setState({ userBox: userBoxStatus.NO_BOX });
@@ -43,11 +43,10 @@ class App extends Component {
   }
 
   checkConnected = () => {
-    window.web3 = new Web3(window.ethereum);
     this.isUser();
     //console.log("Checking");
     try{
-      if(window.web3.utils.isAddress(window.web3.currentProvider.selectedAddress)){
+      if(window.web3.utils.isAddress(window.ethereum.selectedAddress)){
         this.setState({ connected: true });
         return true;
       }
@@ -55,6 +54,7 @@ class App extends Component {
       return false;
     } catch(e){
       this.setState({ connected: false });
+      console.log(e);
       return false;
     }
   }
@@ -64,10 +64,10 @@ class App extends Component {
       return;
     }
 
-    if(typeof window.ethereum === 'undefined'){
+    if(typeof window.ethereum === "undefined"){
       alert("Please install MetaMask");
     }
-    window.web3 = new Web3(window.ethereum);
+    window.web3 = new Web3(window.ethereum);//const web3 = new Web3(window.web3.currentProvider);
     window.ethereum.enable()
     .then(accounts => this.checkConnected())
     .catch(e => this.checkConnected());
