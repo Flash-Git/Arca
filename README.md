@@ -27,3 +27,4 @@ A lot of contracts require you to be the owner in order to call certain function
 I can imagine a whole market based on these features but I have neither the money nor the time to work on this aspect of the project myself.
 
 ### Current TODO List
+-Write TODO List
