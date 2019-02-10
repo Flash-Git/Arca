@@ -11,7 +11,14 @@ import { userBoxStatus } from "./Static";
 
 
 class App extends Component {
+/*  const BN = window.web3.utils.toBN;
 
+  let one = new BN(this.state.addresses[0]);
+  let two = new BN(this.state.addresses[1]);
+  one.mul(two);
+  
+  console.log(one.toString(16));
+*/
   state = {
     connected: false,
     addresses: ["", ""],
@@ -34,10 +41,11 @@ class App extends Component {
         this.setState({ userBox: userBoxStatus.NO_BOX });
       }
     } catch(e){
-      console.log(e);
+      console.log("Provider address not found");
+      console.log("Enabling Ethereum...");
       window.web3 = new Web3(window.ethereum);
       window.ethereum.enable()
-        .then(accounts => console.log(accounts))
+        .then(accounts => console.log("Address found: " + accounts[0]))
         .catch(e => console.log(e + "Failed to connect"));
     }
   }
