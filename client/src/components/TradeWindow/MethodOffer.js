@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import makeBlockie from "ethereum-blockies-base64";
 
 import abi from "../../abi";
 import { AppAddress, sendStatus } from "../../Static";
@@ -97,19 +98,24 @@ class MethodOffer extends Component {
 
   render(){
     const method = this.props.method;
-
+    console.log(method.contractAdd);
     return(
       <div className="method" style={ methodStyle }>
         <div className="display" style={ displayStyle }>
-          { method.contractAdd + " " + method.methodType + " " + method.methodName }
-          { "(" }
+          { method.contractAdd }
+          { 
+            method.contractAdd !== "" ?
+              <span> <span>&nbsp;</span> <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" style={{ marginTop:"0.2em" }} /> <span>&nbsp;</span> </span>
+            : ""
+          }
+          { method.methodType + " " + method.methodName } { "(" }
           { this.props.method.args.map((arg, i) => (
             arg[0] + ": " + arg[1] + " = " + arg[2] + (i === method.args.length-1 ? "" : ", ")
           )) }
           { ")\n" }
-          { method.func }
+          { "Enc: " + method.func }
         </div>
-        { ((method.sendStatus === sendStatus.SENT)||(!this.props.isUser)) ? "" : //TODO
+        { ((method.sendStatus === sendStatus.SENT)||(!this.props.isUser)) ? "" :
           (
           <form onSubmit={ this.onSubmit } className="form" style={ formStyle }>
             <input 
@@ -141,7 +147,7 @@ class MethodOffer extends Component {
           </form>
         ) }
         <button onClick={ this.sendMethod } style={ (method.sendStatus === sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
-          { (method.sendStatus === sendStatus.SENT ? "Sent" : "Send Method") }
+          { method.sendStatus === sendStatus.SENT ? <span>Sent<br />(Resend)</span> : "Send Method" }
         </button>
       </div>
     );
@@ -162,6 +168,7 @@ const methodStyle = {
 }
 
 const displayStyle = {
+  display: "flex",
   gridColumn: "1 / 2",
   gridRow: "1",
   textAlign: "center",
