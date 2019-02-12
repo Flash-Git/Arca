@@ -6,23 +6,82 @@ import Web3Status from "./components/Web3Status";
 import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
 
-import "./App.css";
 import { userBoxStatus } from "./Static";
-
+import "./App.css";
 
 class App extends Component {
-/*  const BN = window.web3.utils.toBN;
+/*const BN = window.web3.utils.toBN;
 
   let one = new BN(this.state.addresses[0]);
   let two = new BN(this.state.addresses[1]);
   one.mul(two);
   
-  console.log(one.toString(16));
-*/
+  console.log(one.toString(16));*/
+  
   state = {
     connected: false,
     addresses: ["", ""],
     userBox: userBoxStatus.NO_BOX
+  }
+
+
+/*
+  button to connect to web3
+
+  isUser check for box purposes
+
+  checkConnected method for periodical use and fallback
+
+
+
+
+
+
+*/
+
+
+
+  enableWeb3 = () => {
+    //Check whether the DApp has an open connection to the Ethereum blockchain
+    try{
+      const add = window.ethereum.selectedAddress;
+    } catch(e){
+      
+    }
+    
+    
+      if(this.checkConnected()){
+      return;
+    }
+    
+    //Check if user's window has a window.ethereum currently available
+    if(typeof window.ethereum === "undefined"){
+      alert("Please install MetaMask");
+    }
+
+    //Attempt to open a connection to the Ethereum blockchain
+    window.web3 = new Web3(window.ethereum);//const web3 = new Web3(window.web3.currentProvider);
+    window.ethereum.enable()
+    .then(accounts => this.checkConnected())
+    .catch(e => this.checkConnected());
+
+  }
+
+  checkConnected = () => {
+    this.isUser();
+    //console.log("Checking");
+    try{
+      if(window.web3.utils.isAddress(window.ethereum.selectedAddress)){
+        this.setState({ connected: true });
+        return true;
+      }
+      this.setState({ connected: false });
+      return false;
+    } catch(e){
+      this.setState({ connected: false });
+      console.log(e);
+      return false;
+    }
   }
 
   setAddresses = (addresses) => {
@@ -50,37 +109,9 @@ class App extends Component {
     }
   }
 
-  checkConnected = () => {
-    this.isUser();
-    //console.log("Checking");
-    try{
-      if(window.web3.utils.isAddress(window.ethereum.selectedAddress)){
-        this.setState({ connected: true });
-        return true;
-      }
-      this.setState({ connected: false });
-      return false;
-    } catch(e){
-      this.setState({ connected: false });
-      console.log(e);
-      return false;
-    }
-  }
+
   
-  enableWeb3 = () => {
-    if(this.checkConnected()){
-      return;
-    }
 
-    if(typeof window.ethereum === "undefined"){
-      alert("Please install MetaMask");
-    }
-    window.web3 = new Web3(window.ethereum);//const web3 = new Web3(window.web3.currentProvider);
-    window.ethereum.enable()
-    .then(accounts => this.checkConnected())
-    .catch(e => this.checkConnected());
-
-  }
 
 
   //   .then(accounts => {
