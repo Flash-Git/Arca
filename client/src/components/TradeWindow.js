@@ -65,8 +65,12 @@ class TradeWindow extends Component {
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
         {/* <h3>{ AppAddress }</h3> */}
-        <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) } addresses={ [this.props.addresses[1], this.props.addresses[0]] } connected ={ this.props.connected } />
-        <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) } addresses={ [this.props.addresses[0], this.props.addresses[1]] } connected ={ this.props.connected } />
+        <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) }
+          addresses={ [this.props.addresses[1], this.props.addresses[0]] } connected ={ this.props.connected }
+        />
+        <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) }
+          addresses={ [this.props.addresses[0], this.props.addresses[1]] } connected ={ this.props.connected }
+        />
         { (this.props.userBox !== 0 ?
           <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
             { (this.executed ? "Executed" : "Execute") }

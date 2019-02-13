@@ -48,13 +48,16 @@ class App extends Component {
     const connection = this.checkConnection();
     //Check whether the DApp has an open connection to the Ethereum blockchain
     if(connection === 0) return;
-
+    
     //Check whether the user is on the rinkeby network
     if(connection === 3) return;
     
     //Check if user's window has a window.ethereum currently available
-    if(typeof window.ethereum === "undefined") alert("Please install MetaMask");
-
+    if(typeof window.ethereum === "undefined"){
+      alert("Please install MetaMask");
+      return;
+    }
+    
     //Attempt to open a connection to the Ethereum blockchain
     //Old const web3 = new Web3(window.web3.currentProvider);//
     window.web3 = new Web3(window.ethereum);
