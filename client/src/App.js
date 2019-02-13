@@ -52,13 +52,12 @@ class App extends Component {
     //Check whether the user is on the rinkeby network
     if(connection === 3) return;
     
-    console.log("cunt");
-
     //Check if user's window has a window.ethereum currently available
     if(typeof window.ethereum === "undefined") alert("Please install MetaMask");
 
     //Attempt to open a connection to the Ethereum blockchain
-    window.web3 = new Web3(window.ethereum);//const web3 = new Web3(window.web3.currentProvider);
+    //Old const web3 = new Web3(window.web3.currentProvider);//
+    window.web3 = new Web3(window.ethereum);
     window.ethereum.enable()
     .then(accounts => this.checkConnection())
     .catch(e => {
