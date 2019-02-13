@@ -101,7 +101,7 @@ class App extends Component {
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
         <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.userBox } connected={ this.state.connected }/>
-        <TradeWindow addresses={ this.state.addresses } userBox={ this.state.userBox } />
+        <TradeWindow addresses={ this.state.addresses } userBox={ this.state.userBox } connected ={ this.state.connected } />
       </div>
     );
   }

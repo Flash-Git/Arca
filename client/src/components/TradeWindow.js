@@ -12,6 +12,10 @@ class TradeWindow extends Component {
   }
   
   execute = () => {
+    if(!this.props.connected){
+      alert("Not connected");
+      return;
+    }
     if(this.props.userBox === userBoxStatus.FIRST_BOX){
       this.sendExecute(this.props.addresses[0], this.props.addresses[1]);
     } else if(this.props.userBox === userBoxStatus.SECOND_BOX){
@@ -23,7 +27,6 @@ class TradeWindow extends Component {
   }
 
   async sendExecute(_add1, _add2) {
-
     let contract;
     try{
       contract = await new window.web3.eth.Contract(abi, AppAddress);
@@ -62,8 +65,8 @@ class TradeWindow extends Component {
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
         {/* <h3>{ AppAddress }</h3> */}
-        <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) } addresses={ [this.props.addresses[1], this.props.addresses[0]] } />
-        <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) } addresses={ [this.props.addresses[0], this.props.addresses[1]] } />
+        <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) } addresses={ [this.props.addresses[1], this.props.addresses[0]] } connected ={ this.props.connected } />
+        <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) } addresses={ [this.props.addresses[0], this.props.addresses[1]] } connected ={ this.props.connected } />
         { (this.props.userBox !== 0 ?
           <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
             { (this.executed ? "Executed" : "Execute") }
@@ -103,7 +106,8 @@ const btnStyleSent = {
 //PropTypes
 TradeWindow.propTypes = {
   userBox: PropTypes.number.isRequired,
-  addresses: PropTypes.array.isRequired
+  addresses: PropTypes.array.isRequired,
+  connected: PropTypes.bool.isRequired
 }
 
 export default TradeWindow;

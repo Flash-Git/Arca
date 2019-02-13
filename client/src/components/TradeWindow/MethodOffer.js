@@ -25,6 +25,10 @@ class MethodOffer extends Component {
   }
 
   sendMethod = () => {
+    if(!this.props.connected){
+      alert("Not connected");
+      return;
+    }
     const method = this.props.method;
 
     //TODO add checks
@@ -219,7 +223,8 @@ MethodOffer.propTypes = {
   addresses: PropTypes.array.isRequired,
   isUser: PropTypes.bool.isRequired,
   addMethodArguments: PropTypes.func.isRequired,
-  setMethodSendStatus: PropTypes.func.isRequired
+  setMethodSendStatus: PropTypes.func.isRequired,
+  connected: PropTypes.bool.isRequired
 }
 
 export default MethodOffer;

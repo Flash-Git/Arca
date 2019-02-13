@@ -10,6 +10,10 @@ class Satisfied extends Component {
     isSatisfied: satisfiedStatus.FALSE
   }
 
+  componentDidMount() {
+    setInterval( () => this.getSatisfied(), 30000);
+  }
+  
   componentWillReceiveProps(nextProps) {
     if(nextProps.addresses===this.props.addresses){
       return;
@@ -50,6 +54,10 @@ class Satisfied extends Component {
   }
 
   async sendSetSatisfied() {
+    if(!this.props.connected){
+      alert("Not connected");
+      return;
+    }
     const add1 = this.props.addresses[0];
     const add2 = this.props.addresses[1];
     let contract;
@@ -86,8 +94,11 @@ class Satisfied extends Component {
     }
   }
 
-
   async sendSetUnsatisfied() {
+    if(!this.props.connected){
+      alert("Not connected");
+      return;
+    }
     const add1 = this.props.addresses[0];
     const add2 = this.props.addresses[1];
     let contract;
@@ -122,12 +133,11 @@ class Satisfied extends Component {
       console.error(e);
     }
   }
-  
-   componentDidMount() {
-     setInterval( () => this.getSatisfied(), 30000);
-   }
 
   async getSatisfied() {
+    if(!this.props.connected){
+      return;
+    }
     const add1 = this.props.addresses[0];
     const add2 = this.props.addresses[1];
     
@@ -208,7 +218,8 @@ const btnStyleSent = {
 Satisfied.propTypes = {
   setSatisfied: PropTypes.func.isRequired,
   addresses: PropTypes.array.isRequired,
-  isUser: PropTypes.bool.isRequired
+  isUser: PropTypes.bool.isRequired,
+  connected: PropTypes.bool.isRequired
 }
 
 export default Satisfied;

@@ -54,6 +54,10 @@ class Box extends Component {
 
   //Keep sendStatus of methods up to date for safety on execution checks later
   setMethodSendStatus = (id, sendStatus) => {
+    if(!this.props.connected){
+      alert("Not connected");
+      return;
+    }
     const newMethods = this.state.localMethods;
     
     this.state.localMethods.forEach((method, index) => {
@@ -70,6 +74,10 @@ class Box extends Component {
   }
 
   async getMethods() {
+    if(!this.props.connected){
+      return;
+    }
+
     const _add1 = this.props.addresses[0];
     const _add2 = this.props.addresses[1];
     
@@ -128,17 +136,17 @@ class Box extends Component {
       <div className="box" style={ boxStyle }>
         <Summary address={ this.props.addresses[0] } />
         <div className="container" style={ containerStyle }>
-          <EthOffer />
+          <EthOffer connected ={ this.props.connected } />
           { this.state.chainMethods.map(method =>
             <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments }
-              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } />
+              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } connected ={ this.props.connected } />
           ) }
           { this.state.localMethods.map(method =>
             <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments }
-              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } />
+              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } connected ={ this.props.connected } />
           ) }
         </div>
-        <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.props.isUser } />
+        <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.props.isUser } connected ={ this.props.connected } />
         { (this.props.isUser ? <SubmitBox addMethod={ this.addLocalMethod } /> : "") }
       </div>
     );
@@ -167,7 +175,8 @@ const boxStyle = {
 //PropTypes
 Box.propTypes = {
   isUser: PropTypes.bool.isRequired,
-  addresses: PropTypes.array.isRequired
+  addresses: PropTypes.array.isRequired,
+  connected: PropTypes.bool.isRequired
 }
 
 export default Box;
