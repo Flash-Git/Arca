@@ -37,7 +37,6 @@ class App extends Component {
       }
     }catch(e){
       this.setState({ connected: false });
-      console.log(e);
       return 1;
     }
     this.setState({ connected: true });
