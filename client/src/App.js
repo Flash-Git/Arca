@@ -21,6 +21,7 @@ class App extends Component {
   state = {
     connected: false,
     addresses: ["", ""],
+    ensAdds: ["", ""],
     userBox: userBoxStatus.NO_BOX
   }
 
@@ -58,7 +59,7 @@ class App extends Component {
     }
     
     //Attempt to open a connection to the Ethereum blockchain
-    //Old const web3 = new Web3(window.web3.currentProvider);//
+    //Old const web3 = new Web3(window.web3.currentProvider);
     window.web3 = new Web3(window.ethereum);
     window.ethereum.enable()
     .then(accounts => this.checkConnection())
@@ -71,10 +72,11 @@ class App extends Component {
     });
   }
 
-  setAddresses = (addresses) => {
+  setAddresses = (addresses, ensAdds) => {
     this.setState({ addresses }, () => {
       this.checkUserBox();
     });
+    this.setState({ ensAdds });
   }
 
   checkUserBox = () => {
@@ -103,7 +105,7 @@ class App extends Component {
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
         <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.userBox } connected={ this.state.connected }/>
-        <TradeWindow addresses={ this.state.addresses } userBox={ this.state.userBox } connected ={ this.state.connected } />
+        <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds } userBox={ this.state.userBox } connected ={ this.state.connected } />
       </div>
     );
   }

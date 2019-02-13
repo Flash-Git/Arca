@@ -6,7 +6,7 @@ class Summary extends Component {
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        ENS - { this.props.address } &nbsp; { this.props.address !== "" ? <img src={makeBlockie(this.props.address)} width="22px" height="22px" alt="blockie" style={{ marginTop:"0.2em" }} /> : "" }
+        { this.props.ensAdd !== "" ? this.props.ensAdd + " - " : "" } { this.props.address } &nbsp; { this.props.address !== "" ? <img src={makeBlockie(this.props.address)} width="22px" height="22px" alt="blockie" style={{ marginTop:"0.2em" }} /> : "" }
       </div>
     );
   }
@@ -25,7 +25,8 @@ const methodStyle = {
 
 //PropTypes
 Summary.propTypes = {
-  address: PropTypes.string.isRequired
+  address: PropTypes.string.isRequired,
+  ensAdd: PropTypes.string.isRequired
 }
 
 export default Summary;

@@ -77,6 +77,9 @@ class Box extends Component {
     if(!this.props.connected){
       return;
     }
+    //TODO
+    console.log("ens: " + await window.web3.ens);
+    console.log("utils: " + await window.web3.utils);
 
     const _add1 = this.props.addresses[0];
     const _add2 = this.props.addresses[1];
@@ -134,7 +137,7 @@ class Box extends Component {
   render() {
     return(
       <div className="box" style={ boxStyle }>
-        <Summary address={ this.props.addresses[0] } />
+        <Summary address={ this.props.addresses[0] } ensAdd={ this.props.ensAdd } />
         <div className="container" style={ containerStyle }>
           <EthOffer connected ={ this.props.connected } />
           { this.state.chainMethods.map(method =>
@@ -176,6 +179,7 @@ const boxStyle = {
 Box.propTypes = {
   isUser: PropTypes.bool.isRequired,
   addresses: PropTypes.array.isRequired,
+  ensAdd: PropTypes.string.isRequired,
   connected: PropTypes.bool.isRequired
 }
 
