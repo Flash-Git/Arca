@@ -77,9 +77,6 @@ class Box extends Component {
     if(!this.props.connected){
       return;
     }
-    //TODO
-    console.log("ens: " + await window.web3.ens);
-    console.log("utils: " + await window.web3.utils);
 
     const _add1 = this.props.addresses[0];
     const _add2 = this.props.addresses[1];

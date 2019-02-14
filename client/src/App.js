@@ -41,6 +41,12 @@ class App extends Component {
       return 1;
     }
     this.setState({ connected: true });
+    //BROKEN
+    // window.web3.eth.ens.resolver('ethereum.eth').then((contract) => {
+    //   console.log(contract);
+    // });
+    //window.web3.eth.ens.getAddress("ethereum.eth").then(add1 => console.log(add1))
+
     return 0;
   }
 
@@ -57,7 +63,7 @@ class App extends Component {
       alert("Please install MetaMask");
       return;
     }
-    
+
     //Attempt to open a connection to the Ethereum blockchain
     //Old const web3 = new Web3(window.web3.currentProvider);
     window.web3 = new Web3(window.ethereum);
@@ -103,7 +109,7 @@ class App extends Component {
     return(
       <div className="App">
         <Header />
-        <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } checkConnected={ this.checkConnected } />
+        <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } />
         <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.userBox } connected={ this.state.connected }/>
         <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds } userBox={ this.state.userBox } connected ={ this.state.connected } />
       </div>

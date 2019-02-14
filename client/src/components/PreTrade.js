@@ -16,15 +16,15 @@ class PreTrade extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     let count = 0;
-    
+    if(!this.props.connected){
+      return;
+    }
     if(this.state.address1.includes(".eth")){
-      console.log(window.web3.ens.getAddress(this.state.address1));
       window.web3.eth.ens.getAddress(this.state.address1).then(address1 =>
-        this.setState({ ensAdd1: this.state.address1, address1 }, () => console.log(this.state.ensAdd1))
+        this.setState({ ensAdd1: this.state.address1, address1 }, () => this.handleNewAddresses)
       );
       count++;
     }
-    
     if(this.state.address2.includes(".eth")){
       window.web3.eth.ens.getAddress(this.state.address2).then(address2 =>
         this.setState({ ensAdd2: this.state.address2, address2 }, () => this.handleNewAddresses)
@@ -44,7 +44,7 @@ class PreTrade extends Component {
 
   checkAddresses = () => {
     if(!this.props.connected){
-      return;
+      return false;
     }
     let sumAdd1 = "";
     let sumAdd2 = "";
@@ -76,7 +76,7 @@ class PreTrade extends Component {
   onChange = (e) => {this.setState({
       [e.target.name]: e.target.value
     });
-    this.checkAddresses();//TODO race condition(?)
+    this.checkAddresses();
   }
 
   render(){
