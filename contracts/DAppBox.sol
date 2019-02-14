@@ -67,7 +67,7 @@ contract DAppBox {
   function markSecurity(bool _secure) public {
     require(markedInsecure[msg.sender] == !_secure, "Already marked");
     markedInsecure[msg.sender] = _secure;
-    if(_security == true){
+    if(_secure == true){
       insecurityCount += 1;
     } else {
       insecurityCount -= 1;
