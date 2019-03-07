@@ -6,7 +6,8 @@ class Summary extends Component {
   render(){
     return(
       <div className="method" style={ methodStyle }>
-        { this.props.ensAdd !== "" ? this.props.ensAdd + " - " : "" } { this.props.address } &nbsp; { this.props.address !== "" ? <img src={makeBlockie(this.props.address)} width="22px" height="22px" alt="blockie" style={{ marginTop:"0.2em" }} /> : "" }
+        { this.props.ensAdd !== "" ? this.props.ensAdd + " - " : "" } { this.props.address } &nbsp;
+        { this.props.address !== "" ? <img src={makeBlockie(this.props.address)} width="22px" height="22px" alt="blockie" style={{ marginTop:"0.2em" }} /> : "" }
       </div>
     );
   }
