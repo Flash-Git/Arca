@@ -107,10 +107,20 @@ class PreTrade extends Component {
   }
 }
 
+const preTradeStyle = {
+  textAlign: "center",
+  justifyContent: "center",
+  background: "#608f82",
+  padding: "0.4rem",
+  paddingTop: "0.2rem",
+  paddingBottom: "0.2rem",
+  margin: "1.6rem",
+  border: "solid"
+}
+
 const methodStyle = {
   textAlign: "center",
   justifyContent: "center",
-  background: "#888",
   color: "#fff",
 }
 
@@ -125,12 +135,6 @@ const badInputStyle= {
   textAlign: "center",
   margin: "0.2rem",
   border: "solid red"
-}
-
-const preTradeStyle = {
-  textAlign: "center",
-  justifyContent: "center",
-  background: "#888"
 }
 
 const btnStyle = {

@@ -84,8 +84,11 @@ class TradeWindow extends Component {
 const tradeWindowStyle = {
   textAlign: "center",
   justifyContent: "center",
-  padding: "1rem",
-  margin: "1rem"
+  background: "#608f82",
+  padding: "0.4rem",  
+  margin: "1.6rem",
+  border: "solid",
+
 }
 
 const btnStyleUnsent = {
