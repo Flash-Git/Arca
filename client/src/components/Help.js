@@ -54,7 +54,7 @@ const helpSectionStyle = {
   marginRight: "1rem",
   borderRightStyle: "solid",
   fontSize: "small",
-  lineHeight: "1"
+  lineHeight: "0.5"
 }
 
 const btnStyle = {
