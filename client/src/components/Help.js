@@ -30,6 +30,14 @@ class Help extends Component {
             <p>Arg Type: &lt;address&gt; Arg Name: &lt;_newOwner&gt; Arg Value: &lt;Trade Partner&gt;</p>
             <h4>On execution: The Box contract will set the owner variable of 0x1234... to &lt;Trade Partner&gt;</h4>
           </div>
+          <div style={ helpSectionStyle }>
+            <h3>Balanceable function calls</h3>
+            <h4>To offer x of contract 0x4321... "tokens"</h4>
+            <p>Contract Address: &lt;0x4321...&gt; Function Name: &lt;setOwner&gt; Function Type: &lt;function&gt; Call Type: &lt;Ownable&gt;</p>
+            <h4>To add the argument address _newOwner = &lt;Trade Partner&gt; to the function setOwner()</h4>
+            <p>Arg Type: &lt;address&gt; Arg Name: &lt;_newOwner&gt; Arg Value: &lt;Trade Partner&gt;</p>
+            <h4>On execution: The Box contract will transfer x of contract 0x4321... "tokens" to &lt;Trade Partner&gt;</h4>
+          </div>
         </div>
         <button onClick={ this.toggle } style={ btnStyle }>Toggle Help</button>
       </div>
