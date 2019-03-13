@@ -84,7 +84,7 @@ class TradeWindow extends Component {
 const tradeWindowStyle = {
   textAlign: "center",
   justifyContent: "center",
-  background: "#608f82",
+  background: "#486898",
   padding: "0.4rem",
   margin: "1.6rem",
   border: "solid",
