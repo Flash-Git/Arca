@@ -13,8 +13,8 @@ class Help extends Component {
   render(){
     return(
       <div id="section-help" className="section" style={ helpSectionStyle }>
-        <div style={ helpCellsStyle }>
-          <div style={ helpCellStyle }>
+        <div style={ helpCellStyle }>
+          <div>
             <h3>Arbitrary function calls</h3>
             <h4>To call the function setInt() of 0xbcF2...</h4>
             <span>Contract Address: &lt;0xbcF2...&gt; Function Name: &lt;setInt&gt; Function Type: &lt;function&gt; Call Type: &lt;Arbitrary&gt;</span>
@@ -22,15 +22,21 @@ class Help extends Component {
             <span>Arg Type: &lt;int256&gt; Arg Name: &lt;_value&gt; Arg Value: &lt;5&gt;</span>
             <h4>On execution: The Box contract will call setInt(5) of 0xbcF2...</h4>
           </div>
-          <div style={ helpCellStyle }>
+          <button onClick={ this.toggle } style={ btnStyle }>Toggle Help</button>
+        </div>
+        <div style={ helpCellStyle }>
+          <div>
             <h3>Ownable function calls</h3>
             <h4>To offer ownership of contract 0x1234...</h4>
             <span>Contract Address: &lt;0x1234...&gt; Function Name: &lt;setOwner&gt; Function Type: &lt;function&gt; Call Type: &lt;Ownable&gt;</span>
             <h4>To add the argument address _newOwner = &lt;Trade Partner&gt; to the function setOwner()</h4>
             <span>Arg Type: &lt;address&gt; Arg Name: &lt;_newOwner&gt; Arg Value: &lt;Trade Partner&gt;</span>
-            <h4>On execution: The Box contract will set the owner variable of 0x1234... to &lt;Trade Partner&gt;</h4>
+          <h4>On execution: The Box contract will set the owner variable of 0x1234... to &lt;Trade Partner&gt;</h4>
           </div>
-          <div style={ helpCellStyle }>
+          <button onClick={ this.toggle } style={ btnStyle }>Toggle Help</button>
+        </div>
+        <div style={ helpCellStyle }>
+          <div>
             <h3>Balanceable function calls</h3>
             <h4>To offer x of contract 0x4321... "tokens"</h4>
             <span>Contract Address: &lt;0x4321...&gt; Function Name: &lt;setOwner&gt; Function Type: &lt;function&gt; Call Type: &lt;Ownable&gt;</span>
@@ -38,8 +44,8 @@ class Help extends Component {
             <span>Arg Type: &lt;address&gt; Arg Name: &lt;_newOwner&gt; Arg Value: &lt;Trade Partner&gt;</span>
             <h4>On execution: The Box contract will transfer x of contract 0x4321... "tokens" to &lt;Trade Partner&gt;</h4>
           </div>
+          <button onClick={ this.toggle } style={ btnStyle }>Toggle Help</button>
         </div>
-        <button onClick={ this.toggle } style={ btnStyle }>Toggle Help</button>
       </div>
     );
   }
@@ -55,11 +61,10 @@ const helpSectionStyle = {
   border: "solid"
 }
 
-const helpCellsStyle = {
-  display: "flex"
-}
-
 const helpCellStyle = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
   textAlign: "left",
   color: "#fff",
   background: "#706baa",
@@ -80,7 +85,8 @@ const btnStyle = {
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold",
-  margin: "0 2rem"
+  padding: "1.5rem",
+  margin: "0.5rem 0"
 }
 
 //PropTypes
