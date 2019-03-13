@@ -5,12 +5,23 @@ import PropTypes from "prop-types";
 class Help extends Component {
 
   state = {
+    display: false
   }
 
   toggle = (e) => {
+    const display = !this.state.display;
+    this.setState({ display });
   }
 
-  render(){
+  render() {
+    if(!this.state.display){
+      return(
+        <div id="section-help" className="section" style={ helpSectionStyle }>
+          <button onClick={ this.toggle } style={ btnStyle }>Toggle Help</button>
+        </div>
+      );
+    }
+
     return(
       <div id="section-help" className="section" style={ helpSectionStyle }>
         <div style={ helpCellStyle }>
@@ -86,7 +97,7 @@ const btnStyle = {
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold",
-  padding: "0.35rem",
+  padding: "0.5rem",
   margin: "0.5rem 0"
 }
 
