@@ -53,9 +53,10 @@ class Help extends Component {
 
 const helpSectionStyle = {
   display: "flex",
-  textAlign: "center",
+  flexWrap: "wrap",
   justifyContent: "center",
-  background: "#608f82",
+  textAlign: "center",
+  background: "#486898",
   margin: "0 1.6rem",
   padding: "0.4rem",
   border: "solid"
@@ -63,17 +64,17 @@ const helpSectionStyle = {
 
 const helpCellStyle = {
   display: "flex",
+  flex: "1 1 10rem",
   flexDirection: "column",
   justifyContent: "space-between",
   textAlign: "left",
   color: "#fff",
-  background: "#706baa",
+  background: "#3f4f6a",
   padding: "0 0.5rem",
-  marginRight: "1rem",
-  // borderRightStyle: "solid",
+  margin: "0.5rem",
   fontSize: "small",
   lineHeight: "1",
-  width: "15rem"
+  maxWidth: "18rem"
 }
 
 const btnStyle = {
@@ -85,7 +86,7 @@ const btnStyle = {
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold",
-  padding: "1.5rem",
+  padding: "0.35rem",
   margin: "0.5rem 0"
 }
 
