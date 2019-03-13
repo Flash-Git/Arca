@@ -85,10 +85,9 @@ const tradeWindowStyle = {
   textAlign: "center",
   justifyContent: "center",
   background: "#608f82",
-  padding: "0.4rem",  
+  padding: "0.4rem",
   margin: "1.6rem",
   border: "solid",
-
 }
 
 const btnStyleUnsent = {

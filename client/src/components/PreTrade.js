@@ -111,9 +111,7 @@ const preTradeStyle = {
   textAlign: "center",
   justifyContent: "center",
   background: "#608f82",
-  padding: "0.4rem",
-  paddingTop: "0.2rem",
-  paddingBottom: "0.2rem",
+  padding: "0.4rem 0.2rem",
   margin: "1.6rem",
   border: "solid"
 }
