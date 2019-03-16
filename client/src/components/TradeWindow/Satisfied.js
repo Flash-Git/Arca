@@ -168,7 +168,7 @@ class Satisfied extends Component {
     }
   }
 
-  render(){
+  render() {
     return(
       <div className="method" style={ methodStyle }>
         <button onClick={ this.toggleSatisfied } style={ (this.state.isSatisfied === satisfiedStatus.TRUE ? btnStyleSent : btnStyleUnsent) }>

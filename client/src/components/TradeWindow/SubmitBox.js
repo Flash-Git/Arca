@@ -28,7 +28,7 @@ class SubmitBox extends Component {
      [e.target.name]: e.target.value
    });
 
-  render(){
+  render() {
     return(
       <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
         <input 

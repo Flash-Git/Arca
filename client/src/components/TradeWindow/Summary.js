@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
 class Summary extends Component {
 
-  render(){
+  render() {
     return(
       <div className="method" style={ methodStyle }>
         { this.props.ensAdd !== "" ? this.props.ensAdd + " - " : "" } { this.props.address } &nbsp;

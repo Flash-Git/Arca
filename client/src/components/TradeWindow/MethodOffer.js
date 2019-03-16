@@ -100,7 +100,7 @@ class MethodOffer extends Component {
     }
   }
 
-  render(){
+  render() {
     const method = this.props.method;
     console.log(method.contractAdd);
     return(

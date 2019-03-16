@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 class Ethoffer extends Component {
-  render(){
+  render() {
     return(
       <div className="method" style={ methodStyle }>
         Eth Offer

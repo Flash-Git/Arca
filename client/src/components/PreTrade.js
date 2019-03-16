@@ -79,7 +79,7 @@ class PreTrade extends Component {
     this.checkAddresses();
   }
 
-  render(){
+  render() {
     return(
       <div id="section-preTrade" className="section" style={ preTradeStyle }>
         <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
