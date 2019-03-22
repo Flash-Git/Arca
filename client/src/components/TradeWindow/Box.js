@@ -153,23 +153,24 @@ class Box extends Component {
   }
 }
 
+const boxStyle = {
+  display: "grid",
+  gridColumnGap: "3px",
+  gridTemplateColumns: "3fr 1fr",//TODO handle screensizes in a more aesthetically pleasing way
+  textAlign: "center",
+  justifyContent: "center",
+  margin: "0.5rem 0.5rem",
+  background: "#666",
+  border: "solid",
+  minHeight: "10rem",
+  fontWeight: "bold",
+  width: "60rem"
+}
+
 const containerStyle = {
   gridColumn: "1 auto",
   gridRow: "2 auto",
   margin: "0.1rem"
-}
-
-const boxStyle = {
-  display: "grid",
-  gridColumnGap: "3px",
-  gridTemplateColumns: "3fr 1fr",
-  textAlign: "center",
-  justifyContent: "center",
-  margin: "0.1rem",
-  background: "#666",
-  border: "solid",
-  minHeight: "10rem",
-  fontWeight: "bold"
 }
 
 //PropTypes

@@ -64,13 +64,15 @@ class TradeWindow extends Component {
   render() {
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
-        {/* <h3>{ AppAddress }</h3> */}
-        <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) }
-          addresses={ [this.props.addresses[1], this.props.addresses[0]] } ensAdd={ this.props.ensAdds[1] } connected ={ this.props.connected }
-        />
-        <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) }
-          addresses={ [this.props.addresses[0], this.props.addresses[1]] } ensAdd={ this.props.ensAdds[0] } connected ={ this.props.connected }
-        />
+        <div id="boxes" style={ boxesStyle }>
+          {/* <h3>{ AppAddress }</h3> */}
+          <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) }
+            addresses={ [this.props.addresses[1], this.props.addresses[0]] } ensAdd={ this.props.ensAdds[1] } connected ={ this.props.connected }
+          />
+          <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) }
+            addresses={ [this.props.addresses[0], this.props.addresses[1]] } ensAdd={ this.props.ensAdds[0] } connected ={ this.props.connected }
+          />
+        </div>
         { (this.props.userBox !== 0 ?
           <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
             { (this.executed ? "Executed" : "Execute") }
@@ -82,12 +84,22 @@ class TradeWindow extends Component {
 }
 
 const tradeWindowStyle = {
+  display: "flex",
+  flexDirection: "column",
   textAlign: "center",
   justifyContent: "center",
   background: "#486898",
   padding: "0.4rem",
   margin: "1.6rem",
   border: "solid",
+}
+
+const boxesStyle = {
+  display: "flex",
+  flexWrap: "wrap",
+  textAlign: "center",
+  justifyContent: "center",
+  background: "#486898",
 }
 
 const btnStyleUnsent = {
@@ -97,7 +109,9 @@ const btnStyleUnsent = {
   borderRadius: "5%",
   cursor: "pointer",
   color: "#fff",
-  fontWeight: "bold"
+  fontWeight: "bold",
+  alignSelf: "center",
+  margin: "0.5rem"
 }
 
 const btnStyleSent = {
@@ -107,6 +121,8 @@ const btnStyleSent = {
   borderRadius: "5%",
   color: "#fff",
   fontWeight: "bold",
+  alignSelf: "center",
+  margin: "0.5rem"
 }
 
 //PropTypes
