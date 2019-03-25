@@ -19,6 +19,10 @@ contract DAppBox {
   mapping(address => mapping(address => Box)) public boxes;
   mapping(address => uint256) public ethBalances;
 
+  struct Erc20Offer{
+		address erc20Ad;
+		uint256 amount;
+	}
 
   struct FuncCall {
     address contractAd;
@@ -28,6 +32,7 @@ contract DAppBox {
   struct Box {
     int256 ethOffer;//intentionally not a uint
     FuncCall[] funcOffers;
+    Erc20Offer[] erc20Offers;
     uint8 count;
     bool satisfied;
     bytes32 funcsHash;//Encoded bytes of partner's box so that you can't front run a call to set satisfied
@@ -133,6 +138,22 @@ contract DAppBox {
   function clearBox(address _tradePartner) public {//TODO test that this works as expected
     delete boxes[msg.sender][_tradePartner];
   }
+
+	function pushDirectErc20TransferOffer(address _tradePartner, address _erc20Address, uint256 _amount) public {
+		require(_erc20Address.allowance(msg.sender, _tradePartner) => _amount);
+		Erc20Offer memory offer;
+    offer.erc20Address = _erc20Address;
+    offer.amount = _amount;
+    boxes[msg.sender][_tradePartner].erc20Offers.push(offer);
+    boxes[msg.sender][_tradePartner].erc20OfferCount += 1;
+
+    dropSatisfaction(msg.sender, _tradePartner);
+	}
+
+	function directERC20Transfer(address _tradePartner, address _erc20Address, uint256 _amount) public {
+		(success) = _erc20Address.transferFrom(msg.sender, _tradePartner, _amount); //Attack vector: Unvetted External Function
+		require(success, "Failed to tranfer tokens");
+	}
 
 
   /*
