@@ -12,7 +12,7 @@ Maybe the seller will give it to you in exchange for 3 of your kitties, a tank, 
 
 ### WHAT CAN BE TRADED?
 Ether:
-You can place positive or negative Ether balances in your box, (if it's negative, you are requestion Ether to go along with the items you are trading).
+You can place positive or negative Ether balances in your box, (if it's negative, you are requesting Ether to go along with the items you are trading).
 
 Ownables:
 This includes ERC721s as well as anything that has an owner, ENS names, your place in a multisig, etc.
@@ -30,3 +30,66 @@ I can imagine a whole market based on these features but I have neither the mone
 -Add reverse lookup for ENS when it becomes available with web3.js
 -So much contract stuff
 -Transition to SQL
+
+_______
+
+###ESCROWLESS ERC20/ERC721 DEMO
+
+ ___Bob____       __Alice___
+|          |     |          |
+|          |     |          |
+|          |     |          |
+|          |     |          |
+|          |     |          |
+|_bNonce=0_|     |_aNonce=0_|
+
+
+-Start
+bNonce=0      |    aNonce=0
+
+-Bob adds kitty
+bNonce=1      |    aNonce=0
+
+-Alice adds Heart
+bNonce=1      |    aNonce=1
+
+-Bob accepts trade
+bNonce=1      |    aNonce=1
+satisfied     |
+ptnerNonce=1  |
+
+-Bob adds 3Weth
+bNonce=2      |    aNonce=1
+satisfied     |
+ptnerNonce=1  |
+
+-Alice accepts trade
+bNonce=2      |    aNonce=1
+satisfied     |    satisfied
+ptnerNonce=1  |    ptnerNonce=2
+
+
+ ___Bob____       __Alice___
+|          |     |          |
+| -Kitty   |     | -Heart   |
+| -3Weth   |     |          |
+|          |     |          |
+|          |     |          |
+|_bNonce=2_|     |_aNonce=1_|
+
+
+-Bob executes trade
+	-Checks
+		is Bob satisfied
+		is Alice satisfied
+		is Bob pNonce == aNonce
+		is Alice pNonce == bNonce
+	-Calls
+		Erc721
+		Transfer Kitty from Bob to Alice
+		Transfer Heart from Alice to Bob
+		Erc20
+		Transfer 3Weth from Bob to Alice
+	-Cleanup
+		Bob unsatisfied
+		Alice unsatisfied
