@@ -7,40 +7,19 @@ pragma solidity ^0.5.7;
 */
 
 interface Erc20 {
-  event Transfer(address indexed from, address indexed to, uint256 value);
-  event Approval(address indexed owner, address indexed spender, uint256 value);
-
-  function transfer(address to, uint256 value) external returns (bool);
-  function approve(address spender, uint256 value) external returns (bool);
   function transferFrom(address from, address to, uint256 value) external returns (bool);
-  function totalSupply() external view returns (uint256);
   function balanceOf(address who) external view returns (uint256);
   function allowance(address owner, address spender) external view returns (uint256);
 }
 
-contract Erc721 {
-  event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
-  event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
-  event ApprovalForAll(address indexed owner, address indexed operator, bool approved);
-
-  function balanceOf(address owner) public view returns (uint256 balance);
-  function ownerOf(uint256 tokenId) public view returns (address owner);
-
-  function approve(address to, uint256 tokenId) public;
-  function getApproved(uint256 tokenId) public view returns (address operator);
-
-  function setApprovalForAll(address operator, bool _approved) public;
-  function isApprovedForAll(address owner, address operator) public view returns (bool);
-
-  function transferFrom(address from, address to, uint256 tokenId) public;
-  function safeTransferFrom(address from, address to, uint256 tokenId) public;
-
-  function safeTransferFrom(address from, address to, uint256 tokenId, bytes memory data) public;
+interface Erc721 {
+  function ownerOf(uint256 tokenId) external view returns (address owner);
+  function getApproved(uint256 tokenId) external view returns (address operator);
+  function safeTransferFrom(address from, address to, uint256 tokenId) external;
 }
 
 contract DAppBoxSoft {
-  mapping(address => mapping(address => Box)) public boxes;
-  mapping(address => mapping(address => uint256)) public balances;
+  mapping(address => mapping(address => Box)) private boxes;
 
   struct OfferErc20 {
 		address add;
@@ -60,6 +39,41 @@ contract DAppBoxSoft {
     uint256 nonce;
     uint256 partnerNonce;
   }
+
+
+  /*
+  * GETTERS
+  * 
+  */
+
+  function getOfferErc20(address _add1, address _add2, uint8 _index) public returns(address, uint256) {
+    return (boxes[_add1][_add2].offersErc20[_index].add, boxes[_add1][_add2].offersErc20[_index].amount);
+  }
+  
+  function getOfferErc721(address _add1, address _add2, uint8 _index) public returns(address, uint256) {
+    return (boxes[_add1][_add2].offersErc721[_index].add, boxes[_add1][_add2].offersErc721[_index].id);
+  }
+
+  function getErc20Count(address _add1, address _add2) public returns(uint8) {
+    return boxes[_add1][_add2].countErc20;
+  }
+
+  function getErc721Count(address _add1, address _add2) public returns(uint8) {
+    return boxes[_add1][_add2].countErc721;
+  }
+
+  function getNonce(address _add1, address _add2) public returns(uint256) {
+    return boxes[_add1][_add2].nonce;
+  }
+
+  function getPartnerNonce(address _add1, address _add2) public returns(uint256) {
+    return boxes[_add1][_add2].partnerNonce;
+  }
+
+
+  /*
+  * TRADE ACTIONS
+  */
 
   function acceptTrade(address _tradePartner, uint256 _partnerNonce) public {
     boxes[msg.sender][_tradePartner].partnerNonce = _partnerNonce+1; //Offset serves to avoid explicit "satisfied" variable
@@ -161,7 +175,7 @@ contract DAppBoxSoft {
   }
 
   function directErc721Transfer(address _add1, address _add2, address _erc721Address, uint256 _id) private {
-    Erc721(_erc721Address).transferFrom(_add1, _add2, _id);
+    Erc721(_erc721Address).safeTransferFrom(_add1, _add2, _id); //Erc 721 transfers don't require a return?
     require(Erc721(_erc721Address).ownerOf(_id) == _add2, "Failed to transfer erc721 token");
   }
 
