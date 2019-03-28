@@ -78,16 +78,6 @@ contract DAppBoxSoft {
 
 
   /*
-  * EXECUTION
-  */
-
-  function directERC20Transfer(address _tradePartner, address _erc20Address, uint256 _amount) public {
-    bool success = Erc20(_erc20Address).transferFrom(msg.sender, _tradePartner, _amount); //Attack vector: Unvetted External Function
-    require(success, "Failed to tranfer tokens");
-  }
-
-
-  /*
   * BOX FUNCTIONS
   */
 
@@ -112,6 +102,35 @@ contract DAppBoxSoft {
     boxes[msg.sender][_tradePartner].countErc721 = _count;
 
     boxes[msg.sender][_tradePartner].nonce++;
+  }
+
+
+  /*
+  * EXECUTION
+  */
+
+  function executeTransfersErc20(address _add1, address _add2) private {
+    OfferErc20[] memory offers = boxes[_add1][_add2].offersErc20;
+    for(uint8 i = 0; i < boxes[_add1][_add2].countErc20; i++){
+      directErc20Transfer(_add1, _add2, offers[i].add, offers[i].amount);
+    }
+  }
+  
+  function executeTransfersErc721(address _add1, address _add2) private {
+    OfferErc721[] memory offers = boxes[_add1][_add2].offersErc721;
+    for(uint8 i = 0; i < boxes[_add1][_add2].countErc721; i++){
+      directErc721Transfer(_add1, _add2, offers[i].add, offers[i].id);
+    }
+  }
+
+  function directErc20Transfer(address _add1, address _add2, address _erc20Address, uint256 _amount) private {
+    bool success = Erc20(_erc20Address).transferFrom(_add1, _add2, _amount);
+    require(success, "Failed to transfer erc20 tokens");
+  }
+
+  function directErc721Transfer(address _add1, address _add2, address _erc721Address, uint256 _id) private {
+    bool success = Erc721(_erc721Address).transferFrom(_add1, _add2, _id);
+    require(success, "Failed to transfer erc721");
   }
 
 }
