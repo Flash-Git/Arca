@@ -37,40 +37,31 @@ contract DAppBoxSoft {
     OfferErc721[] offersErc721;
     uint8 countErc20;
     uint8 countErc721;
-    bool satisfied;
-    bytes32 boxHash;//Encoded bytes of partner's box to prevent front running
+    uint256 nonce;
+    uint256 partnerNonce;
   }
 
-  function setCountErc20(address _tradePartner, uint8 _count) public {
-    boxes[msg.sender][_tradePartner].countErc20 = _count;
-  }
-
-  function setCountErc721(address _tradePartner, uint8 _count) public {
-    boxes[msg.sender][_tradePartner].countErc721 = _count;
-  }
-
-  function acceptTrade(address _tradePartner, bytes32 _boxHash) public {
-    boxes[msg.sender][_tradePartner].satisfied = true;
-    boxes[msg.sender][_tradePartner].boxHash = _boxHash;
+  function acceptTrade(address _tradePartner, uint256 _partnerNonce) public {
+    boxes[msg.sender][_tradePartner].partnerNonce = _partnerNonce+1; //Offset serves to avoid explicit "satisfied" variable
   }
 
   function unacceptTrade(address _tradePartner) public {
-    boxes[msg.sender][_tradePartner].satisfied = false;
+    boxes[msg.sender][_tradePartner].partnerNonce = 0;
   }
 
-  function acceptAndExecuteTrade(address _tradePartner, bytes32 _boxHash) public {
-    acceptTrade(_tradePartner, _boxHash);
+  function acceptAndExecuteTrade(address _tradePartner, uint256 _partnerNonce) public {
+    acceptTrade(_tradePartner, _partnerNonce);
     executeTrade(_tradePartner);
   }
 
   function executeTrade(address _tradePartner) public {
-    //Check Satisfaction
-    require(boxes[msg.sender][_tradePartner].satisfied == true, "Sender not satisfied");
-    require(boxes[_tradePartner][msg.sender].satisfied == true, "Trade partner not satisfied");
+    //Reference
+    Box memory senderBox = boxes[msg.sender][_tradePartner];
+    Box memory prtnerBox = boxes[_tradePartner][msg.sender];
 
-    //Check hashes
-    require(checkHashes(msg.sender, _tradePartner), "Sender hashes failed to match partner's box");
-    require(checkHashes(_tradePartner, msg.sender), "Partner hashes failed to match sender's box");
+    //Check Nonces
+    require(senderBox.nonce+1 == prtnerBox.partnerNonce, "Sender not satisfied");
+    require(prtnerBox.nonce+1 == senderBox.partnerNonce, "Trade partner not satisfied");
 
     //Execute Erc20 Transfers
     executeTransfersErc20(msg.sender, _tradePartner);
@@ -81,26 +72,46 @@ contract DAppBoxSoft {
     executeTransfersErc721(_tradePartner, msg.sender);
 
     //Drop Satisfaction
-    boxes[_add1][_add2].satisfied = false;
-    boxes[_add2][_add1].satisfied = false;
+    senderBox.partnerNonce = 0;
+    prtnerBox.partnerNonce = 0;
   }
 
+
+  /*
+  * EXECUTION
+  */
+
+  function directERC20Transfer(address _tradePartner, address _erc20Address, uint256 _amount) public {
+    bool success = Erc20(_erc20Address).transferFrom(msg.sender, _tradePartner, _amount); //Attack vector: Unvetted External Function
+    require(success, "Failed to tranfer tokens");
+  }
+
+
+  /*
+  * BOX FUNCTIONS
+  */
+
   function pushOfferErc20(address _tradePartner, address _erc20Address, uint256 _amount) public {
-    tokenContract = Erc20(_erc20Address);
-    require(tokenContract.allowance(msg.sender, _tradePartner) => _amount);
-		OfferErc20 memory offer;
+		require(Erc20(_erc20Address).allowance(msg.sender, _tradePartner) >= _amount, "Insufficient allowance");
+    OfferErc20 memory offer;
     offer.add = _erc20Address;
     offer.amount = _amount;
     boxes[msg.sender][_tradePartner].offersErc20.push(offer);
     boxes[msg.sender][_tradePartner].countErc20 += 1;
 
-    dropSatisfaction(msg.sender, _tradePartner);
+    boxes[msg.sender][_tradePartner].nonce++;
   }
 
-  function directERC20Transfer(address _tradePartner, address _erc20Address, uint256 _amount) public {
-    tokenContract = Erc20(_erc20Address);
-    (success) = tokenContract.transferFrom(msg.sender, _tradePartner, _amount); //Attack vector: Unvetted External Function
-    require(success, "Failed to tranfer tokens");
+  function setCountErc20(address _tradePartner, uint8 _count) public {
+    boxes[msg.sender][_tradePartner].countErc20 = _count;
+
+    boxes[msg.sender][_tradePartner].nonce++;
+  }
+
+  function setCountErc721(address _tradePartner, uint8 _count) public {
+    boxes[msg.sender][_tradePartner].countErc721 = _count;
+
+    boxes[msg.sender][_tradePartner].nonce++;
   }
 
 }
