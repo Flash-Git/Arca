@@ -102,12 +102,24 @@ contract DAppBoxSoft {
   */
 
   function pushOfferErc20(address _tradePartner, address _erc20Address, uint256 _amount) public {
-		require(Erc20(_erc20Address).allowance(msg.sender, _tradePartner) >= _amount, "Insufficient allowance");
+		require(Erc20(_erc20Address).allowance(msg.sender, address(this)) >= _amount, "Insufficient allowance");
     OfferErc20 memory offer;
     offer.add = _erc20Address;
     offer.amount = _amount;
     boxes[msg.sender][_tradePartner].offersErc20.push(offer);
     boxes[msg.sender][_tradePartner].countErc20 += 1;
+
+    boxes[msg.sender][_tradePartner].nonce++;
+  }
+  
+  function pushOfferErc721(address _tradePartner, address _erc721Address, uint256 _id) public {
+		require(Erc721(_erc721Address).ownerOf(_id) == msg.sender, "Sender isn't owner of this erc721 token");
+		require(Erc721(_erc721Address).getApproved(_id) == address(this), "Contract not approved to transfer this erc721 token");
+    OfferErc721 memory offer;
+    offer.add = _erc721Address;
+    offer.id = _id;
+    boxes[msg.sender][_tradePartner].offersErc721.push(offer);
+    boxes[msg.sender][_tradePartner].countErc721 += 1;
 
     boxes[msg.sender][_tradePartner].nonce++;
   }
@@ -150,7 +162,7 @@ contract DAppBoxSoft {
 
   function directErc721Transfer(address _add1, address _add2, address _erc721Address, uint256 _id) private {
     bool success = Erc721(_erc721Address).transferFrom(_add1, _add2, _id);
-    require(success, "Failed to transfer erc721");
+    require(success, "Failed to transfer erc721 token");
   }
 
 }
