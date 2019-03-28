@@ -161,8 +161,8 @@ contract DAppBoxSoft {
   }
 
   function directErc721Transfer(address _add1, address _add2, address _erc721Address, uint256 _id) private {
-    bool success = Erc721(_erc721Address).transferFrom(_add1, _add2, _id);
-    require(success, "Failed to transfer erc721 token");
+    Erc721(_erc721Address).transferFrom(_add1, _add2, _id);
+    require(Erc721(_erc721Address).ownerOf(_id) == _add2, "Failed to transfer erc721 token");
   }
 
 }
