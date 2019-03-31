@@ -9,6 +9,7 @@ import MethodOffer from "./MethodOffer";
 import uuid from "uuid/v4";
 
 import abi from "../../abi";
+import erc20Abi from "../../erc20Abi";
 import { AppAddress, sendStatus } from "../../Static";
 
 class Box extends Component {
@@ -88,19 +89,19 @@ class Box extends Component {
     }catch(e){
       return;
     }
-    let contract;
+    let boxContract, erc20Contract, erc721Contract;
     try{
-      contract = await new window.web3.eth.Contract(abi, AppAddress);
+      boxContract = await new window.web3.eth.Contract(abi, AppAddress);
     }catch(e){//UNCLEAN
       console.log(e);
     }    
     let countErc20 = 0;
     let countErc721 = 0;
     try{
-      countErc20 = await contract.methods.getErc20Count(_add1, _add2).call({
+      countErc20 = await boxContract.methods.getErc20Count(_add1, _add2).call({
         from: _add1
       });
-      countErc721 = await contract.methods.getErc721Count(_add1, _add2).call({
+      countErc721 = await boxContract.methods.getErc721Count(_add1, _add2).call({
         from: _add1
       });
     } catch(e){
@@ -111,20 +112,30 @@ class Box extends Component {
 
     for(let i = 0; i < countErc20; i++){
       try {
-//        function getOfferErc20(address _add1, address _add2, uint8 _index) public view returns(address, uint256) {
-
-        const result = await contract.methods.getFuncCall(_add1, _add2, i).call({
+        const result = await boxContract.methods.getOfferErc20(_add1, _add2, i).call({
           from: _add1
         });
-        let method={};
-        method.id = uuid();//TODO get ID from server
-        method.methodName = "";
-        method.args = [];
-        method.sendStatus = sendStatus.SENT;
-        method.methodType = "function";
-        [method.contractAdd, method.func] = [result[0], result[1]];
+        erc20Contract = await new window.web3.eth.Contract(erc20Abi, result[0]);
+
+        let offer = {};
+        offer.id = uuid();//TODO get ID from server
+        try {
+          offer.name = await erc20Contract.methods.name.call({
+            from: _add1
+          });
+          offer.symbol = await boxContract.methods.symbol.call({
+            from: _add1
+          });
+        } catch(e){
+          offer.name = "";
+          offer.symbol = "";
+        }
+        [offer.contractAdd, offer.amount]
+        const result = await boxContract.methods.getFuncCall(_add1, _add2, i).call({
+          from: _add1
+        });
         
-        arr.push(method);
+        arr.push(offer);
       } catch(e) {
         console.error(e);
       }
