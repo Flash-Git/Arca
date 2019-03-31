@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
+
 class Summary extends Component {
 
   render() {
