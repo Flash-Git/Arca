@@ -22,14 +22,14 @@ contract ERC20 is IERC20 {
   mapping(address => mapping(address => uint256)) internal _allowed;
 
   /*
-  * @dev Total number of tokens in existence
+  * @dev Total number of tokens in existence.
   */
   function totalSupply() public view returns (uint256) {
     return _totalSupply;
   }
 
   /*
-  * @dev Gets the balance of the specified address
+  * @dev Gets the balance of the specified address.
   * @param owner The address to query the balance of
   * @return A uint256 representing the amount owned by the passed address
   */
@@ -38,7 +38,7 @@ contract ERC20 is IERC20 {
   }
 
   /*
-  * @dev Function to check the amount of tokens that an owner allowed to a spender
+  * @dev Function to check the amount of tokens that an owner allowed to a spender.
   * @param owner address The address which owns the funds
   * @param spender address The address which will spend the funds
   * @return A uint256 specifying the amount of tokens still available for the spender
@@ -48,7 +48,7 @@ contract ERC20 is IERC20 {
   }
 
   /*
-  * @dev Transfer token to a specified address
+  * @dev Transfer token to a specified address.
   * @param to The address to transfer to
   * @param value The amount to be transferred
   */
@@ -72,7 +72,7 @@ contract ERC20 is IERC20 {
   }
 
   /*
-  * @dev Transfer tokens from one address to another
+  * @dev Transfer tokens from one address to another.
   * Note that while this function emits an Approval event, this is not required as per the specification,
   * and other compliant implementations may not emit the event
   * @param from address The address which you want to send tokens from
@@ -89,7 +89,7 @@ contract ERC20 is IERC20 {
   * @dev Increase the amount of tokens that an owner allowed to a spender
   * approve should be called when _allowed[msg.sender][spender] == 0. To increment
   * allowed value is better to use this function to avoid 2 calls (and wait until
-  * the first transaction is mined)
+  * the first transaction is mined).
   * From MonolithDAO Token.sol
   * Emits an Approval event
   * @param spender The address which will spend the funds
@@ -104,7 +104,7 @@ contract ERC20 is IERC20 {
   * @dev Decrease the amount of tokens that an owner allowed to a spender
   * approve should be called when _allowed[msg.sender][spender] == 0. To decrement
   * allowed value is better to use this function to avoid 2 calls (and wait until
-  * the first transaction is mined)
+  * the first transaction is mined).
   * From MonolithDAO Token.sol
   * Emits an Approval event
   * @param spender The address which will spend the funds
@@ -116,7 +116,7 @@ contract ERC20 is IERC20 {
   }
 
   /*
-  * @dev Transfer token for a specified addresses
+  * @dev Transfer token for a specified addresses.
   * @param from The address to transfer from
   * @param to The address to transfer to
   * @param value The amount to be transferred
@@ -146,7 +146,7 @@ contract ERC20 is IERC20 {
 
   /*
   * @dev Internal function that burns an amount of the token of a given
-  * account
+  * account.
   * @param account The account whose tokens will be burnt
   * @param value The amount that will be burnt
   */
@@ -159,7 +159,7 @@ contract ERC20 is IERC20 {
   }
 
   /*
-  * @dev Approve an address to spend another addresses' tokens
+  * @dev Approve an address to spend another addresses' tokens.
   * @param owner The address that owns the tokens
   * @param spender The address that will spend the tokens
   * @param value The number of tokens that can be spent
@@ -175,7 +175,7 @@ contract ERC20 is IERC20 {
   /*
   * @dev Internal function that burns an amount of the token of a given
   * account, deducting from the sender's allowance for said account. Uses the
-  * internal burn function
+  * internal burn function.
   * Emits an Approval event (reflecting the reduced allowance)
   * @param account The account whose tokens will be burnt
   * @param value The amount that will be burnt

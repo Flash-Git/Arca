@@ -54,7 +54,7 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Gets the balance of the specified address
+  * @dev Gets the balance of the specified address.
   * @param owner address to query the balance of
   * @return uint256 representing the amount owned by the passed address
   */
@@ -64,7 +64,7 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Gets the owner of the specified token ID
+  * @dev Gets the owner of the specified token ID.
   * @param tokenId uint256 ID of the token to query the owner of
   * @return address currently marked as the owner of the given token ID
   */
@@ -75,10 +75,10 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Approves another address to transfer the given token ID
-  * The zero address indicates there is no approved address
-  * There can only be one approved address per token at a given time
-  * Can only be called by the token owner or an approved operator
+  * @dev Approves another address to transfer the given token ID.
+  * The zero address indicates there is no approved address.
+  * There can only be one approved address per token at a given time.
+  * Can only be called by the token owner or an approved operator.
   * @param to address to be approved for the given token ID
   * @param tokenId uint256 ID of the token to be approved
   */
@@ -92,8 +92,8 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Gets the approved address for a token ID, or zero if no address set
-  * Reverts if the token ID does not exist
+  * @dev Gets the approved address for a token ID, or zero if no address set.
+  * Reverts if the token ID does not exist.
   * @param tokenId uint256 ID of the token to query the approval of
   * @return address currently approved for the given token ID
   */
@@ -103,8 +103,8 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Sets or unsets the approval of a given operator
-  * An operator is allowed to transfer all tokens of the sender on their behalf
+  * @dev Sets or unsets the approval of a given operator.
+  * An operator is allowed to transfer all tokens of the sender on their behalf.
   * @param to operator address to set the approval
   * @param approved representing the status of the approval to be set
   */
@@ -115,7 +115,7 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Tells whether an operator is approved by a given owner
+  * @dev Tells whether an operator is approved by a given owner.
   * @param owner owner address which you want to query the approval of
   * @param operator operator address which you want to query the approval of
   * @return bool whether the given operator is approved by the given owner
@@ -125,9 +125,9 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Transfers the ownership of a given token ID to another address
-  * Usage of this method is discouraged, use `safeTransferFrom` whenever possible
-  * Requires the msg.sender to be the owner, approved, or operator
+  * @dev Transfers the ownership of a given token ID to another address.
+  * Usage of this method is discouraged, use `safeTransferFrom` whenever possible.
+  * Requires the msg.sender to be the owner, approved, or operator.
   * @param from current owner of the token
   * @param to address to receive the ownership of the given token ID
   * @param tokenId uint256 ID of the token to be transferred
@@ -139,7 +139,7 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Safely transfers the ownership of a given token ID to another address
+  * @dev Safely transfers the ownership of a given token ID to another address.
   * If the target address is a contract, it must implement `onERC721Received`,
   * which is called upon a safe transfer, and return the magic value
   * `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`; otherwise,
@@ -154,12 +154,12 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Safely transfers the ownership of a given token ID to another address
+  * @dev Safely transfers the ownership of a given token ID to another address.
   * If the target address is a contract, it must implement `onERC721Received`,
   * which is called upon a safe transfer, and return the magic value
   * `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`; otherwise,
-  * the transfer is reverted
-  * Requires the msg.sender to be the owner, approved, or operator
+  * the transfer is reverted.
+  * Requires the msg.sender to be the owner, approved, or operator.
   * @param from current owner of the token
   * @param to address to receive the ownership of the given token ID
   * @param tokenId uint256 ID of the token to be transferred
@@ -171,7 +171,7 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Returns whether the specified token exists
+  * @dev Returns whether the specified token exists.
   * @param tokenId uint256 ID of the token to query the existence of
   * @return bool whether the token exists
   */
@@ -181,7 +181,7 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Returns whether the given spender can transfer a given token ID
+  * @dev Returns whether the given spender can transfer a given token ID.
   * @param spender address of the spender to query
   * @param tokenId uint256 ID of the token to be transferred
   * @return bool whether the msg.sender is approved for the given token ID,
@@ -193,8 +193,8 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Internal function to mint a new token
-  * Reverts if the given token ID already exists
+  * @dev Internal function to mint a new token.
+  * Reverts if the given token ID already exists.
   * @param to The address that will own the minted token
   * @param tokenId uint256 ID of the token to be minted
   */
@@ -209,8 +209,8 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Internal function to burn a specific token
-  * Reverts if the token does not exist
+  * @dev Internal function to burn a specific token.
+  * Reverts if the token does not exist.
   * Deprecated, use _burn(uint256) instead.
   * @param owner owner of the token to burn
   * @param tokenId uint256 ID of the token being burned
@@ -227,8 +227,8 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Internal function to burn a specific token
-  * Reverts if the token does not exist
+  * @dev Internal function to burn a specific token.
+  * Reverts if the token does not exist.
   * @param tokenId uint256 ID of the token being burned
   */
   function _burn(uint256 tokenId) internal {
@@ -257,8 +257,8 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Internal function to invoke `onERC721Received` on a target address
-  * The call is not executed if the target address is not a contract
+  * @dev Internal function to invoke `onERC721Received` on a target address.
+  * The call is not executed if the target address is not a contract.
   * @param from address representing the previous owner of the given token ID
   * @param to target address that will receive the tokens
   * @param tokenId uint256 ID of the token to be transferred
@@ -275,7 +275,7 @@ contract ERC721 is ERC165, IERC721 {
   }
 
   /*
-  * @dev Private function to clear current approval of a given token ID
+  * @dev Private function to clear current approval of a given token ID.
   * @param tokenId uint256 ID of the token to be transferred
   */
   function _clearApproval(uint256 tokenId) private {

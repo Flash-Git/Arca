@@ -4,7 +4,7 @@ pragma solidity ^0.5.0;
 * Original code sourced from OpenZeppelin
 *
 * @title SafeMath
-* @dev Unsigned math operations with safety checks that revert on error
+* @dev Unsigned math operations with safety checks that revert on error.
 */
 library SafeMath {
   /*
@@ -24,7 +24,7 @@ library SafeMath {
   }
 
   /*
-  * @dev Integer division of two unsigned integers truncating the quotient, reverts on division by zero
+  * @dev Integer division of two unsigned integers truncating the quotient, reverts on division by zero.
   */
   function div(uint256 a, uint256 b) internal pure returns (uint256) {
     //Solidity only automatically asserts when dividing by 0
@@ -35,7 +35,7 @@ library SafeMath {
   }
 
   /*
-  * @dev Subtracts two unsigned integers, reverts on overflow (i.e. if subtrahend is greater than minuend)
+  * @dev Subtracts two unsigned integers, reverts on overflow (i.e. if subtrahend is greater than minuend).
   */
   function sub(uint256 a, uint256 b) internal pure returns (uint256) {
     require(b <= a);
@@ -45,7 +45,7 @@ library SafeMath {
   }
 
   /*
-  * @dev Adds two unsigned integers, reverts on overflow
+  * @dev Adds two unsigned integers, reverts on overflow.
   */
   function add(uint256 a, uint256 b) internal pure returns (uint256) {
     uint256 c = a + b;

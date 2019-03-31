@@ -5,13 +5,13 @@ import "./ERC20.sol";
 /*
 * @title Another Standard ERC20 Token -Balanceable
 *
-* @dev Implementation of the basic standard token
+* @dev Implementation of the basic standard token.
 * https://eips.ethereum.org/EIPS/eip-20
 */
 contract ASETB is ERC20 {
   /*
   * Constructor
-  * @dev Gives all tokens to contract creator
+  * @dev Gives all tokens to contract creator.
   */
   constructor() public {
     name = "Another Standard ERC Token -Balanceable";

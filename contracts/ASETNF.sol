@@ -11,7 +11,7 @@ import "./ERC721.sol";
 contract ASETNF is ERC721 {
   /*
   * Constructor
-  * @dev Mints tokens and gives them to the contract creator
+  * @dev Mints tokens and gives them to the contract creator.
   * @param _tokenCount The amount of tokens to mint
   */
   constructor(uint8 _tokenCount) public {
@@ -21,7 +21,7 @@ contract ASETNF is ERC721 {
   }
 
   /*
-  * @dev Function to mint tokens
+  * @dev Function to mint tokens.
   * @param to The address that will receive the minted tokens
   * @param tokenId The token id to mint
   */
@@ -31,7 +31,7 @@ contract ASETNF is ERC721 {
   }
 
   /* 
-  * @dev Removed sender arguments to simplify direct transfers
+  * @dev Removed sender arguments to simplify direct transfers.
   * @param _to address to receive the ownership of the given token ID
   * @param _tokenId uint256 ID of the token to be transferred
   */
@@ -40,7 +40,7 @@ contract ASETNF is ERC721 {
   }
 
   /* 
-  * @dev Removed sender arguments to simplify safe direct transfers
+  * @dev Removed sender arguments to simplify safe direct transfers.
   * @param _to address to receive the ownership of the given token ID
   * @param _tokenId uint256 ID of the token to be transferred
   */
