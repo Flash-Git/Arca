@@ -22,9 +22,9 @@ contract DAppBoxSoft {
   mapping(address => mapping(address => Box)) private boxes;
 
   struct OfferErc20 {
-		address add;
-		uint256 amount;
-	}
+    address add;
+    uint256 amount;
+  }
 
   struct OfferErc721 {
     address add;
@@ -115,7 +115,7 @@ contract DAppBoxSoft {
   */
 
   function pushOfferErc20(address _tradePartner, address _erc20Address, uint256 _amount) public {
-		require(Erc20(_erc20Address).allowance(msg.sender, address(this)) >= _amount, "Insufficient allowance");
+    require(Erc20(_erc20Address).allowance(msg.sender, address(this)) >= _amount, "Insufficient allowance");
     OfferErc20 memory offer;
     offer.add = _erc20Address;
     offer.amount = _amount;
@@ -126,8 +126,8 @@ contract DAppBoxSoft {
   }
   
   function pushOfferErc721(address _tradePartner, address _erc721Address, uint256 _id) public {
-		require(Erc721(_erc721Address).ownerOf(_id) == msg.sender, "Sender isn't owner of this erc721 token");
-		require(Erc721(_erc721Address).getApproved(_id) == address(this), "Contract not approved to transfer this erc721 token");
+    require(Erc721(_erc721Address).ownerOf(_id) == msg.sender, "Sender isn't owner of this erc721 token");
+    require(Erc721(_erc721Address).getApproved(_id) == address(this), "Contract not approved to transfer this erc721 token");
     OfferErc721 memory offer;
     offer.add = _erc721Address;
     offer.id = _id;
