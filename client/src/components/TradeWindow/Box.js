@@ -79,71 +79,96 @@ class Box extends Component {
     if(!this.props.connected){
       return;
     }
-
-    const _add1 = this.props.addresses[0];
-    const _add2 = this.props.addresses[1];
     
+    let add1 = this.props.addresses[0];
+    let add2 = this.props.addresses[1];
+
     try{
-      if(!window.web3.utils.isAddress(_add1) && !window.web3.utils.isAddress(_add2)){
+      if(!window.web3.utils.isAddress(add1) && !window.web3.utils.isAddress(add2)){
         return;
       }
     }catch(e){
       return;
     }
-    let boxContract, erc20Contract, erc721Contract;
-    try{
-      boxContract = await new window.web3.eth.Contract(abi, AppAddress);
-    }catch(e){//UNCLEAN
-      console.log(e);
-    }    
-    let countErc20 = 0;
-    let countErc721 = 0;
-    try{
-      countErc20 = await boxContract.methods.getErc20Count(_add1, _add2).call({
-        from: _add1
-      });
-      countErc721 = await boxContract.methods.getErc721Count(_add1, _add2).call({
-        from: _add1
-      });
-    } catch(e){
-      return;
-    }
 
-    const arr = [];
-
-    for(let i = 0; i < countErc20; i++){
-      try {
-        const result = await boxContract.methods.getOfferErc20(_add1, _add2, i).call({
-          from: _add1
-        });
-        erc20Contract = await new window.web3.eth.Contract(abiErc20, result[0]);
-
-        let offer = {};
-        offer.id = uuid();//TODO get ID from server
-        try {
-          offer.name = await erc20Contract.methods.name.call({
-            from: _add1
-          });
-          offer.symbol = await boxContract.methods.symbol.call({
-            from: _add1
-          });
-        } catch(e){
-          offer.name = "";
-          offer.symbol = "";
+    let erc20Offers = [];
+    let erc721Offers = [];
+    for(let i = 0; i < 2; i++) {
+      let boxContract;
+      try{
+        boxContract = await new window.web3.eth.Contract(abi, AppAddress);
+      }catch(e){//UNCLEAN
+        console.log(e);
+        return;
+      }
+  
+      let count = 0;
+      let ercAbi = [];
+      try{
+        for(let type = 0; type < count; type++){
+          if(type === 0){//erc20
+            ercAbi = abiErc20;
+            count = await boxContract.methods.getErc20Count(add1, add2).call({
+              from: add1
+            });
+          } else {
+            ercAbi = abiErc721;
+            count = await boxContract.methods.getErc721Count(add1, add2).call({
+              from: add1
+            });
+          }
         }
-        [offer.contractAdd, offer.amount] = result;
-        
-        arr.push(offer);
-      } catch(e) {
-        console.error(e);
+      } catch(e){
+        return;
+      }
+      
+      const arr = [];
+      for(let type = 0; type < count; type++){
+        try {
+          let result;
+          if(type === 0){//erc20
+            result = await boxContract.methods.getOfferErc20(add1, add2, i).call({
+              from: add1
+            });
+          } else {
+            result = await boxContract.methods.getOfferErc721(add1, add2, i).call({
+              from: add1
+            });
+          }
+          const contract = await new window.web3.eth.Contract(ercAbi, result[0]);
+  
+          let offer = { id: uuid(), type };//TODO get ID from server
+          try {
+            offer.name = await contract.methods.name.call({
+              from: add1
+            });
+            offer.symbol = await boxContract.methods.symbol.call({
+              from: add1
+            });
+          } catch(e){
+            offer.name = "";
+            offer.symbol = "";
+          }
+          if(type === 0){//erc20
+            [offer.contractAdd, offer.amount] = result;
+          } else {
+            [offer.contractAdd, offer.id] = result;
+          }
+          arr.push(offer);
+        } catch(e) {
+          console.error(e);
+        }
       }
     }
-    
+
     this.setState({ chainMethods: [] });
-    arr.forEach((method) => {
+    erc20Offers.forEach((method) => {
       this.addChainMethod(method);
     });
-    //TODO check and remove duplicates from both method lists
+    erc721Offers.forEach((method) => {
+      this.addChainMethod(method);
+    });
+    //TODO check and remove duplicates from method lists
   }
 
   render() {
