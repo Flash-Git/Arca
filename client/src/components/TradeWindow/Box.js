@@ -38,20 +38,6 @@ class Box extends Component {
     this.setState({ chainMethods: [...this.state.chainMethods, method] });
   }
 
-  addMethodArguments = (id, args) => {
-    const newMethods = this.state.localMethods;
-    
-    //Can't use indexOf filter. learned the hard way
-    this.state.localMethods.forEach((method, index) => {
-      if(method.id === id) {
-        newMethods[index].args.push(args);
-        newMethods[index].sendStatus = sendStatus.SENDING;
-      }
-    });
-
-    this.setState({ localMethods: newMethods });
-  }
-
   //Keep sendStatus of methods up to date for safety on execution checks later
   setMethodSendStatus = (id, sendStatus) => {
     if(!this.props.connected){
@@ -78,8 +64,7 @@ class Box extends Component {
       return;
     }
     
-    let add1 = this.props.addresses[0];
-    let add2 = this.props.addresses[1];
+    const [add1, add2] = this.props.addresses;
 
     try{
       if(!window.web3.utils.isAddress(add1) && !window.web3.utils.isAddress(add2)){
@@ -89,8 +74,6 @@ class Box extends Component {
       return;
     }
 
-    let erc20Offers = [];
-    let erc721Offers = [];
     for(let type = 0; type < 2; type++) {
       let boxContract;
       try{
@@ -119,7 +102,7 @@ class Box extends Component {
         return;
       }
       
-      const arr = [];
+      const offers = [];
       for(let i = 0; i < count; i++){
         try {
           let offer = { id: type+i, type };//TODO get ID from server
@@ -144,7 +127,7 @@ class Box extends Component {
             offer.name = "";
             offer.symbol = "";
           }
-          arr.push(offer);
+          offers.push(offer);
         } catch(e) {
           console.error(e);
         }
@@ -152,11 +135,8 @@ class Box extends Component {
     }
 
     this.setState({ chainMethods: [] });
-    erc20Offers.forEach((method) => {
-      this.addChainMethod(method, 0);
-    });
-    erc721Offers.forEach((method) => {
-      this.addChainMethod(method, 1);
+    offers.forEach((method) => {
+      this.addChainMethod(method);
     });
     //TODO check and remove duplicates from method lists
   }
