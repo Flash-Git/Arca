@@ -93,7 +93,7 @@ class Box extends Component {
 
     let erc20Offers = [];
     let erc721Offers = [];
-    for(let i = 0; i < 2; i++) {
+    for(let type = 0; type < 2; type++) {
       let boxContract;
       try{
         boxContract = await new window.web3.eth.Contract(abi, AppAddress);
@@ -105,54 +105,46 @@ class Box extends Component {
       let count = 0;
       let ercAbi = [];
       try{
-        for(let type = 0; type < count; type++){
-          if(type === 0){//erc20
-            ercAbi = abiErc20;
-            count = await boxContract.methods.getErc20Count(add1, add2).call({
-              from: add1
-            });
-          } else {
-            ercAbi = abiErc721;
-            count = await boxContract.methods.getErc721Count(add1, add2).call({
-              from: add1
-            });
-          }
+        if(type === 0){//erc20
+          ercAbi = abiErc20;
+          count = await boxContract.methods.getErc20Count(add1, add2).call({
+            from: add1
+          });
+        } else {
+          ercAbi = abiErc721;
+          count = await boxContract.methods.getErc721Count(add1, add2).call({
+            from: add1
+          });
+          
         }
       } catch(e){
         return;
       }
       
       const arr = [];
-      for(let type = 0; type < count; type++){
+      for(let i = 0; i < count; i++){
         try {
-          let result;
+          let offer = { id: type+i, type };//TODO get ID from server
           if(type === 0){//erc20
-            result = await boxContract.methods.getOfferErc20(add1, add2, i).call({
+            [offer.contractAdd, offer.amount] = await boxContract.methods.getOfferErc20(add1, add2, i).call({
               from: add1
             });
           } else {
-            result = await boxContract.methods.getOfferErc721(add1, add2, i).call({
+            [offer.contractAdd, offer.id] = await boxContract.methods.getOfferErc721(add1, add2, i).call({
               from: add1
             });
           }
-          const contract = await new window.web3.eth.Contract(ercAbi, result[0]);
-  
-          let offer = { id: uuid(), type };//TODO get ID from server
-          try {
-            offer.name = await contract.methods.name.call({
+          const ercContract = await new window.web3.eth.Contract(ercAbi, offer.contractAdd);
+          try {//name and symbol aren't required for the erc token standards
+            offer.name = await ercContract.methods.name.call({
               from: add1
             });
-            offer.symbol = await boxContract.methods.symbol.call({
+            offer.symbol = await ercContract.methods.symbol.call({
               from: add1
             });
           } catch(e){
             offer.name = "";
             offer.symbol = "";
-          }
-          if(type === 0){//erc20
-            [offer.contractAdd, offer.amount] = result;
-          } else {
-            [offer.contractAdd, offer.id] = result;
           }
           arr.push(offer);
         } catch(e) {
