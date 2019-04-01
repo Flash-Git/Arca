@@ -9,7 +9,8 @@ import MethodOffer from "./MethodOffer";
 import uuid from "uuid/v4";
 
 import abi from "../../abi";
-import erc20Abi from "../../erc20Abi";
+import abiErc20 from "../../abiErc20";
+import abiErc721 from "../../abiErc721";
 import { AppAddress, sendStatus } from "../../Static";
 
 class Box extends Component {
@@ -115,7 +116,7 @@ class Box extends Component {
         const result = await boxContract.methods.getOfferErc20(_add1, _add2, i).call({
           from: _add1
         });
-        erc20Contract = await new window.web3.eth.Contract(erc20Abi, result[0]);
+        erc20Contract = await new window.web3.eth.Contract(abiErc20, result[0]);
 
         let offer = {};
         offer.id = uuid();//TODO get ID from server
