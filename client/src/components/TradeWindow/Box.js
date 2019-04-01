@@ -131,10 +131,7 @@ class Box extends Component {
           offer.name = "";
           offer.symbol = "";
         }
-        [offer.contractAdd, offer.amount]
-        const result = await boxContract.methods.getFuncCall(_add1, _add2, i).call({
-          from: _add1
-        });
+        [offer.contractAdd, offer.amount] = result;
         
         arr.push(offer);
       } catch(e) {
