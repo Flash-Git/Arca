@@ -5,12 +5,12 @@
   "dependencies": {
     "axios": "^0.18.0",
     "ethereum-blockies-base64": "^1.0.2",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-scripts": "^2.1.8",
-    "react-transition-group": "^2.6.0",
+    "react-transition-group": "^2.7.1",
     "uuid": "^3.3.2",
-    "web3": "^1.0.0-beta.48"
+    "web3": "^1.0.0-beta.51"
   },
   "scripts": {
     "start": "react-scripts start",
