@@ -4,9 +4,7 @@ import PropTypes from "prop-types";
 import Summary from "./Summary";
 import Satisfied from "./Satisfied";
 import SubmitBox from "./SubmitBox";
-import EthOffer from "./EthOffer";
-import MethodOffer from "./MethodOffer";
-import uuid from "uuid/v4";
+import OfferErc from "./OfferErc";
 
 import abi from "../../abi";
 import abiErc20 from "../../abiErc20";
@@ -21,7 +19,7 @@ class Box extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.addresses===this.props.addresses){
+    if(nextProps.addresses === this.props.addresses){
       return;
     }
     this.setState({
@@ -130,7 +128,7 @@ class Box extends Component {
               from: add1
             });
           } else {
-            [offer.contractAdd, offer.id] = await boxContract.methods.getOfferErc721(add1, add2, i).call({
+            [offer.contractAdd, offer.aId] = await boxContract.methods.getOfferErc721(add1, add2, i).call({
               from: add1
             });
           }
@@ -155,10 +153,10 @@ class Box extends Component {
 
     this.setState({ chainMethods: [] });
     erc20Offers.forEach((method) => {
-      this.addChainMethod(method);
+      this.addChainMethod(method, 0);
     });
     erc721Offers.forEach((method) => {
-      this.addChainMethod(method);
+      this.addChainMethod(method, 1);
     });
     //TODO check and remove duplicates from method lists
   }
@@ -168,17 +166,19 @@ class Box extends Component {
       <div className="box" style={ boxStyle }>
         <Summary address={ this.props.addresses[0] } ensAdd={ this.props.ensAdd } />
         <div className="container" style={ containerStyle }>
-          <EthOffer connected ={ this.props.connected } />
           { this.state.chainMethods.map(method =>
-            <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments }
-              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } connected ={ this.props.connected } />
+            <OfferErc key= { method.id } method={ method }
+              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
+              isUser={ this.props.isUser } connected ={ this.props.connected } />
           ) }
           { this.state.localMethods.map(method =>
-            <MethodOffer key= { method.id } method={ method } addMethodArguments={ this.addMethodArguments }
-              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } isUser={ this.props.isUser } connected ={ this.props.connected } />
+            <OfferErc key= { method.id } method={ method }
+              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
+              isUser={ this.props.isUser } connected ={ this.props.connected } />
           ) }
         </div>
-        <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.props.isUser } connected ={ this.props.connected } />
+        <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
+          isUser={ this.props.isUser } connected ={ this.props.connected } />
         { (this.props.isUser ? <SubmitBox addMethod={ this.addLocalMethod } /> : "") }
       </div>
     );
