@@ -94,13 +94,9 @@ class Box extends Component {
     }catch(e){//UNCLEAN
       console.log(e);
     }    
-    let countErc20 = 0;
-    let countErc721 = 0;
+    let count = 0;
     try{
-      countErc20 = await contract.methods.getErc20Count(_add1, _add2).call({
-        from: _add1
-      });
-      countErc721 = await contract.methods.getErc721Count(_add1, _add2).call({
+      count = await contract.methods.getCount(_add1, _add2).call({
         from: _add1
       });
     } catch(e){
@@ -109,10 +105,8 @@ class Box extends Component {
 
     const arr = [];
 
-    for(let i = 0; i < countErc20; i++){
+    for(let i = 0; i < count; i++){
       try {
-//        function getOfferErc20(address _add1, address _add2, uint8 _index) public view returns(address, uint256) {
-
         const result = await contract.methods.getFuncCall(_add1, _add2, i).call({
           from: _add1
         });
