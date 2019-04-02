@@ -55,13 +55,12 @@ class Box extends Component {
     this.setState({ localMethods: newMethods });
   }
 
-  setSatisfied = (count) => {//acceptTrade
-    let boxContract;
+  async setSatisfied(count) {//acceptTrade
     try{
-      boxContract = await new window.web3.eth.Contract(abi, AppAddress);
+      let boxContract = await new window.web3.eth.Contract(abi, AppAddress);
     
       await boxContract.methods.acceptTrade(this.props.addresses[1], this.props.partnerNonce).send({
-        from: add1
+        from: this.props.addresses[0]
       })
       .on("transactionHash", (hash) => {
         console.log("txHash: " + hash);
