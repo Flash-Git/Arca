@@ -110,9 +110,11 @@ class App extends Component {
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } />
-        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses } isUser={ this.state.userBox } connected={ this.state.connected }/>
+        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses }
+          isUser={ this.state.userBox } connected={ this.state.connected }/>
         <Help />
-        <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds } userBox={ this.state.userBox } connected ={ this.state.connected } />
+        <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds }
+          userBox={ this.state.userBox } connected ={ this.state.connected } />
       </div>
     );
   }

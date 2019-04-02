@@ -5,7 +5,6 @@ import makeBlockie from "ethereum-blockies-base64";
 import abi from "../../abi";
 import { AppAddress, sendStatus } from "../../Static";
 
-
 class OfferErc extends Component {
 
   state = {
