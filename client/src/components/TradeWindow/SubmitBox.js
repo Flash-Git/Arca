@@ -19,9 +19,9 @@ class SubmitBox extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     const method = this.state;
-    if(method.type.toUpperCase.includes("20")){
+    if(method.type.includes("20")){
       method.type = 0;
-    } else if(method.type.toUpperCase.includes("721")){
+    } else if(method.type.includes("721")){
       method.type = 1;
     }
     method.id = method.type+"-"+uuid();//TODO getCount
@@ -39,7 +39,7 @@ class SubmitBox extends Component {
         <input 
           type="text" 
           name="contractAdd" 
-          placeholder="Contract Address" 
+          placeholder="Token's Contract Address" 
           value={ this.state.contractAdd }
           onChange={ this.onChange }
         />
@@ -53,7 +53,7 @@ class SubmitBox extends Component {
         <input
           type="text" 
           name="amountId" 
-          placeholder="Amount if ERC20 or ID if ERC721" 
+          placeholder="Amount / ID" 
           value={ this.state.amountId }
           onChange={ this.onChange }
         />
