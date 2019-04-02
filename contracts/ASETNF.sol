@@ -9,6 +9,9 @@ import "./ERC721.sol";
 * https://eips.ethereum.org/EIPS/eip-721
 */
 contract ASETNF is ERC721 {
+  string public name = "Another Standard ERC721 Token -NonFungible";
+  string public symbol = "ASETNF";
+
   /*
   * Constructor
   * @dev Mints tokens and gives them to the contract creator.
