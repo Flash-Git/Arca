@@ -24,8 +24,8 @@ class OfferErc extends Component {
     }
 
     try{
-      this.broadcast(this.props.method);
       this.setState({ sendStatus: sendStatus.SENDING });
+      this.broadcast(this.props.method);
     } catch(e) {
       console.error(e);
       this.setState({ sendStatus: sendStatus.UNSENT });
@@ -76,14 +76,28 @@ class OfferErc extends Component {
     }
   }
 
+  buttonText = () => {
+    if(this.props.method.sendStatus === sendStatus.SENT){
+      if(!this.props.isUser) {
+        return <span> Sent </span>;
+      } else {
+        return <span> Sent<br />(Resend) </span>;
+      }
+    } else if(this.props.method.sendStatus === sendStatus.SENDING) {
+      return <span> Sending </span>;
+    } else {
+      return <span> Send Offer </span>;
+    }
+  }
+
   render() {
     const method = this.props.method;
     return(
       <div className="method" style={ methodStyle }>
         <div className="display" style={ displayStyle }>
           { method.type === 0
-            ? <span>ERC20: </span>
-            : <span>ERC721: </span>
+            ? <span>ERC20:&nbsp;</span>
+            : <span>ERC721:&nbsp;</span>
           }
           { method.contractAdd }
           {
@@ -93,11 +107,11 @@ class OfferErc extends Component {
                 style={{ marginTop:"0.4rem" }} /> <span>&nbsp;</span> </span>
             : ""
           }
-          { method.symbol }
+          { method.symbol }&nbsp;
           { method.amountId }
         </div>
         <button onClick={ this.sendMethod } style={ (method.sendStatus === sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
-          { method.sendStatus === sendStatus.SENT ? <span>Sent<br />(Resend)</span> : "Send Method" }
+          { this.buttonText() }
         </button>
       </div>
     );
@@ -114,7 +128,7 @@ const methodStyle = {
   background: "#444",
   color: "#fff",
   margin: "0.2rem",
-  fontSize: "0.85em"
+  fontSize: "0.95em"
 }
 
 const displayStyle = {
@@ -126,7 +140,7 @@ const displayStyle = {
   background: "#444",
   color: "#fff",
   margin: "0.2rem",
-  fontSize: "0.85em"
+  fontSize: "0.95em"
 }
 
 const btnStyleUnsent = {
