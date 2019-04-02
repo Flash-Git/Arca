@@ -97,24 +97,32 @@ class Box extends Component {
           count = await boxContract.methods.getErc721Count(add1, add2).call({
             from: add1
           });
-          
         }
       } catch(e){
         return;
       }
       
+      if(count === 0){
+        continue;
+      }
+
       for(let i = 0; i < count; i++){
         try {
-          let offer = { id: type+i, type };//TODO get ID from server
+          let offer = { id: type+i, type, contractAdd: "", amountId: "" };
+          let result;
           if(type === 0){//erc20
-            [offer.contractAdd, offer.amount] = await boxContract.methods.getOfferErc20(add1, add2, i).call({
+            result = await boxContract.methods.getOfferErc20(add1, add2, i).call({
               from: add1
             });
-          } else {
-            [offer.contractAdd, offer.aId] = await boxContract.methods.getOfferErc721(add1, add2, i).call({
+          } else if(type === 1){//erc721
+            result = await boxContract.methods.getOfferErc721(add1, add2, i).call({
               from: add1
             });
           }
+          [offer.contractAdd, offer.amountId] = [result[0], result[1]];
+          //[offer.contractAdd, offer.amountId] = result;//Can't destructure into objects?
+          console.log("id: " + offer.id + ", contractAdd: " + offer.contractAdd + ", amountId: " + offer.amountId);
+
           const ercContract = await new window.web3.eth.Contract(ercAbi, offer.contractAdd);
           try {//name and symbol aren't required for the erc token standards
             offer.name = await ercContract.methods.name.call({
@@ -133,7 +141,6 @@ class Box extends Component {
         }
       }
     }
-
     this.setState({ chainMethods: [] });
     offers.forEach((method) => {
       this.addChainMethod(method);
