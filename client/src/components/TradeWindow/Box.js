@@ -55,8 +55,30 @@ class Box extends Component {
     this.setState({ localMethods: newMethods });
   }
 
-  setSatisfied = (isSatisfied) => {//TODO
-
+  setSatisfied = (count) => {//acceptTrade
+    let boxContract;
+    try{
+      boxContract = await new window.web3.eth.Contract(abi, AppAddress);
+    
+      await boxContract.methods.acceptTrade(this.props.addresses[1], this.props.partnerNonce).send({
+        from: add1
+      })
+      .on("transactionHash", (hash) => {
+        console.log("txHash: " + hash);
+      })
+      .on("receipt", (receipt) => {
+        this.props.acceptTrade(this.props.addresses[0]);
+      })
+      .on("confirmation", (confirmationNumber, receipt) => {
+        if(confirmationNumber === 3){
+          console.log("receipt: " + receipt);
+        }
+      })
+      .on("error", console.error);
+    }catch(e){
+      console.log(e);
+      return;
+    }
   }
 
   async getMethods() {
