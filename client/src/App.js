@@ -11,14 +11,7 @@ import { userBoxStatus } from "./Static";
 import "./App.css";
 
 class App extends Component {
-/*const BN = window.web3.utils.toBN;
 
-  let one = new BN(this.state.addresses[0]);
-  let two = new BN(this.state.addresses[1]);
-  one.mul(two);
-  
-  console.log(one.toString(16));*/
-  
   state = {
     connected: false,
     addresses: ["", ""],
@@ -28,11 +21,12 @@ class App extends Component {
 
   checkConnection = () => {
     try{
-      if(window.ethereum.networkVersion !== "4" && window.ethereum.selectedAddress !== "undefined"){
+      //Using Embark
+      /*if(window.ethereum.networkVersion !== "4" && window.ethereum.selectedAddress !== "undefined"){
         alert("The Ethereum contract is currently running on the rinkeby network.");
         this.setState({ connected: false });
         return 3;
-      }
+      }*/
       if(!window.web3.utils.isAddress(window.ethereum.selectedAddress)){
         this.setState({ connected: false });
         return 2;
