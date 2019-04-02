@@ -1,20 +1,10 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const path = require("path");
 
 const app = express();
 
 //Bodyparser middleware
 app.use(express.json());
-
-//DB config
-const db = require("./config/keys").mongoURI;
-
-//Connect to Mongo
-mongoose
-  .connect(db, {useNewUrlParser: true})
-  .then(() => console.log("MongoDB connected..."))
-  .catch((err) => console.log(err));
 
 //Serve static assets if in prod
 if(process.env.NODE_ENV === "production") {
