@@ -129,7 +129,7 @@ class Box extends Component {
 
       for(let i = 0; i < count; i++){
         try {
-          let offer = { id: type+i, type, contractAdd: "", amountId: "" };
+          let offer = { id: type+"-"+i, type, contractAdd: "", amountId: "" };
           let result;
           if(type === 0){//erc20
             result = await boxContract.methods.getOfferErc20(add1, add2, i).call({
