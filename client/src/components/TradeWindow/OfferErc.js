@@ -38,7 +38,7 @@ class OfferErc extends Component {
 
     try{
       if(_method.type === 0){
-        await contract.methods.pushOfferErc20(add2, _method.contractAdd, _method.amount).send({
+        await contract.methods.pushOfferErc20(add2, _method.contractAdd, _method.amountId).send({
           from: add1
         })
         .on("transactionHash", (hash) => {
@@ -54,7 +54,7 @@ class OfferErc extends Component {
         })
         .on("error", console.error);
       } else if(_method.type === 1){
-        await contract.methods.pushOfferErc721(add2, _method.contractAdd, _method.amount).send({
+        await contract.methods.pushOfferErc721(add2, _method.contractAdd, _method.amountId).send({
           from: add1
         })
         .on("transactionHash", (hash) => {
@@ -81,14 +81,20 @@ class OfferErc extends Component {
     return(
       <div className="method" style={ methodStyle }>
         <div className="display" style={ displayStyle }>
+          { method.type === 0
+            ? <span>ERC20: </span>
+            : <span>ERC721: </span>
+          }
           { method.contractAdd }
-          { 
+          {
             method.contractAdd !== "" ?
               <span> <span>&nbsp;</span> <img src={ 
                 makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" 
-                style={{ marginTop:"0.2em" }} /> <span>&nbsp;</span> </span>
+                style={{ marginTop:"0.4rem" }} /> <span>&nbsp;</span> </span>
             : ""
           }
+          { method.symbol }
+          { method.amountId }
         </div>
         <button onClick={ this.sendMethod } style={ (method.sendStatus === sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
           { method.sendStatus === sendStatus.SENT ? <span>Sent<br />(Resend)</span> : "Send Method" }
