@@ -47,7 +47,7 @@ class Box extends Component {
     const newMethods = this.state.localMethods;
     
     this.state.localMethods.forEach((method, index) => {
-      if(method.id === id) {
+      if(method.id === id){
         newMethods[index].sendStatus = sendStatus;
       }
     });
@@ -74,7 +74,8 @@ class Box extends Component {
       return;
     }
 
-    for(let type = 0; type < 2; type++) {
+    const offers = [];
+    for(let type = 0; type < 2; type++){
       let boxContract;
       try{
         boxContract = await new window.web3.eth.Contract(abi, AppAddress);
@@ -102,7 +103,6 @@ class Box extends Component {
         return;
       }
       
-      const offers = [];
       for(let i = 0; i < count; i++){
         try {
           let offer = { id: type+i, type };//TODO get ID from server
