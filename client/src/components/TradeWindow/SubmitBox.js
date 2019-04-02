@@ -8,18 +8,23 @@ class SubmitBox extends Component {
 
   state = {
     id: "",
+    type: "",
+    name: "",
+    symbol: "",
     contractAdd: "",
-    methodName: "",
-    methodType: "",
-    args: [],
-    sendStatus: sendStatus.UNSENT,
-    func: ""
+    amountId: "",
+    sendStatus: sendStatus.UNSENT
   }
 
   onSubmit = (e) => {
     e.preventDefault();
     const method = this.state;
-    method.id = uuid();
+    if(method.type.toUpperCase.includes("20")){
+      method.type = 0;
+    } else if(method.type.toUpperCase.includes("721")){
+      method.type = 1;
+    }
+    method.id = method.type+"-"+uuid();//TODO getCount
     this.setState(method);
     this.props.addMethod(this.state);
   }
@@ -40,21 +45,21 @@ class SubmitBox extends Component {
         />
         <input
           type="text" 
-          name="methodName" 
-          placeholder="Function Name" 
-          value={ this.state.methodName }
+          name="type" 
+          placeholder="ERC20"
+          value={ this.state.type }
           onChange={ this.onChange }
         />
         <input
           type="text" 
-          name="methodType" 
-          placeholder="Function Type" 
-          value={ this.state.methodType }
+          name="amountId" 
+          placeholder="Amount if ERC20 or ID if ERC721" 
+          value={ this.state.amountId }
           onChange={ this.onChange }
         />
         <input
           type="submit" 
-          value="Add Function" 
+          value="Add Offer" 
           className="btn"
         />
       </form>
