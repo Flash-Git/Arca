@@ -141,7 +141,6 @@ class Box extends Component {
             });
           }
           [offer.contractAdd, offer.amountId] = [result[0], result[1]];
-          //[offer.contractAdd, offer.amountId] = result;//Can't destructure into objects?
           console.log("id: " + offer.id + ", contractAdd: " + offer.contractAdd + ", amountId: " + offer.amountId);
 
           const ercContract = await new window.web3.eth.Contract(ercAbi, offer.contractAdd);
