@@ -140,23 +140,24 @@ class Box extends Component {
               from: add1
             });
           }
-          [offer.contractAdd, offer.amountId] = [result[0], result[1]];
+          [offer.contractAdd, offer.amountId] = [result[0], result[1].toString()];
           console.log("id: " + offer.id + ", contractAdd: " + offer.contractAdd + ", amountId: " + offer.amountId);
 
           const ercContract = await new window.web3.eth.Contract(ercAbi, offer.contractAdd);
           try {//name and symbol aren't required for the erc token standards
-            offer.name = await ercContract.methods.name.call({
+            offer.name = await ercContract.methods.name().call({
               from: add1
             });
-            offer.symbol = await ercContract.methods.symbol.call({
+            offer.symbol = await ercContract.methods.symbol().call({
               from: add1
             });
           } catch(e){
             offer.name = "";
             offer.symbol = "";
+            console.log(e);
           }
           offers.push(offer);
-        } catch(e) {
+        } catch(e){
           console.error(e);
         }
       }
