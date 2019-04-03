@@ -7,15 +7,15 @@ class Header extends Component {
 
   headerText = () => {
     if(AppAddress !== ""){
-        return <>
-          <span>
-            <img src={makeBlockie(AppAddress)} width="32px" height="32px" alt="blockie" style={{ marginRight:"1em", marginTop:"1.15em" }} />
-          </span>
-          <h2> DAPPBOX </h2>
-          <span>
-            <img src={makeBlockie(AppAddress)} width="32px" height="32px" alt="blockie" style={{ marginLeft:"1em", marginTop:"1.15em" }} />
-          </span>
-        </>;
+      return <>
+        <span>
+          <img src={makeBlockie(AppAddress)} width="32px" height="32px" alt="blockie" style={{ marginRight:"1em", marginTop:"1.15em" }} />
+        </span>
+        <h2> DAPPBOX </h2>
+        <span>
+          <img src={makeBlockie(AppAddress)} width="32px" height="32px" alt="blockie" style={{ marginLeft:"1em", marginTop:"1.15em" }} />
+        </span>
+      </>;
     } else {
       return <h2> DAPPBOX </h2>;
     }
