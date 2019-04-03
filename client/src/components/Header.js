@@ -6,10 +6,8 @@ import { AppAddress } from "../Static";
 class Header extends Component {
 
   headerText = () => {
-    let head = "";
     if(AppAddress !== ""){
-        head =
-        <>
+        return <>
           <span>
             <img src={makeBlockie(AppAddress)} width="32px" height="32px" alt="blockie" style={{ marginRight:"1em", marginTop:"1.15em" }} />
           </span>
@@ -19,9 +17,8 @@ class Header extends Component {
           </span>
         </>;
     } else {
-      head = <h2> DAPPBOX </h2>;
+      return <h2> DAPPBOX </h2>;
     }
-    return head;
   }
 
   render() {
