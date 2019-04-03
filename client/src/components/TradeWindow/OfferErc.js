@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
 
-import abi from "../../abi";
+import abi from "../../abis/abi";
 import { AppAddress, sendStatus } from "../../Static";
 
 class OfferErc extends Component {

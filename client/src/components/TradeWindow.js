@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Box from "./TradeWindow/Box";
 
-import abi from "../abi";
+import abi from "../abis/abi";
 import { AppAddress, executedStatus, userBoxStatus } from "../Static";
 
 class TradeWindow extends Component {

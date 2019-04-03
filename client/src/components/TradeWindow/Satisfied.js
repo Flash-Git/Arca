@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import abi from "../../abi";
+import abi from "../../abis/abi";
 import { AppAddress, satisfiedStatus } from "../../Static";
 
 class Satisfied extends Component {

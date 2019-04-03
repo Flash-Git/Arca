@@ -6,9 +6,9 @@ import Satisfied from "./Satisfied";
 import SubmitBox from "./SubmitBox";
 import OfferErc from "./OfferErc";
 
-import abi from "../../abi";
-import abiErc20 from "../../abiErc20";
-import abiErc721 from "../../abiErc721";
+import abi from "../../abis/abi";
+import abiErc20 from "../../abis/abiErc20";
+import abiErc721 from "../../abis/abiErc721";
 import { AppAddress, sendStatus } from "../../Static";
 
 class Box extends Component {
