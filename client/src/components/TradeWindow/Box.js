@@ -18,16 +18,16 @@ class Box extends Component {
     chainMethods: []
   }
 
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.addresses === this.props.addresses){
-      return;
-    }
-    this.setState({
-    }, () => this.getMethods());
-  }
+  //componentWillReceiveProps(nextProps) {
+   // if(nextProps.addresses === this.props.addresses){
+   //   return;
+    //}
+    //this.setState({
+    //}, () => this.getMethods());
+  //}
   
    componentDidMount() {
-     setInterval( () => this.getMethods(), 30000);
+     setInterval( () => this.getMethods(), 10000);
    }
 
   addLocalMethod = (method) => {
@@ -141,7 +141,7 @@ class Box extends Component {
             });
           }
           [offer.contractAdd, offer.amountId] = [result[0], result[1].toString()];
-          console.log("id: " + offer.id + ", contractAdd: " + offer.contractAdd + ", amountId: " + offer.amountId);
+          //console.log("id: " + offer.id + ", contractAdd: " + offer.contractAdd + ", amountId: " + offer.amountId);
 
           const ercContract = await new window.web3.eth.Contract(ercAbi, offer.contractAdd);
           try {//name and symbol aren't required for the erc token standards
@@ -166,6 +166,7 @@ class Box extends Component {
     offers.forEach((method) => {
       this.addChainMethod(method);
     });
+    this.props.setCount(this.props.boxNum, offers.length);
     //TODO check and remove duplicates from method lists
   }
 
@@ -177,16 +178,16 @@ class Box extends Component {
           { this.state.chainMethods.map(method =>
             <OfferErc key= { method.id } method={ method }
               setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
-              isUser={ this.props.isUser } connected ={ this.props.connected } />
+              isUser={ this.props.isUser } connected={ this.props.connected } />
           ) }
           { this.state.localMethods.map(method =>
             <OfferErc key= { method.id } method={ method }
               setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
-              isUser={ this.props.isUser } connected ={ this.props.connected } />
+              isUser={ this.props.isUser } connected={ this.props.connected } />
           ) }
         </div>
         <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
-          isUser={ this.props.isUser } connected ={ this.props.connected } />
+          isUser={ this.props.isUser } connected={ this.props.connected } count={ this.props.count } />
         { (this.props.isUser ? <SubmitBox addMethod={ this.addLocalMethod } /> : "") }
       </div>
     );
@@ -215,10 +216,13 @@ const containerStyle = {
 
 //PropTypes
 Box.propTypes = {
+  boxNum: PropTypes.number.isRequired,
   isUser: PropTypes.bool.isRequired,
   addresses: PropTypes.array.isRequired,
   ensAdd: PropTypes.string.isRequired,
-  connected: PropTypes.bool.isRequired
+  connected: PropTypes.bool.isRequired,
+  setCount: PropTypes.func.isRequired,
+  count: PropTypes.number.isRequired
 }
 
 export default Box;

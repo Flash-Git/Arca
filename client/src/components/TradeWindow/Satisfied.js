@@ -11,15 +11,15 @@ class Satisfied extends Component {
   }
 
   componentDidMount() {
-    setInterval( () => this.getSatisfied(), 30000);
+    setInterval( () => this.getSatisfied(), 10000);
   }
   
-  componentWillReceiveProps(nextProps) {
-    if(nextProps.addresses===this.props.addresses){
-      return;
-    }
-    this.getSatisfied();
-  }
+  //componentWillReceiveProps(nextProps) {
+  //  if(nextProps.addresses === this.props.addresses){
+  //    return;
+  //  }
+  //  this.getSatisfied();
+  //}
 
   toggleSatisfied = (e) => {//TODO ADD STUFF FOR TRANSITIONAL STATES
     if(!this.props.isUser){
@@ -30,19 +30,19 @@ class Satisfied extends Component {
     switch(this.state.isSatisfied){
       case satisfiedStatus.TRUE:
         isSatisfied = satisfiedStatus.TOFALSE;
-        this.sendSetUnsatisfied();
+        this.rejectTrade();
         break;
       case satisfiedStatus.FALSE:
         isSatisfied = satisfiedStatus.TOTRUE;
-        this.sendSetSatisfied();
+        this.acceptTrade();
         break;
       case satisfiedStatus.TOTRUE:
         isSatisfied = satisfiedStatus.TOFALSE;
-        this.sendSetUnsatisfied();
+        this.rejectTrade();
         break;
       case satisfiedStatus.TOFALSE:
         isSatisfied = satisfiedStatus.TOTRUE;
-        this.sendSetSatisfied();
+        this.acceptTrade();
         break;
       default:
         console.log("Error in toggleSatisfied");
@@ -53,13 +53,12 @@ class Satisfied extends Component {
     this.props.setSatisfied(isSatisfied);
   }
 
-  async sendSetSatisfied() {
+  async acceptTrade() {
     if(!this.props.connected){
       alert("Not connected");
       return;
     }
-    const add1 = this.props.addresses[0];
-    const add2 = this.props.addresses[1];
+    const [add1, add2] = this.props.addresses;
     let contract;
 
     try{
@@ -68,7 +67,7 @@ class Satisfied extends Component {
       console.log(e);
     }
     try{
-      contract.methods.setSatisfied(add2, "0x").send({//TODO hash other box
+      contract.methods.acceptTrade(add2, this.props.count).send({
         from: add1
         //TODO estimate gas
       })
@@ -94,13 +93,12 @@ class Satisfied extends Component {
     }
   }
 
-  async sendSetUnsatisfied() {
+  async rejectTrade() {
     if(!this.props.connected){
       alert("Not connected");
       return;
     }
-    const add1 = this.props.addresses[0];
-    const add2 = this.props.addresses[1];
+    const [add1, add2] = this.props.addresses;
     let contract;
 
     try{
@@ -110,7 +108,7 @@ class Satisfied extends Component {
     }
 
     try{
-      contract.methods.setUnsatisfied(add2).send({//TODO hash other box
+      contract.methods.rejectTrade(add2).send({
         from: add1
         //TODO estimate gas
       })
@@ -138,10 +136,9 @@ class Satisfied extends Component {
     if(!this.props.connected){
       return;
     }
-    const add1 = this.props.addresses[0];
-    const add2 = this.props.addresses[1];
-    
+    const [add1, add2] = this.props.addresses;
     let contract;
+
     try{
       contract = await new window.web3.eth.Contract(abi, AppAddress);
     }catch(e){//UNCLEAN
@@ -149,9 +146,15 @@ class Satisfied extends Component {
     }    
     let satisfied = false;
     try{
-      satisfied = await contract.methods.getSatisfied(add1, add2).call({
+      const partnerNonce = await contract.methods.getPartnerNonce(add1, add2).call({
         from: add1
       });
+      const nonce = await contract.methods.getNonce(add2, add1).call({
+        from: add1
+      });
+      if(+partnerNonce === +nonce+1){
+        satisfied = true;
+      }
     } catch(e){
       return;
     }
@@ -219,7 +222,8 @@ Satisfied.propTypes = {
   setSatisfied: PropTypes.func.isRequired,
   addresses: PropTypes.array.isRequired,
   isUser: PropTypes.bool.isRequired,
-  connected: PropTypes.bool.isRequired
+  connected: PropTypes.bool.isRequired,
+  count: PropTypes.number.isRequired //Partner box count
 }
 
 export default Satisfied;

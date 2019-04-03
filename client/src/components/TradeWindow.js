@@ -8,7 +8,14 @@ import { AppAddress, executedStatus, userBoxStatus } from "../Static";
 class TradeWindow extends Component {
   
   state = {
-    executedStatus: executedStatus.FALSE
+    executedStatus: executedStatus.FALSE,
+    counts: [0, 0]
+  }
+
+  setCount = (boxNum, count) => {
+    const counts = this.state.counts;
+    counts[boxNum] = count;
+    this.setState({ counts });
   }
   
   execute = () => {
@@ -67,10 +74,12 @@ class TradeWindow extends Component {
         <div id="boxes" style={ boxesStyle }>
           {/* <h3>{ AppAddress }</h3> */}
           <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) }
-            addresses={ [this.props.addresses[1], this.props.addresses[0]] } ensAdd={ this.props.ensAdds[1] } connected ={ this.props.connected }
+            addresses={ [this.props.addresses[1], this.props.addresses[0]] } ensAdd={ this.props.ensAdds[1] }
+            connected={ this.props.connected } setCount={ this.setCount } boxNum = { 0 } count={ this.state.counts[1] }
           />
           <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) }
-            addresses={ [this.props.addresses[0], this.props.addresses[1]] } ensAdd={ this.props.ensAdds[0] } connected ={ this.props.connected }
+            addresses={ [this.props.addresses[0], this.props.addresses[1]] } ensAdd={ this.props.ensAdds[0] }
+            connected={ this.props.connected } setCount={ this.setCount } boxNum = { 1 } count={ this.state.counts[0] }
           />
         </div>
         { (this.props.userBox !== 0 ?
