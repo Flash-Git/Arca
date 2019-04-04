@@ -19,9 +19,9 @@ class Web3Status extends Component {
 }
 
 const web3StatusStyle = {
+  width: "100%",
   textAlign: "center",
   justifyContent: "center",
-  background: "#486898",
 }
 
 const btnStyleUnsent = {

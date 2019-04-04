@@ -97,7 +97,7 @@ const tradeWindowStyle = {
   flexDirection: "column",
   textAlign: "center",
   justifyContent: "center",
-  background: "#486898",
+  background: "#858889",
   padding: "0.4rem",
   margin: "1.6rem",
   border: "solid",
@@ -108,7 +108,7 @@ const boxesStyle = {
   flexWrap: "wrap",
   textAlign: "center",
   justifyContent: "center",
-  background: "#486898",
+  background: "#858889",
 }
 
 const btnStyleUnsent = {

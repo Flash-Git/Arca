@@ -7,15 +7,15 @@ class Header extends Component {
 
   headerText = () => {
     if(AppAddress !== ""){
-      return <>
+      return <div style={ textStyle }>
         <span>
-          <img src={makeBlockie(AppAddress)} width="32px" height="32px" alt="blockie" style={{ marginRight:"1em", marginTop:"1.15em" }} />
+          <img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{ marginRight:"1em", marginTop:"1.15em" }} />
         </span>
         <h2> DAPPBOX </h2>
         <span>
-          <img src={makeBlockie(AppAddress)} width="32px" height="32px" alt="blockie" style={{ marginLeft:"1em", marginTop:"1.15em" }} />
+          <img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{ marginLeft:"1em", marginTop:"1.15em" }} />
         </span>
-      </>;
+      </div>;
     } else {
       return <h2> DAPPBOX </h2>;
     }
@@ -23,21 +23,20 @@ class Header extends Component {
 
   render() {
     return(
-      <header id="section-header" className="section" style={ headerStyle }>
+      <header id="section-header" className="section">
         { this.headerText() }
       </header>
     );
   }
 }
 
-const headerStyle = {
+const textStyle = {
   display: "flex",
   flexDirection: "row",
-  background: "#333",
   color: "#fff",
   textAlign: "center",
   justifyContent: "center",
-  padding: "0.2rem"
+  padding: "0.2rem",
 }
 
 export default Header;

@@ -110,9 +110,10 @@ class PreTrade extends Component {
 const preTradeStyle = {
   textAlign: "center",
   justifyContent: "center",
-  background: "#486898",
+  background: "#858889",
   padding: "0.4rem 0.2rem",
   margin: "1.6rem",
+  marginTop: "0",
   border: "solid"
 }
 
