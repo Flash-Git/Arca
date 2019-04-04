@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Web3 from "web3";
 
 import Header from "./components/Header";
-import Web3Status from "./components/Web3Status";
 import UserInfo from "./components/UserInfo";
 import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
@@ -103,17 +102,24 @@ class App extends Component {
   render() {
     return(
       <div className="App">
-        <Header />
-        <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } />
-        <UserInfo />
-        <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses }
-          isUser={ this.state.userBox } connected={ this.state.connected }/>
-        {/*<Help />*/}
-        <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds }
-          userBox={ this.state.userBox } connected ={ this.state.connected } />
+        <UserInfo enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } />
+        <div style={ mainStyle } >
+          <Header />
+          <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses }
+            isUser={ this.state.userBox } connected={ this.state.connected }/>
+          {/*<Help />*/}
+          <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds }
+            userBox={ this.state.userBox } connected ={ this.state.connected } />
+          </div>
       </div>
     );
   }
+}
+
+const mainStyle = {
+  margin: "0",
+  marginRight: "10.7rem",
+  padding: "0"
 }
 
 export default App;
