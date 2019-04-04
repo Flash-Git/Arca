@@ -3,6 +3,7 @@ import Web3 from "web3";
 
 import Header from "./components/Header";
 import Web3Status from "./components/Web3Status";
+import UserInfo from "./components/UserInfo";
 import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
 //import Help from "./components/Help";
@@ -104,6 +105,7 @@ class App extends Component {
       <div className="App">
         <Header />
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } />
+        <UserInfo />
         <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses }
           isUser={ this.state.userBox } connected={ this.state.connected }/>
         {/*<Help />*/}
