@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import Web3Status from "./components/Web3Status";
 import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
-import Help from "./components/Help";
+//import Help from "./components/Help";
 
 import { userBoxStatus } from "./Static";
 import "./App.css";
@@ -21,12 +21,12 @@ class App extends Component {
 
   checkConnection = () => {
     try{
-      //Using Embark
-      /*if(window.ethereum.networkVersion !== "4" && window.ethereum.selectedAddress !== "undefined"){
+      //Disable if using Embark
+      if(window.ethereum.networkVersion !== "4" && window.ethereum.selectedAddress !== "undefined"){
         alert("The Ethereum contract is currently running on the rinkeby network.");
         this.setState({ connected: false });
         return 3;
-      }*/
+      }
       if(!window.web3.utils.isAddress(window.ethereum.selectedAddress)){
         this.setState({ connected: false });
         return 2;
@@ -65,8 +65,8 @@ class App extends Component {
     .then(accounts => this.checkConnection())
     .catch(e => {
       if(e !== "User rejected provider access"){
-        alert("There was an issue signing you in. Please check console for error");
-        console.log("Error:\n" + e);
+        alert("There was an issue signing you in. Please check console(F12) for error");
+        console.log("\nError:\n" + e);
         return;
       }
     });
@@ -96,7 +96,7 @@ class App extends Component {
   }
 
   refresh = () => {
-
+    
   }
 
   render() {
@@ -106,7 +106,7 @@ class App extends Component {
         <Web3Status enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } />
         <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses }
           isUser={ this.state.userBox } connected={ this.state.connected }/>
-        <Help />
+        {/*<Help />*/}
         <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds }
           userBox={ this.state.userBox } connected ={ this.state.connected } />
       </div>
