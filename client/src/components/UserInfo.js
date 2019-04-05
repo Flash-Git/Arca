@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Web3Status from "./Web3Status";
+import TokenInfo from "./UserInfo/TokenInfo";
 import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
 
@@ -10,16 +11,18 @@ class UserInfo extends Component {
   }
 
   render() {
+    if(window.ethereum.selectedAddress === undefined){
+      return(
+        <div id="section-userInfo" className="section" style={ userInfoStyle }>
+          <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
+        </div>
+      );
+    }
     return(
       <div id="section-userInfo" className="section" style={ userInfoStyle }>
-        {
-          window.ethereum.selectedAddress !== undefined ? 
-          <img src={ makeBlockie(window.ethereum.selectedAddress) } width="32px" height="32px" alt="blockie" /> : "" 
-        }
+        <img src={ makeBlockie(window.ethereum.selectedAddress) } width="32px" height="32px" alt="blockie" />
         <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
-        <div>
-
-        </div>
+        <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected } />
       </div>
     );
   }
