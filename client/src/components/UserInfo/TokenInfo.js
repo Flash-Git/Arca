@@ -31,7 +31,6 @@ class TokenInfo extends Component {
     let contract;
 
     for(let i = 0; i<listErc20.length; i++){
-
       let erc20 = {};
       contract = await new window.web3.eth.Contract(abiErc20, listErc20[i]);
 
@@ -39,7 +38,11 @@ class TokenInfo extends Component {
         from: address
       });
       balance = balance.toString();
-      
+
+      if(balance === "0"){
+        continue;
+      }
+
       erc20.balance = balance.slice(0, balance.length-18);
 
       erc20.symbol = await contract.methods.symbol().call({
@@ -56,19 +59,18 @@ class TokenInfo extends Component {
     }
   
     for(let i = 0; i<listErc721.length; i++){
-      try{
-        contract = await new window.web3.eth.Contract(abiErc721, listErc721[i]);
-      }catch(e){
-        return;
-      }
+      let erc721 = {};
+      contract = await new window.web3.eth.Contract(abiErc721, listErc721[i]);
+
       let balance = await contract.methods.balanceOf(address).call({
         from: address
       });
-      balance = balance.toString();
+      erc721.balance = balance.toString();
 
-      if(balance === 0){
+      if(erc721.balance === "0"){
         continue;
       }
+
       let symbol = "";
       try{
         symbol = await contract.methods.symbol().call({
@@ -77,11 +79,12 @@ class TokenInfo extends Component {
       }catch(e){
         symbol = "NA";
       }
+      erc721.symbol = symbol;
 
-      erc721s.push({ symbol, balance });
+      erc721s.push(erc721);
     }
 
-    this.setState({ erc20s });
+    this.setState({ erc20s, erc721s });
   }
 
   render() {
@@ -93,13 +96,17 @@ class TokenInfo extends Component {
             <span> { erc20.allowance }</span>
           </>
         ) }
+        { this.state.erc721s.map(erc721 => 
+          <>
+            <span> { erc721.symbol } &nbsp; { erc721.balance }</span>
+          </>
+        ) }
       </div>
     );
   }
 }
 
 const tokenInfoStyle = {
-
 }
 
 //PropTypes
