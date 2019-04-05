@@ -90,25 +90,26 @@ class OfferErc extends Component {
     }
   }
 
+  offer = (method) => {
+    return <>
+      { method.type === 0 ? <span>ERC20:&nbsp;</span> : <span>ERC721:&nbsp;</span> }
+      { method.contractAdd }
+      if(method.contractAdd !== ""){
+        <span> <span>&nbsp;</span> <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" 
+        style={{ marginTop:"0.4rem" }} /> <span>&nbsp;</span> </span>
+      } else { 
+        <span>&nbsp;</span>
+       }
+      { method.symbol }&nbsp;{ method.amountId }
+    </>
+  }
+
   render() {
     const method = this.props.method;
     return(
       <div className="method" style={ methodStyle }>
         <div className="display" style={ displayStyle }>
-          { method.type === 0
-            ? <span>ERC20:&nbsp;</span>
-            : <span>ERC721:&nbsp;</span>
-          }
-          { method.contractAdd }
-          {
-            method.contractAdd !== "" ?
-              <span> <span>&nbsp;</span> <img src={ 
-                makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" 
-                style={{ marginTop:"0.4rem" }} /> <span>&nbsp;</span> </span>
-            : ""
-          }
-          { method.symbol }&nbsp;
-          { method.amountId }
+          { this.offer(method) }
         </div>
         <button onClick={ this.sendMethod } style={ (method.sendStatus === sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
           { this.buttonText() }
