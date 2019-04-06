@@ -22,7 +22,7 @@ class UserInfo extends Component {
           <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
         </div>
         <div style={ bottomStyle }>
-          <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected } addErc20={ this.props.addErc20 } />
+          <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected } addErc={ this.props.addErc } />
         </div>
       </div>
     );
