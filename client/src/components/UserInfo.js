@@ -50,13 +50,15 @@ const userInfoStyle = {
 const topStyle = {
   margin: "0.45rem",
   padding: "0.5rem",
-  background: "#666"
+  background: "#666",
+  border: "solid"
 }
 
 const bottomStyle = {
   margin: "0.45rem",
   background: "#666",
-  minHeight: "20rem"
+  minHeight: "20rem",
+  border: "solid"
 }
 
 //PropTypes

@@ -24,7 +24,8 @@ const liStyle= {
 }
 
 const erc20Style = {
-  textAlign: "left"
+  textAlign: "left",
+  marginBottom: "1rem"
 }
 
 const symbolStyle = { 
