@@ -16,6 +16,7 @@ class App extends Component {
     connected: false,
     addresses: ["", ""],
     ensAdds: ["", ""],
+    erc: {},
     userBox: userBoxStatus.NO_BOX
   }
 
@@ -99,17 +100,21 @@ class App extends Component {
     
   }
 
+  addErc = (erc) => {
+    this.setState({ erc })
+  }
+
   render() {
     return(
       <div className="App">
-        <UserInfo enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } />
+        <UserInfo enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } addErc={ this.addErc } />
         <div style={ mainStyle } >
           <Header />
           <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses }
             isUser={ this.state.userBox } connected={ this.state.connected }/>
           {/*<Help />*/}
           <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds }
-            userBox={ this.state.userBox } connected ={ this.state.connected } />
+            userBox={ this.state.userBox } connected={ this.state.connected } erc={ this.state.erc } />
           </div>
       </div>
     );
