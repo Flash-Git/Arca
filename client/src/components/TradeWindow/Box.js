@@ -176,12 +176,12 @@ class Box extends Component {
         <Summary address={ this.props.addresses[0] } ensAdd={ this.props.ensAdd } />
         <div className="container" style={ containerStyle }>
           { this.state.chainMethods.map(method =>
-            <OfferErc key= { method.id } method={ method }
+            <OfferErc key={ method.id } method={ method }
               setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
               isUser={ this.props.isUser } connected={ this.props.connected } />
           ) }
           { this.state.localMethods.map(method =>
-            <OfferErc key= { method.id } method={ method }
+            <OfferErc key={ method.id } method={ method }
               setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
               isUser={ this.props.isUser } connected={ this.props.connected } />
           ) }
