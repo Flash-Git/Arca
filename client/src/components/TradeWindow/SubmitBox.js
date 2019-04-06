@@ -16,6 +16,15 @@ class SubmitBox extends Component {
     sendStatus: sendStatus.UNSENT
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.erc20.contractAdd !== this.props.erc20.contractAdd){
+      this.setState({ contractAdd: this.props.erc20.contractAdd, type: "ERC20" });
+    }
+    if(nextProps.erc721.contractAdd !== this.props.erc721.contractAdd){
+      this.setState({ contractAdd: this.props.erc721.contractAdd, type: "ERC721" });
+    }
+  }
+
   onSubmit = (e) => {
     e.preventDefault();
     const method = this.state;
@@ -78,7 +87,8 @@ const methodStyle = {
 
 //PropTypes
 SubmitBox.propTypes = {
-  addMethod: PropTypes.func.isRequired
+  addMethod: PropTypes.func.isRequired,
+  erc: PropTypes.object.isRequired
 }
 
 export default SubmitBox;
