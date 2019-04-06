@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import Erc20 from "./Erc20";
+import Erc721 from "./Erc721";
 import abiErc20 from "../../abis/abiErc20";
 import abiErc721 from "../../abis/abiErc721";
 import { AppAddress, listErc20, listErc721 } from "../../Static";
@@ -14,7 +16,7 @@ class TokenInfo extends Component {
 
   componentDidMount() {
     this.updateBalances();
-    setInterval( () => this.updateBalances(), 10000);
+    setInterval( () => this.updateBalances(), 1000);
   }
 
   async updateBalances() {
@@ -30,8 +32,8 @@ class TokenInfo extends Component {
     }
     let contract;
 
-    for(let i = 0; i<listErc20.length; i++){
-      let erc20 = {};
+    for(let i = 0; i < listErc20.length; i++){
+      let erc20 = { id: i };
       contract = await new window.web3.eth.Contract(abiErc20, listErc20[i]);
 
       let balance = await contract.methods.balanceOf(address).call({
@@ -58,8 +60,8 @@ class TokenInfo extends Component {
       erc20s.push( erc20 );
     }
   
-    for(let i = 0; i<listErc721.length; i++){
-      let erc721 = {};
+    for(let i = 0; i < listErc721.length; i++){
+      let erc721 = { id: i };
       contract = await new window.web3.eth.Contract(abiErc721, listErc721[i]);
 
       let balance = await contract.methods.balanceOf(address).call({
@@ -90,23 +92,28 @@ class TokenInfo extends Component {
   render() {
     return(
       <div className="tokenInfo" style={ tokenInfoStyle }>
-        { this.state.erc20s.map(erc20 => 
-          <>
-            <span> { erc20.symbol } &nbsp; { erc20.balance }</span>
-            <span> { erc20.allowance }</span>
-          </>
+        <h4 style={ h3Style }>ERC20</h4>
+        { this.state.erc20s.map(erc20 =>
+          <Erc20 key={ erc20.id } symbol={ erc20.symbol } balance={ erc20.balance } allowance={ erc20.allowance } />
         ) }
-        { this.state.erc721s.map(erc721 => 
-          <>
-            <span> { erc721.symbol } &nbsp; { erc721.balance }</span>
-          </>
+        <h4 style={ h3Style }>ERC721</h4>
+        { this.state.erc721s.map(erc721 =>
+          <Erc721 key={ erc721.id } symbol={ erc721.symbol } balance={ erc721.balance } />
         ) }
       </div>
     );
   }
 }
 
+const h3Style = {
+  marginTop: "0.6em",
+  marginBottom: "0.4em",
+  textDecoration: "underline"
+}
+
 const tokenInfoStyle = {
+  padding: "0.5rem",
+  paddingLeft: "1rem"
 }
 
 //PropTypes
