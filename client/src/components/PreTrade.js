@@ -83,44 +83,58 @@ class PreTrade extends Component {
     return(
       <div id="section-preTrade" className="section" style={ preTradeStyle }>
         <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
-        <input
+        <div style={ addressesStyle }>
+          <input
+              type="text"
+              name="address1"
+              placeholder="Address 1"
+              value={ this.state.address1 }
+              onChange={ this.onChange }
+              style={ (this.state.validInput1 ? inputStyle : badInputStyle) }
+            />
+          <input
             type="text"
-            name="address1"
-            placeholder="Address 1"
-            value={ this.state.address1 }
+            name="address2"
+            placeholder="Address 2"
+            value={ this.state.address2 }
             onChange={ this.onChange }
-            style={ (this.state.validInput1 ? inputStyle : badInputStyle) }
+            style={ (this.state.validInput2 ? inputStyle : badInputStyle) }
           />
-        <input
-          type="text"
-          name="address2"
-          placeholder="Address 2"
-          value={ this.state.address2 }
-          onChange={ this.onChange }
-          style={ (this.state.validInput2 ? inputStyle : badInputStyle) }
-        />
+        </div>
         </form>
-        <button onClick={ this.onSubmit } style={ btnStyle }>Open Trade Box</button>
-        <button onClick={ this.props.refresh } style={ btnStyle }>Refresh</button>
+        <div style={ addressesStyle }>
+          <button onClick={ this.onSubmit } style={ btnStyle }>Open Trade Box</button>
+          <button onClick={ this.props.refresh } style={ btnStyle }>Refresh</button>
+        </div>
       </div>
     );
   }
 }
 
 const preTradeStyle = {
+  display: "flex",
   textAlign: "center",
   justifyContent: "center",
   background: "#858889",
   padding: "0.4rem 0.2rem",
   margin: "1.6rem",
   marginTop: "0",
-  border: "solid"
+  border: "solid",
+  flexDirection: "column"
+}
+
+const addressesStyle = {
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "center",
+  textAlign: "center"
 }
 
 const methodStyle = {
   textAlign: "center",
   justifyContent: "center",
-  color: "#fff",
+  color: "#fff"
 }
 
 const inputStyle= {
@@ -145,6 +159,7 @@ const btnStyle = {
   color: "#fff",
   fontWeight: "bold",
   margin: "0 1rem",
+  marginTop: "0.2rem",
   width: "13em"
 }
 
