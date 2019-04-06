@@ -188,7 +188,7 @@ class Box extends Component {
         </div>
         <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
           isUser={ this.props.isUser } connected={ this.props.connected } count={ this.props.count } />
-        { (this.props.isUser ? <SubmitBox addMethod={ this.addLocalMethod } /> : "") }
+        { (this.props.isUser ? <SubmitBox addMethod={ this.addLocalMethod } erc={ this.props.erc } /> : "") }
       </div>
     );
   }
@@ -222,7 +222,8 @@ Box.propTypes = {
   ensAdd: PropTypes.string.isRequired,
   connected: PropTypes.bool.isRequired,
   setCount: PropTypes.func.isRequired,
-  count: PropTypes.number.isRequired
+  count: PropTypes.number.isRequired,
+  erc: PropTypes.object.isRequired
 }
 
 export default Box;

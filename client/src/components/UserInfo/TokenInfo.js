@@ -33,7 +33,7 @@ class TokenInfo extends Component {
     let contract;
 
     for(let i = 0; i < listErc20.length; i++){
-      let erc20 = { id: i, contractAdd: listErc20[i] };
+      let erc20 = { id: i, contractAdd: listErc20[i], type: "ERC20" };
       contract = await new window.web3.eth.Contract(abiErc20, listErc20[i]);
 
       let balance = await contract.methods.balanceOf(address).call({
@@ -61,7 +61,7 @@ class TokenInfo extends Component {
     }
   
     for(let i = 0; i < listErc721.length; i++){
-      let erc721 = { id: i, contractAdd: listErc721[i] };
+      let erc721 = { id: i, contractAdd: listErc721[i], type: "ERC721" };
       contract = await new window.web3.eth.Contract(abiErc721, listErc721[i]);
 
       let balance = await contract.methods.balanceOf(address).call({

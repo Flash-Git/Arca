@@ -16,7 +16,7 @@ class App extends Component {
     connected: false,
     addresses: ["", ""],
     ensAdds: ["", ""],
-    erc: {},
+    erc: { contractAdd: "", type: "" },
     userBox: userBoxStatus.NO_BOX
   }
 
@@ -101,7 +101,7 @@ class App extends Component {
   }
 
   addErc = (erc) => {
-    this.setState({ erc })
+    this.setState({ erc });
   }
 
   render() {

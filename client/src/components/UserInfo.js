@@ -60,7 +60,7 @@ const bottomStyle = {
 UserInfo.propTypes = {
   connected: PropTypes.bool.isRequired,
   enableWeb3: PropTypes.func.isRequired,
-  addErc20: PropTypes.func.isRequired
+  addErc: PropTypes.func.isRequired
 }
 
 export default UserInfo;

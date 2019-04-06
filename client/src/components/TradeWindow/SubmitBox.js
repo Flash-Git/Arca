@@ -6,26 +6,28 @@ import { sendStatus } from "../../Static";
 
 class SubmitBox extends Component {
 
-  state = {
-    id: "",
-    type: "",
-    name: "",
-    symbol: "",
-    contractAdd: "",
-    amountId: "",
-    sendStatus: sendStatus.UNSENT
+  constructor(props) {
+    super(props);
+    this.state = {
+      id: "",
+      type: "",
+      name: "",
+      symbol: "",
+      contractAdd: "",
+      amountId: "",
+      sendStatus: sendStatus.UNSENT
+    }
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.erc20.contractAdd !== this.props.erc20.contractAdd){
-      this.setState({ contractAdd: this.props.erc20.contractAdd, type: "ERC20" });
-    }
-    if(nextProps.erc721.contractAdd !== this.props.erc721.contractAdd){
-      this.setState({ contractAdd: this.props.erc721.contractAdd, type: "ERC721" });
+    if(nextProps.erc.contractAdd !== this.props.erc.contractAdd){
+      this.setState({ contractAdd: this.props.erc.contractAdd, type: this.props.erc.type, amountId: "" });
     }
   }
 
-  onSubmit = (e) => {
+  onSubmit(e) {
     e.preventDefault();
     const method = this.state;
     if(method.type.includes("20")){
@@ -38,9 +40,11 @@ class SubmitBox extends Component {
     this.props.addMethod(this.state);
   }
 
-   onChange = (e) => this.setState({
-     [e.target.name]: e.target.value
-   });
+  onChange(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
 
   render() {
     return(

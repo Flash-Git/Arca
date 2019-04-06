@@ -14,7 +14,7 @@ class Erc20 extends Component {
         <li style={ liStyle }>
           <div>
             <span style={ symbolStyle }>{ this.props.erc.symbol }&nbsp;</span>
-            <img src={ makeBlockie(this.props.erc.contractAdd) } width="11px" height="10px" alt="blockie" style={{ marginTop:"0.2em" }} />&nbsp;<br/>
+            <img src={ makeBlockie(this.props.erc.contractAdd) } width="10px" height="10px" alt="blockie" style={{ marginTop:"0.2em" }} />&nbsp;<br/>
             Balance:&nbsp;{ this.props.erc.balance }<br/>
             Allowance:&nbsp;{ this.props.erc.allowance }
           </div>
@@ -62,9 +62,8 @@ const symbolStyle = {
 
 //PropTypes
 Erc20.propTypes = {
-  contractAdd: PropTypes.string.isRequired,
-  erc20: PropTypes.object.isRequired,
-  addErc20: PropTypes.func.isRequired  
+  erc: PropTypes.object.isRequired,
+  addErc: PropTypes.func.isRequired
 }
 
 export default Erc20;

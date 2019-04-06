@@ -76,10 +76,12 @@ class TradeWindow extends Component {
           <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) }
             addresses={ [this.props.addresses[1], this.props.addresses[0]] } ensAdd={ this.props.ensAdds[1] }
             connected={ this.props.connected } setCount={ this.setCount } boxNum = { 0 } count={ this.state.counts[1] }
+            erc={ this.props.erc }
           />
           <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) }
             addresses={ [this.props.addresses[0], this.props.addresses[1]] } ensAdd={ this.props.ensAdds[0] }
             connected={ this.props.connected } setCount={ this.setCount } boxNum = { 1 } count={ this.state.counts[0] }
+            erc={ this.props.erc }
           />
         </div>
         { (this.props.userBox !== 0 ?
@@ -139,7 +141,8 @@ TradeWindow.propTypes = {
   userBox: PropTypes.number.isRequired,
   addresses: PropTypes.array.isRequired,
   ensAdds: PropTypes.array.isRequired,
-  connected: PropTypes.bool.isRequired
+  connected: PropTypes.bool.isRequired,
+  erc: PropTypes.object.isRequired
 }
 
 export default TradeWindow;
