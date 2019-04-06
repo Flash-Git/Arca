@@ -14,15 +14,21 @@ class UserInfo extends Component {
     if(window.ethereum.selectedAddress === undefined){
       return(
         <div id="section-userInfo" className="section" style={ userInfoStyle }>
-          <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
+          <div style={{ margin: "0.45rem", padding: "0.5rem", background: "#666", minHeight: "20rem" }}>
+            <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
+          </div>
         </div>
       );
     }
     return(
       <div id="section-userInfo" className="section" style={ userInfoStyle }>
-        <img src={ makeBlockie(window.ethereum.selectedAddress) } width="32px" height="32px" alt="blockie" />
-        <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
-        <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected } />
+        <div style={ topStyle }>
+          <img src={ makeBlockie(window.ethereum.selectedAddress) } width="32px" height="32px" alt="blockie" />
+          <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
+        </div>
+        <div style={ bottomStyle }>
+          <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected } />
+        </div>
       </div>
     );
   }
@@ -30,7 +36,7 @@ class UserInfo extends Component {
 
 const userInfoStyle = {
   width: "10.5rem",
-  height: "30rem",
+  minHeight: "15rem",
   right: "0",
   position: "fixed",
   textAlign: "center",
@@ -39,7 +45,18 @@ const userInfoStyle = {
   marginTop: "3rem",
   marginRight: "0.2rem",
   border: "solid",
-  paddingTop: "0.5rem"
+}
+
+const topStyle = {
+  margin: "0.45rem",
+  padding: "0.5rem",
+  background: "#666"
+}
+
+const bottomStyle = {
+  margin: "0.45rem",
+  background: "#666",
+  minHeight: "20rem"
 }
 
 //PropTypes

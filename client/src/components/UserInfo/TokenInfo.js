@@ -112,8 +112,8 @@ const h3Style = {
 }
 
 const tokenInfoStyle = {
-  padding: "0.5rem",
-  paddingLeft: "1rem"
+  margin: "0.5rem",
+  padding: "0.6rem"
 }
 
 //PropTypes
