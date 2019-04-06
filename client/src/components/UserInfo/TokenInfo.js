@@ -33,7 +33,7 @@ class TokenInfo extends Component {
     let contract;
 
     for(let i = 0; i < listErc20.length; i++){
-      let erc20 = { id: i };
+      let erc20 = { id: i, contractAdd: listErc20[i] };
       contract = await new window.web3.eth.Contract(abiErc20, listErc20[i]);
 
       let balance = await contract.methods.balanceOf(address).call({
@@ -61,7 +61,7 @@ class TokenInfo extends Component {
     }
   
     for(let i = 0; i < listErc721.length; i++){
-      let erc721 = { id: i };
+      let erc721 = { id: i, contractAdd: listErc721[i] };
       contract = await new window.web3.eth.Contract(abiErc721, listErc721[i]);
 
       let balance = await contract.methods.balanceOf(address).call({
@@ -94,11 +94,11 @@ class TokenInfo extends Component {
       <div className="tokenInfo" style={ tokenInfoStyle }>
         <h4 style={ h3Style }>ERC20</h4>
         { this.state.erc20s.map(erc20 =>
-          <Erc20 key={ erc20.id } symbol={ erc20.symbol } balance={ erc20.balance } allowance={ erc20.allowance } />
+          <Erc20 key={ erc20.id } contractAdd={ erc20.contractAdd } symbol={ erc20.symbol } balance={ erc20.balance } allowance={ erc20.allowance } />
         ) }
         <h4 style={ h3Style }>ERC721</h4>
         { this.state.erc721s.map(erc721 =>
-          <Erc721 key={ erc721.id } symbol={ erc721.symbol } balance={ erc721.balance } />
+          <Erc721 key={ erc721.id } contractAdd={ erc721.contractAdd } symbol={ erc721.symbol } balance={ erc721.balance } />
         ) }
       </div>
     );

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import makeBlockie from "ethereum-blockies-base64";
 
 class Erc20 extends Component {
   render() {
     return(
       <div className="erc20" style={ erc20Style }>
         <li style={ liStyle }>
-          <span style={ symbolStyle }>{ this.props.symbol }</span><br/>
+          <span style={ symbolStyle }>{ this.props.symbol }&nbsp;</span>
+          <img src={makeBlockie(this.props.contractAdd)} width="8px" height="8px" alt="blockie" style={{ marginTop:"0.2em" }} /><br/>
           Balance:&nbsp;{ this.props.balance }<br/>
           Allowance:&nbsp;{ this.props.allowance }
         </li>
@@ -35,6 +37,7 @@ const symbolStyle = {
 
 //PropTypes
 Erc20.propTypes = {
+  contractAdd: PropTypes.string.isRequired,
   symbol: PropTypes.string.isRequired,
   balance: PropTypes.string.isRequired,
   allowance: PropTypes.string.isRequired
