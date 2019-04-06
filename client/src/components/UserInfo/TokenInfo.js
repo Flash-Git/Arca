@@ -93,12 +93,12 @@ class TokenInfo extends Component {
     return(
       <div className="tokenInfo" style={ tokenInfoStyle }>
         <h4 style={ h3Style }>ERC20</h4>
-        { this.state.erc20s.map(erc20 =>
-          <Erc20 key={ erc20.id } contractAdd={ erc20.contractAdd } symbol={ erc20.symbol } balance={ erc20.balance } allowance={ erc20.allowance } />
+        { this.state.erc20s.map(erc =>
+          <Erc20 key={ erc.id } erc={ erc } addErc={ this.props.addErc } />
         ) }
         <h4 style={ h3Style }>ERC721</h4>
-        { this.state.erc721s.map(erc721 =>
-          <Erc721 key={ erc721.id } contractAdd={ erc721.contractAdd } symbol={ erc721.symbol } balance={ erc721.balance } />
+        { this.state.erc721s.map(erc =>
+          <Erc721 key={ erc.id } erc={ erc } addErc={ this.props.addErc } />
         ) }
       </div>
     );
@@ -119,7 +119,8 @@ const tokenInfoStyle = {
 //PropTypes
 TokenInfo.propTypes = {
   address: PropTypes.string.isRequired,
-  connected: PropTypes.bool.isRequired
+  connected: PropTypes.bool.isRequired,
+  addErc: PropTypes.func.isRequired
 }
 
 export default TokenInfo;
