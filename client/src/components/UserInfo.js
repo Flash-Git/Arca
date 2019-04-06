@@ -5,11 +5,6 @@ import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
 
 class UserInfo extends Component {
-
-  onClick = () => {
-    
-  }
-
   render() {
     if(window.ethereum.selectedAddress === undefined){
       return(
@@ -27,7 +22,7 @@ class UserInfo extends Component {
           <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
         </div>
         <div style={ bottomStyle }>
-          <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected } />
+          <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected } addErc20={ this.props.addErc20 } />
         </div>
       </div>
     );
@@ -65,6 +60,7 @@ const bottomStyle = {
 UserInfo.propTypes = {
   connected: PropTypes.bool.isRequired,
   enableWeb3: PropTypes.func.isRequired,
+  addErc20: PropTypes.func.isRequired
 }
 
 export default UserInfo;
