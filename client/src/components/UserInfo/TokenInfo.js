@@ -58,7 +58,7 @@ class TokenInfo extends Component {
       if(allowance === "0"){
         erc.allowance = "False";
       }else{
-        erc.allowance = allowance.slice(0, balance.length-18);
+        erc.allowance = "True";
       }
 
       erc20s.push(erc);
