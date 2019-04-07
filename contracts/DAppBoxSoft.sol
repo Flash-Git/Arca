@@ -14,7 +14,7 @@ interface Erc20 {
 
 interface Erc721 {
   function ownerOf(uint256 tokenId) external view returns (address owner);
-  function getApproved(uint256 tokenId) external view returns (address operator);
+  function isApprovedForAll(address owner, address operator) external view returns (bool);
   function safeTransferFrom(address from, address to, uint256 tokenId) external;
 }
 
@@ -144,7 +144,7 @@ contract DAppBoxSoft {
   
   function pushOfferErc721(address _tradePartner, address _erc721Address, uint256 _id) public {
     require(Erc721(_erc721Address).ownerOf(_id) == msg.sender, "Sender isn't owner of this erc721 token");
-    require(Erc721(_erc721Address).getApproved(_id) == address(this), "Contract not approved to transfer this erc721 token");
+    require(Erc721(_erc721Address).isApprovedForAll(msg.sender, address(this)) == true, "Contract not approved for erc721 token transfers");
 
     OfferErc721 memory offer;
     offer.add = _erc721Address;
