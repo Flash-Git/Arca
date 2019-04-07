@@ -1,4 +1,4 @@
-const AppAddress = "0x57199f58f93c9321e169df9938331f46d6207055";
+const AppAddress = "0x78407Ecad9fD13BdD2CEB090b11A71E430a82843";
 const executedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
 const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
 const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
