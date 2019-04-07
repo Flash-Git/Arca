@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import uuid from "uuid/v4";
 import PropTypes from "prop-types";
 
 import abiErc20 from "../../abis/abiErc20";
