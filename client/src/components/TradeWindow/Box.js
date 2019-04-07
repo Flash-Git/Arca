@@ -18,14 +18,6 @@ class Box extends Component {
     chainMethods: []
   }
 
-  //componentWillReceiveProps(nextProps) {
-   // if(nextProps.addresses === this.props.addresses){
-   //   return;
-    //}
-    //this.setState({
-    //}, () => this.getMethods());
-  //}
-  
    componentDidMount() {
      setInterval( () => this.getMethods(), 10000);
    }
@@ -98,16 +90,12 @@ class Box extends Component {
     const offers = [];
     for(let type = 0; type < 2; type++){
       let boxContract;
-      try{
-        boxContract = await new window.web3.eth.Contract(abi, AppAddress);
-      }catch(e){//UNCLEAN
-        console.log(e);
-        return;
-      }
-  
+        
       let count = 0;
       let ercAbi = [];
+
       try{
+        boxContract = await new window.web3.eth.Contract(abi, AppAddress);
         if(type === 0){//erc20
           ercAbi = abiErc20;
           count = await boxContract.methods.getErc20Count(add1, add2).call({
@@ -120,6 +108,7 @@ class Box extends Component {
           });
         }
       } catch(e){
+        console.log(e);
         return;
       }
       
@@ -189,8 +178,8 @@ class Box extends Component {
         <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
           isUser={ this.props.isUser } connected={ this.props.connected } count={ this.props.count } />
         { this.props.isUser ? 
-          <SubmitBox addMethod={ this.addLocalMethod } erc={ this.props.erc }
-            connected={ this.props.connected } address={ this.props.addresses[0] } /> :""
+          <SubmitBox address={ this.props.addresses[0] } addMethod={ this.addLocalMethod } erc={ this.props.erc }
+            connected={ this.props.connected } /> :""
         }
       </div>
     );
