@@ -32,13 +32,13 @@ class OfferErc extends Component {
     }
   }
 
-  async broadcast(_method) {
+  async broadcast(method) {
     const contract = await new window.web3.eth.Contract(abi, AppAddress);
     const [add1, add2] = this.props.addresses;
 
     try{
-      if(_method.type === 0){
-        await contract.methods.pushOfferErc20(add2, _method.contractAdd, _method.amountId).send({
+      if(method.type === 0){
+        await contract.methods.pushOfferErc20(add2, method.contractAdd, method.amountId).send({
           from: add1
         })
         .on("transactionHash", (hash) => {
@@ -53,8 +53,8 @@ class OfferErc extends Component {
           }
         })
         .on("error", console.error);
-      } else if(_method.type === 1){
-        await contract.methods.pushOfferErc721(add2, _method.contractAdd, _method.amountId).send({
+      } else if(method.type === 1){
+        await contract.methods.pushOfferErc721(add2, method.contractAdd, method.amountId).send({
           from: add1
         })
         .on("transactionHash", (hash) => {
@@ -70,7 +70,6 @@ class OfferErc extends Component {
         })
         .on("error", console.error);
       }
-      
     } catch(e){
       console.log(e);
     }
@@ -93,14 +92,8 @@ class OfferErc extends Component {
   offer = (method) => {
     return <>
       { method.type === 0 ? <span>ERC20:&nbsp;</span> : <span>ERC721:&nbsp;</span> }
-      { method.contractAdd }
-      if(method.contractAdd !== ""){
-        <span> <span>&nbsp;</span> <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" 
-        style={{ marginTop:"0.4rem" }} /> <span>&nbsp;</span> </span>
-      } else { 
-        <span>&nbsp;</span>
-       }
-      { method.symbol }&nbsp;{ method.amountId }
+      { method.contractAdd } <span>&nbsp;</span>
+      <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" style={{ marginTop: "0.3rem" }} />
     </>
   }
 
