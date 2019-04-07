@@ -40,8 +40,6 @@ class SubmitBox extends Component {
     }else{
       return;
     }
-    method.id = method.type+"-"+uuid();//TODO getCount
-    this.setState(method);
     this.props.addMethod(this.state);
   }
 
@@ -80,11 +78,6 @@ class SubmitBox extends Component {
         .on("transactionHash", (hash) => {
           console.log("txHash: " + hash);
         })
-        .on("confirmation", (confirmationNumber, receipt) => {
-          if(confirmationNumber === 3){
-            console.log("receipt: " + receipt);
-          }
-        })
         .on("error", console.error);
       }else{//ERC721
         await contract.methods.setApprovalForAll(AppAddress, true).send({
@@ -92,11 +85,6 @@ class SubmitBox extends Component {
         })
         .on("transactionHash", (hash) => {
           console.log("txHash: " + hash);
-        })
-        .on("confirmation", (confirmationNumber, receipt) => {
-          if(confirmationNumber === 3){
-            console.log("receipt: " + receipt);
-          }
         })
         .on("error", console.error);
       }
@@ -155,10 +143,10 @@ const methodStyle = {
 
 //PropTypes
 SubmitBox.propTypes = {
+  address: PropTypes.string.isRequired,
   addMethod: PropTypes.func.isRequired,
   erc: PropTypes.object.isRequired,
-  connected: PropTypes.bool.isRequired,
-  address: PropTypes.string.isRequired
+  connected: PropTypes.bool.isRequired
 }
 
 export default SubmitBox;
