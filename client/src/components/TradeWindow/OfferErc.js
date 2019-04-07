@@ -84,8 +84,10 @@ class OfferErc extends Component {
   offer = (method) => {
     return <>
       { method.type === 0 ? <span>ERC20:&nbsp;</span> : <span>ERC721:&nbsp;</span> }
-      { method.contractAdd }&nbsp;
-      <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" style={{ marginTop: "0.3rem" }} />
+      { method.symbol }&nbsp;
+      <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" style={{ marginTop: "0.3rem" }} />&nbsp;
+      { method.type === 0 ? <span>Amount:&nbsp;</span> : <span>ID:&nbsp;</span> }
+      { method.amountId }
     </>
   }
 
