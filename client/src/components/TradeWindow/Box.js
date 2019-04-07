@@ -188,7 +188,10 @@ class Box extends Component {
         </div>
         <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
           isUser={ this.props.isUser } connected={ this.props.connected } count={ this.props.count } />
-        { (this.props.isUser ? <SubmitBox addMethod={ this.addLocalMethod } erc={ this.props.erc } /> : "") }
+        { this.props.isUser ? 
+          <SubmitBox addMethod={ this.addLocalMethod } erc={ this.props.erc }
+            connected={ this.props.connected } address={ this.props.addresses[0] } /> :""
+        }
       </div>
     );
   }
