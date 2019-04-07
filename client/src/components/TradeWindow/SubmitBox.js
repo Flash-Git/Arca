@@ -23,7 +23,7 @@ class SubmitBox extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.erc.contractAdd !== this.props.erc.contractAdd){
-      this.setState({ contractAdd: this.props.erc.contractAdd, type: this.props.erc.type, amountId: "" });
+      this.setState({ contractAdd: nextProps.erc.contractAdd, type: nextProps.erc.type, amountId: "" });
     }
   }
 
