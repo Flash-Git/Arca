@@ -13,16 +13,39 @@ import { AppAddress, sendStatus } from "../../Static";
 
 class Box extends Component {
 
-  state = {
-    localMethods: [],
-    chainMethods: []
+  constructor(props) {
+    super(props);
+    this.state = {
+      localMethods: [],
+      chainMethods: []
+    }
+    this.addLocalMethod = this.addLocalMethod.bind(this);
   }
 
    componentDidMount() {
      setInterval( () => this.getMethods(), 10000);
    }
 
-  addLocalMethod = (method) => {
+  async addLocalMethod(method) {
+    const [add1, add2] = this.props.addresses;
+    let count = "";
+    
+    try{
+      let boxContract = await new window.web3.eth.Contract(abi, AppAddress);
+      if(method.type === 0){//erc20
+        count = await boxContract.methods.getErc20Count(add1, add2).call({
+          from: add1
+        });
+      } else {//erc721
+        count = await boxContract.methods.getErc721Count(add1, add2).call({
+          from: add1
+        });
+      }
+    } catch(e){
+      console.log(e);
+      return;
+    }
+    method.id = method.type+"-"+count;
     this.setState({ localMethods: [...this.state.localMethods, method] });
   }
 
@@ -59,11 +82,6 @@ class Box extends Component {
       })
       .on("receipt", (receipt) => {
         this.props.acceptTrade(this.props.addresses[0]);
-      })
-      .on("confirmation", (confirmationNumber, receipt) => {
-        if(confirmationNumber === 3){
-          console.log("receipt: " + receipt);
-        }
       })
       .on("error", console.error);
     }catch(e){
@@ -159,6 +177,11 @@ class Box extends Component {
     //TODO check and remove duplicates from method lists
   }
 
+  remove = (method) => {
+    let localMethods = this.state.localMethods.filter(meth => meth.id !== method.id);
+    this.setState({ localMethods });
+  }
+
   render() {
     return(
       <div className="box" style={ boxStyle }>
@@ -167,12 +190,12 @@ class Box extends Component {
           { this.state.chainMethods.map(method =>
             <OfferErc key={ method.id } method={ method }
               setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
-              isUser={ this.props.isUser } connected={ this.props.connected } />
+              isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
           ) }
           { this.state.localMethods.map(method =>
             <OfferErc key={ method.id } method={ method }
               setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
-              isUser={ this.props.isUser } connected={ this.props.connected } />
+              isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
           ) }
         </div>
         <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }

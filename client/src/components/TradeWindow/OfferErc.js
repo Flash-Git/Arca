@@ -46,11 +46,7 @@ class OfferErc extends Component {
         })
         .on("receipt", (receipt) => {
           this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
-        })
-        .on("confirmation", (confirmationNumber, receipt) => {
-          if(confirmationNumber === 3){
-            console.log("receipt: " + receipt);
-          }
+          this.props.remove(this.props.method);
         })
         .on("error", console.error);
       } else if(method.type === 1){
@@ -62,11 +58,7 @@ class OfferErc extends Component {
         })
         .on("receipt", (receipt) => {
           this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
-        })
-        .on("confirmation", (confirmationNumber, receipt) => {
-          if(confirmationNumber === 3){
-            console.log("receipt: " + receipt);
-          }
+          this.props.remove(this.props.method);
         })
         .on("error", console.error);
       }
@@ -92,7 +84,7 @@ class OfferErc extends Component {
   offer = (method) => {
     return <>
       { method.type === 0 ? <span>ERC20:&nbsp;</span> : <span>ERC721:&nbsp;</span> }
-      { method.contractAdd } <span>&nbsp;</span>
+      { method.contractAdd }&nbsp;
       <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" style={{ marginTop: "0.3rem" }} />
     </>
   }
@@ -166,7 +158,8 @@ OfferErc.propTypes = {
   addresses: PropTypes.array.isRequired,
   isUser: PropTypes.bool.isRequired,
   setMethodSendStatus: PropTypes.func.isRequired,
-  connected: PropTypes.bool.isRequired
+  connected: PropTypes.bool.isRequired,
+  remove: PropTypes.func.isRequired
 }
 
 export default OfferErc;
