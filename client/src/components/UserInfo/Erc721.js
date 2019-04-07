@@ -3,40 +3,66 @@ import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
 
 class Erc721 extends Component {
+
+  add = (e) => {
+    this.props.addErc(this.props.erc);
+  }
+
   render() {
     return(
-      <div className="erc721" style={ erc721Style }>
-        <li style={ liStyle }><span style={ symbolStyle }>{ this.props.symbol }&nbsp;</span>
-        <img src={makeBlockie(this.props.contractAdd)} width="8px" height="8px" alt="blockie" style={{ marginTop:"0.2em" }} /><br/>
-        Count:&nbsp;{ this.props.balance }</li>
+      <div className="erc721" style={ ercStyle }>
+        <li style={ liStyle }>
+          <div>
+            <span style={ symbolStyle }>{ this.props.erc.symbol }&nbsp;</span>
+            <img src={ makeBlockie(this.props.erc.contractAdd) } width="10px" height="10px" alt="blockie" style={{ marginTop:"0.2em" }} />&nbsp;<br/>
+            Count:&nbsp;{ this.props.erc.balance }
+          </div>
+          <button onClick={ this.add } style={ btnStyle }>
+            +
+          </button>
+        </li>
       </div>
     );
   }
 }
 
+const btnStyle = {
+  marginLeft: "auto",
+  textAlign: "center",
+  justifyContent: "center",
+  background: "#bbb",
+  border: "none",
+  borderRadius: "30%",
+  fontWeight: "bold",
+  padding: "0.3rem",
+  alignSelf: "center",
+  color: "000"
+}
+
 const liStyle= {
+  display: "flex",
   listStyleType: "none",
-  margin: "0",
+  marginTop: "0.4rem",
   padding: "0",
   fontSize: "70%",
   lineHeight: "90%"
 }
 
-const erc721Style = {
+const ercStyle = {
   textAlign: "left",
   marginBottom: "1rem"
 }
 
 const symbolStyle = { 
+  fontSize: "115%",
   fontWeight: "bold",
   marginLeft: "2rem"
 }
 
 //PropTypes
 Erc721.propTypes = {
-  contractAdd: PropTypes.string.isRequired,
-  symbol: PropTypes.string.isRequired,
-  balance: PropTypes.string.isRequired,
+  erc: PropTypes.object.isRequired,
+  addErc: PropTypes.func.isRequired
 }
 
 export default Erc721;
