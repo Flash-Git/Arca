@@ -33,7 +33,7 @@ class TokenInfo extends Component {
     let contract;
 
     for(let i = 0; i < listErc20.length; i++){
-      let erc20 = { id: i, contractAdd: listErc20[i], type: "ERC20" };
+      let erc = { id: i, contractAdd: listErc20[i], type: "ERC20" };
       contract = await new window.web3.eth.Contract(abiErc20, listErc20[i]);
 
       let balance = await contract.methods.balanceOf(address).call({
@@ -45,9 +45,9 @@ class TokenInfo extends Component {
         continue;
       }
 
-      erc20.balance = balance.slice(0, balance.length-18);
+      erc.balance = balance.slice(0, balance.length-18);
 
-      erc20.symbol = await contract.methods.symbol().call({
+      erc.symbol = await contract.methods.symbol().call({
         from: address
       });
 
@@ -55,21 +55,25 @@ class TokenInfo extends Component {
         from: address
       });
       allowance = allowance.toString();
+      if(allowance === "0"){
+        erc.allowance = "False";
+      }else{
+        erc.allowance = allowance.slice(0, balance.length-18);
+      }
 
-      erc20.allowance = allowance.slice(0, balance.length-18);
-      erc20s.push( erc20 );
+      erc20s.push(erc);
     }
   
     for(let i = 0; i < listErc721.length; i++){
-      let erc721 = { id: i, contractAdd: listErc721[i], type: "ERC721" };
+      let erc = { id: i, contractAdd: listErc721[i], type: "ERC721" };
       contract = await new window.web3.eth.Contract(abiErc721, listErc721[i]);
 
       let balance = await contract.methods.balanceOf(address).call({
         from: address
       });
-      erc721.balance = balance.toString();
+      erc.balance = balance.toString();
 
-      if(erc721.balance === "0"){
+      if(erc.balance === "0"){
         continue;
       }
 
@@ -81,9 +85,18 @@ class TokenInfo extends Component {
       }catch(e){
         symbol = "NA";
       }
-      erc721.symbol = symbol;
+      erc.symbol = symbol;
 
-      erc721s.push(erc721);
+      let allowance = await contract.methods.isApprovedForAll(address, AppAddress).call({
+        from: address
+      });
+      if(allowance === false){
+        erc.allowance = "False";
+      }else{
+        erc.allowance = "True";
+      }
+
+      erc721s.push(erc);
     }
 
     this.setState({ erc20s, erc721s });

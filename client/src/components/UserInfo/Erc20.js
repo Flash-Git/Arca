@@ -16,7 +16,7 @@ class Erc20 extends Component {
             <span style={ symbolStyle }>{ this.props.erc.symbol }&nbsp;</span>
             <img src={ makeBlockie(this.props.erc.contractAdd) } width="10px" height="10px" alt="blockie" style={{ marginTop:"0.2em" }} />&nbsp;<br/>
             Balance:&nbsp;{ this.props.erc.balance }<br/>
-            Allowance:&nbsp;{ this.props.erc.allowance }
+            Enabled:&nbsp;{ this.props.erc.allowance }
           </div>
           <button onClick={ this.add } style={ btnStyle }>
             +
@@ -37,7 +37,8 @@ const btnStyle = {
   fontWeight: "bold",
   padding: "0.3rem",
   alignSelf: "center",
-  color: "000"
+  color: "000",
+  cursor: "pointer"
 }
 
 const liStyle= {
