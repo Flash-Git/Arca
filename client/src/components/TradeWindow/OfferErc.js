@@ -83,11 +83,15 @@ class OfferErc extends Component {
 
   offer = (method) => {
     return <>
-      { method.type === 0 ? <span>ERC20:&nbsp;</span> : <span>ERC721:&nbsp;</span> }
-      { method.symbol }&nbsp;
-      <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" style={{ marginTop: "0.3rem" }} />&nbsp;
-      { method.type === 0 ? <span>Amount:&nbsp;</span> : <span>ID:&nbsp;</span> }
-      { method.amountId }
+      <div style={{ marginRight: "1rem" }}>
+        { method.type === 0 ? <span>ERC20:&nbsp;</span> : <span>ERC721:&nbsp;</span> }
+        { method.symbol }&nbsp;
+      <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" style={{ marginTop: "0.3rem" }} />
+      </div>
+      <div>
+        { method.type === 0 ? <span>Amount:&nbsp;</span> : <span>ID:&nbsp;</span> }
+        { method.amountId }
+      </div>
     </>
   }
 
@@ -121,6 +125,8 @@ const methodStyle = {
 
 const displayStyle = {
   display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap",
   gridColumn: "1 / 2",
   gridRow: "1",
   textAlign: "center",
