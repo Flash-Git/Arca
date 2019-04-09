@@ -32,6 +32,7 @@ class UserInfo extends Component {
 const userInfoStyle = {
   width: "10.5rem",
   minHeight: "15rem",
+  maxHeight: "80%",
   right: "0",
   position: "fixed",
   textAlign: "center",
@@ -40,6 +41,8 @@ const userInfoStyle = {
   marginTop: "3rem",
   marginRight: "0.2rem",
   border: "solid",
+  overflowY: "auto",
+  scrollbarWidth: "thin"
 }
 
 const topStyle = {
