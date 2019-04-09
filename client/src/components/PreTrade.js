@@ -44,6 +44,11 @@ class PreTrade extends Component {
         return;
       }
     }
+
+    //DOESNT WORK
+    //Uncaught (in promise) Error: Network not synced; last block was 3620.3069999217987 seconds ago
+    const ens = await window.web3.eth.ens.getAddress("jaquinn.eth");
+    console.log(ens);
   }
 
   async onChange1(e) {
