@@ -3,93 +3,86 @@ import PropTypes from "prop-types";
 
 class PreTrade extends Component {
 
-  state = {
-    address1: "",
-    ensAdd1: "",
-    address2: "",
-    ensAdd2: "",
-    validInput1: false,
-    validInput2: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      address1: "",
+      address2: "",
+      ensAdd1: "",
+      ensAdd2: "",
+      validInput1: false,
+      validInput2: false
+    }
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onChange1 = this.onChange1.bind(this);
+    this.onChange2 = this.onChange2.bind(this);
+    this.checkAddress = this.checkAddress.bind(this);
   }
 
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    let count = 0;
-    if(!this.props.connected){
+  async checkAddress(index, address) {
+    if(window.web3 === "undefined"){
+      this.setState({ validInput1: false, validInput2: false });
       return;
     }
-    if(this.state.address1.includes(".eth")){
-      window.web3.eth.ens.getAddress(this.state.address1).then(address1 =>
-        this.setState({ ensAdd1: this.state.address1, address1 }, () => this.handleNewAddresses)
-      );
-      count++;
-    }
-    if(this.state.address2.includes(".eth")){
-      window.web3.eth.ens.getAddress(this.state.address2).then(address2 =>
-        this.setState({ ensAdd2: this.state.address2, address2 }, () => this.handleNewAddresses)
-      );
-      count++;
-    } else if(count === 0){
-      this.handleNewAddresses();
-    }
-  }
-
-  handleNewAddresses = () => {
-    if(this.checkAddresses() === false){
-      return;
-    }
-    this.props.setAddresses([this.state.address1, this.state.address2], [this.state.ensAdd1, this.state.ensAdd2]);
-  }
-
-  checkAddresses = () => {
-    if(!this.props.connected){
-      return false;
-    }
-    let sumAdd1 = "";
-    let sumAdd2 = "";
     
-    try{
-      sumAdd1 = window.web3.utils.toChecksumAddress(this.state.address1);
-    } catch(e) {
-      this.setState({ validInput1: false });
-      return false;
-    }
-    try{
-      sumAdd2 = window.web3.utils.toChecksumAddress(this.state.address2);
-    } catch(e) {
-      this.setState({ validInput2: false });
-      return false;
-    }
-    if(window.web3.utils.isAddress(sumAdd1)){
-      this.setState({ validInput1: true });
-    } else {
-      this.setState({ validInput1: false });
-    }
-    if(window.web3.utils.isAddress(sumAdd2)){
-      this.setState({ validInput2: true });
-    } else {
-      this.setState({ validInput2: false });
+    if(!address.includes(".eth")){
+      if(address.length !== 42){
+        index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
+        return;
+      }
+
+      try{
+        const sumAdd = await window.web3.utils.toChecksumAddress(address);
+        if(window.web3.utils.isAddress(sumAdd)){
+          index === 0 ? this.setState({ validInput1: true }) : this.setState({ validInput2: true });
+          return;
+        }
+        index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
+        return;
+      }catch(e){
+        index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
+        return;
+      }
     }
   }
 
-  onChange = (e) => {this.setState({
+  async onChange1(e) {
+    this.setState({
       [e.target.name]: e.target.value
     });
-    this.checkAddresses();
+
+    this.checkAddress(0, e.target.value);
+  }
+
+  async onChange2(e) {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+
+    this.checkAddress(1, e.target.value);
+  }
+
+  async onSubmit(e) {
+    e.preventDefault();
+    if(!this.props.connected){
+      return;
+    }
+    if(this.state.validInput1 && this.state.validInput1){
+      this.props.setAddresses([this.state.address1, this.state.address2], [this.state.ensAdd1, this.state.ensAdd2]);
+    }
   }
 
   render() {
     return(
       <div id="section-preTrade" className="section" style={ preTradeStyle }>
-        <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
+        <form onSubmit={ this.onSubmit } className="method" style={ formStyle }>
         <div style={ addressesStyle }>
           <input
               type="text"
               name="address1"
               placeholder="Address 1"
               value={ this.state.address1 }
-              onChange={ this.onChange }
+              onChange={ this.onChange1 }
               style={ (this.state.validInput1 ? inputStyle : badInputStyle) }
             />
           <input
@@ -97,14 +90,14 @@ class PreTrade extends Component {
             name="address2"
             placeholder="Address 2"
             value={ this.state.address2 }
-            onChange={ this.onChange }
+            onChange={ this.onChange2 }
             style={ (this.state.validInput2 ? inputStyle : badInputStyle) }
           />
         </div>
         </form>
         <div style={ addressesStyle }>
           <button onClick={ this.onSubmit } style={ btnStyle }>Open Trade Box</button>
-          <button onClick={ this.props.refresh } style={ btnStyle }>Refresh</button>
+          {/*<button onClick={ this.props.refresh } style={ btnStyle }>Refresh</button>*/}
         </div>
       </div>
     );
@@ -131,7 +124,7 @@ const addressesStyle = {
   textAlign: "center"
 }
 
-const methodStyle = {
+const formStyle = {
   textAlign: "center",
   justifyContent: "center",
   color: "#fff"
