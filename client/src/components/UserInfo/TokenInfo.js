@@ -16,7 +16,7 @@ class TokenInfo extends Component {
 
   componentDidMount() {
     this.updateBalances();
-    setInterval( () => this.updateBalances(), 1000);
+    setInterval( () => this.updateBalances(), 5000);
   }
 
   async updateBalances() {
