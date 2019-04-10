@@ -39,13 +39,13 @@ class TokenInfo extends Component {
       let balance = await contract.methods.balanceOf(address).call({
         from: address
       });
-      balance = balance.toString();
+      balance = balance.div("1000000000000000000").toString();
 
       if(balance === "0"){
         continue;
       }
 
-      erc.balance = balance.slice(0, balance.length-18);
+      erc.balance = balance;
 
       erc.symbol = await contract.methods.symbol().call({
         from: address
