@@ -45,10 +45,22 @@ class PreTrade extends Component {
       }
     }
 
-    //DOESNT WORK
-    //Uncaught (in promise) Error: Network not synced; last block was 3620.3069999217987 seconds ago
-    const ens = await window.web3.eth.ens.getAddress("jaquinn.eth");
-    console.log(ens);
+    try{ 
+      //DOESNT WORK
+      //Uncaught (in promise) Error: Network not synced; last block was 3620.3069999217987 seconds ago
+      let ensAdd = await window.web3.eth.ens.getAddress(address);
+      console.log("ENS:" + address + " Add: " + ensAdd);
+      ensAdd = await window.web3.utils.toChecksumAddress(ensAdd);
+      if(!window.web3.utils.isAddress(ensAdd)){
+        index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
+      }
+      index === 0 ? this.setState({ validInput1: true, address1: ensAdd, ensAdd1: address }) : this.setState({ validInput2: true, address1: ensAdd, ensAdd1: address });
+      return;
+    }catch(e){
+      console.log(e);
+      index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
+      return;
+    }
   }
 
   async onChange1(e) {
