@@ -142,6 +142,7 @@ class Box extends Component {
             result = await boxContract.methods.getOfferErc20(add1, add2, i).call({
               from: add1
             });
+            result[1] = result[1].div("1000000000000000000");
           } else if(type === 1){//erc721
             result = await boxContract.methods.getOfferErc721(add1, add2, i).call({
               from: add1
