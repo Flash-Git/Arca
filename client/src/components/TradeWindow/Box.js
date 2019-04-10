@@ -188,22 +188,26 @@ class Box extends Component {
       <div className="box" style={ boxStyle }>
         <Summary address={ this.props.addresses[0] } ensAdd={ this.props.ensAdd } />
         <div className="container" style={ containerStyle }>
-          { this.state.chainMethods.map(method =>
-            <OfferErc key={ method.id } method={ method }
-              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
-              isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
-          ) }
-          { this.state.localMethods.map(method =>
-            <OfferErc key={ method.id } method={ method }
-              setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
-              isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
-          ) }
+          <div>
+            { this.state.chainMethods.map(method =>
+              <OfferErc key={ method.id } method={ method }
+                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
+                isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
+            ) }
+          </div>
+          <div>
+            { this.state.localMethods.map(method =>
+              <OfferErc key={ method.id } method={ method }
+                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
+                isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
+            ) }
+          </div>
         </div>
         <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
           isUser={ this.props.isUser } connected={ this.props.connected } count={ this.props.count } />
-        { this.props.isUser ? 
+        { this.props.isUser ?
           <SubmitBox address={ this.props.addresses[0] } addMethod={ this.addLocalMethod } erc={ this.props.erc }
-            connected={ this.props.connected } /> :""
+            connected={ this.props.connected } /> : ""
         }
       </div>
     );
@@ -219,7 +223,7 @@ const boxStyle = {
   margin: "0.5rem 0.5rem",
   background: "#666",
   border: "solid",
-  minHeight: "10rem",
+  minHeight: "8rem",
   fontWeight: "bold",
   width: "60rem"
 }

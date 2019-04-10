@@ -83,14 +83,18 @@ class OfferErc extends Component {
 
   offer = (method) => {
     return <>
-      <div style={{ margin: "0 0.5rem" }} >
-        { method.type === 0 ? <span>ERC20:&nbsp;</span> : <span>ERC721:&nbsp;</span> }
-        { method.symbol }&nbsp;&nbsp;
-        <img src={ makeBlockie(method.contractAdd) } width="16px" height="16px" alt="blockie" />
+      <div style={{ height: "100%", float: "left", textAlign: "center", justifyContent: "center" }}>
+        <img src={ makeBlockie(method.contractAdd) } width="24px" height="24px" alt="blockie" style={{ margin: "0.2rem" }} />
+        { method.type === 0 ? <span>&nbsp;ERC20:</span> : <span>&nbsp;ERC721:</span> }
       </div>
-      <div style={{ margin: "0 0.5rem" }}>
-        { method.type === 0 ? <span>Amount:&nbsp;</span> : <span>ID:&nbsp;</span> }
-        { method.amountId }
+      <div style={ displayInnerStyle } >
+        <div style={{ margin: "0 0.5rem" }} >
+          { method.symbol }
+        </div>
+        <div style={{ margin: "0 0.5rem" }}>
+          { method.type === 0 ? <span>Amount:&nbsp;</span> : <span>ID:&nbsp;</span> }
+          { method.amountId }
+        </div>
       </div>
     </>
   }
@@ -114,7 +118,6 @@ const methodStyle = {
   display: "grid",
   gridColumnGap: "3px",
   gridTemplateColumns: "5fr 1fr",
-  gridTemplateRows: "1 1",
   textAlign: "center",
   justifyContent: "center",
   background: "#444",
@@ -124,22 +127,28 @@ const methodStyle = {
 }
 
 const displayStyle = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  gridColumn: "1 / 2",
-  gridRow: "1",
-  textAlign: "center",
-  justifyContent: "center",
+  gridColumn: "1 / 2",  
   background: "#444",
   color: "#fff",
   margin: "0.2rem",
-  fontSize: "0.95em"
+  fontSize: "0.95em",
+  display: "flex",
+  flexDirection: "row",
+  //flexWrap: "wrap"
+}
+
+const displayInnerStyle = {
+  display: "flex",
+  flexDirection: "row",
+  flexWrap: "wrap",
+  textAlign: "center",
+  justifyContent: "center",
+  height: "100%",
+  flexGrow: "1"
 }
 
 const btnStyleUnsent = {
   gridColumn: "2",
-  gridRow: "1 / 3",
   background: "#660000",
   padding: "6px 26px",
   border: "none",
@@ -151,7 +160,6 @@ const btnStyleUnsent = {
 
 const btnStyleSent = {
   gridColumn: "2",
-  gridRow: "1 / 3",
   background: "#441111",
   padding: "6px 26px",
   border: "none",
