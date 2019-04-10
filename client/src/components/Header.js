@@ -36,7 +36,6 @@ const textStyle = {
   color: "#fff",
   textAlign: "center",
   justifyContent: "center",
-  padding: "0.2rem",
 }
 
 export default Header;
