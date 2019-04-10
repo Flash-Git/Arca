@@ -86,7 +86,7 @@ class TradeWindow extends Component {
         </div>
         { (this.props.userBox !== 0 ?
           <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
-            { (this.executed ? "Executed" : "Execute") }
+            { (this.executed ? "Trade Executed" : "Execute Trade") }
           </button>
         : "") }
       </div>
@@ -101,7 +101,7 @@ const tradeWindowStyle = {
   justifyContent: "center",
   background: "#858889",
   padding: "0.4rem",
-  margin: "1.6rem",
+  margin: "0 1.6rem",
   border: "solid",
 }
 
@@ -115,25 +115,23 @@ const boxesStyle = {
 
 const btnStyleUnsent = {
   background: "#660000",
-  padding: "6px 26px",
+  padding: "0.7em 5em",
   border: "none",
   borderRadius: "5%",
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold",
   alignSelf: "center",
-  margin: "0.5rem"
 }
 
 const btnStyleSent = {
   background: "#441111",
-  padding: "6px 26px",
+  padding: "0.7em 5em",
   border: "none",
   borderRadius: "5%",
   color: "#fff",
   fontWeight: "bold",
   alignSelf: "center",
-  margin: "0.5rem"
 }
 
 //PropTypes
