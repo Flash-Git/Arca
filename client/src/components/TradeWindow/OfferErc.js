@@ -83,19 +83,14 @@ class OfferErc extends Component {
 
   offer = (method) => {
     return <>
-      <div style={{ height: "100%", float: "left", textAlign: "center", justifyContent: "center" }}>
-        <img src={ makeBlockie(method.contractAdd) } width="24px" height="24px" alt="blockie" style={{ margin: "0.2rem" }} />
-        { method.type === 0 ? <span>&nbsp;ERC20:</span> : <span>&nbsp;ERC721:</span> }
+      <img src={ makeBlockie(method.contractAdd) } width="28px" height="28px" alt="blockie" style={{ margin: "0.25rem 0.4rem", float: "left" }} />
+      { method.type === 0 ? <div style={{ width: "4rem", margin: "0.2rem" }} >ERC20&nbsp;&nbsp;&nbsp;-</div> : 
+          <div style={{ width: "4rem", margin: "0.2rem" }} >ERC721&nbsp;&nbsp;-</div> }
+      <div style={{ minWidth: "4rem", margin: "0.25rem" }} >
+        { method.symbol }
       </div>
-      <div style={ displayInnerStyle } >
-        <div style={{ margin: "0 0.5rem" }} >
-          { method.symbol }
-        </div>
-        <div style={{ margin: "0 0.5rem" }}>
-          { method.type === 0 ? <span>Amount:&nbsp;</span> : <span>ID:&nbsp;</span> }
-          { method.amountId }
-        </div>
-      </div>
+      { method.type === 0 ? <div style={{ minWidth: "6rem", margin: "0.2rem" }} >Amount:&nbsp;{ method.amountId } </div> :
+          <div style={{ minWidth: "6rem", margin: "0.2rem" }} >ID:&nbsp;{ method.amountId } </div> }
     </>
   }
 
@@ -106,7 +101,7 @@ class OfferErc extends Component {
         <div className="display" style={ displayStyle }>
           { this.offer(method) }
         </div>
-        <button onClick={ this.sendMethod } style={ (method.sendStatus === sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
+        <button onClick={ this.sendMethod } style={( method.sendStatus === sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
           { this.buttonText() }
         </button>
       </div>
@@ -134,17 +129,9 @@ const displayStyle = {
   fontSize: "0.95em",
   display: "flex",
   flexDirection: "row",
-  //flexWrap: "wrap"
-}
-
-const displayInnerStyle = {
-  display: "flex",
-  flexDirection: "row",
-  flexWrap: "wrap",
-  textAlign: "center",
   justifyContent: "center",
-  height: "100%",
-  flexGrow: "1"
+  flexWrap: "wrap",
+  textAlign: "start",
 }
 
 const btnStyleUnsent = {
