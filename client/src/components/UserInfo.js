@@ -6,7 +6,7 @@ import makeBlockie from "ethereum-blockies-base64";
 
 class UserInfo extends Component {
   render() {
-    if(window.ethereum.selectedAddress === "undefined"){
+    if(!window.ethereum.selectedAddress){
       return(
         <div id="section-userInfo" className="section" style={ userInfoStyle }>
           <div style={{ margin: "0.45rem", padding: "0.5rem", background: "#666", minHeight: "20rem" }}>
