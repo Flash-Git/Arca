@@ -36,29 +36,33 @@ class TokenInfo extends Component {
       let erc = { id: i, contractAdd: listErc20[i], type: "ERC20" };
       contract = await new window.web3.eth.Contract(abiErc20, listErc20[i]);
 
-      let balance = await contract.methods.balanceOf(address).call({
-        from: address
-      });
-      balance = balance.div("1000000000000000000").toString();
+      try{
+        let balance = await contract.methods.balanceOf(address).call({
+          from: address
+        });
+        balance = balance.div("1000000000000000000").toString();
 
-      if(balance === "0"){
+        if(balance === "0"){
+          continue;
+        }
+
+        erc.balance = balance;
+
+        erc.symbol = await contract.methods.symbol().call({
+          from: address
+        });
+
+        let allowance = await contract.methods.allowance(address, AppAddress).call({
+          from: address
+        });
+        allowance = allowance.toString();
+        if(allowance === "0"){
+          erc.allowance = "False";
+        }else{
+          erc.allowance = "True";
+        }
+      }catch(e){
         continue;
-      }
-
-      erc.balance = balance;
-
-      erc.symbol = await contract.methods.symbol().call({
-        from: address
-      });
-
-      let allowance = await contract.methods.allowance(address, AppAddress).call({
-        from: address
-      });
-      allowance = allowance.toString();
-      if(allowance === "0"){
-        erc.allowance = "False";
-      }else{
-        erc.allowance = "True";
       }
 
       erc20s.push(erc);
@@ -67,35 +71,37 @@ class TokenInfo extends Component {
     for(let i = 0; i < listErc721.length; i++){
       let erc = { id: i, contractAdd: listErc721[i], type: "ERC721" };
       contract = await new window.web3.eth.Contract(abiErc721, listErc721[i]);
-
-      let balance = await contract.methods.balanceOf(address).call({
-        from: address
-      });
-      erc.balance = balance.toString();
-
-      if(erc.balance === "0"){
-        continue;
-      }
-
-      let symbol = "";
       try{
-        symbol = await contract.methods.symbol().call({
+        let balance = await contract.methods.balanceOf(address).call({
           from: address
         });
+        erc.balance = balance.toString();
+
+        if(erc.balance === "0"){
+          continue;
+        }
+
+        let symbol = "";
+        try{
+          symbol = await contract.methods.symbol().call({
+            from: address
+          });
+        }catch(e){
+          symbol = "NA";
+        }
+        erc.symbol = symbol;
+
+        let allowance = await contract.methods.isApprovedForAll(address, AppAddress).call({
+          from: address
+        });
+        if(allowance === false){
+          erc.allowance = "False";
+        }else{
+          erc.allowance = "True";
+        }
       }catch(e){
-        symbol = "NA";
+       continue;
       }
-      erc.symbol = symbol;
-
-      let allowance = await contract.methods.isApprovedForAll(address, AppAddress).call({
-        from: address
-      });
-      if(allowance === false){
-        erc.allowance = "False";
-      }else{
-        erc.allowance = "True";
-      }
-
       erc721s.push(erc);
     }
 
