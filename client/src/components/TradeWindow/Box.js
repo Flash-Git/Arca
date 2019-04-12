@@ -203,8 +203,10 @@ class Box extends Component {
             ) }
           </div>
         </div>
-        <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
-          isUser={ this.props.isUser } connected={ this.props.connected } count={ this.props.count } />
+        {this.props.addresses[0].length === 0 ? "" :
+          <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
+            isUser={ this.props.isUser } connected={ this.props.connected } count={ this.props.count } />
+        }
         { this.props.isUser ?
           <SubmitBox address={ this.props.addresses[0] } addMethod={ this.addLocalMethod } erc={ this.props.erc }
             connected={ this.props.connected } /> : ""
