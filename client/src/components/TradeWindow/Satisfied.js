@@ -173,7 +173,7 @@ class Satisfied extends Component {
 
   render() {
     return(
-      <div className="method" style={ methodStyle }>
+      <div className="satisfied" style={ satisfiedStyle }>
         <button onClick={ this.toggleSatisfied } style={ (this.state.isSatisfied === satisfiedStatus.TRUE ? btnStyleSent : btnStyleUnsent) }>
           {this.state.isSatisfied !== satisfiedStatus.TRUE ? "Accept Trade" : "Accepted"}
         </button>
@@ -182,7 +182,7 @@ class Satisfied extends Component {
   }
 }
 
-const methodStyle = {
+const satisfiedStyle = {
   gridColumn: "2 auto",
   gridRow: "2 auto",
   display: "flex",
