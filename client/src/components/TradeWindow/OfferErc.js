@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
 
 import abi from "../../abis/abi";
-import { AppAddress, sendStatus } from "../../Static";
+import { AppAddress, sendStatus, colours } from "../../Static";
 
 class OfferErc extends Component {
 
@@ -118,16 +118,15 @@ const methodStyle = {
   gridTemplateColumns: "5fr 1fr",
   textAlign: "center",
   justifyContent: "center",
-  background: "#444",
-  color: "#fff",
+  background: colours.Secondary,
   margin: "0.2rem",
   fontSize: "0.95em"
 }
 
 const displayStyle = {
   gridColumn: "1 / 2",  
-  background: "#444",
-  color: "#fff",
+  background: colours.Secondary,
+  color: colours.Primary,
   margin: "0.2rem",
   fontSize: "0.95em",
   display: "flex",

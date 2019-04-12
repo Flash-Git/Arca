@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
+import { colours } from "../Static";
+
 class PreTrade extends Component {
 
   constructor(props) {
@@ -128,11 +130,12 @@ const preTradeStyle = {
   display: "flex",
   textAlign: "center",
   justifyContent: "center",
-  background: "#858889",
+  background: colours.Secondary,
   padding: "0.4rem 0.2rem",
   margin: "1.6rem",
   marginTop: "0",
-  border: "solid",
+  color: colours.Tertiary,
+  //border: "solid",
   flexDirection: "column"
 }
 
@@ -147,7 +150,7 @@ const addressesStyle = {
 const formStyle = {
   textAlign: "center",
   justifyContent: "center",
-  color: "#fff"
+  color: colours.Primary
 }
 
 const inputStyle= {

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import Box from "./TradeWindow/Box";
 
 import abi from "../abis/abi";
-import { AppAddress, executedStatus, userBoxStatus } from "../Static";
+import { AppAddress, executedStatus, userBoxStatus, colours } from "../Static";
 
 class TradeWindow extends Component {
   
@@ -99,10 +99,10 @@ const tradeWindowStyle = {
   flexDirection: "column",
   textAlign: "center",
   justifyContent: "center",
-  background: "#858889",
+  background: colours.Primary,
   padding: "0.4rem",
   margin: "0 1.6rem",
-  border: "solid",
+//  border: "solid",
 }
 
 const boxesStyle = {
@@ -110,7 +110,7 @@ const boxesStyle = {
   flexWrap: "wrap",
   textAlign: "center",
   justifyContent: "center",
-  background: "#858889",
+  background: colours.Primary,
 }
 
 const btnStyleUnsent = {

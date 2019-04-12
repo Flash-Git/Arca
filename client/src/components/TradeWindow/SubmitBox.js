@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import abiErc20 from "../../abis/abiErc20";
 import abiErc721 from "../../abis/abiErc721";
-import { AppAddress, sendStatus } from "../../Static";
+import { AppAddress, sendStatus, colours } from "../../Static";
 
 class SubmitBox extends Component {
 
@@ -161,7 +161,7 @@ const methodStyle = {
   gridRow: "3",
   textAlign: "center",
   justifyContent: "center",
-  background: "#222",
+  background: colours.Secondary,
   color: "#fff"
 }
 

@@ -5,7 +5,7 @@ import Erc20 from "./Erc20";
 import Erc721 from "./Erc721";
 import abiErc20 from "../../abis/abiErc20";
 import abiErc721 from "../../abis/abiErc721";
-import { AppAddress, listErc20, listErc721 } from "../../Static";
+import { AppAddress, listErc20, listErc721, colours } from "../../Static";
 
 class TokenInfo extends Component {
 

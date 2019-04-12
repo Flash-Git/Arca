@@ -9,7 +9,7 @@ import OfferErc from "./OfferErc";
 import abi from "../../abis/abi";
 import abiErc20 from "../../abis/abiErc20";
 import abiErc721 from "../../abis/abiErc721";
-import { AppAddress, sendStatus } from "../../Static";
+import { AppAddress, sendStatus, colours } from "../../Static";
 
 class Box extends Component {
 
@@ -178,8 +178,8 @@ class Box extends Component {
     //TODO check and remove duplicates from method lists
   }
 
-  remove = (method) => {
-    let localMethods = this.state.localMethods.filter(meth => meth.id !== method.id);
+  remove = (id) => {
+    let localMethods = this.state.localMethods.filter(meth => meth.id !== id);
     this.setState({ localMethods });
   }
 
@@ -221,8 +221,9 @@ const boxStyle = {
   textAlign: "center",
   justifyContent: "center",
   margin: "0.5rem 0.5rem",
-  background: "#666",
-  border: "solid",
+  background: colours.Secondary,
+  color: colours.Tertiary,
+  //border: "solid",
   minHeight: "8rem",
   fontWeight: "bold",
   width: "60rem"

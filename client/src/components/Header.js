@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import makeBlockie from "ethereum-blockies-base64";
 
-import { AppAddress } from "../Static";
+import { AppAddress, colours } from "../Static";
 
 class Header extends Component {
 
@@ -33,7 +33,7 @@ class Header extends Component {
 const textStyle = {
   display: "flex",
   flexDirection: "row",
-  color: "#fff",
+  color: colours.Tertiary,
   textAlign: "center",
   justifyContent: "center",
 }

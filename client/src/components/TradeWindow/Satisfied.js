@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import abi from "../../abis/abi";
-import { AppAddress, satisfiedStatus } from "../../Static";
+import { AppAddress, satisfiedStatus, colours } from "../../Static";
 
 class Satisfied extends Component {
 
@@ -175,7 +175,7 @@ class Satisfied extends Component {
     return(
       <div className="method" style={ methodStyle }>
         <button onClick={ this.toggleSatisfied } style={ (this.state.isSatisfied === satisfiedStatus.TRUE ? btnStyleSent : btnStyleUnsent) }>
-          {this.state.isSatisfied === satisfiedStatus.TRUE ? "Satisfied" : "Unsatisifed"}
+          {this.state.isSatisfied !== satisfiedStatus.TRUE ? "Accept Trade" : "Accepted"}
         </button>
       </div>
     );
@@ -189,7 +189,7 @@ const methodStyle = {
   alignItems: "center",
   textAlign: "center",
   justifyContent: "center",
-  background: "#444",
+  background: colours.Secondary,
   color: "#fff",
   margin: "0.2rem",
 }
