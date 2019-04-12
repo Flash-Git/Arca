@@ -29,17 +29,42 @@ class SubmitBox extends Component {
     }
   }
 
-  onSubmit(e) {//addOffer
+  async onSubmit(e) {//addOffer
     e.preventDefault();
-    const method = this.state;
+    const method = {
+      id: "",
+      type: this.state.type,
+      name: "",
+      symbol: "",
+      contractAdd: this.state.contractAdd,
+      amountId: this.state.amountId,
+      sendStatus: sendStatus.UNSENT
+    };
+    let ercAbi = "";
+
     if(method.type.includes("20")){
+      ercAbi = abiErc20;
       method.type = 0;
     }else if(method.type.includes("721")){
+      ercAbi = abiErc20;
       method.type = 1;
     }else{
       return;
     }
-    this.props.addMethod(this.state);
+    try {
+      const ercContract = await new window.web3.eth.Contract(ercAbi, method.contractAdd);
+      method.name = await ercContract.methods.name().call({
+        from: this.props.address
+      });
+      method.symbol = await ercContract.methods.symbol().call({
+        from: this.props.address
+      });
+    }catch(e){
+      method.name = "";
+      method.symbol = "";
+    }
+
+    this.props.addMethod(method);
   }
 
   onChange(e) {

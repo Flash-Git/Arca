@@ -36,15 +36,18 @@ class OfferErc extends Component {
     const contract = await new window.web3.eth.Contract(abi, AppAddress);
     const [add1, add2] = this.props.addresses;
 
+    let bnAm = window.web3.utils.toBN(method.amountId.toString());
+    bnAm = bnAm.mul(window.web3.utils.toBN("1000000000000000000"));
+
     try{
       if(method.type === 0){
-        await contract.methods.pushOfferErc20(add2, method.contractAdd, method.amountId).send({
+        await contract.methods.pushOfferErc20(add2, method.contractAdd, bnAm.toString()).send({
           from: add1
         })
-        .on("transactionHash", (hash) => {
+        .on("transactionHash", hash => {
           console.log("txHash: " + hash);
         })
-        .on("receipt", (receipt) => {
+        .on("receipt", receipt => {
           this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
           this.props.remove(this.props.method);
         })
@@ -53,7 +56,7 @@ class OfferErc extends Component {
         await contract.methods.pushOfferErc721(add2, method.contractAdd, method.amountId).send({
           from: add1
         })
-        .on("transactionHash", (hash) => {
+        .on("transactionHash", hash => {
           console.log("txHash: " + hash);
         })
         .on("receipt", (receipt) => {
