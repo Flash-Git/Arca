@@ -22,9 +22,9 @@ contract DAppBoxSoft {
   event TradeAccepted(address indexed sender, address indexed partner, uint256 indexed partnerNonce);
   event TradeUnaccepted(address indexed sender, address indexed partner);
   event TradeExecuted(address indexed sender, address indexed partner);
-  event OfferPushedERC20(address indexed sender, address indexed partner,
+  event OfferModifiedERC20(address indexed sender, address indexed partner,
     address contractAdd, uint256 amount, uint8 indexed index, uint256 nonce);
-  event OfferPushedERC721(address indexed sender, address indexed partner,
+  event OfferModifiedERC721(address indexed sender, address indexed partner,
     address contractAdd, uint256 id, uint8 indexed index, uint256 nonce);
   event OfferRemovedERC20(address indexed sender, address indexed partner, uint8 indexed index, uint256 nonce);
   event OfferRemovedERC721(address indexed sender, address indexed partner, uint8 indexed index, uint256 nonce);
@@ -130,6 +130,10 @@ contract DAppBoxSoft {
   */
 
   function pushOfferErc20(address _tradePartner, address _erc20Address, uint256 _amount) public {
+    addOfferErc20(_tradePartner, _erc20Address, _amount, boxes[msg.sender][_tradePartner].countErc20);
+  }
+
+  function addOfferErc20(address _tradePartner, address _erc20Address, uint256 _amount, uint8 _index) public {
     require(Erc20(_erc20Address).allowance(msg.sender, address(this)) >= _amount, "Insufficient allowance");
 
     OfferErc20 memory offer;
@@ -137,14 +141,22 @@ contract DAppBoxSoft {
     offer.amount = _amount;
 
     Box storage box = boxes[msg.sender][_tradePartner];
-    box.offersErc20.push(offer);
-    box.countErc20++;
+    if(box.offersErc20.length > _index){
+      box.offersErc20[_index] = offer;
+    }else{
+      box.offersErc20.push(offer);
+      box.countErc20++;
+    }
 
     box.nonce++;
-    emit OfferPushedERC20(msg.sender, _tradePartner, _erc20Address, _amount, box.countErc20-1, box.nonce);
+    emit OfferModifiedERC20(msg.sender, _tradePartner, _erc20Address, _amount, _index, box.nonce);
   }
   
   function pushOfferErc721(address _tradePartner, address _erc721Address, uint256 _id) public {
+    addOfferErc721(_tradePartner, _erc721Address, _id, boxes[msg.sender][_tradePartner].countErc721);
+  }
+  
+  function addOfferErc721(address _tradePartner, address _erc721Address, uint256 _id, uint8 _index) public {
     require(Erc721(_erc721Address).ownerOf(_id) == msg.sender, "Sender isn't owner of this erc721 token");
     require(Erc721(_erc721Address).isApprovedForAll(msg.sender, address(this)) == true, "Contract not approved for erc721 token transfers");
 
@@ -153,11 +165,15 @@ contract DAppBoxSoft {
     offer.id = _id;
 
     Box storage box = boxes[msg.sender][_tradePartner];
-    box.offersErc721.push(offer);
-    box.countErc721++;
+    if(box.offersErc721.length > _index){
+      box.offersErc721[_index] = offer;
+    }else{
+      box.offersErc721.push(offer);
+      box.countErc721++;
+    }
 
     box.nonce++;
-    emit OfferPushedERC721(msg.sender, _tradePartner, _erc721Address, _id, box.countErc721-1, box.nonce);
+    emit OfferModifiedERC721(msg.sender, _tradePartner, _erc721Address, _id, _index, box.nonce);
   }
 
   function removeOfferErc20(address _tradePartner, uint8 _index) public {
