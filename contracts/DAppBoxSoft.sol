@@ -23,9 +23,11 @@ contract DAppBoxSoft {
   event TradeUnaccepted(address indexed sender, address indexed partner);
   event TradeExecuted(address indexed sender, address indexed partner);
   event OfferPushedERC20(address indexed sender, address indexed partner,
-    address indexed contractAdd, uint256 amount, uint8 index, uint256 nonce);
+    address contractAdd, uint256 amount, uint8 indexed index, uint256 nonce);
   event OfferPushedERC721(address indexed sender, address indexed partner,
-    address indexed contractAdd, uint256 id, uint8 index, uint256 nonce);
+    address contractAdd, uint256 id, uint8 indexed index, uint256 nonce);
+  event OfferRemovedERC20(address indexed sender, address indexed partner, uint8 indexed index, uint256 nonce);
+  event OfferRemovedERC721(address indexed sender, address indexed partner, uint8 indexed index, uint256 nonce);
   event BoxCountModifiedERC20(address indexed sender, address indexed partner, uint8 indexed count, uint256 nonce);
   event BoxCountModifiedERC721(address indexed sender, address indexed partner, uint8 indexed count, uint256 nonce);
 
@@ -136,7 +138,7 @@ contract DAppBoxSoft {
 
     Box storage box = boxes[msg.sender][_tradePartner];
     box.offersErc20.push(offer);
-    box.countErc20 += 1;
+    box.countErc20++;
 
     box.nonce++;
     emit OfferPushedERC20(msg.sender, _tradePartner, _erc20Address, _amount, box.countErc20-1, box.nonce);
@@ -152,12 +154,29 @@ contract DAppBoxSoft {
 
     Box storage box = boxes[msg.sender][_tradePartner];
     box.offersErc721.push(offer);
-    box.countErc721 += 1;
+    box.countErc721++;
 
     box.nonce++;
     emit OfferPushedERC721(msg.sender, _tradePartner, _erc721Address, _id, box.countErc721-1, box.nonce);
   }
 
+  function removeOfferErc20(address _tradePartner, uint8 _index) public {
+    Box storage box = boxes[msg.sender][_tradePartner];
+    box.offersErc20[_index].add = address(0);
+
+    box.nonce++;
+    emit OfferRemovedERC20(msg.sender, _tradePartner, _index, box.nonce);
+  }
+
+  function removeOfferErc721(address _tradePartner, uint8 _index) public {
+    Box storage box = boxes[msg.sender][_tradePartner];
+    box.offersErc721[_index].add = address(0);
+
+    box.nonce++;
+    emit OfferRemovedERC721(msg.sender, _tradePartner, _index, box.nonce);
+  }
+
+  //Set to 0 to clear
   function setCountErc20(address _tradePartner, uint8 _count) public {
     Box storage box = boxes[msg.sender][_tradePartner];
     box.countErc20 = _count;
@@ -166,6 +185,7 @@ contract DAppBoxSoft {
     emit BoxCountModifiedERC20(msg.sender, _tradePartner, _count, box.nonce);
   }
 
+  //Set to 0 to clear
   function setCountErc721(address _tradePartner, uint8 _count) public {
     Box storage box = boxes[msg.sender][_tradePartner];
     box.countErc721 = _count;
@@ -180,16 +200,24 @@ contract DAppBoxSoft {
   */
 
   function executeTransfersErc20(address _add1, address _add2) private {
-    OfferErc20[] memory offers = boxes[_add1][_add2].offersErc20;
-    for(uint8 i = 0; i < boxes[_add1][_add2].countErc20; i++){
-      directErc20Transfer(_add1, _add2, offers[i].add, offers[i].amount);
+    Box storage box = boxes[_add1][_add2];
+
+    OfferErc20[] memory offers = box.offersErc20;
+    for(uint8 i = 0; i < box.countErc20; i++){
+      if(box.offersErc20[i].add != address(0)){
+        directErc20Transfer(_add1, _add2, offers[i].add, offers[i].amount);
+      }
     }
   }
   
   function executeTransfersErc721(address _add1, address _add2) private {
-    OfferErc721[] memory offers = boxes[_add1][_add2].offersErc721;
-    for(uint8 i = 0; i < boxes[_add1][_add2].countErc721; i++){
-      directErc721Transfer(_add1, _add2, offers[i].add, offers[i].id);
+    Box storage box = boxes[_add1][_add2];
+
+    OfferErc721[] memory offers = box.offersErc721;
+    for(uint8 i = 0; i < box.countErc721; i++){
+      if(box.offersErc721[i].add != address(0)){
+        directErc721Transfer(_add1, _add2, offers[i].add, offers[i].id);
+      }
     }
   }
 
