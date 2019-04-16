@@ -25,14 +25,28 @@ class OfferErc extends Component {
 
     try{
       this.setState({ sendStatus: sendStatus.SENDING });
-      this.broadcast(this.props.method);
-    } catch(e) {
+      this.broadcastAdd(this.props.method);
+    }catch(e){
       console.error(e);
       this.setState({ sendStatus: sendStatus.UNSENT });
     }
   }
 
-  async broadcast(method) {
+  removeMethod = () => {
+    if(!this.props.connected){
+      alert("Not connected");
+      return;
+    }
+
+    try{
+      this.broadcastRemove(this.props.method);
+      this.props.remove(this.props.method);
+    }catch(e){
+      console.error(e);
+    }
+  }
+
+  async broadcastAdd(method) {
     const contract = await new window.web3.eth.Contract(abi, AppAddress);
     const [add1, add2] = this.props.addresses;
 
@@ -62,6 +76,33 @@ class OfferErc extends Component {
         .on("receipt", (receipt) => {
           this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
           this.props.remove(this.props.method);
+        })
+        .on("error", console.error);
+      }
+    } catch(e){
+      console.log(e);
+    }
+  }
+
+  async broadcastRemove() {
+    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+    const [add1, add2] = this.props.addresses;
+
+    try{
+      if(method.type === 0){
+        await contract.methods.removeOfferErc20(add2, method.id.split("-")[1]).send({
+          from: add1
+        })
+        .on("transactionHash", hash => {
+          console.log("txHash: " + hash);
+        })
+        .on("error", console.error);
+      }else if(method.type === 1){
+        await contract.methods.removeOfferErc721(add2, method.id.split("-")[1]).send({
+          from: add1
+        })
+        .on("transactionHash", hash => {
+          console.log("txHash: " + hash);
         })
         .on("error", console.error);
       }
