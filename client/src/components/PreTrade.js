@@ -84,6 +84,7 @@ class PreTrade extends Component {
   async onSubmit(e) {
     e.preventDefault();
     if(!this.props.connected){
+      alert("Not connected");
       return;
     }
     await this.checkAddress(0, this.state.address1);
