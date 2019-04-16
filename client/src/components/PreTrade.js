@@ -8,6 +8,8 @@ class PreTrade extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      input1: "",
+      input2: "",
       address1: "",
       address2: "",
       ensAdd1: "",
@@ -21,22 +23,22 @@ class PreTrade extends Component {
     this.checkAddress = this.checkAddress.bind(this);
   }
 
-  async checkAddress(index, address) {
+  async checkAddress(index, input) {
     if(!window.web3){
       this.setState({ validInput1: false, validInput2: false });
       return;
     }
     
-    if(!address.includes(".eth")){
-      if(address.length !== 42){
+    if(!input.includes(".eth")){
+      if(input.length !== 42){
         index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
         return;
       }
 
       try{
-        const sumAdd = await window.web3.utils.toChecksumAddress(address);
+        const sumAdd = await window.web3.utils.toChecksumAddress(input);
         if(window.web3.utils.isAddress(sumAdd)){
-          index === 0 ? this.setState({ validInput1: true }) : this.setState({ validInput2: true });
+          index === 0 ? this.setState({ address1: sumAdd, validInput1: true }) : this.setState({ address2: sumAdd, validInput2: true });
           return;
         }
         index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
@@ -47,16 +49,13 @@ class PreTrade extends Component {
       }
     }
 
-    try{ 
-      //DOESNT WORK
-      //Uncaught (in promise) Error: Network not synced; last block was 3620.3069999217987 seconds ago
-      let ensAdd = await window.web3.eth.ens.getAddress(address);
-      console.log("ENS:" + address + " Add: " + ensAdd);
+    try{
+      let ensAdd = await window.web3.eth.ens.getAddress(input);
       ensAdd = await window.web3.utils.toChecksumAddress(ensAdd);
       if(!window.web3.utils.isAddress(ensAdd)){
         index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
       }
-      index === 0 ? this.setState({ validInput1: true, address1: ensAdd, ensAdd1: address }) : this.setState({ validInput2: true, address1: ensAdd, ensAdd1: address });
+      index === 0 ? this.setState({ validInput1: true, address1: ensAdd, ensAdd1: input }) : this.setState({ validInput2: true, address2: ensAdd, ensAdd2: input });
       return;
     }catch(e){
       console.log(e);
@@ -99,28 +98,27 @@ class PreTrade extends Component {
     return(
       <div id="section-preTrade" className="section" style={ preTradeStyle }>
         <form onSubmit={ this.onSubmit } className="method" style={ formStyle }>
-        <div style={ addressesStyle }>
-          <input
+          <div style={ addressesStyle }>
+            <input
+                type="text"
+                name="input1"
+                placeholder="Address 1"
+                value={ this.state.input1 }
+                onChange={ this.onChange1 }
+                style={ (this.state.validInput1 ? inputStyle : badInputStyle) }
+              />
+            <input
               type="text"
-              name="address1"
-              placeholder="Address 1"
-              value={ this.state.address1 }
-              onChange={ this.onChange1 }
-              style={ (this.state.validInput1 ? inputStyle : badInputStyle) }
+              name="input2"
+              placeholder="Address 2"
+              value={ this.state.input2 }
+              onChange={ this.onChange2 }
+              style={ (this.state.validInput2 ? inputStyle : badInputStyle) }
             />
-          <input
-            type="text"
-            name="address2"
-            placeholder="Address 2"
-            value={ this.state.address2 }
-            onChange={ this.onChange2 }
-            style={ (this.state.validInput2 ? inputStyle : badInputStyle) }
-          />
-        </div>
+          </div>
         </form>
         <div style={ addressesStyle }>
           <button onClick={ this.onSubmit } style={ btnStyle }>Open Trade Box</button>
-          {/*<button onClick={ this.props.refresh } style={ btnStyle }>Refresh</button>*/}
         </div>
       </div>
     );
@@ -131,27 +129,28 @@ const preTradeStyle = {
   display: "flex",
   textAlign: "center",
   justifyContent: "center",
-  background: colours.Secondary,
+  background: colours.Primary,
   padding: "0.4rem 0.2rem",
   margin: "1.6rem",
   marginTop: "0",
-  color: colours.Tertiary,
+  color: colours.Quaternary,
   //border: "solid",
-  flexDirection: "column"
+  flexDirection: "row"
 }
 
 const addressesStyle = {
   display: "flex",
-  flexDirection: "row",
+  flexDirection: "column",
   flexWrap: "wrap",
   justifyContent: "center",
-  textAlign: "center"
+  textAlign: "center",
+  margin: "0.2rem"
 }
 
 const formStyle = {
   textAlign: "center",
   justifyContent: "center",
-  color: colours.Primary
+  color: colours.Quaternary
 }
 
 const inputStyle= {
@@ -169,7 +168,7 @@ const badInputStyle= {
 
 const btnStyle = {
   background: "#660000",
-  padding: "6px 26px",
+  padding: "14px 18px",
   border: "none",
   borderRadius: "5%",
   cursor: "pointer",
@@ -177,7 +176,6 @@ const btnStyle = {
   fontWeight: "bold",
   margin: "0 1rem",
   marginTop: "0.2rem",
-  width: "13em"
 }
 
 //PropTypes
