@@ -39,8 +39,8 @@ class OfferErc extends Component {
     }
 
     try{
-      this.broadcastRemove(this.props.method);
-      this.props.remove(this.props.method);
+      if(!this.props.local) this.broadcastRemove(this.props.method);
+      this.props.remove(this.props.method.id);
     }catch(e){
       console.error(e);
     }
@@ -63,7 +63,7 @@ class OfferErc extends Component {
         })
         .on("receipt", receipt => {
           this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
-          this.props.remove(this.props.method);
+          this.props.remove(this.props.method.id);
         })
         .on("error", console.error);
       } else if(method.type === 1){
@@ -73,9 +73,9 @@ class OfferErc extends Component {
         .on("transactionHash", hash => {
           console.log("txHash: " + hash);
         })
-        .on("receipt", (receipt) => {
+        .on("receipt", receipt => {
           this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
-          this.props.remove(this.props.method);
+          this.props.remove(this.props.method.id);
         })
         .on("error", console.error);
       }
@@ -84,7 +84,7 @@ class OfferErc extends Component {
     }
   }
 
-  async broadcastRemove() {
+  async broadcastRemove(method) {
     const contract = await new window.web3.eth.Contract(abi, AppAddress);
     const [add1, add2] = this.props.addresses;
 
@@ -142,6 +142,9 @@ class OfferErc extends Component {
     const method = this.props.method;
     return(
       <div className="method" style={ methodStyle }>
+        <button onClick={ this.removeMethod } style={ btnStyleX }>
+          x
+        </button>
         <div className="display" style={ displayStyle }>
           { this.offer(method) }
         </div>
@@ -156,18 +159,18 @@ class OfferErc extends Component {
 const methodStyle = {
   display: "grid",
   gridColumnGap: "3px",
-  gridTemplateColumns: "5fr 1fr",
+  gridTemplateColumns: "auto 5fr auto",
   textAlign: "center",
   justifyContent: "center",
-  background: colours.Secondary,
+  background: colours.Primary,
   margin: "0.2rem",
   fontSize: "0.95em"
 }
 
 const displayStyle = {
-  gridColumn: "1 / 2",  
-  background: colours.Secondary,
-  color: colours.Primary,
+  gridColumn: "2 / 3",  
+  background: colours.Primary,
+  color: colours.Quaternary,
   margin: "0.2rem",
   fontSize: "0.95em",
   display: "flex",
@@ -178,24 +181,36 @@ const displayStyle = {
 }
 
 const btnStyleUnsent = {
-  gridColumn: "2",
+  gridColumn: "3",
   background: "#660000",
-  padding: "6px 26px",
   border: "none",
   borderRadius: "5%",
   cursor: "pointer",
-  color: "#fff",
-  fontWeight: "bold"
+  color: colours.Quaternary,
+  width: "5rem",
+  fontWeight: "bold",
+  margin: "0.2rem"
 }
 
 const btnStyleSent = {
-  gridColumn: "2",
+  gridColumn: "3",
   background: "#441111",
-  padding: "6px 26px",
   border: "none",
   borderRadius: "5%",
-  color: "#fff",
+  color: colours.Quaternary,
+  width: "5rem",
   fontWeight: "bold",
+  margin: "0.2rem"
+}
+
+const btnStyleX = {
+  gridColumn: "1",
+  background: "#441111",
+  border: "none",
+  color: colours.Quaternary,
+  width: "2.5rem",
+  fontWeight: "bold",
+  margin: "0.2rem"
 }
 
 //PropTypes
@@ -205,7 +220,8 @@ OfferErc.propTypes = {
   isUser: PropTypes.bool.isRequired,
   setMethodSendStatus: PropTypes.func.isRequired,
   connected: PropTypes.bool.isRequired,
-  remove: PropTypes.func.isRequired
+  remove: PropTypes.func.isRequired,
+  local: PropTypes.bool.isRequired
 }
 
 export default OfferErc;
