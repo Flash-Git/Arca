@@ -238,6 +238,7 @@ const containerStyle = {
   margin: "0.1rem",
   overflowY: "auto",
   scrollbarWidth: "thin",
+  minHeight: "8rem",
   maxHeight: "14.45rem",
   paddingRight: "0.2rem"
 }

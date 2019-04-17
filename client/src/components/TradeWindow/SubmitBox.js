@@ -162,7 +162,7 @@ const methodStyle = {
   textAlign: "center",
   justifyContent: "center",
   background: colours.Secondary,
-  color: "#fff"
+  color: colours.Quaternary
 }
 
 //PropTypes

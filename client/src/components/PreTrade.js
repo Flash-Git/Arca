@@ -166,7 +166,7 @@ const badInputStyle= {
 }
 
 const btnStyle = {
-  background: colours.Tertiary,
+  background: colours.User,
   padding: "14px 18px",
   border: "none",
   borderRadius: "5%",

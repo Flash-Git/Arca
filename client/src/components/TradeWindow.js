@@ -114,7 +114,7 @@ const boxesStyle = {
 }
 
 const btnStyleUnsent = {
-  background: colours.Tertiary,
+  background: colours.User,
   padding: "0.7em 5em",
   border: "none",
   borderRadius: "5%",
@@ -125,7 +125,7 @@ const btnStyleUnsent = {
 }
 
 const btnStyleSent = {
-  background: colours.Tertiary,
+  background: colours.User,
   padding: "0.7em 5em",
   border: "none",
   borderRadius: "5%",
