@@ -13,13 +13,6 @@ class Satisfied extends Component {
   componentDidMount() {
     setInterval( () => this.getSatisfied(), 10000);
   }
-  
-  //componentWillReceiveProps(nextProps) {
-  //  if(nextProps.addresses === this.props.addresses){
-  //    return;
-  //  }
-  //  this.getSatisfied();
-  //}
 
   toggleSatisfied = (e) => {//TODO ADD STUFF FOR TRANSITIONAL STATES
     if(!this.props.isUser){
@@ -189,7 +182,7 @@ const satisfiedStyle = {
   alignItems: "center",
   textAlign: "center",
   justifyContent: "center",
-  background: colours.Secondary,
+  background: colours.Primary,
   color: "#fff",
   margin: "0.2rem",
 }
@@ -197,7 +190,7 @@ const satisfiedStyle = {
 const btnStyleUnsent = {
   gridColumn: "2",
   gridRow: "1 / 3",
-  background: "#660000",
+  background: colours.Tertiary,
   padding: "26px 26px",
   border: "none",
   borderRadius: "5%",
@@ -209,7 +202,7 @@ const btnStyleUnsent = {
 const btnStyleSent = {
   gridColumn: "2",
   gridRow: "1 / 3",
-  background: "#441111",
+  background: colours.Tertiary,
   padding: "26px 26px",
   border: "none",
   borderRadius: "5%",

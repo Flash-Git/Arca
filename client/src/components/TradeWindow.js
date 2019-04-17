@@ -99,7 +99,7 @@ const tradeWindowStyle = {
   flexDirection: "column",
   textAlign: "center",
   justifyContent: "center",
-  background: colours.Primary,
+  //background: colours.Primary,
   padding: "0.4rem",
   margin: "0 1.6rem",
 //  border: "solid",
@@ -110,11 +110,11 @@ const boxesStyle = {
   flexWrap: "wrap",
   textAlign: "center",
   justifyContent: "center",
-  background: colours.Primary,
+  //background: colours.Primary,
 }
 
 const btnStyleUnsent = {
-  background: "#660000",
+  background: colours.Tertiary,
   padding: "0.7em 5em",
   border: "none",
   borderRadius: "5%",
@@ -125,7 +125,7 @@ const btnStyleUnsent = {
 }
 
 const btnStyleSent = {
-  background: "#441111",
+  background: colours.Tertiary,
   padding: "0.7em 5em",
   border: "none",
   borderRadius: "5%",

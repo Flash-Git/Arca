@@ -1,5 +1,6 @@
 body, html {
-  background-color: #EDEDED;
+  background-color: #474949;
+  background-image: radial-gradient(#474949, #495151, #586060);
   min-height: 100%;
   height: 100%;
   margin: 0;

@@ -117,7 +117,7 @@ class PreTrade extends Component {
           </div>
         </form>
         <div style={ addressesStyle }>
-          <button onClick={ this.onSubmit } style={ btnStyle }>Open Trade Box</button>
+          <button onClick={ this.onSubmit } style={ btnStyle }>Load Boxes</button>
         </div>
       </div>
     );
@@ -128,9 +128,8 @@ const preTradeStyle = {
   display: "flex",
   textAlign: "center",
   justifyContent: "center",
-  background: colours.Primary,
+  //background: colours.Primary,
   padding: "0.4rem 0.2rem",
-  margin: "1.6rem",
   marginTop: "0",
   color: colours.Quaternary,
   //border: "solid",
@@ -155,18 +154,19 @@ const formStyle = {
 const inputStyle= {
   width: "24em",
   textAlign: "center",
-  margin: "0.1rem"
+  margin: "0.2rem",
+  border: "solid 2px green"
 }
 
 const badInputStyle= {
   width: "24em",
   textAlign: "center",
   margin: "0.2rem",
-  border: "solid red"
+  border: "solid 2px red"
 }
 
 const btnStyle = {
-  background: "#660000",
+  background: colours.Tertiary,
   padding: "14px 18px",
   border: "none",
   borderRadius: "5%",

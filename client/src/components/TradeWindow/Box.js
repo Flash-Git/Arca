@@ -219,22 +219,28 @@ class Box extends Component {
 const boxStyle = {
   display: "grid",
   gridColumnGap: "3px",
-  gridTemplateColumns: "3fr 1fr",//TODO handle screensizes in a more aesthetically pleasing way
+  gridTemplateRows: "2rem 3fr",
+  gridTemplateColumns: "4fr 1fr",
   textAlign: "center",
   justifyContent: "center",
-  margin: "0.5rem 0.5rem",
+  margin: "1rem 0.5rem",
   background: colours.Secondary,
-  color: colours.Tertiary,
-  //border: "solid",
+  color: colours.Quaternary,
   minHeight: "8rem",
   fontWeight: "bold",
-  width: "60rem"
+  width: "50rem",
+  //border: "solid 1px",
+  padding: "0.3rem"
 }
 
 const containerStyle = {
   gridColumn: "1 auto",
   gridRow: "2 auto",
-  margin: "0.1rem"
+  margin: "0.1rem",
+  overflowY: "auto",
+  scrollbarWidth: "thin",
+  maxHeight: "14.45rem",
+  paddingRight: "0.2rem"
 }
 
 //PropTypes

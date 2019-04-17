@@ -18,7 +18,7 @@ class Summary extends Component {
 
   render() {
     return(
-      <div className="summary" style={ methodStyle }>
+      <div className="summary" style={ summaryStyle }>
         { this.summary() }
         { this.props.address !== "" ? <img src={makeBlockie(this.props.address)}
           width="22px" height="22px" alt="blockie" style={{ marginTop:"0.2em" }} /> : "" }
@@ -27,7 +27,7 @@ class Summary extends Component {
   }
 }
 
-const methodStyle = {
+const summaryStyle = {
   display: "flex",
   gridColumn: "1 / 3",
   gridRow: "1",
@@ -35,7 +35,9 @@ const methodStyle = {
   justifyContent: "center",
   background: colours.Primary,
   color: colours.Quaternary,
-  marginTop:"0.1rem"
+  margin: "0 0.3rem",
+  marginTop:"0.1rem",
+  padding: "0.1rem"
 }
 
 //PropTypes
