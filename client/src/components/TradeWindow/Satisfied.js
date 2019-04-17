@@ -185,6 +185,7 @@ const satisfiedStyle = {
   background: colours.Primary,
   color: "#fff",
   margin: "0.2rem",
+  marginRight: "0.3rem",
 }
 
 const btnStyleUnsent = {
