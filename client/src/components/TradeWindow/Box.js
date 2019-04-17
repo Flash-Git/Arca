@@ -126,7 +126,6 @@ class Box extends Component {
           });
         }
       } catch(e){
-        console.log(e);
         return;
       }
       
@@ -175,12 +174,12 @@ class Box extends Component {
       this.addChainMethod(method);
     });
     this.props.setCount(this.props.boxNum, offers.length);
-    //TODO check and remove duplicates from method lists
   }
 
   remove = (id) => {
     let localMethods = this.state.localMethods.filter(meth => meth.id !== id);
-    this.setState({ localMethods });
+    let chainMethods = this.state.chainMethods.filter(meth => meth.id !== id);
+    this.setState({ localMethods, chainMethods });
   }
 
   render() {
@@ -191,14 +190,14 @@ class Box extends Component {
           <div>
             { this.state.chainMethods.map(method =>
               <OfferErc key={ method.id } method={ method }
-                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
+                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ false }
                 isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
             ) }
           </div>
           <div>
             { this.state.localMethods.map(method =>
               <OfferErc key={ method.id } method={ method }
-                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses }
+                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ true }
                 isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
             ) }
           </div>
