@@ -38,7 +38,7 @@ class PreTrade extends Component {
       try{
         const sumAdd = await window.web3.utils.toChecksumAddress(input);
         if(window.web3.utils.isAddress(sumAdd)){
-          index === 0 ? this.setState({ address1: sumAdd, validInput1: true }) : this.setState({ address2: sumAdd, validInput2: true });
+          index === 0 ? this.setState({ validInput1: true, address1: sumAdd, ensAdd1: "" }) : this.setState({ validInput2: true, address2: sumAdd, ensAdd2: "" });
           return;
         }
         index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
@@ -58,7 +58,6 @@ class PreTrade extends Component {
       index === 0 ? this.setState({ validInput1: true, address1: ensAdd, ensAdd1: input }) : this.setState({ validInput2: true, address2: ensAdd, ensAdd2: input });
       return;
     }catch(e){
-      console.log(e);
       index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
       return;
     }
@@ -86,8 +85,8 @@ class PreTrade extends Component {
       alert("Not connected");
       return;
     }
-    await this.checkAddress(0, this.state.address1);
-    await this.checkAddress(1, this.state.address2);
+    await this.checkAddress(0, this.state.input1);
+    await this.checkAddress(1, this.state.input2);
     
     if(this.state.validInput1 && this.state.validInput1){
       this.props.setAddresses([this.state.address1, this.state.address2], [this.state.ensAdd1, this.state.ensAdd2]);

@@ -2,13 +2,26 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
 
+import { colours } from "../../Static";
+
 class Summary extends Component {
+
+  summary() {
+    if(this.props.ensAdd !== "") {
+      return <>{ this.props.ensAdd }&nbsp;</>;
+    }
+    if(this.props.address !== "") {
+      return <>{ this.props.address }&nbsp;</>;
+    }
+  }
+
 
   render() {
     return(
-      <div className="method" style={ methodStyle }>
-        { this.props.ensAdd !== "" ? this.props.ensAdd + " - " : "" } { this.props.address } &nbsp;
-        { this.props.address !== "" ? <img src={makeBlockie(this.props.address)} width="22px" height="22px" alt="blockie" style={{ marginTop:"0.2em" }} /> : "" }
+      <div className="summary" style={ methodStyle }>
+        { this.summary() }
+        { this.props.address !== "" ? <img src={makeBlockie(this.props.address)}
+          width="22px" height="22px" alt="blockie" style={{ marginTop:"0.2em" }} /> : "" }
       </div>
     );
   }
@@ -20,9 +33,9 @@ const methodStyle = {
   gridRow: "1",
   textAlign: "center",
   justifyContent: "center",
-  background: "#222",
-  color: "#fff",
-  marginTop:"0.8rem"
+  background: colours.Primary,
+  color: colours.Quaternary,
+  marginTop:"0.1rem"
 }
 
 //PropTypes
