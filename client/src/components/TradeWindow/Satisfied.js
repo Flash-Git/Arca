@@ -7,7 +7,7 @@ import { AppAddress, satisfiedStatus, colours } from "../../Static";
 class Satisfied extends Component {
 
   state = {
-    isSatisfied: satisfiedStatus.FALSE
+    isAccepted: satisfiedStatus.FALSE
   }
 
   componentDidMount() {
@@ -18,23 +18,23 @@ class Satisfied extends Component {
     if(!this.props.isUser){
       return;
     }
-    let isSatisfied;
+    let isAccepted;
 
-    switch(this.state.isSatisfied){
+    switch(this.state.isAccepted){
       case satisfiedStatus.TRUE:
-        isSatisfied = satisfiedStatus.TOFALSE;
+        isAccepted = satisfiedStatus.TOFALSE;
         this.rejectTrade();
         break;
       case satisfiedStatus.FALSE:
-        isSatisfied = satisfiedStatus.TOTRUE;
+        isAccepted = satisfiedStatus.TOTRUE;
         this.acceptTrade();
         break;
       case satisfiedStatus.TOTRUE:
-        isSatisfied = satisfiedStatus.TOFALSE;
+        isAccepted = satisfiedStatus.TOFALSE;
         this.rejectTrade();
         break;
       case satisfiedStatus.TOFALSE:
-        isSatisfied = satisfiedStatus.TOTRUE;
+        isAccepted = satisfiedStatus.TOTRUE;
         this.acceptTrade();
         break;
       default:
@@ -42,8 +42,8 @@ class Satisfied extends Component {
         return;
     }
 
-    this.setState({ isSatisfied });
-    this.props.setSatisfied(isSatisfied);
+    this.setState({ isAccepted });
+    this.props.setSatisfied(isAccepted);
   }
 
   async acceptTrade() {
@@ -103,7 +103,6 @@ class Satisfied extends Component {
     try{
       contract.methods.rejectTrade(add2).send({
         from: add1
-        //TODO estimate gas
       })
         .on("transactionHash", hash => {
           console.log(hash);
@@ -111,11 +110,6 @@ class Satisfied extends Component {
         .on("receipt", receipt => {
           this.props.setSatisfied(satisfiedStatus.FALSE);
           this.setState({ isSatisfied: satisfiedStatus.FALSE });
-        })
-        .on("confirmation", (confirmationNumber, receipt) => {
-          if(confirmationNumber === 3){
-            console.log("receipt: " + receipt);
-          }
         })
         .on("error", error => {
           console.error(error);
@@ -164,12 +158,36 @@ class Satisfied extends Component {
     }
   }
 
+  status() {
+    if(this.props.isUser){
+      return <div style={ {...statusStyle, ...statusStyleUser} }>
+          Accepted
+        </div>;
+    }
+    return <div style={ {...statusStyle, ...statusStyleNotUser} }>
+        Not Accepted
+      </div>;
+  }
+
+  button() {
+    if(!this.props.isUser) return;
+    if(this.state.isAccepted){
+      return <button onClick={ this.toggleSatisfied }
+          style={ {...btnStyle, ...btnStyleAccepted} }>
+          Reject
+        </button>;
+    }
+    return <button onClick={ this.toggleSatisfied }
+        style={ {...btnStyle, ...btnStyleNotAccepted} }>
+        Accept
+      </button>;
+  }
+
   render() {
     return(
       <div className="satisfied" style={ satisfiedStyle }>
-        <button onClick={ this.toggleSatisfied } style={ (this.state.isSatisfied === satisfiedStatus.TRUE ? btnStyleSent : btnStyleUnsent) }>
-          {this.state.isSatisfied !== satisfiedStatus.TRUE ? "Accept Trade" : "Accepted"}
-        </button>
+        { this.status() }
+        { this.button() }
       </div>
     );
   }
@@ -179,36 +197,52 @@ const satisfiedStyle = {
   gridColumn: "2 auto",
   gridRow: "2 auto",
   display: "flex",
+  flexDirection: "column",
   alignItems: "center",
   textAlign: "center",
-  justifyContent: "center",
+  justifyContent: "space-evenly",//justify-content: space-evenly;
   background: colours.Primary,
-  color: "#fff",
+  color: colours.Quaternary,
   margin: "0.2rem",
   marginRight: "0.3rem",
 }
 
-const btnStyleUnsent = {
+const btnStyle = {
   gridColumn: "2",
   gridRow: "1 / 3",
-  background: colours.Tertiary,
-  padding: "26px 26px",
   border: "none",
-  borderRadius: "5%",
+  color: colours.Quaternary,
+  fontWeight: "bold",
+  margin: "0.2rem",
+  padding: "0.65rem 1.1rem",
   cursor: "pointer",
-  color: "#fff",
-  fontWeight: "bold"
+  borderRadius: "26%",
 }
 
-const btnStyleSent = {
+const btnStyleAccepted = {
+  background: colours.User,
+}
+
+const btnStyleNotAccepted = {
+  background: colours.NotUser,
+}
+
+const statusStyle = {
   gridColumn: "2",
   gridRow: "1 / 3",
-  background: colours.Tertiary,
-  padding: "26px 26px",
-  border: "none",
-  borderRadius: "5%",
-  color: "#fff",
+  color: colours.Quaternary,
   fontWeight: "bold",
+  padding: "0.2rem",
+  width: "100%",
+  margin: "0.2rem 0"
+}
+
+const statusStyleUser = {
+  background: colours.Secondary
+}
+
+const statusStyleNotUser = {
+  background: colours.Secondary
 }
 
 //PropTypes
