@@ -11,7 +11,7 @@ class Satisfied extends Component {
   }
 
   componentDidMount() {
-    setInterval( () => this.getSatisfied(), 10000);
+    setInterval( () => this.getSatisfied(), 5000);
   }
 
   toggleSatisfied = (e) => {//TODO ADD STUFF FOR TRANSITIONAL STATES
@@ -69,7 +69,7 @@ class Satisfied extends Component {
         })
         .on("receipt", receipt => {
           this.props.setSatisfied(satisfiedStatus.TRUE);
-          this.setState({ isSatisfied: satisfiedStatus.TRUE });
+          this.setState({ isAccepted: satisfiedStatus.TRUE });
         })
         .on("confirmation", (confirmationNumber, receipt) => {
           if(confirmationNumber === 3){
@@ -78,7 +78,7 @@ class Satisfied extends Component {
         })
         .on("error", error => {
           this.props.setSatisfied(satisfiedStatus.FALSE);
-          this.setState({ isSatisfied: satisfiedStatus.FALSE });
+          this.setState({ isAccepted: satisfiedStatus.FALSE });
           console.error(error);
         });
     } catch(e){
@@ -101,7 +101,7 @@ class Satisfied extends Component {
     }
 
     try{
-      contract.methods.rejectTrade(add2).send({
+      contract.methods.unacceptTrade(add2).send({
         from: add1
       })
         .on("transactionHash", hash => {
@@ -109,7 +109,7 @@ class Satisfied extends Component {
         })
         .on("receipt", receipt => {
           this.props.setSatisfied(satisfiedStatus.FALSE);
-          this.setState({ isSatisfied: satisfiedStatus.FALSE });
+          this.setState({ isAccepted: satisfiedStatus.FALSE });
         })
         .on("error", error => {
           console.error(error);
@@ -128,7 +128,7 @@ class Satisfied extends Component {
 
     try{
       contract = await new window.web3.eth.Contract(abi, AppAddress);
-    }catch(e){//UNCLEAN
+    }catch(e){
       console.log(e);
     }    
     let satisfied = false;
@@ -148,33 +148,35 @@ class Satisfied extends Component {
 
     switch(satisfied){
       case false:
-        this.setState({ isSatisfied: satisfiedStatus.FALSE} );
+        this.setState({ isAccepted: satisfiedStatus.FALSE} );
+        this.props.setSatisfied(satisfiedStatus.FALSE);
         break;
       case true:
-      this.setState({ isSatisfied: satisfiedStatus.TRUE} );
-      break;
+        this.setState({ isAccepted: satisfiedStatus.TRUE} );
+        this.props.setSatisfied(satisfiedStatus.TRUE);
+        break;
       default:
         return;
     }
   }
 
   status() {
-    if(this.props.isUser){
-      return <div style={ {...statusStyle, ...statusStyleUser} }>
+    if(this.state.isAccepted === satisfiedStatus.TRUE){
+      return <div style={ {...statusStyle, ...statusStyleAccepted} }>
           Accepted
         </div>;
     }
-    return <div style={ {...statusStyle, ...statusStyleNotUser} }>
+    return <div style={ {...statusStyle, ...statusStyleNotAccepted} }>
         Not Accepted
       </div>;
   }
 
   button() {
     if(!this.props.isUser) return;
-    if(this.state.isAccepted){
+    if(this.state.isAccepted === satisfiedStatus.TRUE){
       return <button onClick={ this.toggleSatisfied }
           style={ {...btnStyle, ...btnStyleAccepted} }>
-          Reject
+          Unaccept
         </button>;
     }
     return <button onClick={ this.toggleSatisfied }
@@ -214,17 +216,17 @@ const btnStyle = {
   color: colours.Quaternary,
   fontWeight: "bold",
   margin: "0.2rem",
-  padding: "0.65rem 1.1rem",
+  padding: "0.6rem 1.1rem",
   cursor: "pointer",
-  borderRadius: "26%",
+  borderRadius: "18%",
 }
 
 const btnStyleAccepted = {
-  background: colours.User,
+  background: colours.NotUser,
 }
 
 const btnStyleNotAccepted = {
-  background: colours.NotUser,
+  background: colours.User,
 }
 
 const statusStyle = {
@@ -232,17 +234,22 @@ const statusStyle = {
   gridRow: "1 / 3",
   color: colours.Quaternary,
   fontWeight: "bold",
-  padding: "0.2rem",
+  padding: "0.2rem 0",
   width: "100%",
-  margin: "0.2rem 0"
+  margin: "0.2rem 0",
+  background: colours.Secondary,
 }
 
-const statusStyleUser = {
-  background: colours.Secondary
+const statusStyleAccepted = {
+  //color: colours.isUser,
+  borderTop: "solid 2px green",
+  borderBottom: "solid 2px green"
 }
 
-const statusStyleNotUser = {
-  background: colours.Secondary
+const statusStyleNotAccepted = {
+  //color: colours.NotUser,
+  borderTop: "solid 2px red",
+  borderBottom: "solid 2px red"
 }
 
 //PropTypes

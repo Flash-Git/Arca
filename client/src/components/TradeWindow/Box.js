@@ -9,22 +9,23 @@ import OfferErc from "./OfferErc";
 import abi from "../../abis/abi";
 import abiErc20 from "../../abis/abiErc20";
 import abiErc721 from "../../abis/abiErc721";
-import { AppAddress, sendStatus, colours } from "../../Static";
+import { AppAddress, sendStatus, satisfiedStatus, colours } from "../../Static";
 
 class Box extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
+      satisfied: satisfiedStatus.FALSE,
       localMethods: [],
       chainMethods: []
     }
     this.addLocalMethod = this.addLocalMethod.bind(this);
   }
 
-   componentDidMount() {
-     setInterval( () => this.getMethods(), 5000);
-   }
+  componentDidMount() {
+    setInterval( () => this.getMethods(), 5000);
+  }
 
   async addLocalMethod(method) {
     const [add1, add2] = this.props.addresses;
@@ -70,24 +71,8 @@ class Box extends Component {
     this.setState({ localMethods: newMethods });
   }
 
-  async setSatisfied(count) {//acceptTrade
-    try{
-      let boxContract = await new window.web3.eth.Contract(abi, AppAddress);
-    
-      await boxContract.methods.acceptTrade(this.props.addresses[1], this.props.partnerNonce).send({
-        from: this.props.addresses[0]
-      })
-      .on("transactionHash", (hash) => {
-        console.log("txHash: " + hash);
-      })
-      .on("receipt", (receipt) => {
-        this.props.acceptTrade(this.props.addresses[0]);
-      })
-      .on("error", console.error);
-    }catch(e){
-      console.log(e);
-      return;
-    }
+  setSatisfied = (satisfied) => {
+    this.setState({ satisfied });
   }
 
   async getMethods() {
@@ -184,7 +169,8 @@ class Box extends Component {
 
   render() {
     return(
-      <div className="box" style={ boxStyle }>
+      <div className="box" style={ this.state.satisfied === satisfiedStatus.TRUE ?
+        {...boxStyle, ...{border: "solid green 2px" }} : {...boxStyle, ...{border: "solid red 2px" }} }>
         <Summary address={ this.props.addresses[0] } ensAdd={ this.props.ensAdd } />
         <div className="container" style={ containerStyle }>
           <div>
@@ -228,7 +214,6 @@ const boxStyle = {
   minHeight: "8rem",
   fontWeight: "bold",
   width: "50rem",
-  //border: "solid 1px",
   padding: "0.3rem"
 }
 
