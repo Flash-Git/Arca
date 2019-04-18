@@ -106,7 +106,7 @@ class Box extends Component {
           count = await boxContract.methods.getErc20Count(add1, add2).call({
             from: add1
           });
-        } else {
+        }else{
           ercAbi = abiErc721;
           count = await boxContract.methods.getErc721Count(add1, add2).call({
             from: add1
@@ -127,7 +127,7 @@ class Box extends Component {
       }
 
       for(let i = 0; i < count; i++){
-        try {
+        try{
           let offer = { id: type+"-"+i, type, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
           let result;
           if(type === 0){//erc20
@@ -135,7 +135,7 @@ class Box extends Component {
               from: add1
             });
             result[1] = result[1].div("1000000000000000000");
-          } else if(type === 1){//erc721
+          }else if(type === 1){//erc721
             result = await boxContract.methods.getOfferErc721(add1, add2, i).call({
               from: add1
             });
@@ -144,21 +144,21 @@ class Box extends Component {
           //console.log("id: " + offer.id + ", contractAdd: " + offer.contractAdd + ", amountId: " + offer.amountId);
 
           const ercContract = await new window.web3.eth.Contract(ercAbi, offer.contractAdd);
-          try {//name and symbol aren't required for the erc token standards
+          try{//name and symbol aren't required for the erc token standards
             offer.name = await ercContract.methods.name().call({
               from: add1
             });
             offer.symbol = await ercContract.methods.symbol().call({
               from: add1
             });
-          } catch(e){
+          }catch(e){
             offer.name = "";
             offer.symbol = "";
             console.log(e);
           }
           this.remove(offer.id, 0);
           offers.push(offer);
-        } catch(e){
+        }catch(e){
           console.error(e);
         }
       }
