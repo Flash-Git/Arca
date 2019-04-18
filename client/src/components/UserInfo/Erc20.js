@@ -12,13 +12,17 @@ class Erc20 extends Component {
 
   render() {
     return(
-      <div className="erc20" style={ erc20Style }>
+      <div className="erc20" style={ ercStyle }>
         <li style={ liStyle }>
           <div>
-            <span style={ symbolStyle }>{ this.props.erc.symbol }&nbsp;</span>
-            <img src={ makeBlockie(this.props.erc.contractAdd) } width="10px" height="10px" alt="blockie" style={{ marginTop:"0.2em" }} />&nbsp;<br/>
-            Balance:&nbsp;{ this.props.erc.balance }<br/>
-            Enabled:&nbsp;{ this.props.erc.allowance }
+            <div style={{ marginBottom: "0.4rem" }}>
+              <span style={ symbolStyle }>{ this.props.erc.symbol }&nbsp;</span>
+              <img src={ makeBlockie(this.props.erc.contractAdd) } width="12px" height="12px" alt="blockie" /><br/>
+            </div>
+            <div>
+              Balance:&nbsp;{ this.props.erc.balance }<br/>
+              Enabled:&nbsp;{ this.props.erc.allowance }
+            </div>
           </div>
           <button onClick={ this.add } style={ btnStyle }>
             +
@@ -27,6 +31,28 @@ class Erc20 extends Component {
       </div>
     );
   }
+}
+
+const ercStyle = {
+  textAlign: "left",
+  marginBottom: "0.5rem",
+  padding: "0.65rem",
+  borderRadius: "1rem",
+  background: colours.Primary
+}
+
+const liStyle= {
+  display: "flex",
+  listStyleType: "none",
+  fontSize: "72%",
+  lineHeight: "120%"
+}
+
+const symbolStyle = { 
+  fontWeight: "bold",
+  marginLeft: "2rem",
+  fontSize: "115%",
+  lineHeight: "110%",
 }
 
 const btnStyle = {
@@ -39,28 +65,7 @@ const btnStyle = {
   fontWeight: "bold",
   padding: "0.3rem 0.5rem",
   alignSelf: "center",
-  color: "000",
   cursor: "pointer"
-}
-
-const liStyle= {
-  display: "flex",
-  listStyleType: "none",
-  marginTop: "0.4rem",
-  padding: "0",
-  fontSize: "70%",
-  lineHeight: "90%"
-}
-
-const erc20Style = {
-  textAlign: "left",
-  marginBottom: "1rem"
-}
-
-const symbolStyle = { 
-  fontSize: "115%",
-  fontWeight: "bold",
-  marginLeft: "2rem"
 }
 
 //PropTypes

@@ -100,7 +100,7 @@ class TokenInfo extends Component {
           erc.allowance = "True";
         }
       }catch(e){
-       continue;
+        continue;
       }
       erc721s.push(erc);
     }
@@ -127,7 +127,7 @@ class TokenInfo extends Component {
 const h3Style = {
   marginTop: "0",
   marginBottom: "0.3rem",
-  textDecoration: "underline"
+  //textDecoration: "underline"
 }
 
 const tokenInfoStyle = {

@@ -32,7 +32,8 @@ class UserInfo extends Component {
 }
 
 const userInfoStyle = {
-  width: "10.5rem",
+  color: colours.Quaternary,
+  width: "13.5rem",
   minHeight: "15rem",
   maxHeight: "80%",
   right: "0",
