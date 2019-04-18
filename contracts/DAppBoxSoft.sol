@@ -184,6 +184,8 @@ contract DAppBoxSoft {
       box.offersErc721[_index] = offer;
     }else{
       box.offersErc721.push(offer);
+    }
+    if(box.countErc721 <= _index){
       box.countErc721++;
     }
 
