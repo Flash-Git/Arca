@@ -211,7 +211,7 @@ const btnStyleX = {
   cursor: "pointer",
   border: "none",
   color: colours.Quaternary,
-  width: "1.4rem",
+  width: "1.9rem",
   fontWeight: "bold",
   padding: "0.25rem",
   margin: "0.25rem"

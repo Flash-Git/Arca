@@ -128,14 +128,14 @@ class TokenInfo extends Component {
 const h3Style = {
   marginTop: "0",
   marginBottom: "0.3rem",
-  //textDecoration: "underline"
 }
 
 const tokenInfoStyle = {
-  margin: "0.5rem",
+  margin: "0.25rem",
   padding: "0.6rem 0",
-  paddingBottom: "1rem",
-  borderRadius: "20px"
+  paddingBottom: "0",
+  borderRadius: "20px",
+  minHeight: "5rem"
 }
 
 //PropTypes
