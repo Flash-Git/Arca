@@ -11,7 +11,7 @@ class UserInfo extends Component {
     if(!window.ethereum.selectedAddress){
       return(
         <div id="section-userInfo" className="section" style={ userInfoStyle }>
-          <div style={{ margin: "0.45rem", padding: "0.5rem", minHeight: "20rem" }}>
+          <div style={{ margin: "0.45rem", padding: "0.5rem" }}>
             <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
           </div>
         </div>
@@ -34,32 +34,24 @@ class UserInfo extends Component {
 const userInfoStyle = {
   color: colours.Quaternary,
   width: "13.5rem",
-  minHeight: "15rem",
-  maxHeight: "80%",
-  right: "0",
-  position: "fixed",
   textAlign: "center",
   justifyContent: "center",
-  //background: colours.Primary,
-  marginTop: "3rem",
-  marginRight: "0.2rem",
-  //border: "solid",
-  overflowY: "auto",
-  scrollbarWidth: "thin"
+  marginRight: "0.4rem",
 }
 
 const topStyle = {
-  margin: "0.45rem",
+  margin: "0.8rem",
+  marginTop: "0",
   padding: "0.5rem",
-  //background: colours.Primary,
-  //border: "solid"
 }
 
 const bottomStyle = {
   margin: "0.45rem",
   background: colours.Secondary,
-  borderRadius: "20px"
-  //border: "solid"
+  borderRadius: "20px",
+  maxHeight: "26rem",//?
+  overflowY: "auto",
+  scrollbarWidth: "thin",
 }
 
 //PropTypes

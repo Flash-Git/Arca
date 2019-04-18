@@ -169,7 +169,7 @@ const btnStyle = {
   background: colours.User,
   padding: "14px 18px",
   border: "none",
-  borderRadius: "5%",
+  borderRadius: "0.4rem",
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold",

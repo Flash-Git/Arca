@@ -199,13 +199,14 @@ const satisfiedStyle = {
   gridRow: "2 auto",
   display: "flex",
   flexDirection: "column",
+  justifyContent: "space-evenly",
   alignItems: "center",
   textAlign: "center",
-  justifyContent: "space-evenly",//justify-content: space-evenly;
   background: colours.Primary,
   color: colours.Quaternary,
   margin: "0.2rem",
   marginRight: "0.3rem",
+  lineHeight: "1.5em"
 }
 
 const btnStyle = {
@@ -217,7 +218,7 @@ const btnStyle = {
   margin: "0.2rem",
   padding: "0.6rem 1.1rem",
   cursor: "pointer",
-  borderRadius: "11%",
+  borderRadius: "0.8rem",
 }
 
 const btnStyleAccepted = {
@@ -233,7 +234,7 @@ const statusStyle = {
   gridRow: "1 / 3",
   color: colours.Quaternary,
   fontWeight: "bold",
-  padding: "0.2rem 0",
+  padding: "0.3rem 0",
   width: "100%",
   margin: "0.2rem 0",
   background: colours.Secondary,

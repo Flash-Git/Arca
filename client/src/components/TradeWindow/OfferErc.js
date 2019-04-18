@@ -123,14 +123,14 @@ class OfferErc extends Component {
 
   offer = (method) => {
     return <>
-      <img src={ makeBlockie(method.contractAdd) } width="28px" height="28px" alt="blockie" style={{ margin: "0.25rem 0.4rem", float: "left" }} />
+      <img src={ makeBlockie(method.contractAdd) } width="18px" height="18px" alt="blockie" style={{ margin: "0.25rem 0.4rem", float: "left" }} />
       { method.type === 0 ? <div style={{ width: "4rem", margin: "0.2rem" }} >ERC20&nbsp;&nbsp;&nbsp;-</div> : 
           <div style={{ width: "4rem", margin: "0.2rem" }} >ERC721&nbsp;&nbsp;-</div> }
       <div style={{ minWidth: "4rem", margin: "0.25rem" }} >
         { method.symbol }
       </div>
-      { method.type === 0 ? <div style={{ minWidth: "6rem", margin: "0.2rem" }} >Amount:&nbsp;{ method.amountId } </div> :
-          <div style={{ minWidth: "6rem", margin: "0.2rem" }} >ID:&nbsp;{ method.amountId } </div> }
+      { method.type === 0 ? <div style={{ minWidth: "6rem", margin: "0.25rem" }} >Amount:&nbsp;{ method.amountId } </div> :
+          <div style={{ minWidth: "6rem", margin: "0.25rem" }} >ID:&nbsp;{ method.amountId } </div> }
     </>
   }
 
@@ -170,7 +170,8 @@ const methodStyle = {
   justifyContent: "center",
   background: colours.Primary,
   margin: "0.2rem",
-  fontSize: "0.95em"
+  fontSize: "0.95em",
+  lineHeight: "1.4em"
 }
 
 const displayStyle = {
@@ -212,7 +213,8 @@ const btnStyleX = {
   color: colours.Quaternary,
   width: "1.4rem",
   fontWeight: "bold",
-  margin: "0.65rem"
+  padding: "0.25rem",
+  margin: "0.25rem"
 }
 
 //PropTypes

@@ -15,13 +15,12 @@ class Summary extends Component {
     }
   }
 
-
   render() {
     return(
       <div className="summary" style={ summaryStyle }>
         { this.summary() }
         { this.props.address !== "" ? <img src={makeBlockie(this.props.address)}
-          width="22px" height="22px" alt="blockie" style={{ marginTop:"0.2em" }} /> : "" }
+          width="20px" height="20px" alt="blockie" style={{ marginTop: "0.2rem" }} /> : "" }
       </div>
     );
   }
@@ -37,7 +36,8 @@ const summaryStyle = {
   color: colours.Quaternary,
   margin: "0 0.3rem",
   marginTop:"0.1rem",
-  padding: "0.1rem"
+  padding: "0.1rem",
+  lineHeight: "1.8em"
 }
 
 //PropTypes

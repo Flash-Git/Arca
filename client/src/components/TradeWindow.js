@@ -99,10 +99,8 @@ const tradeWindowStyle = {
   flexDirection: "column",
   textAlign: "center",
   justifyContent: "center",
-  //background: colours.Primary,
-  padding: "0.4rem",
-  margin: "0 1.6rem",
-//  border: "solid",
+  padding: "0 0.4rem",
+  marginBottom: "0.4rem"
 }
 
 const boxesStyle = {
@@ -110,7 +108,6 @@ const boxesStyle = {
   flexWrap: "wrap",
   textAlign: "center",
   justifyContent: "center",
-  //background: colours.Primary,
 }
 
 const btnStyleUnsent = {
@@ -118,7 +115,7 @@ const btnStyleUnsent = {
   padding: "0.7em 5em",
   border: "none",
   cursor: "pointer",
-  color: "#fff",
+  color: colours.Quaternary,
   fontWeight: "bold",
   alignSelf: "center",
 }
