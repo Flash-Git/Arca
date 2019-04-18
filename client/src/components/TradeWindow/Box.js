@@ -17,6 +17,7 @@ class Box extends Component {
     super(props);
     this.state = {
       satisfied: satisfiedStatus.FALSE,
+      partnerNonce: 0,
       localMethods: [],
       chainMethods: []
     }
@@ -96,6 +97,7 @@ class Box extends Component {
         
       let count = 0;
       let ercAbi = [];
+      let partnerNonce = 0;
 
       try{
         boxContract = await new window.web3.eth.Contract(abi, AppAddress);
@@ -110,9 +112,15 @@ class Box extends Component {
             from: add1
           });
         }
-      } catch(e){
+
+        partnerNonce = await boxContract.methods.getNonce(add2, add1).call({
+          from: add1
+        });
+        partnerNonce = +partnerNonce;
+      }catch(e){
         return;
       }
+      this.setState({ partnerNonce });
       
       if(count === 0){
         continue;
@@ -148,6 +156,7 @@ class Box extends Component {
             offer.symbol = "";
             console.log(e);
           }
+          this.remove(offer.id, 0);
           offers.push(offer);
         } catch(e){
           console.error(e);
@@ -161,10 +170,14 @@ class Box extends Component {
     this.props.setCount(this.props.boxNum, offers.length);
   }
 
-  remove = (id) => {
-    let localMethods = this.state.localMethods.filter(meth => meth.id !== id);
-    let chainMethods = this.state.chainMethods.filter(meth => meth.id !== id);
-    this.setState({ localMethods, chainMethods });
+  remove = (id, type) => {
+    if(type === 0){
+      let localMethods = this.state.localMethods.filter(meth => meth.id !== id);
+      this.setState({ localMethods });
+    }else{
+      let chainMethods = this.state.chainMethods.filter(meth => meth.id !== id);
+      this.setState({ chainMethods });
+    }
   }
 
   render() {
@@ -190,7 +203,7 @@ class Box extends Component {
         </div>
         {this.props.addresses[0].length === 0 ? "" :
           <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
-            isUser={ this.props.isUser } connected={ this.props.connected } count={ this.props.count } />
+            isUser={ this.props.isUser } connected={ this.props.connected } partnerNonce={ this.state.partnerNonce } />
         }
         { this.props.isUser ?
           <SubmitBox address={ this.props.addresses[0] } addMethod={ this.addLocalMethod } erc={ this.props.erc }
