@@ -52,15 +52,12 @@ class TradeWindow extends Component {
         })
         .on("receipt", receipt => {
           this.setState({ executedStatus: executedStatus.TRUE });
-        })
-        .on("confirmation", (confirmationNumber, receipt) => {
-          if(confirmationNumber === 3){
-            console.log("receipt: " + receipt);
-          }
+          alert("Trade Executed!");
         })
         .on("error", error => {
           console.error(error);
           this.setState({ executedStatus: executedStatus.FALSE });
+          alert("Trade Failed");
         });
     } catch(e){
       console.error(e);
