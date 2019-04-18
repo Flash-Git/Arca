@@ -131,7 +131,7 @@ class SubmitBox extends Component {
         <input
           type="text"
           name="type"
-          placeholder="'ERC20'/'ERC721'"
+          placeholder="ERC20 / ERC721"
           value={ this.state.type }
           onChange={ this.onChange }
         />
