@@ -128,11 +128,9 @@ const preTradeStyle = {
   display: "flex",
   textAlign: "center",
   justifyContent: "center",
-  //background: colours.Primary,
   padding: "0.4rem 0.2rem",
   marginTop: "0",
   color: colours.Quaternary,
-  //border: "solid",
   flexDirection: "row"
 }
 
