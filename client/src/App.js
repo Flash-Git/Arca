@@ -101,23 +101,39 @@ class App extends Component {
     return(
       <div className="App">
         <Header />
-        <UserInfo enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } addErc={ this.addErc } />
-          <div style={ mainStyle } >
+        <div id="section-main" className="section" style={ mainStyle } >
+          <div style={ leftStyle } >
             <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses }
               isUser={ this.state.userBox } connected={ this.state.connected }/>
-            {/*<Help />*/}
             <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds }
-              userBox={ this.state.userBox } connected={ this.state.connected } erc={ this.state.erc } />
+            userBox={ this.state.userBox } connected={ this.state.connected } erc={ this.state.erc } />
           </div>
+          <div style={ rightStyle } >
+            <UserInfo enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } addErc={ this.addErc } />
+          </div>
+        </div>
       </div>
     );
   }
 }
 
 const mainStyle = {
-  margin: "0",
-  marginRight: "10.7rem",
-  padding: "0"
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  flexWrap: "nowrap",
+}
+
+const leftStyle = {
+  display: "flex",
+  flexDirection: "column",
+  minWidth: "28rem"
+}
+
+const rightStyle = {
+  display: "flex",
+  flexDirection: "column",
+  maxHeight: "100%"
 }
 
 export default App;
