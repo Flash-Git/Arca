@@ -56,13 +56,12 @@ class Satisfied extends Component {
 
     try{
       contract = await new window.web3.eth.Contract(abi, AppAddress);
-    }catch(e){//UNCLEAN
+    }catch(e){
       console.log(e);
     }
     try{
-      contract.methods.acceptTrade(add2, this.props.count).send({
+      contract.methods.acceptTrade(add2, this.props.partnerNonce).send({
         from: add1
-        //TODO estimate gas
       })
         .on("transactionHash", hash => {
           console.log(hash);
@@ -218,7 +217,7 @@ const btnStyle = {
   margin: "0.2rem",
   padding: "0.6rem 1.1rem",
   cursor: "pointer",
-  borderRadius: "18%",
+  borderRadius: "11%",
 }
 
 const btnStyleAccepted = {
@@ -258,7 +257,7 @@ Satisfied.propTypes = {
   addresses: PropTypes.array.isRequired,
   isUser: PropTypes.bool.isRequired,
   connected: PropTypes.bool.isRequired,
-  count: PropTypes.number.isRequired //Partner box count
+  partnerNonce: PropTypes.number.isRequired
 }
 
 export default Satisfied;
