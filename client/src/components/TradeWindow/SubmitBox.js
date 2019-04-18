@@ -121,34 +121,36 @@ class SubmitBox extends Component {
   render() {
     return(
       <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
-        <input
+        <input style={ this.state.contractAdd.length !== 42  ?
+            {width:"24em", border: "solid 1px red", margin: "0.2rem"} : {width:"24em", border: "solid 2px green", margin: "0.2rem"} }
           type="text"
           name="contractAdd"
           placeholder="Token's Contract Address"
           value={ this.state.contractAdd }
           onChange={ this.onChange }
         />
-        <input
+        <input style={ this.state.type.includes("20")||this.state.type.includes("721") ?
+            {width:"10em", border: "solid 2px green", margin: "0.2rem"} : {width:"10em", border: "solid 1px red", margin: "0.2rem"} }
           type="text"
           name="type"
           placeholder="ERC20 / ERC721"
           value={ this.state.type }
           onChange={ this.onChange }
         />
-        <input
+        <input style={{ width:"10em", margin: "0.2rem" }}
           type="text"
           name="amountId"
           placeholder="Amount / ID"
           value={ this.state.amountId }
           onChange={ this.onChange }
         />
-        <input
+        <input style={ btnStyle }
           type="submit"
           name="addOffer"
           value="Add Offer"
           className="btn"
         />
-        <button onClick={ this.allowErc } className="btn">
+        <button style={ btnStyle } onClick={ this.allowErc } className="btn">
           Enable
         </button>
       </form>
@@ -163,6 +165,18 @@ const methodStyle = {
   justifyContent: "center",
   background: colours.Secondary,
   color: colours.Quaternary
+}
+
+const btnStyle = {
+  background: colours.User,
+  padding: "0.35rem 0.5rem",
+  border: "none",
+  borderRadius: "0.4rem",
+  cursor: "pointer",
+  color: "#fff",
+  fontWeight: "bold",
+  margin: "0.2rem 0.5rem",
+  marginTop: "0.4rem"
 }
 
 //PropTypes
