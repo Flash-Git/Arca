@@ -127,6 +127,12 @@ contract DAppBoxSoft {
     prtnerBox.countErc20 = 0;
     senderBox.countErc721 = 0;
     prtnerBox.countErc721 = 0;
+    
+    emit BoxCountModifiedERC20(msg.sender, _tradePartner, 0, senderBox.nonce);
+    emit BoxCountModifiedERC20(_tradePartner, msg.sender, 0, prtnerBox.nonce);
+
+    emit BoxCountModifiedERC721(msg.sender, _tradePartner, 0, senderBox.nonce);
+    emit BoxCountModifiedERC721(_tradePartner, msg.sender, 0, prtnerBox.nonce);
 
     emit TradeExecuted(msg.sender, _tradePartner);
   }
@@ -152,6 +158,8 @@ contract DAppBoxSoft {
       box.offersErc20[_index] = offer;
     }else{
       box.offersErc20.push(offer);
+    }
+    if(box.countErc20 <= _index){
       box.countErc20++;
     }
 
@@ -245,13 +253,17 @@ contract DAppBoxSoft {
   }
 
   function directErc20Transfer(address _add1, address _add2, address _erc20Address, uint256 _amount) private {
-    bool success = Erc20(_erc20Address).transferFrom(_add1, _add2, _amount);
-    require(success, "Failed to transfer erc20 tokens");
+    //Not all "erc20" transfers have a return DESPITE THE STANDARD?
+    //bool success = Erc20(_erc20Address).transferFrom(_add1, _add2, _amount);
+    //require(success, "Failed to transfer erc20 tokens");
+    uint startBalance = Erc20(_erc20Address).balanceOf(_add2);
+    Erc20(_erc20Address).transferFrom(_add1, _add2, _amount);
+    assert(startBalance + _amount == Erc20(_erc20Address).balanceOf(_add2));
   }
 
   function directErc721Transfer(address _add1, address _add2, address _erc721Address, uint256 _id) private {
-    Erc721(_erc721Address).safeTransferFrom(_add1, _add2, _id); //Erc 721 transfers don't require a return?
-    require(Erc721(_erc721Address).ownerOf(_id) == _add2, "Failed to transfer erc721 token");
+    Erc721(_erc721Address).safeTransferFrom(_add1, _add2, _id); //erc721 transfers don't require a return?
+    assert(Erc721(_erc721Address).ownerOf(_id) == _add2);
   }
 
 }
