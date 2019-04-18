@@ -103,8 +103,8 @@ contract DAppBoxSoft {
 
   function executeTrade(address _tradePartner) public {
     //Reference
-    Box memory senderBox = boxes[msg.sender][_tradePartner];
-    Box memory prtnerBox = boxes[_tradePartner][msg.sender];
+    Box storage senderBox = boxes[msg.sender][_tradePartner];
+    Box storage prtnerBox = boxes[_tradePartner][msg.sender];
 
     //Check Nonces
     require(senderBox.nonce+1 == prtnerBox.partnerNonce, "Sender not satisfied");
@@ -121,6 +121,13 @@ contract DAppBoxSoft {
     //Drop Satisfaction
     senderBox.partnerNonce = 0;
     prtnerBox.partnerNonce = 0;
+
+    //Wipe (Not Necessary)
+    senderBox.countErc20 = 0;
+    prtnerBox.countErc20 = 0;
+    senderBox.countErc721 = 0;
+    prtnerBox.countErc721 = 0;
+
     emit TradeExecuted(msg.sender, _tradePartner);
   }
 
