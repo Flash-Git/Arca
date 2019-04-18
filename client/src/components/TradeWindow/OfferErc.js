@@ -40,7 +40,8 @@ class OfferErc extends Component {
 
     try{
       if(!this.props.local) this.broadcastRemove(this.props.method);
-      this.props.remove(this.props.method.id);
+      this.props.remove(this.props.method.id, 0);
+      this.props.remove(this.props.method.id, 1);
     }catch(e){
       console.error(e);
     }
@@ -62,8 +63,8 @@ class OfferErc extends Component {
           console.log("txHash: " + hash);
         })
         .on("receipt", receipt => {
-          this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
-          this.props.remove(this.props.method.id);
+          //this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
+          //this.props.remove(this.props.method.id);
         })
         .on("error", console.error);
       } else if(method.type === 1){
@@ -74,8 +75,8 @@ class OfferErc extends Component {
           console.log("txHash: " + hash);
         })
         .on("receipt", receipt => {
-          this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
-          this.props.remove(this.props.method.id);
+          //this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
+          //this.props.remove(this.props.method.id);
         })
         .on("error", console.error);
       }
@@ -113,15 +114,10 @@ class OfferErc extends Component {
 
   buttonText = () => {
     if(this.props.method.sendStatus === sendStatus.SENT){
-      if(!this.props.isUser) {
-        return <span> Sent </span>;
-      } else {
-        return <span> Sent<br />(Resend) </span>;
-      }
-    } else if(this.props.method.sendStatus === sendStatus.SENDING) {
-      return <span> Sending </span>;
-    } else {
-      return <span> Send Offer </span>;
+      return <span> Resend </span>;
+    } 
+    if(this.props.method.sendStatus === sendStatus.UNSENT){
+      return <span> Send </span>;      
     }
   }
 
@@ -140,6 +136,15 @@ class OfferErc extends Component {
 
   render() {
     const method = this.props.method;
+    if(!this.props.isUser){
+      return(
+        <div className="method" style={ methodStyle }>
+          <div className="display" style={ displayStyle }>
+            { this.offer(method) }
+          </div>
+        </div>
+      );
+    }
     return(
       <div className="method" style={ methodStyle }>
         <button onClick={ this.removeMethod } style={ btnStyleX }>
@@ -148,7 +153,8 @@ class OfferErc extends Component {
         <div className="display" style={ displayStyle }>
           { this.offer(method) }
         </div>
-        <button onClick={ this.sendMethod } style={( method.sendStatus === sendStatus.SENT ? btnStyleSent : btnStyleUnsent) }>
+        <button onClick={ this.sendMethod } style={( method.sendStatus === sendStatus.SENT ?
+          {...btnStyleSend, ...btnStyleSent} : {...btnStyleSend, ...btnStyleUnsent}) }>
           { this.buttonText() }
         </button>
       </div>
@@ -180,11 +186,9 @@ const displayStyle = {
   textAlign: "start",
 }
 
-const btnStyleUnsent = {
+const btnStyleSend = {
   gridColumn: "3",
-  background: "#660000",
   border: "none",
-  borderRadius: "5%",
   cursor: "pointer",
   color: colours.Quaternary,
   width: "5rem",
@@ -192,25 +196,23 @@ const btnStyleUnsent = {
   margin: "0.2rem"
 }
 
+const btnStyleUnsent = {
+  background: colours.User
+}
+
 const btnStyleSent = {
-  gridColumn: "3",
-  background: "#441111",
-  border: "none",
-  borderRadius: "5%",
-  color: colours.Quaternary,
-  width: "5rem",
-  fontWeight: "bold",
-  margin: "0.2rem"
+  background: colours.User
 }
 
 const btnStyleX = {
   gridColumn: "1",
-  background: "#441111",
+  background: "#752535",
+  cursor: "pointer",
   border: "none",
   color: colours.Quaternary,
-  width: "2.5rem",
+  width: "1.4rem",
   fontWeight: "bold",
-  margin: "0.2rem"
+  margin: "0.65rem"
 }
 
 //PropTypes
