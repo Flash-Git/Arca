@@ -115,6 +115,7 @@ class TokenInfo extends Component {
         { this.state.erc20s.map(erc =>
           <Erc20 key={ erc.id } erc={ erc } addErc={ this.props.addErc } />
         ) }
+        <br/>
         <h4 style={ h3Style }>ERC721</h4>
         { this.state.erc721s.map(erc =>
           <Erc721 key={ erc.id } erc={ erc } addErc={ this.props.addErc } />
