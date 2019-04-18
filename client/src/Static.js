@@ -1,5 +1,5 @@
 //Rinkeby
-const AppAddress = "0xBECce46A823FA796cc69F13D83e37ad51300F74d";
+const AppAddress = "0x53dEd708361Ad49a8f742624E249bab79a1E875B";
 const executedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
 const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
 const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
