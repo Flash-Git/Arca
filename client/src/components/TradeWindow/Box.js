@@ -183,7 +183,7 @@ class Box extends Component {
   render() {
     return(
       <div className="box" style={ this.state.satisfied === satisfiedStatus.TRUE ?
-        {...boxStyle, ...{border: "solid green 2px" }} : {...boxStyle, ...{border: "solid red 2px" }} }>
+        {...boxStyle, ...{border: "solid green 1px" }} : {...boxStyle, ...{border: "solid red 1px" }} }>
         <Summary address={ this.props.addresses[0] } ensAdd={ this.props.ensAdd } />
         <div className="container" style={ containerStyle }>
           <div>
@@ -225,9 +225,10 @@ const boxStyle = {
   background: colours.Secondary,
   color: colours.Quaternary,
   minHeight: "8rem",
-  fontWeight: "bold",
+  fontWeight: "normal",
   width: "50rem",
-  padding: "0.3rem"
+  padding: "0.3rem",
+  boxShadow: "0px 0px 30px -1px rgba(0,0,0,0.3)"
 }
 
 const containerStyle = {

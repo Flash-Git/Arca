@@ -206,14 +206,15 @@ const satisfiedStyle = {
   color: colours.Quaternary,
   margin: "0.2rem",
   marginRight: "0.3rem",
-  lineHeight: "1.5em"
+  lineHeight: "1.5em",
+  fontWeight: "bold",
 }
 
 const btnStyle = {
   gridColumn: "2",
   gridRow: "1 / 3",
   border: "none",
-  color: colours.Quaternary,
+  color: "#FFFFFF",
   fontWeight: "bold",
   margin: "0.2rem",
   padding: "0.6rem 1.1rem",

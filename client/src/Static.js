@@ -6,7 +6,8 @@ const satisfiedStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALS
 const userBoxStatus = Object.freeze({ "NO_BOX":0, "FIRST_BOX":2, "SECOND_BOX":3 });
 const listErc20 = ["0xF256D0FFD6B42653269881356CF68D178dfc907d", "0xc778417E063141139Fce010982780140Aa0cD5Ab"]; //Rinkeby
 const listErc721 = ["0x552DcaEBAF0F311fB43977Fa31f85F776217f446"]; //Rinkeby
-const colours = Object.freeze({ "Primary":"#343737", "Secondary":"#526062", "Quaternary":"#FFFFFF", "User":"#528669", "NotUser":"#253529" });
+//const colours = Object.freeze({ "Primary":"#343434", "Secondary":"#505050", "Quaternary":"#FFFFFF", "User":"#888888", "NotUser":"#253529" });
+const colours = Object.freeze({ "Primary":"#DEDEDE", "Secondary":"#ECECEC", "Quaternary":"#000000", "User":"#B9B9B9", "NotUser":"#253529" });
 
 export {
   AppAddress,

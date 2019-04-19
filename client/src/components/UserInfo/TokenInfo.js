@@ -131,11 +131,12 @@ const h3Style = {
 }
 
 const tokenInfoStyle = {
-  margin: "0.25rem",
+  margin: "1.5rem",
   padding: "0.6rem 0",
   paddingBottom: "0",
   borderRadius: "20px",
-  minHeight: "5rem"
+  minHeight: "5rem",
+  boxShadow: "0px 0px 20px 0px rgba(0,0,0,0.25)"  
 }
 
 //PropTypes

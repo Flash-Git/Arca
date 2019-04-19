@@ -112,7 +112,7 @@ const btnStyleUnsent = {
   padding: "0.7em 5em",
   border: "none",
   cursor: "pointer",
-  color: colours.Quaternary,
+  color: "#FFFFFF",
   fontWeight: "bold",
   alignSelf: "center",
 }
@@ -121,7 +121,7 @@ const btnStyleSent = {
   background: colours.User,
   padding: "0.7em 5em",
   border: "none",
-  color: "#fff",
+  color: "#FFFFFF",
   fontWeight: "bold",
   alignSelf: "center",
 }

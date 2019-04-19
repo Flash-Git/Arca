@@ -25,7 +25,7 @@ const web3StatusStyle = {
 }
 
 const btnStyleUnsent = {
-  background: "#660000",
+  background: "#AA0000",
   padding: "6px 26px",
   border: "none",
   borderRadius: "5%",
@@ -35,7 +35,7 @@ const btnStyleUnsent = {
 }
 
 const btnStyleSent = {
-  background: "#441111",
+  background: "#881111",
   padding: "6px 26px",
   border: "none",
   borderRadius: "5%",

@@ -153,14 +153,14 @@ const inputStyle= {
   width: "24em",
   textAlign: "center",
   margin: "0.2rem",
-  border: "solid 2px green"
+  border: "solid 1px green"
 }
 
 const badInputStyle= {
   width: "24em",
   textAlign: "center",
   margin: "0.2rem",
-  border: "solid 2px red"
+  border: "solid 1px red"
 }
 
 const btnStyle = {

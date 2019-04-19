@@ -46,8 +46,6 @@ const topStyle = {
 }
 
 const bottomStyle = {
-  margin: "0.45rem",
-  background: colours.Secondary,
   borderRadius: "20px",
   maxHeight: "26rem",//?
   overflowY: "auto",

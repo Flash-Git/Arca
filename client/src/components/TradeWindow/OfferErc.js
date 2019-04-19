@@ -126,7 +126,7 @@ class OfferErc extends Component {
       <img src={ makeBlockie(method.contractAdd) } width="18px" height="18px" alt="blockie" style={{ margin: "0.25rem 0.4rem", float: "left" }} />
       { method.type === 0 ? <div style={{ width: "4rem", margin: "0.2rem" }} >ERC20&nbsp;&nbsp;&nbsp;-</div> : 
           <div style={{ width: "4rem", margin: "0.2rem" }} >ERC721&nbsp;&nbsp;-</div> }
-      <div style={{ minWidth: "4rem", margin: "0.25rem" }} >
+      <div style={{ minWidth: "4rem", margin: "0.25rem", fontWeight: "normal" }} >
         { method.symbol }
       </div>
       { method.type === 0 ? <div style={{ minWidth: "6rem", margin: "0.25rem" }} >Amount:&nbsp;{ method.amountId } </div> :
@@ -171,7 +171,8 @@ const methodStyle = {
   background: colours.Primary,
   margin: "0.2rem",
   fontSize: "0.95em",
-  lineHeight: "1.4em"
+  lineHeight: "1.4em",
+  fontWeight: "normal",
 }
 
 const displayStyle = {
@@ -191,7 +192,7 @@ const btnStyleSend = {
   gridColumn: "3",
   border: "none",
   cursor: "pointer",
-  color: colours.Quaternary,
+  color: "#FFFFFF",
   width: "5rem",
   fontWeight: "bold",
   margin: "0.2rem"
@@ -207,14 +208,14 @@ const btnStyleSent = {
 
 const btnStyleX = {
   gridColumn: "1",
-  background: "#752535",
+  background: "#F24848",
   cursor: "pointer",
   border: "none",
   color: colours.Quaternary,
-  width: "1.9rem",
+  width: "1.2rem",
+  height: "1.2rem",
   fontWeight: "bold",
-  padding: "0.25rem",
-  margin: "0.25rem"
+  margin: "0.45rem"
 }
 
 //PropTypes

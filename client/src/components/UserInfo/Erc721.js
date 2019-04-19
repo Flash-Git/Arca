@@ -35,9 +35,10 @@ class Erc721 extends Component {
 
 const ercStyle = {
   textAlign: "left",
+  margin: "0.25rem",
   marginBottom: "0.5rem",
-  padding: "0.65rem",
-  borderRadius: "1rem",
+  padding: "0.4rem",
+  borderRadius: "0.4rem",
   background: colours.Primary
 }
 
@@ -60,6 +61,7 @@ const btnStyle = {
   textAlign: "center",
   justifyContent: "center",
   background: colours.User,
+  color: "#FFFFFF",
   border: "none",
   borderRadius: "30%",
   fontWeight: "bold",

@@ -1,12 +1,17 @@
 html {
+  /*
   background-color: #343737;
   background-image: radial-gradient(#303333, #343737, #434646);
+  */
+  background-color: #E9E9E9;
+  background-image: radial-gradient(#D9D9D9, #E9E9E9, #C9C9C9);
+  
   background-repeat: no-repeat;
   background-size: auto;
 }
 
 body {
-  background-color: #343737;
+  background-color: #E8E9E9;
   min-height: 100%;
   margin: 0;
   padding: 0;

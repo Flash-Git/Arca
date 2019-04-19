@@ -40,7 +40,8 @@ const textStyle = {
   color: colours.Quaternary,
   textAlign: "center",
   justifyContent: "center",
-  marginBottom: "0.7rem"
+  marginBottom: "0.7rem",
+  boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)"
 }
 
 export default Header;
