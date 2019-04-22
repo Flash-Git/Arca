@@ -70,11 +70,6 @@ class Satisfied extends Component {
           this.props.setSatisfied(satisfiedStatus.TRUE);
           this.setState({ isAccepted: satisfiedStatus.TRUE });
         })
-        .on("confirmation", (confirmationNumber, receipt) => {
-          if(confirmationNumber === 3){
-            console.log("receipt: " + receipt);
-          }
-        })
         .on("error", error => {
           this.props.setSatisfied(satisfiedStatus.FALSE);
           this.setState({ isAccepted: satisfiedStatus.FALSE });
@@ -223,7 +218,7 @@ const btnStyle = {
 }
 
 const btnStyleAccepted = {
-  background: colours.NotUser,
+  background: colours.User,
 }
 
 const btnStyleNotAccepted = {
