@@ -9,15 +9,15 @@ class Header extends Component {
     if(AppAddress !== ""){
       return <div style={ textStyle }>
         <span>
-          <img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{ marginRight:"1em", marginTop:"0.72em" }} />
+          <img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{...blockyStyle, ...{marginRight:"1em"} }} />
         </span>
-        <h1> DAPPBOX </h1>
+        <h1 style={{ padding: "0.55rem", margin: "0.8rem", boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.08)" }}> DAPPBOX </h1>
         <span>
-          <img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{ marginLeft:"1em", marginTop:"0.72em" }} />
+          <img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{...blockyStyle, ...{marginLeft:"1em"} }} />
         </span>
       </div>;
     } else {
-      return <h1> DAPPBOX </h1>;
+      return <h1 style={{ padding: "0.55rem", margin: "0.8rem", boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.08)" }}> DAPPBOX </h1>;
     }
   }
 
@@ -42,6 +42,12 @@ const textStyle = {
   justifyContent: "center",
   marginBottom: "0.7rem",
   boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.1)"
+}
+
+const blockyStyle = {
+  marginTop:"0.72em",
+  border:"solid 1px",
+  boxShadow: "0px 10px 15px 0px rgba(0,0,0,0.5)"
 }
 
 export default Header;
