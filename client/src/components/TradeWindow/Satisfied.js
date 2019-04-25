@@ -197,9 +197,9 @@ const satisfiedStyle = {
   justifyContent: "space-evenly",
   alignItems: "center",
   textAlign: "center",
-  background: colours.Primary,
+  background: colours.Secondary,
   color: colours.Quaternary,
-  margin: "0.2rem",
+  marginLeft: "0",
   marginRight: "0.3rem",
   marginBottom: "0.3rem",
   marginTop: "0.4rem",
@@ -235,7 +235,7 @@ const statusStyle = {
   width: "100%",
   margin: "0.2rem 0",
   color: colours.Quaternary,
-  background: colours.Primary,
+  background: colours.Secondary,
 }
 
 const statusStyleAccepted = {

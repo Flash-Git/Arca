@@ -170,15 +170,17 @@ const methodStyle = {
   justifyContent: "center",
   background: colours.Secondary,
   margin: "0.2rem",
-  marginLeft: "0rem",
+  marginLeft: "0",
+  marginRight: "0",
   fontSize: "0.95em",
   lineHeight: "1.4em",
   fontWeight: "normal",
+  boxShadow: "0px 5px 5px -5px rgba(0,0,0,0.5)"
 }
 
 const displayStyle = {
   gridColumn: "2 / 3",  
-  background: colours.Primary,
+  background: colours.Secondary,
   color: colours.Quaternary,
   margin: "0.1rem",
   fontSize: "0.95em",

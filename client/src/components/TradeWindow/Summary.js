@@ -32,12 +32,13 @@ const summaryStyle = {
   gridRow: "1",
   textAlign: "center",
   justifyContent: "center",
-  background: colours.Primary,
+  background: colours.Secondary,
   color: colours.Quaternary,
-  margin: "0 0.3rem",
+  margin: "0",
   marginTop:"0.1rem",
   padding: "0.1rem",
-  lineHeight: "1.8em"
+  lineHeight: "1.8em",
+  boxShadow: "0px 5px 5px -5px rgba(0,0,0,0.5)"
 }
 
 //PropTypes
