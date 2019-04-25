@@ -123,7 +123,7 @@ class OfferErc extends Component {
 
   offer = (method) => {
     return <>
-      <img src={ makeBlockie(method.contractAdd) } width="18px" height="18px" alt="blockie" style={{ margin: "0.25rem 0.4rem", float: "left" }} />
+      <img src={ makeBlockie(method.contractAdd) } width="18px" height="18px" alt="blockie" style={{ margin: "0.3rem 0.4rem", float: "left" }} />
       { method.type === 0 ? <div style={{ width: "4rem", margin: "0.2rem" }} >ERC20&nbsp;&nbsp;&nbsp;-</div> : 
           <div style={{ width: "4rem", margin: "0.2rem" }} >ERC721&nbsp;&nbsp;-</div> }
       <div style={{ minWidth: "4rem", margin: "0.25rem", fontWeight: "normal" }} >
@@ -148,7 +148,7 @@ class OfferErc extends Component {
     return(
       <div className="method" style={ methodStyle }>
         <button onClick={ this.removeMethod } style={ btnStyleX }>
-          x
+          &#10060;
         </button>
         <div className="display" style={ displayStyle }>
           { this.offer(method) }
@@ -211,14 +211,17 @@ const btnStyleSent = {
 
 const btnStyleX = {
   gridColumn: "1",
-  background: "#F24848",
   cursor: "pointer",
   border: "none",
+  background: colours.Secondary,
   color: colours.Quaternary,
-  width: "1.2rem",
-  height: "1.2rem",
-  fontWeight: "bold",
-  margin: "0.45rem"
+  textAlign: "center",
+  justifyContent: "center",
+  //width: "1.2rem",
+  //height: "1.2rem",
+  fontWeight: "normal",
+  fontSize: "130%",
+  marginLeft: "0.6rem",
 }
 
 //PropTypes
