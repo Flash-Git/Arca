@@ -201,6 +201,8 @@ const satisfiedStyle = {
   color: colours.Quaternary,
   margin: "0.2rem",
   marginRight: "0.3rem",
+  marginBottom: "0.3rem",
+  marginTop: "0.4rem",
   lineHeight: "1.5em",
   fontWeight: "bold",
 }
@@ -228,12 +230,12 @@ const btnStyleNotAccepted = {
 const statusStyle = {
   gridColumn: "2",
   gridRow: "1 / 3",
-  color: colours.Quaternary,
   fontWeight: "bold",
   padding: "0.3rem 0",
   width: "100%",
   margin: "0.2rem 0",
-  background: colours.Secondary,
+  color: colours.Quaternary,
+  background: colours.Primary,
 }
 
 const statusStyleAccepted = {
