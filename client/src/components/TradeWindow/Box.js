@@ -182,8 +182,7 @@ class Box extends Component {
 
   render() {
     return(
-      <div className="box" style={ this.state.satisfied === satisfiedStatus.TRUE ?
-        {...boxStyle, ...{border: "solid green 1px" }} : {...boxStyle, ...{border: "solid red 1px" }} }>
+      <div className="box" style={ boxStyle } >
         <Summary address={ this.props.addresses[0] } ensAdd={ this.props.ensAdd } />
         <div className="container" style={ containerStyle }>
           <div>
