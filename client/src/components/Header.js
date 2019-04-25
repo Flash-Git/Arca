@@ -8,19 +8,13 @@ class Header extends Component {
   headerText = () => {
     if(AppAddress !== ""){
       return <div style={ textStyle }>
-        <span>
-          <img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{...blockyStyle, ...{marginRight:"1em"} }} />
-        </span>
-        <h1 style={{ padding: "0.55rem", margin: "0.8rem", boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.04)" }}> ARCA </h1>
-        <span>
-          <img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{...blockyStyle, ...{marginLeft:"1em"} }} />
-        </span>
+        <h1 style={{ padding: "0.55rem", margin: "0.8rem", boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.04)" }}> A R C A </h1>
       </div>;
     } else {
-      return <h1 style={{ padding: "0.55rem", margin: "0.8rem", boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.08)" }}> ARCA </h1>;
+      return <h1 style={{ padding: "0.55rem", margin: "0.8rem", boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.08)" }}> A R C A </h1>;
     }
   }
-
+  //<span><img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{...blockyStyle, ...{marginLeft:"1em"} }} /></span>
   render() {
     return(
       <header id="section-header" className="section" style={ headerStyle }>
