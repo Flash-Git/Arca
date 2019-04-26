@@ -122,7 +122,7 @@ class SubmitBox extends Component {
     return(
       <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
         <input style={ this.state.contractAdd.length !== 42  ?
-            {width:"24em", border: "solid 1px red", margin: "0.2rem"} : {width:"24em", border: "solid 2px green", margin: "0.2rem"} }
+            {width:"24em", borderLeft: "solid 2px red", borderStyle: "groove", margin: "0.2rem"} : {width:"24em", borderLeft: "solid 2px green", borderStyle: "groove", margin: "0.2rem"} }
           type="text"
           name="contractAdd"
           placeholder="Token's Contract Address"
@@ -130,14 +130,14 @@ class SubmitBox extends Component {
           onChange={ this.onChange }
         />
         <input style={ this.state.type.includes("20")||this.state.type.includes("721") ?
-            {width:"10em", border: "solid 2px green", margin: "0.2rem"} : {width:"10em", border: "solid 1px red", margin: "0.2rem"} }
+            {width:"10em", borderLeft: "solid 2px green", borderStyle: "groove", margin: "0.2rem"} : {width:"10em", borderLeft: "solid 2px red", borderStyle: "groove", margin: "0.2rem"} }
           type="text"
           name="type"
           placeholder="ERC20 / ERC721"
           value={ this.state.type }
           onChange={ this.onChange }
         />
-        <input style={{ width:"10em", margin: "0.2rem" }}
+        <input style={{ borderStyle: "groove", width:"10em", margin: "0.2rem" }}
           type="text"
           name="amountId"
           placeholder="Amount / ID"

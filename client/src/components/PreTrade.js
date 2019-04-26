@@ -149,18 +149,20 @@ const formStyle = {
   color: colours.Quaternary
 }
 
-const inputStyle= {
+const inputStyle = {
   width: "24em",
   textAlign: "center",
   margin: "0.2rem",
-  border: "solid 1px green"
+  borderLeft: "solid 2px green",
+  borderStyle: "groove"
 }
 
-const badInputStyle= {
+const badInputStyle = {
   width: "24em",
   textAlign: "center",
   margin: "0.2rem",
-  border: "solid 1px red"
+  borderLeft: "solid 2px red",
+  borderStyle: "groove"
 }
 
 const btnStyle = {
