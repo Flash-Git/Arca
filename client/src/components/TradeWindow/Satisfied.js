@@ -211,7 +211,7 @@ const btnStyle = {
   gridColumn: "2",
   gridRow: "1 / 3",
   border: "none",
-  color: "#FFFFFF",
+  color: colours.Secondary,
   fontWeight: "bold",
   margin: "0.2rem",
   padding: "0.6rem 1.1rem",
