@@ -7,7 +7,6 @@ class Footer extends Component {
   render() {
     return(
       <footer id="section-footer" className="section" style={ footerStyle }>
-        footer content
       </footer>
     );
   }
@@ -16,7 +15,7 @@ class Footer extends Component {
 const footerStyle = {
   backgroundColor: colours.Accent,
   color: "#000",
-  height: "3rem",
+  height: "6rem",
   marginTop: "auto"
 }
 

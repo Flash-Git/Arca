@@ -25,7 +25,7 @@ class Header extends Component {
 }
 
 const headerStyle = {
-  backgroundColor: colours.Secondary
+  //backgroundColor: colours.Secondary
 }
 
 const textStyle = {
