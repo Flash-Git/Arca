@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import makeBlockie from "ethereum-blockies-base64";
+//import makeBlockie from "ethereum-blockies-base64";
 
 import { AppAddress, colours } from "../Static";
 
@@ -39,10 +39,10 @@ const textStyle = {
   letterSpacing: "15px"
 }
 
-const blockyStyle = {
+/*const blockyStyle = {
   marginTop:"0.72em",
   border:"solid 1px",
   boxShadow: "0px 10px 15px 0px rgba(0,0,0,0.5)"
-}
+}*/
 
 export default Header;
