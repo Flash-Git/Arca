@@ -25,7 +25,9 @@ class Header extends Component {
 }
 
 const headerStyle = {
-  //backgroundColor: colours.Secondary
+  backgroundColor: colours.Secondary,
+  boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.3)",
+  marginBottom: "1rem"
 }
 
 const textStyle = {
@@ -35,7 +37,6 @@ const textStyle = {
   textAlign: "center",
   justifyContent: "center",
   marginBottom: "0.7rem",
-  boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.3)",
   letterSpacing: "15px"
 }
 

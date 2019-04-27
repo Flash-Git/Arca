@@ -97,7 +97,7 @@ const tradeWindowStyle = {
   textAlign: "center",
   justifyContent: "center",
   padding: "0 0.4rem",
-  marginBottom: "0.4rem"
+  marginBottom: "1.2rem"
 }
 
 const boxesStyle = {
