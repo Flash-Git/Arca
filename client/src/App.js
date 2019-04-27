@@ -122,6 +122,7 @@ class App extends Component {
 const pageStyle = {
   display: "flex",
   flexDirection: "column",
+  justifyContent: "space-around",
   minHeight: "100vh"
 }
 
@@ -135,7 +136,7 @@ const mainStyle = {
 const leftStyle = {
   display: "flex",
   flexDirection: "column",
-  minWidth: "28rem"
+  minWidth: "10rem"
 }
 
 const rightStyle = {

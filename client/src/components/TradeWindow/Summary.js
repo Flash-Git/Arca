@@ -38,7 +38,7 @@ const summaryStyle = {
   marginTop:"0.1rem",
   padding: "0.1rem",
   lineHeight: "1.8em",
-  boxShadow: "0px 5px 5px -5px rgba(0,0,0,0.5)"
+  boxShadow: "0px 5px 7px -5px rgba(0,0,0,0.65)"
 }
 
 //PropTypes

@@ -27,14 +27,15 @@ class Header extends Component {
 const h1Style = {
   padding: "0.45rem",
   margin: "0.6rem",
-  marginBottom: "0.9rem",
-  boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.04)"
+  marginBottom: "1rem",
+  boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.02)",
 }
 
 const headerStyle = {
   backgroundColor: colours.Secondary,
   boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.3)",
-  marginBottom: "1rem"
+  marginBottom: "1rem",
+  width: "100%"
 }
 
 const textStyle = {

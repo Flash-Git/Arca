@@ -220,11 +220,12 @@ const boxStyle = {
   gridTemplateColumns: "4fr 1fr",
   textAlign: "center",
   justifyContent: "center",
-  margin: "1rem 0.5rem",
+  margin: "1rem 1.25rem",
   background: colours.Secondary,
   color: colours.Quaternary,
   minHeight: "8rem",
   fontWeight: "normal",
+  minWidth: "10rem",
   width: "50rem",
   padding: "0.3rem",
   boxShadow: "0px 0px 25px -2px rgba(0,0,0,0.25)"

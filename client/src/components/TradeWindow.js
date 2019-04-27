@@ -96,7 +96,8 @@ const tradeWindowStyle = {
   flexDirection: "column",
   textAlign: "center",
   justifyContent: "center",
-  padding: "0 0.4rem",
+  //padding: "0 0.4rem",
+  //paddingRight: "0",
   marginBottom: "1.2rem"
 }
 

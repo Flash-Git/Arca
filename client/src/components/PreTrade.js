@@ -96,7 +96,7 @@ class PreTrade extends Component {
   render() {
     return(
       <div id="section-preTrade" className="section" style={ preTradeStyle }>
-        <form onSubmit={ this.onSubmit } className="method" style={ formStyle }>
+        <form onSubmit={ this.onSubmit } className="form" style={ formStyle }>
           <div style={ addressesStyle }>
             <input
                 type="text"
@@ -116,7 +116,7 @@ class PreTrade extends Component {
             />
           </div>
         </form>
-        <div style={ addressesStyle }>
+        <div style={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
           <button onClick={ this.onSubmit } style={ btnStyle }>Load Boxes</button>
         </div>
       </div>
@@ -125,13 +125,25 @@ class PreTrade extends Component {
 }
 
 const preTradeStyle = {
+  //minWidth: "10rem",
   display: "flex",
+  flexWrap: "wrap",
+  flexDirection: "row",
   textAlign: "center",
   justifyContent: "center",
-  padding: "0.4rem 0.2rem",
+  margin: "0.4rem 0",
+  padding: "0 0.4rem",
   marginTop: "0",
   color: colours.Quaternary,
-  flexDirection: "row"
+}
+
+const formStyle = {
+  //minWidth: "10rem",
+  textAlign: "center",
+  justifyContent: "center",
+  color: colours.Quaternary,
+  width: "20em",
+  maxWidth: "100%"
 }
 
 const addressesStyle = {
@@ -140,27 +152,22 @@ const addressesStyle = {
   flexWrap: "wrap",
   justifyContent: "center",
   textAlign: "center",
-  margin: "0.2rem"
-}
-
-const formStyle = {
-  textAlign: "center",
-  justifyContent: "center",
-  color: colours.Quaternary
+  margin: "0.2rem 0",
+  width: "20em",
+  minWidth: "6em",
+  maxWidth: "100%"
 }
 
 const inputStyle = {
-  width: "24em",
   textAlign: "center",
-  margin: "0.2rem",
+  margin: "0.2rem 0",
   borderLeft: "solid 2px green",
   borderStyle: "groove"
 }
 
 const badInputStyle = {
-  width: "24em",
   textAlign: "center",
-  margin: "0.2rem",
+  margin: "0.2rem 0",
   borderLeft: "solid 2px red",
   borderStyle: "groove"
 }

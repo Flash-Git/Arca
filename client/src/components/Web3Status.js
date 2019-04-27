@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import { colours } from "../Static";
 
 class Web3Status extends Component {
 
@@ -25,20 +26,20 @@ const web3StatusStyle = {
 }
 
 const btnStyleUnsent = {
-  background: "#AA0000",
+  background: colours.Accent,
   padding: "6px 26px",
   border: "none",
-  borderRadius: "5%",
+  borderRadius: "1rem",
   cursor: "pointer",
   color: "#fff",
   fontWeight: "bold"
 }
 
 const btnStyleSent = {
-  background: "#881111",
+  background: "#A6B2B8",
   padding: "6px 26px",
   border: "none",
-  borderRadius: "5%",
+  borderRadius: "0",
   color: "#fff",
   fontWeight: "bold",
 }
