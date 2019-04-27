@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import UserInfo from "./components/UserInfo";
 import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
+import Footer from "./components/Footer";
 
 import { userBoxStatus } from "./Static";
 import "./App.css";
@@ -99,7 +100,7 @@ class App extends Component {
 
   render() {
     return(
-      <div className="App">
+      <div className="App" style={ pageStyle }>
         <Header />
         <div id="section-main" className="section" style={ mainStyle } >
           <div style={ leftStyle } >
@@ -112,9 +113,16 @@ class App extends Component {
             <UserInfo enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } addErc={ this.addErc } />
           </div>
         </div>
+        <Footer />
       </div>
     );
   }
+}
+
+const pageStyle = {
+  display: "flex",
+  flexDirection: "column",
+  minHeight: "100vh"
 }
 
 const mainStyle = {
