@@ -8,10 +8,10 @@ class Header extends Component {
   headerText = () => {
     if(AppAddress !== ""){
       return <div style={ textStyle }>
-        <h1 style={{ padding: "0.55rem", margin: "0.8rem", boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.04)" }}> A R C A </h1>
+        <h1 style={ h1Style }> A R C A </h1>
       </div>;
     } else {
-      return <h1 style={{ padding: "0.55rem", margin: "0.8rem", boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.04)" }}> A R C A </h1>;
+      return <h1 style={ h1Style }> A R C A </h1>;
     }
   }
   //<span><img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{...blockyStyle, ...{marginLeft:"1em"} }} /></span>
@@ -22,6 +22,13 @@ class Header extends Component {
       </header>
     );
   }
+}
+
+const h1Style = {
+  padding: "0.45rem",
+  margin: "0.6rem",
+  marginBottom: "0.9rem",
+  boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.04)"
 }
 
 const headerStyle = {
@@ -36,7 +43,7 @@ const textStyle = {
   color: colours.Quaternary,
   textAlign: "center",
   justifyContent: "center",
-  marginBottom: "0.7rem",
+  marginBottom: "0",
   letterSpacing: "15px"
 }
 

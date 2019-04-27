@@ -1,13 +1,13 @@
 html {
-  background-color: #F1F1F1;
-  background-image: radial-gradient(#E5E5E5, #F1F1F1, #E0E0E0);
+  background-color: #EBEBEB;
+  background-image: radial-gradient(#E0E0E0, #EBEBEB, #DADADA);
   
   background-repeat: no-repeat;
   background-size: auto;
 }
 
 body {
-  background-color: #F1F1F1;
+  background-color: #EBEBEB;
   min-height: 100%;
   margin: 0;
   padding: 0;
