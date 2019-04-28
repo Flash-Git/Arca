@@ -39,10 +39,10 @@ const ercStyle = {
   marginBottom: "0.5rem",
   padding: "0.4rem",
   borderRadius: "0.4rem",
-  background: colours.Primary
+  background: colours.Secondary
 }
 
-const liStyle= {
+const liStyle = {
   display: "flex",
   listStyleType: "none",
   fontSize: "72%",

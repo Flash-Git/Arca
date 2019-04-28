@@ -131,9 +131,8 @@ const preTradeStyle = {
   flexDirection: "row",
   textAlign: "center",
   justifyContent: "center",
-  margin: "0.4rem 0",
   padding: "0 0.4rem",
-  marginTop: "0",
+  margin: "0",
   color: colours.Quaternary,
 }
 
@@ -150,38 +149,38 @@ const addressesStyle = {
   display: "flex",
   flexDirection: "column",
   flexWrap: "wrap",
-  justifyContent: "center",
+  justifyContent: "space-between",
   textAlign: "center",
-  margin: "0.2rem 0",
   width: "20em",
   minWidth: "6em",
-  maxWidth: "100%"
+  maxWidth: "100%",
 }
 
 const inputStyle = {
   textAlign: "center",
   margin: "0.2rem 0",
   borderLeft: "solid 2px green",
-  borderStyle: "groove"
+  borderStyle: "groove",
+  backgroundColor: colours.Primary
 }
 
 const badInputStyle = {
   textAlign: "center",
   margin: "0.2rem 0",
   borderLeft: "solid 2px red",
-  borderStyle: "groove"
+  borderStyle: "groove",
+  backgroundColor: colours.Primary
 }
 
 const btnStyle = {
   background: colours.User,
-  padding: "14px 18px",
+  padding: "12px 16px",
   border: "none",
   borderRadius: "0.4rem",
   cursor: "pointer",
-  color: "#fff",
+  color: colours.Secondary,
   fontWeight: "bold",
-  margin: "0 1rem",
-  marginTop: "0.2rem",
+  margin: "0.5rem",
 }
 
 //PropTypes
