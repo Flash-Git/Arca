@@ -104,7 +104,7 @@ class PreTrade extends Component {
                 placeholder="Address 1"
                 value={ this.state.input1 }
                 onChange={ this.onChange1 }
-                style={ (this.state.validInput1 ? inputStyle : badInputStyle) }
+                style={ (this.state.validInput1 ? {...inputStyle, ...{ marginBottom: "0.1rem" }} : {...badInputStyle, ...{ marginBottom: "0.1rem" }}) }
               />
             <input
               type="text"
@@ -149,7 +149,7 @@ const addressesStyle = {
   display: "flex",
   flexDirection: "column",
   flexWrap: "wrap",
-  justifyContent: "space-between",
+  justifyContent: "center",
   textAlign: "center",
   width: "20em",
   minWidth: "6em",
