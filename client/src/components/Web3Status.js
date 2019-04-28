@@ -31,17 +31,18 @@ const btnStyleUnsent = {
   border: "none",
   borderRadius: "1rem",
   cursor: "pointer",
-  color: "#fff",
+  color: "#FFFFFF",
   fontWeight: "bold"
 }
 
 const btnStyleSent = {
-  background: "#A6B2B8",
-  padding: "6px 26px",
+  background: "#8A9096",
+  padding: "4px 16px",
   border: "none",
   borderRadius: "0",
-  color: "#fff",
+  color: "#FFFFFF",
   fontWeight: "bold",
+  marginTop: "0.1rem"
 }
 
 //PropTypes

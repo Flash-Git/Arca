@@ -158,7 +158,7 @@ const addressesStyle = {
 
 const inputStyle = {
   textAlign: "center",
-  margin: "0.2rem 0",
+  margin: "0.15rem 0",
   borderLeft: "solid 2px green",
   borderStyle: "groove",
   backgroundColor: colours.Primary
@@ -166,7 +166,7 @@ const inputStyle = {
 
 const badInputStyle = {
   textAlign: "center",
-  margin: "0.2rem 0",
+  margin: "0.15rem 0",
   borderLeft: "solid 2px red",
   borderStyle: "groove",
   backgroundColor: colours.Primary
