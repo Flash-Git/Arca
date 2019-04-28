@@ -223,7 +223,6 @@ const boxStyle = {
   margin: "1rem 1.25rem",
   background: colours.Secondary,
   color: colours.Quaternary,
-  minHeight: "8rem",
   fontWeight: "normal",
   minWidth: "10rem",
   width: "50rem",
@@ -237,7 +236,7 @@ const containerStyle = {
   margin: "0.1rem",
   overflowY: "auto",
   scrollbarWidth: "thin",
-  minHeight: "8rem",
+  minHeight: "7.5rem",
   maxHeight: "14.45rem",
   paddingRight: "0.2rem"
 }
