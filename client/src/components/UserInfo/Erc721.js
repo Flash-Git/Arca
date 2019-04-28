@@ -35,11 +35,11 @@ class Erc721 extends Component {
 
 const ercStyle = {
   textAlign: "left",
-  margin: "0.25rem",
+  margin: "0.15rem",
   marginBottom: "0.5rem",
-  padding: "0.4rem",
+  padding: "0.2rem",
+  paddingRight: "0",
   borderRadius: "0.4rem",
-  background: colours.Secondary
 }
 
 const liStyle = {
@@ -60,14 +60,15 @@ const btnStyle = {
   marginLeft: "auto",
   textAlign: "center",
   justifyContent: "center",
-  background: colours.User,
+  background: colours.Accent,
   color: "#FFFFFF",
   border: "none",
   borderRadius: "30%",
   fontWeight: "bold",
-  padding: "0.3rem 0.5rem",
+  padding: "0.4rem 0.6rem",
   alignSelf: "center",
-  cursor: "pointer"
+  cursor: "pointer",
+  fontSize: "130%"
 }
 
 //PropTypes

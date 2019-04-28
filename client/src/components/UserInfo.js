@@ -33,7 +33,7 @@ class UserInfo extends Component {
 
 const userInfoStyle = {
   color: colours.Quaternary,
-  width: "13rem",
+  width: "11rem",
   textAlign: "center",
   justifyContent: "center",
   //marginRight: "0.4rem",

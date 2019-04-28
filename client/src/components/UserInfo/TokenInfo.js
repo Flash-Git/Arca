@@ -134,8 +134,8 @@ const tokenInfoStyle = {
   margin: "1rem",
   marginLeft: "0.5rem",
   padding: "0.6rem 0",
-  paddingBottom: "0",
-  borderRadius: "20px",
+  paddingBottom: "0.3rem",
+  borderRadius: "15px",
   minHeight: "5rem",
   boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.2)",
   backgroundColor: colours.Secondary
