@@ -20,7 +20,7 @@ class Footer extends Component {
           <a style={ linkStyle } href="https://github.com/Flash-Git/Arca">
             <FontAwesomeIcon style={ iconStyle } icon={ faGithub } />&nbsp;Source
           </a>
-          <a style={ linkStyle } href="mailto:flashyqpt@gmail.com">
+          <a style={ linkStyle } href="mailto:contact@etharca.com">
             <FontAwesomeIcon style={ iconStyle } icon={ faAt } />&nbsp;Inquiries
           </a>
           <a style={ linkStyle } href="https://twitter.com/flashyqpt">
