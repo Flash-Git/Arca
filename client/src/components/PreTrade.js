@@ -130,14 +130,13 @@ const preTradeStyle = {
   flexDirection: "row",
   textAlign: "center",
   justifyContent: "center",
-  //padding: "0 0.4rem",
-  margin: "0",
+  margin: "0 0.4rem"
 }
 
 const formStyle = {
   textAlign: "center",
   justifyContent: "center",
-  width: "20em",
+  width: "21em",
   maxWidth: "100%",
 }
 
@@ -147,7 +146,7 @@ const addressesStyle = {
   flexWrap: "wrap",
   justifyContent: "center",
   textAlign: "center",
-  width: "20em",
+  width: "21em",
   minWidth: "6em",
   maxWidth: "100%",
 }
@@ -155,10 +154,11 @@ const addressesStyle = {
 const inputStyle = {
   textAlign: "center",
   margin: "0.15rem 0",
-  borderColor: colours.Quaternary,
+  borderColor: "#888888",
   borderWidth: "1px",
-  borderLeft: "solid 2px green",
-  borderStyle: "groove",
+  borderLeft: "solid 4px green",
+  borderStyle: "solid",
+  padding: "0.1rem",
   backgroundColor: colours.Primary,
   color: colours.Quaternary,
 }
@@ -166,12 +166,13 @@ const inputStyle = {
 const badInputStyle = {
   textAlign: "center",
   margin: "0.15rem 0",
-  borderColor: colours.Quaternary,
+  borderColor: "#888888",
   borderWidth: "1px",
-  borderLeft: "solid 2px red",
-  borderStyle: "groove",
+  borderLeft: "solid 4px red",
+  borderStyle: "solid",
+  padding: "0.1rem",
   backgroundColor: colours.Primary,
-  color: colours.Quaternary,
+  color: colours.Quaternary
 }
 
 const btnStyle = {

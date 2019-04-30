@@ -121,8 +121,10 @@ class SubmitBox extends Component {
   render() {
     return(
       <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
-        <input style={ this.state.contractAdd.length !== 42  ?
-            {width:"24em", borderLeft: "solid 2px red", borderStyle: "groove", margin: "0.2rem"} : {width:"24em", borderLeft: "solid 2px green", borderStyle: "groove", margin: "0.2rem"} }
+        <input style={ this.state.contractAdd.length === 42  ?
+            {...baseInputStyle, ...{ maxWidth: "24em", borderLeft: "solid 4px green" }} :
+            {...baseInputStyle, ...{ maxWidth: "24em", borderLeft: "solid 4px red" }}
+          }
           type="text"
           name="contractAdd"
           placeholder="Token's Contract Address"
@@ -130,14 +132,16 @@ class SubmitBox extends Component {
           onChange={ this.onChange }
         />
         <input style={ this.state.type.includes("20")||this.state.type.includes("721") ?
-            {width:"10em", borderLeft: "solid 2px green", borderStyle: "groove", margin: "0.2rem"} : {width:"10em", borderLeft: "solid 2px red", borderStyle: "groove", margin: "0.2rem"} }
+            {...baseInputStyle, ...{ maxWidth: "10em", borderLeft: "solid 4px green" }} :
+            {...baseInputStyle, ...{ maxWidth: "10em", borderLeft: "solid 4px red" }}
+          }
           type="text"
           name="type"
           placeholder="ERC20 / ERC721"
           value={ this.state.type }
           onChange={ this.onChange }
         />
-        <input style={{ borderStyle: "groove", width:"10em", margin: "0.2rem" }}
+        <input style={ {...baseInputStyle, ...{ maxWidth:"10em" }} }
           type="text"
           name="amountId"
           placeholder="Amount / ID"
@@ -167,13 +171,25 @@ const methodStyle = {
   color: colours.Quaternary
 }
 
+const baseInputStyle = {
+  textAlign: "left",
+  margin: "0.2rem",
+  borderColor: "#888888",
+  borderWidth: "1px",
+  borderStyle: "solid",
+  padding: "0.1rem",
+  minWidth: "6em",
+  backgroundColor: colours.Primary,
+  color: colours.Quaternary,
+}
+
 const btnStyle = {
   background: colours.User,
   padding: "0.35rem 0.5rem",
   border: "none",
   borderRadius: "0.4rem",
   cursor: "pointer",
-  color: "#fff",
+  color: "#FFFFFF",
   fontWeight: "bold",
   margin: "0.2rem 0.5rem",
   marginTop: "0.4rem"
