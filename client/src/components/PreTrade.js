@@ -125,7 +125,6 @@ class PreTrade extends Component {
 }
 
 const preTradeStyle = {
-  //minWidth: "10rem",
   display: "flex",
   flexWrap: "wrap",
   flexDirection: "row",
@@ -133,16 +132,13 @@ const preTradeStyle = {
   justifyContent: "center",
   padding: "0 0.4rem",
   margin: "0",
-  color: colours.Quaternary,
 }
 
 const formStyle = {
-  //minWidth: "10rem",
   textAlign: "center",
   justifyContent: "center",
-  color: colours.Quaternary,
   width: "20em",
-  maxWidth: "100%"
+  maxWidth: "100%",
 }
 
 const addressesStyle = {
@@ -159,17 +155,23 @@ const addressesStyle = {
 const inputStyle = {
   textAlign: "center",
   margin: "0.15rem 0",
+  borderColor: colours.Quaternary,
+  borderWidth: "1px",
   borderLeft: "solid 2px green",
   borderStyle: "groove",
-  backgroundColor: colours.Primary
+  backgroundColor: colours.Primary,
+  color: colours.Quaternary,
 }
 
 const badInputStyle = {
   textAlign: "center",
   margin: "0.15rem 0",
+  borderColor: colours.Quaternary,
+  borderWidth: "1px",
   borderLeft: "solid 2px red",
   borderStyle: "groove",
-  backgroundColor: colours.Primary
+  backgroundColor: colours.Primary,
+  color: colours.Quaternary,
 }
 
 const btnStyle = {
