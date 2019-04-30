@@ -38,7 +38,8 @@ const userInfoStyle = {
   width: "11rem",
   textAlign: "center",
   justifyContent: "center",
-  maxHeight: "100%"
+  maxHeight: "100%",
+  marginLeft: "auto"//
 }
 
 const topStyle = {
