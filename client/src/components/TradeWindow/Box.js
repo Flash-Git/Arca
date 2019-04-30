@@ -225,7 +225,6 @@ const boxStyle = {
   color: colours.Quaternary,
   fontWeight: "normal",
   minWidth: "10rem",
-  width: "50rem",
   padding: "0.3rem",
   boxShadow: "0px 0px 25px -2px rgba(0,0,0,0.25)",
   width: "100%"//
