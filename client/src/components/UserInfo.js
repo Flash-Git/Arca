@@ -32,18 +32,20 @@ class UserInfo extends Component {
 }
 
 const userInfoStyle = {
+  display: "flex",
+  flexDirection: "column",
   color: colours.Quaternary,
   width: "11rem",
   textAlign: "center",
   justifyContent: "center",
-  //marginRight: "0.4rem",
+  maxHeight: "100%"
 }
 
 const topStyle = {
-  //margin: "0.8rem",
   marginBottom: "0.8rem",
   marginTop: "0",
   padding: "0.4rem",
+  margin: "0.5rem"
 }
 
 const bottomStyle = {
