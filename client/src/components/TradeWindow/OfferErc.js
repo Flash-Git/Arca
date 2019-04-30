@@ -148,7 +148,7 @@ class OfferErc extends Component {
     return(
       <div className="method" style={ methodStyle }>
         <button onClick={ this.removeMethod } style={ btnStyleX }>
-        <span>&#10060;</span>
+          <span role="img" aria-label="cross">&#10060;</span>
         </button>
         <div className="display" style={ displayStyle }>
           { this.offer(method) }
