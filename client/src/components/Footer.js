@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { faGithub, faTwitter, faEthereum, faBitcoin, faYoutube } from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faTwitter, faEthereum, faBitcoin } from "@fortawesome/free-brands-svg-icons";// daYoutube
 import { faAt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
