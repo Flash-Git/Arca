@@ -129,14 +129,15 @@ const pageStyle = {
 const mainStyle = {
   display: "flex",
   flexDirection: "row",
-  justifyContent: "space-between",
+  justifyContent: "space-around",
   flexWrap: "nowrap",
 }
 
 const leftStyle = {
   display: "flex",
   flexDirection: "column",
-  minWidth: "10rem"
+  minWidth: "10rem",
+  width: "60rem"
 }
 
 const rightStyle = {

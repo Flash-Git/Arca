@@ -130,7 +130,7 @@ const preTradeStyle = {
   flexDirection: "row",
   textAlign: "center",
   justifyContent: "center",
-  padding: "0 0.4rem",
+  //padding: "0 0.4rem",
   margin: "0",
 }
 

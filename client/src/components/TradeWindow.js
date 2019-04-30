@@ -96,9 +96,7 @@ const tradeWindowStyle = {
   flexDirection: "column",
   textAlign: "center",
   justifyContent: "center",
-  //padding: "0 0.4rem",
-  //paddingRight: "0",
-  marginBottom: "1.15rem"
+  marginBottom: "1.15rem",
 }
 
 const boxesStyle = {
@@ -106,6 +104,7 @@ const boxesStyle = {
   flexWrap: "wrap",
   textAlign: "center",
   justifyContent: "center",
+  flexDirection: "row",
 }
 
 const btnStyleUnsent = {
