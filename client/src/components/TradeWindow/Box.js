@@ -28,6 +28,13 @@ class Box extends Component {
     setInterval( () => this.getMethods(), 5000);
   }
 
+  componentWillReceiveProps(newProps) {
+    if(this.props.addresses!==newProps.addresses){
+      if(newProps.connected===false) return;
+      this.getMethods();
+    }
+  }
+
   async addLocalMethod(method) {
     const [add1, add2] = this.props.addresses;
     let count = "";
@@ -130,21 +137,31 @@ class Box extends Component {
         try{
           let offer = { id: type+"-"+i, type, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
           let result;
-          if(type === 0){//erc20
+          if(type === 0){ //erc20
             result = await boxContract.methods.getOfferErc20(add1, add2, i).call({
               from: add1
             });
-            result[1] = result[1].div("1000000000000000000");
-          }else if(type === 1){//erc721
+          }else if(type === 1){ //erc721
             result = await boxContract.methods.getOfferErc721(add1, add2, i).call({
               from: add1
             });
           }
           [offer.contractAdd, offer.amountId] = [result[0], result[1].toString()];
-          //console.log("id: " + offer.id + ", contractAdd: " + offer.contractAdd + ", amountId: " + offer.amountId);
 
           const ercContract = await new window.web3.eth.Contract(ercAbi, offer.contractAdd);
-          try{//name and symbol aren't required for the erc token standards
+          try{ //name and symbol aren't required for the erc token standards
+            if(type===0){ //ERC20
+              let decimals = await ercContract.methods.decimals().call({
+                from: add1
+              });
+              decimals = decimals.toString();
+              let decimalString = "1";
+              for(let i = 0; i < decimals; i++){
+                decimalString+="0";
+              }
+              offer.amountId = result[1].div(decimalString).toString();
+              offer.decimalString = decimalString;
+            }
             offer.name = await ercContract.methods.name().call({
               from: add1
             });
@@ -156,6 +173,7 @@ class Box extends Component {
             offer.symbol = "";
             console.log(e);
           }
+
           this.remove(offer.id, 0);
           offers.push(offer);
         }catch(e){
