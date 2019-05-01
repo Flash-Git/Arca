@@ -9,14 +9,14 @@ import OfferErc from "./OfferErc";
 import abi from "../../abis/abi";
 import abiErc20 from "../../abis/abiErc20";
 import abiErc721 from "../../abis/abiErc721";
-import { AppAddress, sendStatus, satisfiedStatus, colours } from "../../Static";
+import { AppAddress, sendStatus, boolStatus, colours } from "../../Static";
 
 class Box extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      satisfied: satisfiedStatus.FALSE,
+      satisfied: boolStatus.FALSE,
       partnerNonce: 0,
       localMethods: [],
       chainMethods: []

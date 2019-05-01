@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import abi from "../../abis/abi";
-import { AppAddress, satisfiedStatus, colours } from "../../Static";
+import { AppAddress, boolStatus, colours } from "../../Static";
 
 class Satisfied extends Component {
 
   state = {
-    isAccepted: satisfiedStatus.FALSE
+    isAccepted: boolStatus.FALSE
   }
 
   componentDidMount() {
@@ -21,20 +21,20 @@ class Satisfied extends Component {
     let isAccepted;
 
     switch(this.state.isAccepted){
-      case satisfiedStatus.TRUE:
-        isAccepted = satisfiedStatus.TOFALSE;
+      case boolStatus.TRUE:
+        isAccepted = boolStatus.TOFALSE;
         this.rejectTrade();
         break;
-      case satisfiedStatus.FALSE:
-        isAccepted = satisfiedStatus.TOTRUE;
+      case boolStatus.FALSE:
+        isAccepted = boolStatus.TOTRUE;
         this.acceptTrade();
         break;
-      case satisfiedStatus.TOTRUE:
-        isAccepted = satisfiedStatus.TOFALSE;
+      case boolStatus.TOTRUE:
+        isAccepted = boolStatus.TOFALSE;
         this.rejectTrade();
         break;
-      case satisfiedStatus.TOFALSE:
-        isAccepted = satisfiedStatus.TOTRUE;
+      case boolStatus.TOFALSE:
+        isAccepted = boolStatus.TOTRUE;
         this.acceptTrade();
         break;
       default:
@@ -67,12 +67,12 @@ class Satisfied extends Component {
           console.log(hash);
         })
         .on("receipt", receipt => {
-          this.props.setSatisfied(satisfiedStatus.TRUE);
-          this.setState({ isAccepted: satisfiedStatus.TRUE });
+          this.props.setSatisfied(boolStatus.TRUE);
+          this.setState({ isAccepted: boolStatus.TRUE });
         })
         .on("error", error => {
-          this.props.setSatisfied(satisfiedStatus.FALSE);
-          this.setState({ isAccepted: satisfiedStatus.FALSE });
+          this.props.setSatisfied(boolStatus.FALSE);
+          this.setState({ isAccepted: boolStatus.FALSE });
           console.error(error);
         });
     } catch(e){
@@ -102,8 +102,8 @@ class Satisfied extends Component {
           console.log(hash);
         })
         .on("receipt", receipt => {
-          this.props.setSatisfied(satisfiedStatus.FALSE);
-          this.setState({ isAccepted: satisfiedStatus.FALSE });
+          this.props.setSatisfied(boolStatus.FALSE);
+          this.setState({ isAccepted: boolStatus.FALSE });
         })
         .on("error", error => {
           console.error(error);
@@ -142,12 +142,12 @@ class Satisfied extends Component {
 
     switch(satisfied){
       case false:
-        this.setState({ isAccepted: satisfiedStatus.FALSE} );
-        this.props.setSatisfied(satisfiedStatus.FALSE);
+        this.setState({ isAccepted: boolStatus.FALSE} );
+        this.props.setSatisfied(boolStatus.FALSE);
         break;
       case true:
-        this.setState({ isAccepted: satisfiedStatus.TRUE} );
-        this.props.setSatisfied(satisfiedStatus.TRUE);
+        this.setState({ isAccepted: boolStatus.TRUE} );
+        this.props.setSatisfied(boolStatus.TRUE);
         break;
       default:
         return;
@@ -155,7 +155,7 @@ class Satisfied extends Component {
   }
 
   status() {
-    if(this.state.isAccepted === satisfiedStatus.TRUE){
+    if(this.state.isAccepted === boolStatus.TRUE){
       return <div style={ {...statusStyle, ...statusStyleAccepted} }>
           Accepted
         </div>;
@@ -167,7 +167,7 @@ class Satisfied extends Component {
 
   button() {
     if(!this.props.isUser) return;
-    if(this.state.isAccepted === satisfiedStatus.TRUE){
+    if(this.state.isAccepted === boolStatus.TRUE){
       return <button onClick={ this.toggleSatisfied }
           style={ {...btnStyle, ...btnStyleAccepted} }>
           Unaccept

@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import Box from "./TradeWindow/Box";
 
 import abi from "../abis/abi";
-import { AppAddress, executedStatus, userBoxStatus, colours } from "../Static";
+import { AppAddress, boolStatus, userBoxStatus, colours } from "../Static";
 
 class TradeWindow extends Component {
   
   state = {
-    executedStatus: executedStatus.FALSE,
+    executedStatus: boolStatus.FALSE,
     counts: [0, 0]
   }
 
@@ -30,7 +30,7 @@ class TradeWindow extends Component {
     } else {
       return;
     }
-    this.setState({ executedStatus: executedStatus.TOTRUE });
+    this.setState({ executedStatus: boolStatus.TOTRUE });
   }
 
   async sendExecute(_add1, _add2) {
@@ -42,7 +42,7 @@ class TradeWindow extends Component {
     }
 
     try{
-      this.setState({ executedStatus: executedStatus.TOTRUE });
+      this.setState({ executedStatus: boolStatus.TOTRUE });
       contract.methods.executeTrade(_add2).send({
         from: _add1
         //TODO estimate gas
@@ -51,17 +51,17 @@ class TradeWindow extends Component {
           console.log("Hash: " + hash);
         })
         .on("receipt", receipt => {
-          this.setState({ executedStatus: executedStatus.TRUE });
+          this.setState({ executedStatus: boolStatus.TRUE });
           alert("Trade Executed!");
         })
         .on("error", error => {
           console.error(error);
-          this.setState({ executedStatus: executedStatus.FALSE });
+          this.setState({ executedStatus: boolStatus.FALSE });
           alert("Trade Failed");
         });
     } catch(e){
       console.error(e);
-      this.setState({ executedStatus: executedStatus.TRUE });
+      this.setState({ executedStatus: boolStatus.TRUE });
     }
   }
   
