@@ -10,17 +10,28 @@ import { AppAddress, listErc20, listErc721, colours } from "../../Static";
 class TokenInfo extends Component {
 
   state = {
+    connected: false,
     erc20s: [],
     erc721s: []
   }
 
   componentDidMount() {
-    this.updateBalances();
-    setInterval( () => this.updateBalances(), 5000);
+    setInterval( () => this.updateBalances(), 15000);
+  }
+
+  componentWillReceiveProps(newProps) {
+    console.log(newProps.connected + " " + this.props.connected);
+    if(this.props.address!==newProps.address || this.props.connected!==newProps.connected){
+      if(newProps.connected===false){
+        this.setState({ connected: false });
+      }
+      this.setState({ connected: true }, () =>
+        this.updateBalances());
+    }
   }
 
   async updateBalances() {
-    if(!this.props.connected){
+    if(!this.state.connected){
       return;
     }
 
@@ -37,10 +48,21 @@ class TokenInfo extends Component {
       contract = await new window.web3.eth.Contract(abiErc20, listErc20[i]);
 
       try{
+        let decimals = await contract.methods.decimals().call({
+          from: address
+        });
+        decimals = decimals.toString();
+        
+        let decimalString = "1";
+        for(let i = 0; i < decimals; i++){
+          decimalString+="0";
+        }
+        erc.decimalString = decimalString;
+
         let balance = await contract.methods.balanceOf(address).call({
           from: address
         });
-        balance = balance.div("1000000000000000000").toString();
+        balance = balance.div(decimalString).toString();
 
         if(balance === "0"){
           continue;
