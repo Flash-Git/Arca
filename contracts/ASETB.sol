@@ -1,5 +1,10 @@
 pragma solidity ^0.5.0;
 
+/*
+* @Author Flash
+* Source at https://github.com/Flash-Git/Arca/tree/master/contracts
+*/
+
 import "./ERC20.sol";
 
 /*
