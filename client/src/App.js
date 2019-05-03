@@ -23,8 +23,8 @@ class App extends Component {
   checkConnection = () => {
     try{
       //Disable if using Embark
-      if(window.ethereum.networkVersion !== "4"){
-        alert("The Ethereum contract is currently running on the rinkeby network.");
+      if(window.ethereum.networkVersion !== "4" && window.ethereum.networkVersion !== "5"){
+        alert("The Ethereum contract is currently only running on the rinkeby and goerli test networks.");
         this.setState({ connected: false });
         return 3;
       }
