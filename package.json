@@ -22,7 +22,7 @@
     "express": "^4.16.4"
   },
   "devDependencies": {
-    "nodemon": "^1.18.11"
+    "nodemon": "^1.19.0"
   },
   "bugs": {
     "url": "https://github.com/Flash-Git/Arca/issues"
