@@ -59,11 +59,8 @@ class App extends Component {
     window.ethereum.enable()
     .then(accounts => this.checkConnection())
     .catch(e => {
-      if(e !== "User rejected provider access"){
-        alert("There was an issue signing you in. Please check console(F12) for error");
-        console.log("\nError:\n" + e);
-        return;
-      }
+      alert("There was an issue signing you in.");
+      return;
     });
   }
 
@@ -89,11 +86,7 @@ class App extends Component {
       this.enableWeb3();
     }
   }
-
-  refresh = () => {
-    
-  }
-
+  
   addErc = (erc) => {
     this.setState({ erc });
   }
