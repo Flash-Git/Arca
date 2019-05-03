@@ -7,7 +7,7 @@ pragma solidity ^0.5.0;
 
 /*
 * @Author Flash
-* @title Another Standard ERC20 Token -Balanceable
+* @title Arca
 *
 * @dev Allows for the trade of multiple asset types
 * Handles escrowless ERC20 and ERC721 transfers
@@ -25,7 +25,7 @@ interface Erc721 {
   function safeTransferFrom(address from, address to, uint256 tokenId) external;
 }
 
-contract DAppBoxSoft {
+contract Arca {
   event TradeAccepted(address indexed sender, address indexed partner, uint256 indexed partnerNonce);
   event TradeUnaccepted(address indexed sender, address indexed partner);
   event TradeExecuted(address indexed sender, address indexed partner);
