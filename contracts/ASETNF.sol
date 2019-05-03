@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "./ERC721.sol";
 
 /*
+* @Author Flash
 * @title Another Standard ERC721 Token -NonFungible
 * 
 * @dev Implementation of the standard token

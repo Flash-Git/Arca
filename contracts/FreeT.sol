@@ -3,9 +3,10 @@ pragma solidity ^0.5.0;
 import "./ERC20.sol";
 
 /*
+* @Author Flash
 * @title Free Tokens
 *
-* @dev Implementation of the basic standard token with ability to request free tokens.
+* @dev Implementation of the standard token with ability to request free tokens.
 * https://eips.ethereum.org/EIPS/eip-20
 */
 contract FreeT is ERC20 {

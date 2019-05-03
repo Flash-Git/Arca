@@ -1,8 +1,15 @@
 pragma solidity ^0.5.0;
-//Preliminary Code - WIP
 
 /*
-* Allows for the trade of multiple asset types
+* @Author Flash
+* Source at https://github.com/Flash-Git/Arca/tree/master/contracts
+*/
+
+/*
+* @Author Flash
+* @title Another Standard ERC20 Token -Balanceable
+*
+* @dev Allows for the trade of multiple asset types
 * Handles escrowless ERC20 and ERC721 transfers
 */
 

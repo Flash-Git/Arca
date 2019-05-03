@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 import "./ERC20.sol";
 
 /*
+* @Author Flash
 * @title Another Standard ERC20 Token -Balanceable
 *
 * @dev Implementation of the basic standard token.
