@@ -1,6 +1,5 @@
 # ARCA  
-##### ÐApp (UNAUDITED)
+##### [ÐApp live on the Rinkeby and Goerli testnets](https://etharca.com)
 
-Arca lets you to open a trading box with any ethereum address and safely trade tokens without the need for an escrow service.  
-Supports both ERC20 and ERC721 tokens.
-
+Arca lets anyone open a trading box with any other ethereum address and safely trade multiple different tokens at a time without any kind of escrow service.  
+Currently supports both ERC20 and ERC721 tokens.
