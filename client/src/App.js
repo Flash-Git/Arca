@@ -22,7 +22,6 @@ class App extends Component {
 
   checkConnection = () => {
     try{
-      //Disable if using Embark
       if(window.ethereum.networkVersion !== "4" && window.ethereum.networkVersion !== "5"){
         alert("The Ethereum contract is currently only running on the rinkeby and goerli test networks.");
         this.setState({ connected: false });
@@ -86,7 +85,7 @@ class App extends Component {
       this.enableWeb3();
     }
   }
-  
+
   addErc = (erc) => {
     this.setState({ erc });
   }
