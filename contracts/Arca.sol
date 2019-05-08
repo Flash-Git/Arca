@@ -26,19 +26,19 @@ interface Erc721 {
 }
 
 contract Arca {
-  event TradeAccepted(address indexed sender, address indexed partner, uint256 indexed partnerNonce);
-  event TradeUnaccepted(address indexed sender, address indexed partner);
-  event TradeExecuted(address indexed sender, address indexed partner);
-  event OfferModifiedERC20(address indexed sender, address indexed partner,
-    address contractAdd, uint256 amount, uint8 indexed index, uint256 nonce);
-  event OfferModifiedERC721(address indexed sender, address indexed partner,
-    address contractAdd, uint256 id, uint8 indexed index, uint256 nonce);
-  event OfferRemovedERC20(address indexed sender, address indexed partner, uint8 indexed index, uint256 nonce);
-  event OfferRemovedERC721(address indexed sender, address indexed partner, uint8 indexed index, uint256 nonce);
-  event BoxCountModifiedERC20(address indexed sender, address indexed partner, uint8 indexed count, uint256 nonce);
-  event BoxCountModifiedERC721(address indexed sender, address indexed partner, uint8 indexed count, uint256 nonce);
+  event TradeAccepted(address indexed sender, address indexed partner, uint256 indexed boxNum, uint256 partnerNonce);
+  event TradeUnaccepted(address indexed sender, address indexed partner, uint256 indexed boxNum);
+  event TradeExecuted(address indexed sender, address indexed partner, uint256 indexed boxNum);
+  event OfferModifiedERC20(address indexed sender, address indexed partner, uint256 indexed boxNum,
+    address contractAdd, uint256 amount, uint8 index, uint256 nonce);
+  event OfferModifiedERC721(address indexed sender, address indexed partner, uint256 indexed boxNum,
+    address contractAdd, uint256 id, uint8 index, uint256 nonce);
+  event OfferRemovedERC20(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 index, uint256 nonce);
+  event OfferRemovedERC721(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 index, uint256 nonce);
+  event BoxCountModifiedERC20(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 count, uint256 nonce);
+  event BoxCountModifiedERC721(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 count, uint256 nonce);
 
-  mapping(address => mapping(address => Box)) private boxes;
+  mapping(address => mapping(address => mapping(uint256 => Box))) private boxes;
 
   struct OfferErc20 {
     address add;
@@ -64,28 +64,28 @@ contract Arca {
   * GETTERS
   */
 
-  function getOfferErc20(address _add1, address _add2, uint8 _index) public view returns(address, uint256) {
-    return (boxes[_add1][_add2].offersErc20[_index].add, boxes[_add1][_add2].offersErc20[_index].amount);
+  function getOfferErc20(address _add1, address _add2, uint256 _boxNum, uint8 _index) public view returns(address, uint256) {
+    return (boxes[_add1][_add2][_boxNum].offersErc20[_index].add, boxes[_add1][_add2][_boxNum].offersErc20[_index].amount);
   }
   
-  function getOfferErc721(address _add1, address _add2, uint8 _index) public view returns(address, uint256) {
-    return (boxes[_add1][_add2].offersErc721[_index].add, boxes[_add1][_add2].offersErc721[_index].id);
+  function getOfferErc721(address _add1, address _add2, uint256 _boxNum,uint8 _index) public view returns(address, uint256) {
+    return (boxes[_add1][_add2][_boxNum].offersErc721[_index].add, boxes[_add1][_add2][_boxNum].offersErc721[_index].id);
   }
 
-  function getErc20Count(address _add1, address _add2) public view returns(uint8) {
-    return boxes[_add1][_add2].countErc20;
+  function getErc20Count(address _add1, address _add2, uint256 _boxNum) public view returns(uint8) {
+    return boxes[_add1][_add2][_boxNum].countErc20;
   }
 
-  function getErc721Count(address _add1, address _add2) public view returns(uint8) {
-    return boxes[_add1][_add2].countErc721;
+  function getErc721Count(address _add1, address _add2, uint256 _boxNum) public view returns(uint8) {
+    return boxes[_add1][_add2][_boxNum].countErc721;
   }
 
-  function getNonce(address _add1, address _add2) public view returns(uint256) {
-    return boxes[_add1][_add2].nonce;
+  function getNonce(address _add1, address _add2, uint256 _boxNum) public view returns(uint256) {
+    return boxes[_add1][_add2][_boxNum].nonce;
   }
 
-  function getPartnerNonce(address _add1, address _add2) public view returns(uint256) {
-    return boxes[_add1][_add2].partnerNonce;
+  function getPartnerNonce(address _add1, address _add2, uint256 _boxNum) public view returns(uint256) {
+    return boxes[_add1][_add2][_boxNum].partnerNonce;
   }
 
 
@@ -93,41 +93,39 @@ contract Arca {
   * TRADE ACTIONS
   */
 
-  function acceptTrade(address _tradePartner, uint256 _partnerNonce) public {
-    boxes[msg.sender][_tradePartner].partnerNonce = _partnerNonce+1; //Offset serves to avoid explicit "satisfied" variable
-    emit TradeAccepted(msg.sender, _tradePartner, _partnerNonce+1);
+  function acceptTrade(address _tradePartner, uint256 _boxNum, uint256 _partnerNonce) public {
+    boxes[msg.sender][_tradePartner][_boxNum].partnerNonce = _partnerNonce+1; //Offset serves to avoid explicit "satisfied" variable
+    emit TradeAccepted(msg.sender, _tradePartner, _boxNum, _partnerNonce+1);
+
+    if(boxes[_tradePartner][msg.sender][_boxNum].partnerNonce == boxes[msg.sender][_tradePartner][_boxNum].nonce+1){
+      executeTrade(_tradePartner, _boxNum);
+    }
   }
 
-  function unacceptTrade(address _tradePartner) public {
-    boxes[msg.sender][_tradePartner].partnerNonce = 0;
-    emit TradeUnaccepted(msg.sender, _tradePartner);
+  function unacceptTrade(address _tradePartner, uint256 _boxNum) public {
+    boxes[msg.sender][_tradePartner][_boxNum].partnerNonce = 0;
+    emit TradeUnaccepted(msg.sender, _tradePartner, _boxNum);
   }
 
-  function acceptAndExecuteTrade(address _tradePartner, uint256 _partnerNonce) public {
-    acceptTrade(_tradePartner, _partnerNonce);
-    executeTrade(_tradePartner);
-  }
+  function executeTrade(address _tradePartner, uint256 _boxNum) private {
+    Box storage senderBox = boxes[msg.sender][_tradePartner][_boxNum];
+    Box storage prtnerBox = boxes[_tradePartner][msg.sender][_boxNum];
 
-  function executeTrade(address _tradePartner) public {
-    //Reference
-    Box storage senderBox = boxes[msg.sender][_tradePartner];
-    Box storage prtnerBox = boxes[_tradePartner][msg.sender];
-
-    //Check Nonces
+    //Check Satisfaction
     require(senderBox.nonce+1 == prtnerBox.partnerNonce, "Sender not satisfied");
     require(prtnerBox.nonce+1 == senderBox.partnerNonce, "Trade partner not satisfied");
-
-    //Execute Erc20 Transfers
-    executeTransfersErc20(msg.sender, _tradePartner);
-    executeTransfersErc20(_tradePartner, msg.sender);
-
-    //Execute Erc721 Transfers
-    executeTransfersErc721(msg.sender, _tradePartner);
-    executeTransfersErc721(_tradePartner, msg.sender);
 
     //Drop Satisfaction
     senderBox.partnerNonce = 0;
     prtnerBox.partnerNonce = 0;
+
+    //Execute Erc20 Transfers
+    executeTransfersErc20(msg.sender, _tradePartner, _boxNum);
+    executeTransfersErc20(_tradePartner, msg.sender, _boxNum);
+
+    //Execute Erc721 Transfers
+    executeTransfersErc721(msg.sender, _tradePartner, _boxNum);
+    executeTransfersErc721(_tradePartner, msg.sender, _boxNum);
 
     //Wipe (Not Necessary)
     senderBox.countErc20 = 0;
@@ -135,13 +133,13 @@ contract Arca {
     senderBox.countErc721 = 0;
     prtnerBox.countErc721 = 0;
     
-    emit BoxCountModifiedERC20(msg.sender, _tradePartner, 0, senderBox.nonce);
-    emit BoxCountModifiedERC20(_tradePartner, msg.sender, 0, prtnerBox.nonce);
+    emit BoxCountModifiedERC20(msg.sender, _tradePartner, _boxNum, 0, senderBox.nonce);
+    emit BoxCountModifiedERC20(_tradePartner, msg.sender, _boxNum, 0, prtnerBox.nonce);
 
-    emit BoxCountModifiedERC721(msg.sender, _tradePartner, 0, senderBox.nonce);
-    emit BoxCountModifiedERC721(_tradePartner, msg.sender, 0, prtnerBox.nonce);
+    emit BoxCountModifiedERC721(msg.sender, _tradePartner, _boxNum, 0, senderBox.nonce);
+    emit BoxCountModifiedERC721(_tradePartner, msg.sender, _boxNum, 0, prtnerBox.nonce);
 
-    emit TradeExecuted(msg.sender, _tradePartner);
+    emit TradeExecuted(msg.sender, _tradePartner, _boxNum);
   }
 
 
@@ -149,18 +147,18 @@ contract Arca {
   * BOX FUNCTIONS
   */
 
-  function pushOfferErc20(address _tradePartner, address _erc20Address, uint256 _amount) public {
-    addOfferErc20(_tradePartner, _erc20Address, _amount, boxes[msg.sender][_tradePartner].countErc20);
+  function pushOfferErc20(address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount) public {
+    addOfferErc20(_tradePartner, _boxNum, _erc20Address, _amount, boxes[msg.sender][_tradePartner][_boxNum].countErc20);
   }
 
-  function addOfferErc20(address _tradePartner, address _erc20Address, uint256 _amount, uint8 _index) public {
+  function addOfferErc20(address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount, uint8 _index) public {
     require(Erc20(_erc20Address).allowance(msg.sender, address(this)) >= _amount, "Insufficient allowance");
 
     OfferErc20 memory offer;
     offer.add = _erc20Address;
     offer.amount = _amount;
 
-    Box storage box = boxes[msg.sender][_tradePartner];
+    Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     if(box.offersErc20.length > _index){
       box.offersErc20[_index] = offer;
     }else{
@@ -171,14 +169,14 @@ contract Arca {
     }
 
     box.nonce++;
-    emit OfferModifiedERC20(msg.sender, _tradePartner, _erc20Address, _amount, _index, box.nonce);
+    emit OfferModifiedERC20(msg.sender, _tradePartner, _boxNum, _erc20Address, _amount, _index, box.nonce);
   }
   
-  function pushOfferErc721(address _tradePartner, address _erc721Address, uint256 _id) public {
-    addOfferErc721(_tradePartner, _erc721Address, _id, boxes[msg.sender][_tradePartner].countErc721);
+  function pushOfferErc721(address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id) public {
+    addOfferErc721(_tradePartner, _boxNum, _erc721Address, _id, boxes[msg.sender][_tradePartner][_boxNum].countErc721);
   }
   
-  function addOfferErc721(address _tradePartner, address _erc721Address, uint256 _id, uint8 _index) public {
+  function addOfferErc721(address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id, uint8 _index) public {
     require(Erc721(_erc721Address).ownerOf(_id) == msg.sender, "Sender isn't owner of this erc721 token");
     require(Erc721(_erc721Address).isApprovedForAll(msg.sender, address(this)) == true, "Contract not approved for erc721 token transfers");
 
@@ -186,7 +184,7 @@ contract Arca {
     offer.add = _erc721Address;
     offer.id = _id;
 
-    Box storage box = boxes[msg.sender][_tradePartner];
+    Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     if(box.offersErc721.length > _index){
       box.offersErc721[_index] = offer;
     }else{
@@ -197,41 +195,41 @@ contract Arca {
     }
 
     box.nonce++;
-    emit OfferModifiedERC721(msg.sender, _tradePartner, _erc721Address, _id, _index, box.nonce);
+    emit OfferModifiedERC721(msg.sender, _tradePartner, _boxNum, _erc721Address, _id, _index, box.nonce);
   }
 
-  function removeOfferErc20(address _tradePartner, uint8 _index) public {
-    Box storage box = boxes[msg.sender][_tradePartner];
+  function removeOfferErc20(address _tradePartner, uint256 _boxNum, uint8 _index) public {
+    Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.offersErc20[_index].add = address(0);
 
     box.nonce++;
-    emit OfferRemovedERC20(msg.sender, _tradePartner, _index, box.nonce);
+    emit OfferRemovedERC20(msg.sender, _tradePartner, _boxNum, _index, box.nonce);
   }
 
-  function removeOfferErc721(address _tradePartner, uint8 _index) public {
-    Box storage box = boxes[msg.sender][_tradePartner];
+  function removeOfferErc721(address _tradePartner, uint256 _boxNum, uint8 _index) public {
+    Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.offersErc721[_index].add = address(0);
 
     box.nonce++;
-    emit OfferRemovedERC721(msg.sender, _tradePartner, _index, box.nonce);
+    emit OfferRemovedERC721(msg.sender, _tradePartner, _boxNum, _index, box.nonce);
   }
 
   //Set to 0 to clear
-  function setCountErc20(address _tradePartner, uint8 _count) public {
-    Box storage box = boxes[msg.sender][_tradePartner];
+  function setCountErc20(address _tradePartner, uint256 _boxNum, uint8 _count) public {
+    Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.countErc20 = _count;
 
     box.nonce++;
-    emit BoxCountModifiedERC20(msg.sender, _tradePartner, _count, box.nonce);
+    emit BoxCountModifiedERC20(msg.sender, _tradePartner, _boxNum, _count, box.nonce);
   }
 
   //Set to 0 to clear
-  function setCountErc721(address _tradePartner, uint8 _count) public {
-    Box storage box = boxes[msg.sender][_tradePartner];
+  function setCountErc721(address _tradePartner, uint256 _boxNum, uint8 _count) public {
+    Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.countErc721 = _count;
 
     box.nonce++;
-    emit BoxCountModifiedERC721(msg.sender, _tradePartner, _count, box.nonce);
+    emit BoxCountModifiedERC721(msg.sender, _tradePartner, _boxNum, _count, box.nonce);
   }
 
 
@@ -239,8 +237,8 @@ contract Arca {
   * EXECUTION
   */
 
-  function executeTransfersErc20(address _add1, address _add2) private {
-    Box storage box = boxes[_add1][_add2];
+  function executeTransfersErc20(address _add1, address _add2, uint256 _boxNum) private {
+    Box memory box = boxes[_add1][_add2][_boxNum];//should be memory?
 
     OfferErc20[] memory offers = box.offersErc20;
     for(uint8 i = 0; i < box.countErc20; i++){
@@ -250,8 +248,8 @@ contract Arca {
     }
   }
   
-  function executeTransfersErc721(address _add1, address _add2) private {
-    Box storage box = boxes[_add1][_add2];
+  function executeTransfersErc721(address _add1, address _add2, uint256 _boxNum) private {
+    Box memory box = boxes[_add1][_add2][_boxNum];//should be memory?
 
     OfferErc721[] memory offers = box.offersErc721;
     for(uint8 i = 0; i < box.countErc721; i++){
