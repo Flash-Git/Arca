@@ -29,7 +29,7 @@ class PreTrade extends Component {
       return;
     }
     
-    if(!input.includes(".eth")){
+    if(!input.includes(".eth")&&!input.includes(".test")){
       if(input.length !== 42){
         index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
         return;
@@ -190,7 +190,6 @@ const btnStyle = {
 PreTrade.propTypes = {
   isUser: PropTypes.number.isRequired,
   setAddresses: PropTypes.func.isRequired,
-  refresh: PropTypes.func.isRequired,
   connected: PropTypes.bool.isRequired
 }
 
