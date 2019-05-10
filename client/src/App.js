@@ -49,7 +49,7 @@ class App extends Component {
     
     //Check if user's window has a window.ethereum currently available
     if(typeof window.ethereum === "undefined"){
-      alert("Please install MetaMask");
+      alert("Please use a Web3 enabled browser (install MetaMask)");
       return;
     }
     
