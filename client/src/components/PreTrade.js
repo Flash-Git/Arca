@@ -24,9 +24,13 @@ class PreTrade extends Component {
   }
 
   async checkAddress(index, input) {
-    if(!window.web3){
-      this.setState({ validInput1: false, validInput2: false });
-      return;
+    try{
+      if(!this.props.connected){
+        this.setState({ validInput1: false, validInput2: false });
+        return;
+      }
+    } catch(e){
+      await this.props.enableWeb3();
     }
     
     if(!input.includes(".eth")&&!input.includes(".test")){
@@ -82,8 +86,7 @@ class PreTrade extends Component {
   async onSubmit(e) {
     e.preventDefault();
     if(!this.props.connected){
-      alert("Not connected");
-      return;
+      await this.props.enableWeb3();
     }
     await this.checkAddress(0, this.state.input1);
     await this.checkAddress(1, this.state.input2);
@@ -190,7 +193,8 @@ const btnStyle = {
 PreTrade.propTypes = {
   isUser: PropTypes.number.isRequired,
   setAddresses: PropTypes.func.isRequired,
-  connected: PropTypes.bool.isRequired
+  connected: PropTypes.bool.isRequired,
+  enableWeb3: PropTypes.func.isRequired
 }
 
 export default PreTrade;
