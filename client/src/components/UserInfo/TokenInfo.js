@@ -3,14 +3,12 @@ import PropTypes from "prop-types";
 
 import Erc20 from "./Erc20";
 import Erc721 from "./Erc721";
-import abiErc20 from "../../abis/abiErc20";
-import abiErc721 from "../../abis/abiErc721";
-import { AppAddress, listErc20, listErc721, colours } from "../../Static";
+import { listErc20, listErc721, colours } from "../../Static";
+import { ercCalls, erc20Contract, erc721Contract } from "../../ContractCalls";
 
 class TokenInfo extends Component {
 
   state = {
-    connected: false,
     erc20s: [],
     erc721s: []
   }
@@ -20,111 +18,107 @@ class TokenInfo extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if(this.props.address!==newProps.address || this.props.connected!==newProps.connected){
-      if(newProps.connected===false){
-        this.setState({ connected: false });
+    if(newProps.connected!==this.props.connected){
+      if(newProps.connected === true){
+        this.updateBalances();
       }
-      this.setState({ connected: true }, () =>
-        this.updateBalances());
     }
   }
 
-  async updateBalances() {
-    if(!this.state.connected){
+  getBalance = (contract) => {
+    return 
+  }
+
+  updateBalances = () => {
+    if(!this.props.connected){
       return;
     }
 
     let erc20s = [];
+    let decimalBalancePromises = [];
     let erc721s = [];
-    const address = this.props.address.toString();
-    if(!window.web3.utils.isAddress(address)){
-      return;
-    }
-    let contract;
 
     for(let i = 0; i < listErc20.length; i++){
+      console.log("i " + i);
+
       let erc = { id: i, contractAdd: listErc20[i], type: "ERC20" };
-      contract = await new window.web3.eth.Contract(abiErc20, listErc20[i]);
+      const contract = erc20Contract(listErc20[i]);
 
-      try{
-        let decimals = await contract.methods.decimals().call({
-          from: address
-        });
-        decimals = decimals.toString();
-        
-        let decimalString = "1";
-        for(let i = 0; i < decimals; i++){
-          decimalString+="0";
-        }
-        erc.decimalString = decimalString;
-
-        let balance = await contract.methods.balanceOf(address).call({
-          from: address
-        });
-        balance = balance.div(decimalString).toString();
-
-        if(balance === "0"){
-          continue;
-        }
-
-        erc.balance = balance;
-
-        erc.symbol = await contract.methods.symbol().call({
-          from: address
-        });
-
-        let allowance = await contract.methods.allowance(address, AppAddress).call({
-          from: address
-        });
-        allowance = allowance.toString();
-        if(allowance === "0"){
-          erc.allowance = "False";
-        }else{
-          erc.allowance = "True";
-        }
-      }catch(e){
-        continue;
-      }
-
-      erc20s.push(erc);
-    }
-  
-    for(let i = 0; i < listErc721.length; i++){
-      let erc = { id: i, contractAdd: listErc721[i], type: "ERC721" };
-      contract = await new window.web3.eth.Contract(abiErc721, listErc721[i]);
-      try{
-        let balance = await contract.methods.balanceOf(address).call({
-          from: address
-        });
-        erc.balance = balance.toString();
-
-        if(erc.balance === "0"){
-          continue;
-        }
-
-        let symbol = "";
-        try{
-          symbol = await contract.methods.symbol().call({
-            from: address
+      ercCalls(contract, "decimals")
+        .then(res => {
+          erc.decimalString = "1";
+          if(res===null){
+            console.log(listErc20[i]);
+            return;
+          }
+          for(let i = 0; i < +(res.toString()); i++){
+            erc.decimalString+="0";
+          }
+          console.log("decimals " + erc.decimalString);
+          ercCalls(contract, "balanceOf")
+            .then(res => {
+              if(res===null){
+                console.log(listErc20[i]);
+                return;
+              }
+              erc.balance = res.div(erc.decimalString).toString();
+              console.log("balance " + erc.balance);
+              if(erc.balance === "0"){
+                console.log("Skipping");
+                return;
+              }
+              console.log("adding");
+              let promiseArray = [];
+              promiseArray.push(ercCalls(contract, "symbol")
+                .then(res => {
+                  if(res===null){
+                    console.log(listErc20[i]);
+                    return;
+                  }
+                  erc.symbol = res.toString();
+                  console.log("symbol " + erc.symbol);
+                }));
+              promiseArray.push(ercCalls(contract, "allowance")
+                .then(res => {
+                  if(res===null){
+                    console.log(listErc20[i]);
+                    return;
+                  }
+                  res === "0" ? erc.allowance = "False" : erc.allowance = "True";
+                  console.log("allowance " + erc.allowance);
+                }));
+              Promise.all(promiseArray)
+                .then( () => {
+                  erc20s.push(erc);
+                  this.setState({ erc20s });
+                });
           });
-        }catch(e){
-          symbol = "NA";
-        }
-        erc.symbol = symbol;
-
-        let allowance = await contract.methods.isApprovedForAll(address, AppAddress).call({
-          from: address
         });
-        if(allowance === false){
-          erc.allowance = "False";
-        }else{
-          erc.allowance = "True";
-        }
-      }catch(e){
+      }
+      /*
+
+      let decimalString = "1";
+      for(let i = 0; i < decimals; i++){
+        decimalString+="0";
+      }
+      erc.decimalString = decimalString;
+
+      ercCalls(contract, "balanceOf")
+        .then(res => balance = res.div(decimalString).toString());
+      console.log(balance);
+
+      if(balance === "0"){
         continue;
       }
-      erc721s.push(erc);
-    }
+      erc.balance = balance;
+
+      erc.symbol = ercCalls(contract, "symbol").toString();
+      console.log(erc.symbol);
+
+      erc.allowance = ercCalls(contract, "allowance") === "0" ? erc.allowance = "False" : erc.allowance = "True"
+      console.log(erc.allowance);
+      erc20s.push(erc);
+      */
 
     this.setState({ erc20s, erc721s });
   }
@@ -163,7 +157,6 @@ const tokenInfoStyle = {
 
 //PropTypes
 TokenInfo.propTypes = {
-  address: PropTypes.string.isRequired,
   connected: PropTypes.bool.isRequired,
   addErc: PropTypes.func.isRequired
 }
