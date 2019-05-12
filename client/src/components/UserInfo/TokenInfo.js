@@ -128,11 +128,11 @@ class TokenInfo extends Component {
   }
 
   addErc20(_erc) {
-    let erc20s = this.state.erc20s.filter(function(erc20){
+    let erc20s = this.state.erc20s.filter(erc20 =>{
       return erc20.id !== _erc.id;
     });
     erc20s.push(_erc);
-    erc20s.sort(function(a, b) { 
+    erc20s.sort((a, b) => { 
       return a.id - b.id;
     });
     this.setState({ erc20s });
@@ -140,11 +140,11 @@ class TokenInfo extends Component {
 
 
   addErc721(_erc) {
-    let erc721s = this.state.erc721s.filter(function(erc721){
+    let erc721s = this.state.erc721s.filter(erc721 => {
       return erc721.id !== _erc.id;
     });
     erc721s.push(_erc);
-    erc721s.sort(function(a, b) { 
+    erc721s.sort((a, b) => { 
       return a.id - b.id;
     });
     this.setState({ erc721s });
