@@ -3,12 +3,13 @@ import PropTypes from "prop-types";
 
 import Erc20 from "./Erc20";
 import Erc721 from "./Erc721";
-import { listErc20, listErc721, colours } from "../../Static";
+import { ListErc20, ListErc721, colours } from "../../Static";
 import { ercCalls, erc20Contract, erc721Contract } from "../../ContractCalls";
 
 class TokenInfo extends Component {
 
   state = {
+    connected: false,
     erc20s: [],
     erc721s: []
   }
@@ -18,9 +19,9 @@ class TokenInfo extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if(newProps.connected!==this.props.connected){
+    if(newProps.connected !== this.props.connected){
       if(newProps.connected === true){
-        this.updateBalances();
+        this.setState({ connected: newProps.connected }, () => this.updateBalances());
       }
     }
   }
@@ -29,6 +30,9 @@ class TokenInfo extends Component {
     if(!this.props.connected){
       return;
     }
+    
+    const listErc20 = ListErc20();
+    const listErc721 = ListErc721();
 
     for(let i = 0; i < listErc20.length; i++){
       let erc = { id: i, contractAdd: listErc20[i], type: "ERC20" };
@@ -134,7 +138,6 @@ class TokenInfo extends Component {
     });
     this.setState({ erc20s });
   }
-
 
   addErc721(_erc) {
     let erc721s = this.state.erc721s.filter(erc721 => {

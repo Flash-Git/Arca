@@ -48,7 +48,7 @@ class OfferErc extends Component {
   }
 
   async broadcastAdd(method) {
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+    const contract = await new window.web3.eth.Contract(abi, AppAddress());
     const [add1, add2] = this.props.addresses;
 
     let bnAm = window.web3.utils.toBN(method.amountId.toString());
@@ -86,7 +86,7 @@ class OfferErc extends Component {
   }
 
   async broadcastRemove(method) {
-    const contract = await new window.web3.eth.Contract(abi, AppAddress);
+    const contract = await new window.web3.eth.Contract(abi, AppAddress());
     const [add1, add2] = this.props.addresses;
 
     try{

@@ -40,7 +40,7 @@ class Box extends Component {
     let count = "";
     
     try{
-      let boxContract = await new window.web3.eth.Contract(abi, AppAddress);
+      let boxContract = await new window.web3.eth.Contract(abi, AppAddress());
       if(method.type === 0){//erc20
         count = await boxContract.methods.getErc20Count(add1, add2).call({
           from: add1
@@ -107,7 +107,7 @@ class Box extends Component {
       let partnerNonce = 0;
 
       try{
-        boxContract = await new window.web3.eth.Contract(abi, AppAddress);
+        boxContract = await new window.web3.eth.Contract(abi, AppAddress());
         if(type === 0){//erc20
           ercAbi = abiErc20;
           count = await boxContract.methods.getErc20Count(add1, add2).call({

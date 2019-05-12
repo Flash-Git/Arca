@@ -12,7 +12,7 @@ function newContract(_abi, _add) {
 }
 
 export function arcaContract() {
-  return newContract(abiArca, AppAddress);
+  return newContract(abiArca, AppAddress());
 }
 
 export function erc20Contract(_add) {
@@ -38,11 +38,11 @@ export function ercCalls(_contract, _method) {
         from: window.ethereum.selectedAddress
       });
     case "allowance":
-      return _contract.methods.allowance(window.ethereum.selectedAddress, AppAddress).call({
+      return _contract.methods.allowance(window.ethereum.selectedAddress, AppAddress()).call({
         from: window.ethereum.selectedAddress
       });
     case "isApprovedForAll":
-      return _contract.methods.isApprovedForAll(window.ethereum.selectedAddress, AppAddress).call({
+      return _contract.methods.isApprovedForAll(window.ethereum.selectedAddress, AppAddress()).call({
         from: window.ethereum.selectedAddress
       });
     default:

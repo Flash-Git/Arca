@@ -55,7 +55,7 @@ class Satisfied extends Component {
     let contract;
 
     try{
-      contract = await new window.web3.eth.Contract(abi, AppAddress);
+      contract = await new window.web3.eth.Contract(abi, AppAddress());
     }catch(e){
       console.log(e);
     }
@@ -89,7 +89,7 @@ class Satisfied extends Component {
     let contract;
 
     try{
-      contract = await new window.web3.eth.Contract(abi, AppAddress);
+      contract = await new window.web3.eth.Contract(abi, AppAddress());
     }catch(e){//UNCLEAN
       console.log(e);
     }
@@ -121,7 +121,7 @@ class Satisfied extends Component {
     let contract;
 
     try{
-      contract = await new window.web3.eth.Contract(abi, AppAddress);
+      contract = await new window.web3.eth.Contract(abi, AppAddress());
     }catch(e){
       console.log(e);
     }    
