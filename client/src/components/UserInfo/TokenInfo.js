@@ -20,9 +20,7 @@ class TokenInfo extends Component {
 
   componentWillReceiveProps(newProps) {
     if(newProps.connected !== this.props.connected){
-      if(newProps.connected === true){
-        this.setState({ connected: newProps.connected }, () => this.updateBalances());
-      }
+      this.setState({ connected: newProps.connected }, () => this.updateBalances());
     }
   }
 
