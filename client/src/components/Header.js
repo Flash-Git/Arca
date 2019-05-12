@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 //import makeBlockie from "ethereum-blockies-base64";
 
-import { AppAddress, colours } from "../Static";
+import { colours } from "../Static";
 
 class Header extends Component {
 
@@ -18,18 +18,12 @@ class Header extends Component {
       </div>;
     }
     return <div style={ textStyle }>
-      <h5 style={ networkStyle }>  </h5>
+      <h5 style={ networkStyle }> NETWORK </h5>
     </div>;
   }
 
   headerText = () => {
-    if(AppAddress !== ""){
-      return <div style={ textStyle }>
-        <h1 style={ h1Style }> A R C A</h1>
-      </div>;
-    } else {
-      return <h1 style={ h1Style }> A R C A</h1>;
-    }
+    return <h1 style={ h1Style }> A R C A</h1>;
   }
 
 
