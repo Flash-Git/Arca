@@ -78,8 +78,7 @@ class TokenInfo extends Component {
                 }));
               Promise.all(promiseArray)
                 .then( () => {
-                  erc20s.push(erc);
-                  //this.setState({ erc20s });
+                  this.addErc20(erc);
                 });
           });
         });
@@ -102,7 +101,6 @@ class TokenInfo extends Component {
             }
 
             let promiseArray = [];
-
             promiseArray.push(ercCalls(contract, "symbol")
               .then(res => {
                 if(res===null){
@@ -123,20 +121,33 @@ class TokenInfo extends Component {
               }));
             Promise.all(promiseArray)
               .then( () => {
-                erc721s.push(erc);
-                //this.setState({ erc721s });
+                this.addErc721(erc);
               });
           });
       }
+  }
 
-      Promise.all(promiseArray)
-        .then( () => {
-          console.log(promiseArray2.length);
-          Promise.all(promiseArray2)
-            .then( () => {
-              this.setState({ erc20s, erc721s });
-            })
-        });
+  addErc20(_erc) {
+    let erc20s = this.state.erc20s.filter(function(erc20){
+      return erc20.id !== _erc.id;
+    });
+    erc20s.push(_erc);
+    erc20s.sort(function(a, b) { 
+      return a.id - b.id;
+    });
+    this.setState({ erc20s });
+  }
+
+
+  addErc721(_erc) {
+    let erc721s = this.state.erc721s.filter(function(erc721){
+      return erc721.id !== _erc.id;
+    });
+    erc721s.push(_erc);
+    erc721s.sort(function(a, b) { 
+      return a.id - b.id;
+    });
+    this.setState({ erc721s });
   }
 
   render() {
