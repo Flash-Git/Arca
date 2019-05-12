@@ -29,7 +29,7 @@ class PreTrade extends Component {
         this.setState({ validInput1: false, validInput2: false });
         return;
       }
-    } catch(e){
+    }catch(e){
       await this.props.enableWeb3();
     }
     
@@ -71,7 +71,7 @@ class PreTrade extends Component {
     this.setState({
       [e.target.name]: e.target.value
     });
-
+    
     this.checkAddress(0, e.target.value);
   }
 
@@ -88,12 +88,12 @@ class PreTrade extends Component {
     if(!this.props.connected){
       await this.props.enableWeb3();
     }
-    await this.checkAddress(0, this.state.input1);
-    await this.checkAddress(1, this.state.input2);
-    
-    if(this.state.validInput1 && this.state.validInput1){
-      this.props.setAddresses([this.state.address1, this.state.address2], [this.state.ensAdd1, this.state.ensAdd2]);
-    }
+    Promise.all([this.checkAddress(0, this.state.input1), this.checkAddress(1, this.state.input2)])
+      .then( () => {
+        if(this.state.validInput1 && this.state.validInput1){
+          this.props.setAddresses([this.state.address1, this.state.address2], [this.state.ensAdd1, this.state.ensAdd2]);
+        }
+      });
   }
 
   render() {
