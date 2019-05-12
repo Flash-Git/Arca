@@ -25,26 +25,21 @@ class TokenInfo extends Component {
     }
   }
 
-  getBalance = (contract) => {
-    return 
-  }
-
   updateBalances = () => {
     if(!this.props.connected){
       return;
     }
 
     let erc20s = [];
-    let decimalBalancePromises = [];
     let erc721s = [];
+    let promiseArray = [];
+    let promiseArray2 = [];
 
     for(let i = 0; i < listErc20.length; i++){
-      console.log("i " + i);
-
       let erc = { id: i, contractAdd: listErc20[i], type: "ERC20" };
       const contract = erc20Contract(listErc20[i]);
 
-      ercCalls(contract, "decimals")
+      promiseArray.push(ercCalls(contract, "decimals")
         .then(res => {
           erc.decimalString = "1";
           if(res===null){
@@ -54,7 +49,7 @@ class TokenInfo extends Component {
           for(let i = 0; i < +(res.toString()); i++){
             erc.decimalString+="0";
           }
-          console.log("decimals " + erc.decimalString);
+          //console.log("decimals " + erc.decimalString);
           ercCalls(contract, "balanceOf")
             .then(res => {
               if(res===null){
@@ -62,65 +57,92 @@ class TokenInfo extends Component {
                 return;
               }
               erc.balance = res.div(erc.decimalString).toString();
-              console.log("balance " + erc.balance);
+              //console.log("balance " + erc.balance);
               if(erc.balance === "0"){
-                console.log("Skipping");
                 return;
               }
-              console.log("adding");
-              let promiseArray = [];
-              promiseArray.push(ercCalls(contract, "symbol")
+
+              erc20s.push(erc);
+
+              promiseArray2.push(ercCalls(contract, "symbol")
                 .then(res => {
                   if(res===null){
                     console.log(listErc20[i]);
                     return;
                   }
                   erc.symbol = res.toString();
-                  console.log("symbol " + erc.symbol);
+                  //console.log("symbol " + erc.symbol);
                 }));
-              promiseArray.push(ercCalls(contract, "allowance")
+              promiseArray2.push(ercCalls(contract, "allowance")
                 .then(res => {
                   if(res===null){
-                    console.log(listErc20[i]);
+                    //console.log(listErc20[i]);
                     return;
                   }
-                  res === "0" ? erc.allowance = "False" : erc.allowance = "True";
-                  console.log("allowance " + erc.allowance);
+                  erc.allowance = res === "0" ? "False" : "True";
+                  //console.log("allowance " + erc.allowance);
                 }));
-              Promise.all(promiseArray)
+              /*Promise.all(promiseArray)
                 .then( () => {
                   erc20s.push(erc);
-                  this.setState({ erc20s });
-                });
+                  //this.setState({ erc20s });
+                });*/
           });
+        }));
+      }
+
+      for(let i = 0; i < listErc721.length; i++){
+        let erc = { id: i, contractAdd: listErc721[i], type: "ERC721" };
+        const contract = erc721Contract(listErc721[i]);
+
+        promiseArray.push(ercCalls(contract, "balanceOf")
+          .then(res => {
+            if(res===null){
+              console.log(listErc721[i]);
+              return;
+            }
+            erc.balance = res.toString();
+            //console.log("balance " + erc.balance);
+            if(erc.balance === "0"){
+              return;
+            }
+
+            erc721s.push(erc);
+
+            promiseArray2.push(ercCalls(contract, "symbol")
+              .then(res => {
+                if(res===null){
+                  console.log(listErc721[i]);
+                  return;
+                }
+                erc.symbol = res.toString();
+                //console.log("symbol " + erc.symbol);
+              }));
+            promiseArray2.push(ercCalls(contract, "isApprovedForAll")
+              .then(res => {
+                if(res===null){
+                  //console.log(listErc721[i]);
+                  return;
+                }
+                erc.allowance = res === "0" ? "False" : "True";
+                //console.log("allowance " + erc.allowance);
+              }));
+            /*Promise.all(promiseArray)
+              .then( () => {
+                erc721s.push(erc);
+                //this.setState({ erc721s });
+              });*/
+          }));
+      }
+
+      Promise.all(promiseArray)
+        .then( () => {
+          console.log(promiseArray2.length);
+          Promise.all(promiseArray2)
+            .then( () => {
+              this.setState({ erc20s, erc721s });
+            })
         });
-      }
-      /*
-
-      let decimalString = "1";
-      for(let i = 0; i < decimals; i++){
-        decimalString+="0";
-      }
-      erc.decimalString = decimalString;
-
-      ercCalls(contract, "balanceOf")
-        .then(res => balance = res.div(decimalString).toString());
-      console.log(balance);
-
-      if(balance === "0"){
-        continue;
-      }
-      erc.balance = balance;
-
-      erc.symbol = ercCalls(contract, "symbol").toString();
-      console.log(erc.symbol);
-
-      erc.allowance = ercCalls(contract, "allowance") === "0" ? erc.allowance = "False" : erc.allowance = "True"
-      console.log(erc.allowance);
-      erc20s.push(erc);
-      */
-
-    this.setState({ erc20s, erc721s });
   }
 
   render() {
