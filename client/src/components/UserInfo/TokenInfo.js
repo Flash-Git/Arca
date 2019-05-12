@@ -44,7 +44,6 @@ class TokenInfo extends Component {
           for(let i = 0; i < +(res.toString()); i++){
             erc.decimalString+="0";
           }
-          //console.log("decimals " + erc.decimalString);
           ercCalls(contract, "balanceOf")
             .then(res => {
               if(res===null){
@@ -52,7 +51,6 @@ class TokenInfo extends Component {
                 return;
               }
               erc.balance = res.div(erc.decimalString).toString();
-              //console.log("balance " + erc.balance);
               if(erc.balance === "0"){
                 return;
               }
@@ -62,19 +60,19 @@ class TokenInfo extends Component {
                 .then(res => {
                   if(res===null){
                     console.log(listErc20[i]);
+                    erc.symbol = "N/A";
                     return;
                   }
                   erc.symbol = res.toString();
-                  //console.log("symbol " + erc.symbol);
                 }));
               promiseArray.push(ercCalls(contract, "allowance")
                 .then(res => {
                   if(res===null){
-                    //console.log(listErc20[i]);
+                    console.log(listErc20[i]);
+                    erc.allowance = "N/A";
                     return;
                   }
                   erc.allowance = res === "0" ? "False" : "True";
-                  //console.log("allowance " + erc.allowance);
                 }));
               Promise.all(promiseArray)
                 .then( () => {
@@ -95,7 +93,6 @@ class TokenInfo extends Component {
               return;
             }
             erc.balance = res.toString();
-            //console.log("balance " + erc.balance);
             if(erc.balance === "0"){
               return;
             }
@@ -105,19 +102,19 @@ class TokenInfo extends Component {
               .then(res => {
                 if(res===null){
                   console.log(listErc721[i]);
+                  erc.symbol = "N/A";
                   return;
                 }
                 erc.symbol = res.toString();
-                //console.log("symbol " + erc.symbol);
               }));
             promiseArray.push(ercCalls(contract, "isApprovedForAll")
               .then(res => {
                 if(res===null){
-                  //console.log(listErc721[i]);
+                  console.log(listErc721[i]);
+                  erc.allowance = "N/A";
                   return;
                 }
                 erc.allowance = res === "0" ? "False" : "True";
-                //console.log("allowance " + erc.allowance);
               }));
             Promise.all(promiseArray)
               .then( () => {
