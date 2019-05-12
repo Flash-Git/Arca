@@ -16,6 +16,7 @@ class Box extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      connected: false,
       satisfied: boolStatus.FALSE,
       partnerNonce: 0,
       localMethods: [],
@@ -25,13 +26,13 @@ class Box extends Component {
   }
 
   componentDidMount() {
-    setInterval( () => this.getMethods(), 5000);
+    setInterval(() => this.getMethods(), 15000);
   }
 
   componentWillReceiveProps(newProps) {
-    if(this.props.addresses!==newProps.addresses){
-      if(newProps.connected===false) return;
-      this.getMethods();
+    if(this.props.addresses[0] !== newProps.addresses[0] || this.props.addresses[1] !== newProps.addresses[1]
+      || newProps.connected !== this.props.connected){
+      this.setState({ connected: newProps.connected }, () => this.getMethods());
     }
   }
 
@@ -84,7 +85,7 @@ class Box extends Component {
   }
 
   async getMethods() {
-    if(!this.props.connected){
+    if(!this.state.connected){
       return;
     }
     
