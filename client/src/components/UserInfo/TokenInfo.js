@@ -30,16 +30,11 @@ class TokenInfo extends Component {
       return;
     }
 
-    let erc20s = [];
-    let erc721s = [];
-    let promiseArray = [];
-    let promiseArray2 = [];
-
     for(let i = 0; i < listErc20.length; i++){
       let erc = { id: i, contractAdd: listErc20[i], type: "ERC20" };
       const contract = erc20Contract(listErc20[i]);
 
-      promiseArray.push(ercCalls(contract, "decimals")
+      ercCalls(contract, "decimals")
         .then(res => {
           erc.decimalString = "1";
           if(res===null){
@@ -62,9 +57,8 @@ class TokenInfo extends Component {
                 return;
               }
 
-              erc20s.push(erc);
-
-              promiseArray2.push(ercCalls(contract, "symbol")
+              let promiseArray = [];
+              promiseArray.push(ercCalls(contract, "symbol")
                 .then(res => {
                   if(res===null){
                     console.log(listErc20[i]);
@@ -73,7 +67,7 @@ class TokenInfo extends Component {
                   erc.symbol = res.toString();
                   //console.log("symbol " + erc.symbol);
                 }));
-              promiseArray2.push(ercCalls(contract, "allowance")
+              promiseArray.push(ercCalls(contract, "allowance")
                 .then(res => {
                   if(res===null){
                     //console.log(listErc20[i]);
@@ -82,20 +76,20 @@ class TokenInfo extends Component {
                   erc.allowance = res === "0" ? "False" : "True";
                   //console.log("allowance " + erc.allowance);
                 }));
-              /*Promise.all(promiseArray)
+              Promise.all(promiseArray)
                 .then( () => {
                   erc20s.push(erc);
                   //this.setState({ erc20s });
-                });*/
+                });
           });
-        }));
+        });
       }
 
       for(let i = 0; i < listErc721.length; i++){
         let erc = { id: i, contractAdd: listErc721[i], type: "ERC721" };
         const contract = erc721Contract(listErc721[i]);
 
-        promiseArray.push(ercCalls(contract, "balanceOf")
+        ercCalls(contract, "balanceOf")
           .then(res => {
             if(res===null){
               console.log(listErc721[i]);
@@ -107,9 +101,9 @@ class TokenInfo extends Component {
               return;
             }
 
-            erc721s.push(erc);
+            let promiseArray = [];
 
-            promiseArray2.push(ercCalls(contract, "symbol")
+            promiseArray.push(ercCalls(contract, "symbol")
               .then(res => {
                 if(res===null){
                   console.log(listErc721[i]);
@@ -118,7 +112,7 @@ class TokenInfo extends Component {
                 erc.symbol = res.toString();
                 //console.log("symbol " + erc.symbol);
               }));
-            promiseArray2.push(ercCalls(contract, "isApprovedForAll")
+            promiseArray.push(ercCalls(contract, "isApprovedForAll")
               .then(res => {
                 if(res===null){
                   //console.log(listErc721[i]);
@@ -127,12 +121,12 @@ class TokenInfo extends Component {
                 erc.allowance = res === "0" ? "False" : "True";
                 //console.log("allowance " + erc.allowance);
               }));
-            /*Promise.all(promiseArray)
+            Promise.all(promiseArray)
               .then( () => {
                 erc721s.push(erc);
                 //this.setState({ erc721s });
-              });*/
-          }));
+              });
+          });
       }
 
       Promise.all(promiseArray)
