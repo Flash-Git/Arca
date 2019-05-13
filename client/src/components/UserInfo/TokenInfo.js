@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Erc20 from "./Erc20";
 import Erc721 from "./Erc721";
 import { ListErc20, ListErc721, colours } from "../../Static";
-import { ercCalls, erc20Contract, erc721Contract } from "../../ContractCalls";
+import { ErcCalls, Erc20Contract, Erc721Contract } from "../../ContractCalls";
 
 class TokenInfo extends Component {
 
@@ -34,9 +34,9 @@ class TokenInfo extends Component {
 
     for(let i = 0; i < listErc20.length; i++){
       let erc = { id: i, contractAdd: listErc20[i], type: "ERC20" };
-      const contract = erc20Contract(listErc20[i]);
+      const contract = Erc20Contract(listErc20[i]);
 
-      ercCalls(contract, "decimals")
+      ErcCalls("decimals", contract)
         .then(res => {
           erc.decimalString = "1";
           if(res===null){
@@ -46,7 +46,7 @@ class TokenInfo extends Component {
           for(let i = 0; i < +(res.toString()); i++){
             erc.decimalString+="0";
           }
-          ercCalls(contract, "balanceOf")
+          ErcCalls("balanceOf", contract)
             .then(res => {
               if(res===null){
                 console.log(listErc20[i]);
@@ -58,7 +58,7 @@ class TokenInfo extends Component {
               }
 
               let promiseArray = [];
-              promiseArray.push(ercCalls(contract, "symbol")
+              promiseArray.push(ErcCalls("symbol", contract)
                 .then(res => {
                   if(res===null){
                     console.log(listErc20[i]);
@@ -67,7 +67,7 @@ class TokenInfo extends Component {
                   }
                   erc.symbol = res.toString();
                 }));
-              promiseArray.push(ercCalls(contract, "allowance")
+              promiseArray.push(ErcCalls("allowance", contract)
                 .then(res => {
                   if(res===null){
                     console.log(listErc20[i]);
@@ -86,9 +86,9 @@ class TokenInfo extends Component {
 
       for(let i = 0; i < listErc721.length; i++){
         let erc = { id: i, contractAdd: listErc721[i], type: "ERC721" };
-        const contract = erc721Contract(listErc721[i]);
+        const contract = Erc721Contract(listErc721[i]);
 
-        ercCalls(contract, "balanceOf")
+        ErcCalls("balanceOf", contract)
           .then(res => {
             if(res===null){
               console.log(listErc721[i]);
@@ -100,7 +100,7 @@ class TokenInfo extends Component {
             }
 
             let promiseArray = [];
-            promiseArray.push(ercCalls(contract, "symbol")
+            promiseArray.push(ErcCalls("symbol", contract)
               .then(res => {
                 if(res===null){
                   console.log(listErc721[i]);
@@ -109,7 +109,7 @@ class TokenInfo extends Component {
                 }
                 erc.symbol = res.toString();
               }));
-            promiseArray.push(ercCalls(contract, "isApprovedForAll")
+            promiseArray.push(ErcCalls("isApprovedForAll", contract)
               .then(res => {
                 if(res===null){
                   console.log(listErc721[i]);
@@ -127,7 +127,7 @@ class TokenInfo extends Component {
   }
 
   addErc20(_erc) {
-    let erc20s = this.state.erc20s.filter(erc20 =>{
+    let erc20s = this.state.erc20s.filter(erc20 => {
       return erc20.id !== _erc.id;
     });
     erc20s.push(_erc);
