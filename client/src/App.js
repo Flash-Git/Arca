@@ -12,66 +12,90 @@ import "./App.css";
 
 class App extends Component {
 
-  state = {
-    connected: false,
-    addresses: ["", ""],
-    ensAdds: ["", ""],
-    erc: { contractAdd: "", type: "" },
-    userBox: userBoxStatus.NO_BOX
+  constructor(props) {
+    super(props);
+    this.state = {
+      counter: 0,
+      connected: false,
+      addresses: ["", ""],
+      ensAdds: ["", ""],
+      erc: { contractAdd: "", type: "" },
+      userBox: userBoxStatus.NO_BOX
+    }
+    this.enableWeb3 = this.enableWeb3.bind(this);
+  }
+
+  componentDidMount() {
+    setInterval(() => this.updateStuff(), 15000);
+  }
+
+  updateStuff() {
+    // eslint-disable-next-line
+    const counter = ++this.state.counter;
+    this.setState({ counter });
   }
 
   checkConnection = () => {
     try{
-      if(window.ethereum.networkVersion !== "4" && window.ethereum.networkVersion !== "5"){
-        alert("The Ethereum contract is currently only running on the rinkeby and goerli test networks.");
+      //Check if user's window has a window.ethereum currently available
+      if(typeof window.ethereum === "undefined"){
+        alert("Please use a Web3 enabled browser (install MetaMask)");
         this.setState({ connected: false });
-        return 3;
+        return false;
       }
+
       if(!window.web3.utils.isAddress(window.ethereum.selectedAddress)){
         this.setState({ connected: false });
-        return 2;
+        return false;
+      }
+      
+      if(window.ethereum.networkVersion === undefined){
+        alert("window.ethereum.networkVersion is undefined, please refresh the page");
+        return false;
+      }
+
+      //Check whether the user is on the correct network
+      if(window.ethereum.networkVersion !== "4" && window.ethereum.networkVersion !== "5"){
+        console.log("Current network: " + window.ethereum.networkVersion);
+        alert("The Ethereum contract is currently only running on the rinkeby and goerli test networks.");
+        this.setState({ connected: false });
+        return false;
       }
     }catch(e){
       this.setState({ connected: false });
-      return 1;
+      return false;
     }
-    this.setState({ connected: true });
-    return 0;
+    
+    return true;
   }
 
-  enableWeb3 = () => {
-    const connection = this.checkConnection();
-    //Check whether the DApp has an open connection to the Ethereum blockchain
-    if(connection === 0) return;
+  async enableWeb3() {
     
-    //Check whether the user is on the correct network
-    if(connection === 3) return;
-    
-    //Check if user's window has a window.ethereum currently available
-    if(typeof window.ethereum === "undefined"){
-      alert("Please use a Web3 enabled browser (install MetaMask)");
-      return;
+    if(this.checkConnection()){
+      return this.setState({ connected: true });
     }
     
     //Attempt to open a connection to the Ethereum blockchain
     window.web3 = new Web3(window.ethereum);
-    window.ethereum.enable()
-    .then(accounts => this.checkConnection())
-    .catch(e => {
-      alert("There was an issue signing you in.");
-      return;
+    return new Promise((resolve, reject) => {
+      window.ethereum.enable()
+        .then(acc => {
+          if(this.checkConnection()){
+            this.setState({ connected: true }, () => resolve());
+          }else{
+            reject();
+          }
+        })
+        .catch(e => {
+          this.setState({ connected: false });
+          alert("There was an issue signing you in.");
+          reject();
+        });
     });
   }
 
   setAddresses = (addresses, ensAdds) => {
     this.setState({ addresses }, () => {
-      this.checkUserBox();
-    });
-    this.setState({ ensAdds });
-  }
-
-  checkUserBox = () => {
-    try{
       if(this.state.addresses[0].toUpperCase() === window.ethereum.selectedAddress.toUpperCase()){
         this.setState({ userBox: userBoxStatus.FIRST_BOX });
       } else if(this.state.addresses[1].toUpperCase() === window.ethereum.selectedAddress.toUpperCase()){
@@ -79,11 +103,8 @@ class App extends Component {
       } else{
         this.setState({ userBox: userBoxStatus.NO_BOX });
       }
-    } catch(e){
-      console.log("Provider address not found");
-      console.log("Enabling Ethereum...");
-      this.enableWeb3();
-    }
+    });
+    this.setState({ ensAdds });
   }
 
   addErc = (erc) => {
@@ -96,13 +117,13 @@ class App extends Component {
         <Header />
         <div id="section-main" className="section" style={ mainStyle } >
           <div style={ leftStyle } >
-            <PreTrade refresh={ this.refresh } setAddresses={ this.setAddresses }
+            <PreTrade setAddresses={ this.setAddresses } enableWeb3={ this.enableWeb3 }
               isUser={ this.state.userBox } connected={ this.state.connected }/>
-            <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds }
-            userBox={ this.state.userBox } connected={ this.state.connected } erc={ this.state.erc } />
+            <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds } userBox={ this.state.userBox }
+              connected={ this.state.connected } erc={ this.state.erc } counter={ this.state.counter } />
           </div>
           <div style={ rightStyle } >
-            <UserInfo enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } addErc={ this.addErc } />
+            <UserInfo enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } addErc={ this.addErc } counter={ this.state.counter } />
           </div>
         </div>
         <Footer />
