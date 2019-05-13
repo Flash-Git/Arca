@@ -119,9 +119,7 @@ class PreTrade extends Component {
             />
           </div>
         </form>
-        <div style={{ display: "flex", justifyContent: "center", textAlign: "center" }}>
-          <button onClick={ this.onSubmit } style={ btnStyle }>Load Boxes</button>
-        </div>
+        <button onClick={ this.onSubmit } style={ btnStyle }>Load Boxes</button>
       </div>
     );
   }
@@ -133,30 +131,31 @@ const preTradeStyle = {
   flexDirection: "row",
   textAlign: "center",
   justifyContent: "center",
-  margin: "0 0.4rem"
+  //margin: "0 0.4rem"
 }
 
 const formStyle = {
+  display: "flex",
   textAlign: "center",
   justifyContent: "center",
-  width: "21em",
+  //width: "24em",
   maxWidth: "100%",
 }
 
 const addressesStyle = {
   display: "flex",
   flexDirection: "column",
-  flexWrap: "wrap",
-  justifyContent: "center",
+  justifyContent: "space-around",
   textAlign: "center",
-  width: "21em",
-  minWidth: "6em",
+  width: "20em",
+  //minWidth: "6em",//oddly fucky
   maxWidth: "100%",
+  paddingRight: "8px"
 }
 
 const inputStyle = {
   textAlign: "center",
-  margin: "0.15rem 0",
+  //margin: "0.05rem 0",
   borderColor: "#888888",
   borderWidth: "1px",
   borderLeft: "solid 4px green",
@@ -164,21 +163,26 @@ const inputStyle = {
   padding: "0.1rem",
   backgroundColor: colours.Primary,
   color: colours.Quaternary,
+  width: "100%"
 }
 
 const badInputStyle = {
   textAlign: "center",
-  margin: "0.15rem 0",
+  //margin: "0.05rem 0",
   borderColor: "#888888",
   borderWidth: "1px",
   borderLeft: "solid 4px red",
   borderStyle: "solid",
   padding: "0.1rem",
   backgroundColor: colours.Primary,
-  color: colours.Quaternary
+  color: colours.Quaternary,
+  width: "100%"
 }
 
 const btnStyle = {
+  display: "flex",
+  justifyContent: "center",
+  textAlign: "center",
   background: colours.User,
   padding: "10px 14px",
   border: "none",
@@ -186,7 +190,7 @@ const btnStyle = {
   cursor: "pointer",
   color: colours.Secondary,
   fontWeight: "bold",
-  margin: "0.5rem",
+  margin: "0.4rem",
 }
 
 //PropTypes
