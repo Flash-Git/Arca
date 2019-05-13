@@ -100,7 +100,6 @@ class Box extends Component {
             this.addChainErc(offer);
           })
           .catch(e => {
-            console.log("Error getting erc20 offer " + i + ":\n" + e);
             offer.amountId = "N/A";
             offer.symbol = "CANCELLED";
             offer.name = "N/A";
@@ -136,7 +135,6 @@ class Box extends Component {
             this.addChainErc(offer);
           })
           .catch(e => {
-            console.log("Error getting erc721 offer " + i + ":\n" + e);
             offer.amountId = "N/A";
             offer.symbol = "N/A";
             offer.name = "N/A";
