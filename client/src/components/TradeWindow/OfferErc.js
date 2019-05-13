@@ -50,13 +50,11 @@ class OfferErc extends Component {
   async broadcastAdd(method) {
     const contract = await new window.web3.eth.Contract(abi, AppAddress());
     const [add1, add2] = this.props.addresses;
-
-    let bnAm = window.web3.utils.toBN(method.amountId.toString());
-    bnAm = bnAm.mul(window.web3.utils.toBN("1000000000000000000"));
-
+    
     try{
       if(method.type === 0){
-        await contract.methods.pushOfferErc20(add2, method.contractAdd, bnAm.toString()).send({
+        let bnAm = new window.web3.utils.toBN(method.amountId).mul(new window.web3.utils.toBN(method.decimalString)).toString();
+        await contract.methods.pushOfferErc20(add2, method.contractAdd, bnAm).send({
           from: add1
         })
         .on("transactionHash", hash => {
