@@ -6,10 +6,8 @@ import Satisfied from "./Satisfied";
 import SubmitBox from "./SubmitBox";
 import OfferErc from "./OfferErc";
 
-import abi from "../../abis/abi";
-import abiErc20 from "../../abis/abiErc20";
-import abiErc721 from "../../abis/abiErc721";
-import { AppAddress, sendStatus, boolStatus, colours } from "../../Static";
+import { sendStatus, boolStatus, colours } from "../../Static";
+import { ArcaContract, ArcaCalls, Erc20Contract, Erc721Contract, ErcCalls } from "../../ContractCalls";
 
 class Box extends Component {
 
@@ -38,29 +36,21 @@ class Box extends Component {
 
   async addLocalMethod(method) {
     const [add1, add2] = this.props.addresses;
-    let count = "";
+    const contract = ArcaContract();
     
-    try{
-      let boxContract = await new window.web3.eth.Contract(abi, AppAddress());
-      if(method.type === 0){//erc20
-        count = await boxContract.methods.getErc20Count(add1, add2).call({
-          from: add1
+    if(method.type === 0){
+      ArcaCalls("getErc20Count", [add1, add2], contract)
+        .then(res => {
+          method.id = method.type+"-"+res.toString();
+          this.setState({ localMethods: [...this.state.localMethods, method] });
         });
-      } else {//erc721
-        count = await boxContract.methods.getErc721Count(add1, add2).call({
-          from: add1
+    }else{
+      ArcaCalls("getErc721Count", [add1, add2], contract)
+        .then(res => {
+          method.id = method.type+"-"+res.toString();
+          this.setState({ localMethods: [...this.state.localMethods, method] });
         });
-      }
-    } catch(e){
-      console.log(e);
-      return;
     }
-    method.id = method.type+"-"+count;
-    this.setState({ localMethods: [...this.state.localMethods, method] });
-  }
-
-  addChainMethod = (method) => {
-    this.setState({ chainMethods: [...this.state.chainMethods, method] });
   }
 
   //Keep sendStatus of methods up to date for safety on execution checks later
@@ -84,109 +74,140 @@ class Box extends Component {
     this.setState({ satisfied });
   }
 
+  async getErc20Offers(_erc20Count, _arcaContract) {
+    for(let i = 0; i < _erc20Count; i++){
+      const [add1, add2] = this.props.addresses;
+      let offer = { id: "0"+i, type: 0, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
+
+      ArcaCalls("getOfferErc20", [add1, add2, i], _arcaContract)
+        .then(res => {
+          [offer.contractAdd, offer.amountId] = [res[0].toString(), res[1]];
+          const erc20Contract = Erc20Contract(offer.contractAdd);
+
+          Promise.all([
+            ErcCalls("decimals", erc20Contract),
+            ErcCalls("name", erc20Contract),
+            ErcCalls("symbol", erc20Contract)
+          ])
+          .then(res => {
+            let decimalString = "1";
+            for(let i = 0; i < +res[0]; i++){
+              decimalString+="0";
+            }
+            offer.amountId = offer.amountId.div(decimalString).toString();
+
+            res[0] = decimalString;
+            res[1].toString();
+            res[2].toString();
+            [offer.decimalString, offer.name, offer.symbol] = res;
+
+            this.addChainErc(offer);
+          })
+          .catch(e => {
+            console.log("Error getting erc20 offer " + i + ":\n" + e);
+            offer.amountId = "N/A";
+            offer.symbol = "CANCELLED";
+            offer.name = "N/A";
+
+            //this.addChainErc(offer);
+          });
+        })
+        .catch(e => {
+          return;
+        });
+    }
+  }
+
+  async getErc721Offers(_erc721Count, _arcaContract) {
+    for(let i = 0; i < _erc721Count; i++){
+      const [add1, add2] = this.props.addresses;
+      let offer = { id: "1"+i, type: 1, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
+
+      ArcaCalls("getOfferErc721", [add1, add2, i], _arcaContract)
+        .then(res => {
+          [offer.contractAdd, offer.amountId] = [res[0].toString(), res[1].toString()];
+          const erc721Contract = Erc721Contract(offer.contractAdd);
+
+          Promise.all([
+            ErcCalls("name", erc721Contract),
+            ErcCalls("symbol", erc721Contract)
+          ])
+          .then(res => {
+            res[0].toString();
+            res[1].toString();
+            [offer.name, offer.symbol] = res;
+
+            this.addChainErc(offer);
+          })
+          .catch(e => {
+            console.log("Error getting erc721 offer " + i + ":\n" + e);
+            offer.amountId = "N/A";
+            offer.symbol = "N/A";
+            offer.name = "N/A";
+
+            //this.addChainErc(offer);
+          });
+        })
+        .catch(e => {
+          //console.log(e);
+          return;
+        });
+    }
+  }
+
+  addChainErc(_erc) {
+    let chainMethods = this.state.chainMethods.filter(erc => {
+      return erc.id !== _erc.id;
+    });
+    chainMethods.push(_erc);
+    chainMethods.sort((a, b) => { 
+      //console.log(a.id + b.id)
+      return a.id - b.id;
+    });
+
+    this.setState({ chainMethods });
+  }
+
   async getMethods() {
     if(!this.state.connected){
       return;
     }
-    
+
+    const contract = ArcaContract();
     const [add1, add2] = this.props.addresses;
 
-    try{
-      if(!window.web3.utils.isAddress(add1) && !window.web3.utils.isAddress(add2)){
+    let promiseArray = [];
+
+    promiseArray.push(ArcaCalls("getErc20Count", [add1, add2], contract)
+      .then(res => {
+        this.getErc20Offers(+res, contract);
+      })
+      .catch(e => {
         return;
-      }
-    }catch(e){
-      return;
-    }
+      })
+    );
 
-    const offers = [];
-    for(let type = 0; type < 2; type++){
-      let boxContract;
-        
-      let count = 0;
-      let ercAbi = [];
-      let partnerNonce = 0;
-
-      try{
-        boxContract = await new window.web3.eth.Contract(abi, AppAddress());
-        if(type === 0){//erc20
-          ercAbi = abiErc20;
-          count = await boxContract.methods.getErc20Count(add1, add2).call({
-            from: add1
-          });
-        }else{
-          ercAbi = abiErc721;
-          count = await boxContract.methods.getErc721Count(add1, add2).call({
-            from: add1
-          });
-        }
-
-        partnerNonce = await boxContract.methods.getNonce(add2, add1).call({
-          from: add1
-        });
-        partnerNonce = +partnerNonce;
-      }catch(e){
+    promiseArray.push(ArcaCalls("getErc721Count", [add1, add2], contract)
+      .then(res => {
+        this.getErc721Offers(+res, contract)
+      })
+      .catch(e => {
         return;
-      }
-      this.setState({ partnerNonce });
-      
-      if(count === 0){
-        continue;
-      }
+      })
+    );
 
-      for(let i = 0; i < count; i++){
-        try{
-          let offer = { id: type+"-"+i, type, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
-          let result;
-          if(type === 0){ //erc20
-            result = await boxContract.methods.getOfferErc20(add1, add2, i).call({
-              from: add1
-            });
-          }else if(type === 1){ //erc721
-            result = await boxContract.methods.getOfferErc721(add1, add2, i).call({
-              from: add1
-            });
-          }
-          [offer.contractAdd, offer.amountId] = [result[0], result[1].toString()];
+    Promise.all(promiseArray)
+      .then(res => {
+        this.props.setCount(this.props.boxNum, (+res[0]) + (+res[1]));
+      });
 
-          const ercContract = await new window.web3.eth.Contract(ercAbi, offer.contractAdd);
-          try{ //name and symbol aren't required for the erc token standards
-            if(type===0){ //ERC20
-              let decimals = await ercContract.methods.decimals().call({
-                from: add1
-              });
-              decimals = decimals.toString();
-              let decimalString = "1";
-              for(let i = 0; i < decimals; i++){
-                decimalString+="0";
-              }
-              offer.amountId = result[1].div(decimalString).toString();
-              offer.decimalString = decimalString;
-            }
-            offer.name = await ercContract.methods.name().call({
-              from: add1
-            });
-            offer.symbol = await ercContract.methods.symbol().call({
-              from: add1
-            });
-          }catch(e){
-            offer.name = "";
-            offer.symbol = "";
-            console.log(e);
-          }
-
-          this.remove(offer.id, 0);
-          offers.push(offer);
-        }catch(e){
-          console.error(e);
-        }
-      }
-    }
-    this.setState({ chainMethods: [] });
-    offers.forEach((method) => {
-      this.addChainMethod(method);
-    });
-    this.props.setCount(this.props.boxNum, offers.length);
+    ArcaCalls("getNonce", [add2, add1], contract)
+      .then(res => {
+        this.setState({ partnerNonce: +res });
+      })
+      .catch(e => {
+        return;
+      })
   }
 
   remove = (id, type) => {
