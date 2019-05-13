@@ -32,16 +32,29 @@ class Box extends Component {
 
   async addLocalMethod(method) {
     const [add1, add2] = this.props.addresses;
-    const contract = ArcaContract();
+    const arcaContract = ArcaContract();
+    const ercContract = Erc20Contract(method.contractAdd);
     
     if(method.type === 0){
-      ArcaCalls("getErc20Count", [add1, add2], contract)
+      Promise.all([
+        ArcaCalls("getErc20Count", [add1, add2], arcaContract),
+        ErcCalls("decimals", ercContract)
+      ])
         .then(res => {
-          method.id = method.type+"-"+res.toString();
+          method.id = method.type+"-"+res[0].toString();
+
+          method.decimalString = "1";
+          for(let i = 0; i < +(res[1].toString()); i++){
+            method.decimalString+="0";
+          }
+
+          this.setState({ localMethods: [...this.state.localMethods, method] });
+        })
+        .catch(e => {
           this.setState({ localMethods: [...this.state.localMethods, method] });
         });
     }else{
-      ArcaCalls("getErc721Count", [add1, add2], contract)
+      ArcaCalls("getErc721Count", [add1, add2], arcaContract)
         .then(res => {
           method.id = method.type+"-"+res.toString();
           this.setState({ localMethods: [...this.state.localMethods, method] });
@@ -73,7 +86,7 @@ class Box extends Component {
   async getErc20Offers(_erc20Count, _arcaContract) {
     for(let i = 0; i < _erc20Count; i++){
       const [add1, add2] = this.props.addresses;
-      let offer = { id: "0"+i, type: 0, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
+      let offer = { id: "0-"+i, type: 0, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
 
       ArcaCalls("getOfferErc20", [add1, add2, i], _arcaContract)
         .then(res => {
@@ -116,7 +129,7 @@ class Box extends Component {
   async getErc721Offers(_erc721Count, _arcaContract) {
     for(let i = 0; i < _erc721Count; i++){
       const [add1, add2] = this.props.addresses;
-      let offer = { id: "1"+i, type: 1, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
+      let offer = { id: "1-"+i, type: 1, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
 
       ArcaCalls("getOfferErc721", [add1, add2, i], _arcaContract)
         .then(res => {
@@ -154,8 +167,8 @@ class Box extends Component {
       return erc.id !== _erc.id;
     });
     chainMethods.push(_erc);
-    chainMethods.sort((a, b) => { 
-      return a.id - b.id;
+    chainMethods.sort((a, b) => {
+      return a.id.split("-").join("") - b.id.split("-").join("");
     });
 
     this.setState({ chainMethods });
@@ -282,8 +295,6 @@ Box.propTypes = {
   addresses: PropTypes.array.isRequired,
   ensAdd: PropTypes.string.isRequired,
   connected: PropTypes.bool.isRequired,
-  setCount: PropTypes.func.isRequired,
-  count: PropTypes.number.isRequired,
   erc: PropTypes.object.isRequired,
   counter: PropTypes.number.isRequired
 }
