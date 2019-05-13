@@ -14,12 +14,8 @@ class TokenInfo extends Component {
     erc721s: []
   }
 
-  componentDidMount() {
-    setInterval( () => this.updateBalances(), 15000);
-  }
-
   componentWillReceiveProps(newProps) {
-    if(newProps.connected !== this.props.connected){
+    if(newProps.connected !== this.props.connected || newProps.counter !== this.props.counter){
       this.setState({ connected: newProps.connected }, () => this.updateBalances());
     }
   }
@@ -183,7 +179,8 @@ const tokenInfoStyle = {
 //PropTypes
 TokenInfo.propTypes = {
   connected: PropTypes.bool.isRequired,
-  addErc: PropTypes.func.isRequired
+  addErc: PropTypes.func.isRequired,
+  counter: PropTypes.number.isRequired
 }
 
 export default TokenInfo;

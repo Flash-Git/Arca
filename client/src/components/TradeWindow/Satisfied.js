@@ -7,11 +7,15 @@ import { AppAddress, boolStatus, colours } from "../../Static";
 class Satisfied extends Component {
 
   state = {
+    connected: false,
     isAccepted: boolStatus.FALSE
   }
 
-  componentDidMount() {
-    setInterval( () => this.getSatisfied(), 5000);
+  componentWillReceiveProps(newProps) {
+    if(this.props.addresses[0] !== newProps.addresses[0] || this.props.addresses[1] !== newProps.addresses[1]
+      || newProps.connected !== this.props.connected || newProps.counter !== this.props.counter){
+      this.setState({ connected: newProps.connected }, () => this.getSatisfied());
+    }
   }
 
   toggleSatisfied = (e) => {//TODO ADD STUFF FOR TRANSITIONAL STATES
@@ -256,7 +260,8 @@ Satisfied.propTypes = {
   addresses: PropTypes.array.isRequired,
   isUser: PropTypes.bool.isRequired,
   connected: PropTypes.bool.isRequired,
-  partnerNonce: PropTypes.number.isRequired
+  partnerNonce: PropTypes.number.isRequired,
+  counter: PropTypes.number.isRequired
 }
 
 export default Satisfied;

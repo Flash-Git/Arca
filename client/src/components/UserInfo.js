@@ -24,7 +24,8 @@ class UserInfo extends Component {
           <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
         </div>
         <div style={ bottomStyle }>
-          <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected } addErc={ this.props.addErc } />
+          <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected }
+            addErc={ this.props.addErc } counter={ this.props.counter } />
         </div>
       </div>
     );
@@ -60,7 +61,8 @@ const bottomStyle = {
 UserInfo.propTypes = {
   connected: PropTypes.bool.isRequired,
   enableWeb3: PropTypes.func.isRequired,
-  addErc: PropTypes.func.isRequired
+  addErc: PropTypes.func.isRequired,
+  counter: PropTypes.number.isRequired
 }
 
 export default UserInfo;

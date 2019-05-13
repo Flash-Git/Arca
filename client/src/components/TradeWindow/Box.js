@@ -23,13 +23,9 @@ class Box extends Component {
     this.addLocalMethod = this.addLocalMethod.bind(this);
   }
 
-  componentDidMount() {
-    setInterval(() => this.getMethods(), 15000);
-  }
-
   componentWillReceiveProps(newProps) {
     if(this.props.addresses[0] !== newProps.addresses[0] || this.props.addresses[1] !== newProps.addresses[1]
-      || newProps.connected !== this.props.connected){
+      || newProps.connected !== this.props.connected || newProps.counter !== this.props.counter){
       this.setState({ connected: newProps.connected }, () => this.getMethods());
     }
   }
@@ -145,7 +141,7 @@ class Box extends Component {
             offer.symbol = "N/A";
             offer.name = "N/A";
 
-            //this.addChainErc(offer);
+            //this.addChainErc(offer); //Display removed calls
           });
         })
         .catch(e => {
@@ -161,7 +157,6 @@ class Box extends Component {
     });
     chainMethods.push(_erc);
     chainMethods.sort((a, b) => { 
-      //console.log(a.id + b.id)
       return a.id - b.id;
     });
 
@@ -241,8 +236,8 @@ class Box extends Component {
           </div>
         </div>
         {this.props.addresses[0].length === 0 ? "" :
-          <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied }
-            isUser={ this.props.isUser } connected={ this.props.connected } partnerNonce={ this.state.partnerNonce } />
+          <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.props.isUser }
+            connected={ this.props.connected } partnerNonce={ this.state.partnerNonce } counter={ this.props.counter } />
         }
         { this.props.isUser ?
           <SubmitBox address={ this.props.addresses[0] } addMethod={ this.addLocalMethod } erc={ this.props.erc }
@@ -264,7 +259,7 @@ const boxStyle = {
   background: colours.Secondary,
   color: colours.Quaternary,
   fontWeight: "normal",
-  minWidth: "10rem",
+  minWidth: "11rem",
   padding: "0.3rem",
   boxShadow: "0px 0px 25px -2px rgba(0,0,0,0.25)",
   width: "100%"//
@@ -291,7 +286,8 @@ Box.propTypes = {
   connected: PropTypes.bool.isRequired,
   setCount: PropTypes.func.isRequired,
   count: PropTypes.number.isRequired,
-  erc: PropTypes.object.isRequired
+  erc: PropTypes.object.isRequired,
+  counter: PropTypes.number.isRequired
 }
 
 export default Box;
