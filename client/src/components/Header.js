@@ -26,7 +26,6 @@ class Header extends Component {
     return <h1 style={ h1Style }> A R C A</h1>;
   }
 
-
   leftText = () => {
     return <div style={ textStyle }>
       <h5 style={ leftStyle }>  </h5>
