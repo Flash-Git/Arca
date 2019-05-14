@@ -8,10 +8,22 @@ import { ErcCalls, Erc20Contract, Erc721Contract } from "../../ContractCalls";
 
 class TokenInfo extends Component {
 
-  state = {
-    connected: false,
-    erc20s: [],
-    erc721s: []
+  constructor(props) {
+    super(props);
+    this.state = {
+      connected: false,
+      erc20s: [],
+      erc721s: []
+    }
+    this.updateBalances = this.updateBalances.bind(this);
+    this.addErc20 = this.addErc20.bind(this);
+    this.addErc721 = this.addErc721.bind(this);
+    this.checkListErc20 = this.checkListErc20.bind(this);
+    this.checkListErc721 = this.checkListErc721.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({ connected: this.props.connected }, () => this.updateBalances());
   }
 
   componentWillReceiveProps(newProps) {
@@ -20,7 +32,7 @@ class TokenInfo extends Component {
     }
   }
 
-  updateBalances = () => {
+  updateBalances() {
     if(!this.props.connected){
       return;
     }
