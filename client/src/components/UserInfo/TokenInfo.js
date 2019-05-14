@@ -70,7 +70,7 @@ class TokenInfo extends Component {
                     erc.allowance = "N/A";
                     return;
                   }
-                  erc.allowance = res === "0" ? "False" : "True";
+                  erc.allowance = res.toString() === "0" ? "False" : "True";
                 }));
               Promise.all(promiseArray)
                 .then( () => {
@@ -112,7 +112,7 @@ class TokenInfo extends Component {
                   erc.allowance = "N/A";
                   return;
                 }
-                erc.allowance = res === "0" ? "False" : "True";
+                erc.allowance = res === false ? "False" : "True";
               }));
             Promise.all(promiseArray)
               .then(() => {
