@@ -163,10 +163,14 @@ class Box extends Component {
   }
 
   addChainErc(_erc) {
+    let skip = false;
     let chainMethods = this.state.chainMethods.filter(erc => {
+      if(erc.removing) skip=true;
       return erc.id !== _erc.id;
     });
-    chainMethods.push(_erc);
+    if(!skip){
+      chainMethods.push(_erc);
+    }
     chainMethods.sort((a, b) => {
       return a.id.split("-").join("") - b.id.split("-").join("");
     });
@@ -216,6 +220,12 @@ class Box extends Component {
       })
   }
 
+  removing(method, remove = true) {
+    this.remove(method.id, method.type);
+    method.removing = remove;
+    this.addChainErc(method);
+  }
+
   remove = (id, type) => {
     if(type === 0){
       let localMethods = this.state.localMethods.filter(meth => meth.id !== id);
@@ -235,14 +245,14 @@ class Box extends Component {
             { this.state.chainMethods.map(method =>
               <OfferErc key={ method.id } method={ method }
                 setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ false }
-                isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
+                isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } removing={ this.removing } />
             ) }
           </div>
           <div>
             { this.state.localMethods.map(method =>
               <OfferErc key={ method.id } method={ method }
                 setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ true }
-                isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } />
+                isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } removing={ this.removing } />
             ) }
           </div>
         </div>
