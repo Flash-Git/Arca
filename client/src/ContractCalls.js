@@ -42,6 +42,37 @@ export function ArcaCalls(_method, _params, _contract = ArcaContract()) {
   }
 }
 
+export function Tx(_promise) {
+  return new Promise((resolve, reject) => {
+    _promise.on("transactionHash", hash => {
+      alert("Tx Sent: https://etherscan.com/tx/" + hash);
+      console.log("txHash: " + hash);
+    });
+    _promise.on("receipt", receipt => {
+      resolve();
+    });
+    _promise.on("error", e => {
+      console.log("Error in tx execution: " + e);
+      reject();
+    });
+    _promise.catch(e => {
+      console.log("Error in tx send: " + e);
+      reject();
+    });
+  });
+}
+
+export function ArcaSends(_method, _params, _contract = ArcaContract()) {
+  switch(_method){
+    case "pushOfferErc20"://address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount
+      return Tx(_contract.methods.pushOfferErc20(_params[0], "0", _params[1], _params[2]).send({
+        from: window.ethereum.selectedAddress
+      }));
+    default:
+      return false;
+  }
+}
+
 export function Erc20Contract(_add) {
   return newContract(abiErc20, _add);
 }
