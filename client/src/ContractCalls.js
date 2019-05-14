@@ -3,47 +3,26 @@ import abiErc721 from "./abis/abiErc721";
 import abiArca from "./abis/abi";
 import { AppAddress } from "./Static";
 
-function newContract(_abi, _add) {
+function NewContract(_abi, _add) {
   try{
     return new window.web3.eth.Contract(_abi, _add);
   }catch(e){
-    return false;
+    console.log("Failed NewContract:")
+    console.log(e);
+    return new Error(e);
   }
 }
 
 export function ArcaContract() {
-  return newContract(abiArca, AppAddress());
+  return NewContract(abiArca, AppAddress());
 }
 
-export function ArcaCalls(_method, _params, _contract = ArcaContract()) {
-  switch(_method){
-    case "getErc20Count"://address _add1, address _add2, uint256 _boxNum
-      return _contract.methods.getErc20Count(_params[0], _params[1], "0").call({
-        from: window.ethereum.selectedAddress
-      });
-    case "getErc721Count"://address _add1, address _add2, uint256 _boxNum
-      return _contract.methods.getErc721Count(_params[0], _params[1], "0").call({
-        from: window.ethereum.selectedAddress
-      });
-    case "getNonce"://address _add1, address _add2, uint256 _boxNum
-      return _contract.methods.getNonce(_params[0], _params[1], "0").call({
-        from: window.ethereum.selectedAddress
-      });
-    case "getPartnerNonce"://address _add1, address _add2, uint256 _boxNum
-      return _contract.methods.getPartnerNonce(_params[0], _params[1], "0").call({
-        from: window.ethereum.selectedAddress
-      });
-    case "getOfferErc20"://address _add1, address _add2, uint256 _boxNum, uint8 _index
-      return _contract.methods.getOfferErc20(_params[0], _params[1], "0", _params[2]).call({
-        from: window.ethereum.selectedAddress
-      });
-    case "getOfferErc721"://address _add1, address _add2, uint256 _boxNum, uint8 _index
-      return _contract.methods.getOfferErc721(_params[0], _params[1], "0", _params[2]).call({
-        from: window.ethereum.selectedAddress
-      });
-    default:
-      return false;
-  }
+export function Erc20Contract(_add) {
+  return NewContract(abiErc20, _add);
+}
+
+export function Erc721Contract(_add) {
+  return NewContract(abiErc721, _add);
 }
 
 export function Tx(_promise) {
@@ -66,69 +45,133 @@ export function Tx(_promise) {
   });
 }
 
-export function ArcaSends(_method, _params, _contract = ArcaContract()) {
-  switch(_method){
-    case "pushOfferErc20"://address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount
-      return Tx(_contract.methods.pushOfferErc20(_params[0], "0", _params[1], _params[2]).send({
-        from: window.ethereum.selectedAddress
-      }));
-    case "pushOfferErc721"://address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id
-      return Tx(_contract.methods.pushOfferErc721(_params[0], "0", _params[1], _params[2]).send({
-        from: window.ethereum.selectedAddress
-      }));
-    case "removeOfferErc20"://address _tradePartner, uint256 _boxNum, uint8 _index
-      return Tx(_contract.methods.removeOfferErc20(_params[0], "0", _params[1]).send({
-        from: window.ethereum.selectedAddress
-      }));
-    case "removeOfferErc721"://address _tradePartner, uint256 _boxNum, uint8 _index
-      return Tx(_contract.methods.removeOfferErc721(_params[0], "0", _params[1]).send({
-        from: window.ethereum.selectedAddress
-      }));
-    case "acceptTrade"://address _tradePartner, uint256 _boxNum, uint256 _partnerNonce
-      return Tx(_contract.methods.acceptTrade(_params[0], "0", _params[1]).send({
-        from: window.ethereum.selectedAddress
-      }));
-    case "unacceptTrade"://address _tradePartner, uint256 _boxNum
-      return Tx(_contract.methods.unacceptTrade(_params[0], "0").send({
-        from: window.ethereum.selectedAddress
-      }));
-      
-    default:
-      return false;
+export function ArcaCalls(_method, _params, _contract = ArcaContract()) {
+  try{
+    switch(_method){
+      case "getErc20Count"://address _add1, address _add2, uint256 _boxNum
+        return _contract.methods.getErc20Count(_params[0], _params[1], "0").call({
+          from: window.ethereum.selectedAddress
+        });
+      case "getErc721Count"://address _add1, address _add2, uint256 _boxNum
+        return _contract.methods.getErc721Count(_params[0], _params[1], "0").call({
+          from: window.ethereum.selectedAddress
+        });
+      case "getNonce"://address _add1, address _add2, uint256 _boxNum
+        return _contract.methods.getNonce(_params[0], _params[1], "0").call({
+          from: window.ethereum.selectedAddress
+        });
+      case "getPartnerNonce"://address _add1, address _add2, uint256 _boxNum
+        return _contract.methods.getPartnerNonce(_params[0], _params[1], "0").call({
+          from: window.ethereum.selectedAddress
+        });
+      case "getOfferErc20"://address _add1, address _add2, uint256 _boxNum, uint8 _index
+        return _contract.methods.getOfferErc20(_params[0], _params[1], "0", _params[2]).call({
+          from: window.ethereum.selectedAddress
+        });
+      case "getOfferErc721"://address _add1, address _add2, uint256 _boxNum, uint8 _index
+        return _contract.methods.getOfferErc721(_params[0], _params[1], "0", _params[2]).call({
+          from: window.ethereum.selectedAddress
+        });
+      default:
+    }
+  }catch(e){
+    console.log("Failed ArcaCall:")
+    console.log(e);
+    return new Error(e);
   }
 }
 
-export function Erc20Contract(_add) {
-  return newContract(abiErc20, _add);
-}
-
-export function Erc721Contract(_add) {
-  return newContract(abiErc721, _add);
-}
-
 export function ErcCalls(_method, _contract) {
-  switch(_method){
-    case "decimals":
-      return _contract.methods.decimals().call({
-        from: window.ethereum.selectedAddress
-      });
-    case "balanceOf":
-      return _contract.methods.balanceOf(window.ethereum.selectedAddress).call({
-        from: window.ethereum.selectedAddress
-      });
-    case "symbol":
-      return _contract.methods.symbol().call({
-        from: window.ethereum.selectedAddress
-      });
-    case "allowance":
-      return _contract.methods.allowance(window.ethereum.selectedAddress, AppAddress()).call({
-        from: window.ethereum.selectedAddress
-      });
-    case "isApprovedForAll":
-      return _contract.methods.isApprovedForAll(window.ethereum.selectedAddress, AppAddress()).call({
-        from: window.ethereum.selectedAddress
-      });
-    default:
-      return false;
+  try{
+    switch(_method){
+      case "decimals":
+        return _contract.methods.decimals().call({
+          from: window.ethereum.selectedAddress
+        });
+      case "balanceOf":
+        return _contract.methods.balanceOf(window.ethereum.selectedAddress).call({
+          from: window.ethereum.selectedAddress
+        });
+      case "symbol":
+        return _contract.methods.symbol().call({
+          from: window.ethereum.selectedAddress
+        });
+      case "name":
+        return _contract.methods.name().call({
+          from: window.ethereum.selectedAddress
+        });
+      case "allowance":
+        return _contract.methods.allowance(window.ethereum.selectedAddress, AppAddress()).call({
+          from: window.ethereum.selectedAddress
+        });
+      case "isApprovedForAll":
+        return _contract.methods.isApprovedForAll(window.ethereum.selectedAddress, AppAddress()).call({
+          from: window.ethereum.selectedAddress
+        });
+      default:
+        console.log("Default ErcCall");
+    }
+  }catch(e){
+    console.log("Failed ErcCall:")
+    console.log(e);
+    return new Error(e);
+  }
+}
+
+export function ArcaSends(_method, _params, _contract = ArcaContract()) {
+  try{
+    switch(_method){
+      case "pushOfferErc20"://address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount
+        return Tx(_contract.methods.pushOfferErc20(_params[0], "0", _params[1], _params[2]).send({
+          from: window.ethereum.selectedAddress
+        }));
+      case "pushOfferErc721"://address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id
+        return Tx(_contract.methods.pushOfferErc721(_params[0], "0", _params[1], _params[2]).send({
+          from: window.ethereum.selectedAddress
+        }));
+      case "removeOfferErc20"://address _tradePartner, uint256 _boxNum, uint8 _index
+        return Tx(_contract.methods.removeOfferErc20(_params[0], "0", _params[1]).send({
+          from: window.ethereum.selectedAddress
+        }));
+      case "removeOfferErc721"://address _tradePartner, uint256 _boxNum, uint8 _index
+        return Tx(_contract.methods.removeOfferErc721(_params[0], "0", _params[1]).send({
+          from: window.ethereum.selectedAddress
+        }));
+      case "acceptTrade"://address _tradePartner, uint256 _boxNum, uint256 _partnerNonce
+        return Tx(_contract.methods.acceptTrade(_params[0], "0", _params[1]).send({
+          from: window.ethereum.selectedAddress
+        }));
+      case "unacceptTrade"://address _tradePartner, uint256 _boxNum
+        return Tx(_contract.methods.unacceptTrade(_params[0], "0").send({
+          from: window.ethereum.selectedAddress
+        }));
+      default:
+        console.log("Default ArcaSend");
+    }
+  }catch(e){
+    console.log("Failed ArcaSend:")
+    console.log(e);
+    return new Error(e);
+  }
+}
+
+export function ErcSends(_method, _params, _contract = ArcaContract()) {
+  try{
+    switch(_method){
+      case "approve":
+        return Tx(_contract.methods.approve(AppAddress(), "10000000000000000000000000000000000").send({
+          from: window.ethereum.selectedAddress
+        }));
+      case "setApprovalForAll":
+        return Tx(_contract.methods.setApprovalForAll(AppAddress(), true).send({
+          from: window.ethereum.selectedAddress
+        }));
+      default:
+        console.log("Default ErcSend");
+    }
+  }catch(e){
+    console.log("Failed ErcSend:")
+    console.log(e);
+    return new Error(e);
   }
 }
