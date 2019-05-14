@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import Box from "./TradeWindow/Box";
 
-import abi from "../abis/abi";
-import { AppAddress, boolStatus, userBoxStatus, colours } from "../Static";
+import { boolStatus, userBoxStatus } from "../Static";
 
 class TradeWindow extends Component {
   
@@ -33,7 +32,7 @@ class TradeWindow extends Component {
     this.setState({ executedStatus: boolStatus.TOTRUE });
   }
 
-  async sendExecute(_add1, _add2) {
+  /*async sendExecute(_add1, _add2) {
     let contract;
     try{
       contract = await new window.web3.eth.Contract(abi, AppAddress);
@@ -63,7 +62,7 @@ class TradeWindow extends Component {
       console.error(e);
       this.setState({ executedStatus: boolStatus.TRUE });
     }
-  }
+  }*/
   
   render() {
     return(
@@ -108,7 +107,7 @@ const boxesStyle = {
   flexDirection: "row",
 }
 
-const btnStyleUnsent = {
+/*const btnStyleUnsent = {
   background: colours.User,
   padding: "0.7em 5em",
   border: "none",
@@ -125,7 +124,7 @@ const btnStyleSent = {
   color: "#FFFFFF",
   fontWeight: "bold",
   alignSelf: "center",
-}
+}*/
 
 //PropTypes
 TradeWindow.propTypes = {
