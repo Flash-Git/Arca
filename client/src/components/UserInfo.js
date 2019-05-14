@@ -8,11 +8,11 @@ import { colours } from "../Static";
 
 class UserInfo extends Component {
   render() {
-    if(!window.ethereum.selectedAddress){
+    if(!this.props.connected){
       return(
         <div id="section-userInfo" className="section" style={ userInfoStyle }>
           <div style={{ margin: "0.45rem", padding: "0.5rem" }}>
-            <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
+            <Web3Status connected ={ this.props.connected } enableWeb3={ this.props.enableWeb3 } />
           </div>
         </div>
       );
@@ -21,11 +21,11 @@ class UserInfo extends Component {
       <div id="section-userInfo" className="section" style={ userInfoStyle }>
         <div style={ topStyle }>
           <img src={ makeBlockie(window.ethereum.selectedAddress) } width="32px" height="32px" alt="blockie" />
-          <Web3Status enableWeb3={ this.props.enableWeb3 } connected ={ this.props.connected } />
+          <Web3Status connected ={ this.props.connected } enableWeb3={ this.props.enableWeb3 } />
         </div>
         <div style={ bottomStyle }>
-          <TokenInfo address={ window.ethereum.selectedAddress } connected={ this.props.connected }
-            addErc={ this.props.addErc } counter={ this.props.counter } />
+          <TokenInfo connected={ this.props.connected } counter={ this.props.counter } address={ window.ethereum.selectedAddress }
+            addErc={ this.props.addErc } />
         </div>
       </div>
     );
