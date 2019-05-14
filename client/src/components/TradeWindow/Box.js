@@ -236,29 +236,20 @@ class Box extends Component {
     const contract = ArcaContract();
     const [add1, add2] = this.props.addresses;
 
-    let promiseArray = [];
-
-    promiseArray.push(ArcaCalls("getErc20Count", [add1, add2], contract)
+    ArcaCalls("getErc20Count", [add1, add2], contract)
       .then(res => {
         this.getErc20Offers(+res, contract);
       })
       .catch(e => {
         return;
-      })
-    );
+      });
 
-    promiseArray.push(ArcaCalls("getErc721Count", [add1, add2], contract)
+    ArcaCalls("getErc721Count", [add1, add2], contract)
       .then(res => {
         this.getErc721Offers(+res, contract)
       })
       .catch(e => {
         return;
-      })
-    );
-
-    Promise.all(promiseArray)
-      .then(res => {
-        this.props.setCount(this.props.boxNum, (+res[0]) + (+res[1]));
       });
 
     ArcaCalls("getNonce", [add2, add1], contract)
@@ -278,7 +269,6 @@ class Box extends Component {
       }
     });
     
-
     this.setState({ chainMethods: newMethods });
 
   }
