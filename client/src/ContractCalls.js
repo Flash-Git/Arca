@@ -36,11 +36,13 @@ export function Tx(_promise) {
       resolve();
     });
     _promise.on("error", e => {
-      console.log("Error in tx execution: " + e);
+      console.log("Error in tx execution:");
+      console.log(e);
       reject(e);
     });
     _promise.catch(e => {
-      console.log("Error in tx send: " + e);
+      console.log("Error in tx send:");
+      console.log(e);
       reject(e);
     });
   });
