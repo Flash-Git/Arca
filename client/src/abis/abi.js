@@ -7,22 +7,8 @@ const abi = [
 				"type": "address"
 			},
 			{
-				"name": "_partnerNonce",
+				"name": "_boxNum",
 				"type": "uint256"
-			}
-		],
-		"name": "acceptAndExecuteTrade",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "_tradePartner",
-				"type": "address"
 			},
 			{
 				"name": "_partnerNonce",
@@ -41,6 +27,10 @@ const abi = [
 			{
 				"name": "_tradePartner",
 				"type": "address"
+			},
+			{
+				"name": "_boxNum",
+				"type": "uint256"
 			},
 			{
 				"name": "_erc20Address",
@@ -69,6 +59,10 @@ const abi = [
 				"type": "address"
 			},
 			{
+				"name": "_boxNum",
+				"type": "uint256"
+			},
+			{
 				"name": "_erc721Address",
 				"type": "address"
 			},
@@ -93,20 +87,10 @@ const abi = [
 			{
 				"name": "_tradePartner",
 				"type": "address"
-			}
-		],
-		"name": "executeTrade",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
+			},
 			{
-				"name": "_tradePartner",
-				"type": "address"
+				"name": "_boxNum",
+				"type": "uint256"
 			},
 			{
 				"name": "_erc20Address",
@@ -131,6 +115,10 @@ const abi = [
 				"type": "address"
 			},
 			{
+				"name": "_boxNum",
+				"type": "uint256"
+			},
+			{
 				"name": "_erc721Address",
 				"type": "address"
 			},
@@ -153,6 +141,10 @@ const abi = [
 				"type": "address"
 			},
 			{
+				"name": "_boxNum",
+				"type": "uint256"
+			},
+			{
 				"name": "_index",
 				"type": "uint8"
 			}
@@ -169,6 +161,10 @@ const abi = [
 			{
 				"name": "_tradePartner",
 				"type": "address"
+			},
+			{
+				"name": "_boxNum",
+				"type": "uint256"
 			},
 			{
 				"name": "_index",
@@ -189,6 +185,10 @@ const abi = [
 				"type": "address"
 			},
 			{
+				"name": "_boxNum",
+				"type": "uint256"
+			},
+			{
 				"name": "_count",
 				"type": "uint8"
 			}
@@ -207,6 +207,10 @@ const abi = [
 				"type": "address"
 			},
 			{
+				"name": "_boxNum",
+				"type": "uint256"
+			},
+			{
 				"name": "_count",
 				"type": "uint8"
 			}
@@ -223,6 +227,10 @@ const abi = [
 			{
 				"name": "_tradePartner",
 				"type": "address"
+			},
+			{
+				"name": "_boxNum",
+				"type": "uint256"
 			}
 		],
 		"name": "unacceptTrade",
@@ -246,6 +254,11 @@ const abi = [
 			},
 			{
 				"indexed": true,
+				"name": "boxNum",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
 				"name": "partnerNonce",
 				"type": "uint256"
 			}
@@ -265,6 +278,11 @@ const abi = [
 				"indexed": true,
 				"name": "partner",
 				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "boxNum",
+				"type": "uint256"
 			}
 		],
 		"name": "TradeUnaccepted",
@@ -282,6 +300,11 @@ const abi = [
 				"indexed": true,
 				"name": "partner",
 				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "boxNum",
+				"type": "uint256"
 			}
 		],
 		"name": "TradeExecuted",
@@ -301,6 +324,11 @@ const abi = [
 				"type": "address"
 			},
 			{
+				"indexed": true,
+				"name": "boxNum",
+				"type": "uint256"
+			},
+			{
 				"indexed": false,
 				"name": "contractAdd",
 				"type": "address"
@@ -311,7 +339,7 @@ const abi = [
 				"type": "uint256"
 			},
 			{
-				"indexed": true,
+				"indexed": false,
 				"name": "index",
 				"type": "uint8"
 			},
@@ -338,6 +366,11 @@ const abi = [
 				"type": "address"
 			},
 			{
+				"indexed": true,
+				"name": "boxNum",
+				"type": "uint256"
+			},
+			{
 				"indexed": false,
 				"name": "contractAdd",
 				"type": "address"
@@ -348,7 +381,7 @@ const abi = [
 				"type": "uint256"
 			},
 			{
-				"indexed": true,
+				"indexed": false,
 				"name": "index",
 				"type": "uint8"
 			},
@@ -376,6 +409,11 @@ const abi = [
 			},
 			{
 				"indexed": true,
+				"name": "boxNum",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
 				"name": "index",
 				"type": "uint8"
 			},
@@ -403,6 +441,11 @@ const abi = [
 			},
 			{
 				"indexed": true,
+				"name": "boxNum",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
 				"name": "index",
 				"type": "uint8"
 			},
@@ -430,6 +473,11 @@ const abi = [
 			},
 			{
 				"indexed": true,
+				"name": "boxNum",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
 				"name": "count",
 				"type": "uint8"
 			},
@@ -457,6 +505,11 @@ const abi = [
 			},
 			{
 				"indexed": true,
+				"name": "boxNum",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
 				"name": "count",
 				"type": "uint8"
 			},
@@ -479,6 +532,10 @@ const abi = [
 			{
 				"name": "_add2",
 				"type": "address"
+			},
+			{
+				"name": "_boxNum",
+				"type": "uint256"
 			}
 		],
 		"name": "getErc20Count",
@@ -502,6 +559,10 @@ const abi = [
 			{
 				"name": "_add2",
 				"type": "address"
+			},
+			{
+				"name": "_boxNum",
+				"type": "uint256"
 			}
 		],
 		"name": "getErc721Count",
@@ -525,6 +586,10 @@ const abi = [
 			{
 				"name": "_add2",
 				"type": "address"
+			},
+			{
+				"name": "_boxNum",
+				"type": "uint256"
 			}
 		],
 		"name": "getNonce",
@@ -548,6 +613,10 @@ const abi = [
 			{
 				"name": "_add2",
 				"type": "address"
+			},
+			{
+				"name": "_boxNum",
+				"type": "uint256"
 			},
 			{
 				"name": "_index",
@@ -581,6 +650,10 @@ const abi = [
 				"type": "address"
 			},
 			{
+				"name": "_boxNum",
+				"type": "uint256"
+			},
+			{
 				"name": "_index",
 				"type": "uint8"
 			}
@@ -610,6 +683,10 @@ const abi = [
 			{
 				"name": "_add2",
 				"type": "address"
+			},
+			{
+				"name": "_boxNum",
+				"type": "uint256"
 			}
 		],
 		"name": "getPartnerNonce",
