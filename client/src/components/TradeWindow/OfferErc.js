@@ -2,18 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
 
-import abi from "../../abis/abi";
-import { AppAddress, sendStatus, colours } from "../../Static";
+import { sendStatus, colours } from "../../Static";
+import { ArcaSends } from "../../ContractCalls";
 
 class OfferErc extends Component {
 
   state = {
-    id: "",
-    type: "",
-    name: "",
-    symbol: "",
-    contractAdd: "",
-    amountId: "",
     sendStatus: sendStatus.UNSENT
   }
 
@@ -38,75 +32,44 @@ class OfferErc extends Component {
       return;
     }
 
-    try{
-      if(!this.props.local) this.broadcastRemove(this.props.method);
-      this.props.remove(this.props.method.id, 0);
-      this.props.remove(this.props.method.id, 1);
-    }catch(e){
-      console.error(e);
+    if(this.props.local){
+      this.props.remove(this.props.method.id, this.props.method.type);
+      return;
     }
+    this.props.removing(this.props.method);
+    this.broadcastRemove(this.props.method);
   }
 
   async broadcastAdd(method) {
-    const contract = await new window.web3.eth.Contract(abi, AppAddress());
-    const [add1, add2] = this.props.addresses;
-    
-    try{
-      if(method.type === 0){
-        let bnAm = new window.web3.utils.toBN(method.amountId).mul(new window.web3.utils.toBN(method.decimalString)).toString();
-        await contract.methods.pushOfferErc20(add2, method.contractAdd, bnAm).send({
-          from: add1
-        })
-        .on("transactionHash", hash => {
-          console.log("txHash: " + hash);
-        })
-        .on("receipt", receipt => {
-          //this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
-          //this.props.remove(this.props.method.id);
-        })
-        .on("error", console.error);
-      } else if(method.type === 1){
-        await contract.methods.pushOfferErc721(add2, method.contractAdd, method.amountId).send({
-          from: add1
-        })
-        .on("transactionHash", hash => {
-          console.log("txHash: " + hash);
-        })
-        .on("receipt", receipt => {
-          //this.props.setMethodSendStatus(this.props.method.id, sendStatus.SENT);
-          //this.props.remove(this.props.method.id);
-        })
-        .on("error", console.error);
-      }
-    } catch(e){
-      console.log(e);
+    if(method.type === 0){
+      let bnAm = new window.web3.utils.toBN(method.amountId).mul(new window.web3.utils.toBN(method.decimalString)).toString();
+      ArcaSends("pushOfferErc20", [this.props.addresses[1], method.contractAdd, bnAm])
+        .then(() => {})
+        .catch((e) => {})
+    }else if(method.type === 1){
+      ArcaSends("pushOfferErc721", [this.props.addresses[1], method.contractAdd, method.amountId])
+        .then(() => {})
+        .catch((e) => {})
     }
   }
 
   async broadcastRemove(method) {
-    const contract = await new window.web3.eth.Contract(abi, AppAddress());
-    const [add1, add2] = this.props.addresses;
-
-    try{
-      if(method.type === 0){
-        await contract.methods.removeOfferErc20(add2, method.id.split("-")[1]).send({
-          from: add1
+    if(method.type === 0){
+      ArcaSends("removeOfferErc20", [this.props.addresses[1], method.id.split("-")[1]])
+        .then(() => {
+          this.props.remove(this.props.method.id, 0);
         })
-        .on("transactionHash", hash => {
-          console.log("txHash: " + hash);
+        .catch((e) => {
+          this.props.removing(this.props.method, false);
+        });
+    }else if(method.type === 1){
+      ArcaSends("removeOfferErc721", [this.props.addresses[1], method.id.split("-")[1]])
+        .then(() => {
+          this.props.remove(this.props.method.id, 1);
         })
-        .on("error", console.error);
-      }else if(method.type === 1){
-        await contract.methods.removeOfferErc721(add2, method.id.split("-")[1]).send({
-          from: add1
-        })
-        .on("transactionHash", hash => {
-          console.log("txHash: " + hash);
-        })
-        .on("error", console.error);
-      }
-    } catch(e){
-      console.log(e);
+        .catch((e) => {
+          this.props.removing(this.props.method, false);
+        });
     }
   }
 
@@ -134,7 +97,7 @@ class OfferErc extends Component {
 
   render() {
     const method = this.props.method;
-    if(!this.props.isUser){
+    if(!this.props.isUser||method.removing){
       return(
         <div className="method" style={ methodStyle }>
           <div className="display" style={ displayStyle }>
@@ -230,6 +193,7 @@ OfferErc.propTypes = {
   setMethodSendStatus: PropTypes.func.isRequired,
   connected: PropTypes.bool.isRequired,
   remove: PropTypes.func.isRequired,
+  removing: PropTypes.func.isRequired,
   local: PropTypes.bool.isRequired
 }
 
