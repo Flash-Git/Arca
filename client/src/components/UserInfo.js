@@ -8,6 +8,10 @@ import { colours } from "../Static";
 
 class UserInfo extends Component {
   render() {
+    if(this.props.width <= 650){
+      return null;
+    }
+
     if(!this.props.connected){
       return(
         <div id="section-userInfo" className="section" style={ userInfoStyle }>
@@ -17,6 +21,7 @@ class UserInfo extends Component {
         </div>
       );
     }
+
     return(
       <div id="section-userInfo" className="section" style={ userInfoStyle }>
         <div style={ topStyle }>
@@ -62,7 +67,8 @@ UserInfo.propTypes = {
   connected: PropTypes.bool.isRequired,
   enableWeb3: PropTypes.func.isRequired,
   addErc: PropTypes.func.isRequired,
-  counter: PropTypes.number.isRequired
+  counter: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired
 }
 
 export default UserInfo;

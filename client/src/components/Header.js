@@ -41,6 +41,13 @@ class Header extends Component {
 
   //<span><img src={ makeBlockie(AppAddress) } width="32px" height="32px" alt="blockie" style={{...blockyStyle, ...{marginLeft:"1em"} }} /></span>
   render() {
+    if(this.props.width <= 650){
+      return(
+        <header id="section-header" className="section" style={ {...headerStyle, ...{justifyContent: "center"}} }>
+          { this.headerText() }
+        </header>
+      );
+    }
     return(
       <header id="section-header" className="section" style={ headerStyle }>
         { this.leftText() }
@@ -108,6 +115,7 @@ const networkStyle = {
 //PropTypes
 Header.propTypes = {
   connected: PropTypes.bool.isRequired,
+  width: PropTypes.number.isRequired
 }
 
 export default Header;

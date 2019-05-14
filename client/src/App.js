@@ -20,14 +20,28 @@ class App extends Component {
       addresses: ["", ""],
       ensAdds: ["", ""],
       erc: { contractAdd: "", type: "" },
-      userBox: userBoxStatus.NO_BOX
+      userBox: userBoxStatus.NO_BOX,
+      width: window.innerWidth
     }
+    this.handleWindowSizeChange = this.handleWindowSizeChange.bind(this);
+    this.checkConnection = this.checkConnection.bind(this);
     this.enableWeb3 = this.enableWeb3.bind(this);
+    this.setAddresses = this.setAddresses.bind(this);
+    this.addErc = this.addErc.bind(this);
   }
 
-  componentDidMount() {
+  componentWillMount() {
     setInterval(() => this.updateStuff(), 15000);
+    window.addEventListener("resize", this.handleWindowSizeChange);
   }
+  
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleWindowSizeChange);
+  }
+  
+  handleWindowSizeChange() {
+    this.setState({ width: window.innerWidth });
+  };
 
   updateStuff() {
     // eslint-disable-next-line
@@ -35,7 +49,7 @@ class App extends Component {
     this.setState({ counter });
   }
 
-  checkConnection = () => {
+  checkConnection() {
     try{
       //Check if user's window has a window.ethereum currently available
       if(typeof window.ethereum === "undefined"){
@@ -70,7 +84,6 @@ class App extends Component {
   }
 
   async enableWeb3() {
-    
     if(this.checkConnection()){
       return this.setState({ connected: true });
     }
@@ -94,7 +107,7 @@ class App extends Component {
     });
   }
 
-  setAddresses = (addresses, ensAdds) => {
+  setAddresses(addresses, ensAdds) {
     this.setState({ addresses }, () => {
       if(this.state.addresses[0].toUpperCase() === window.ethereum.selectedAddress.toUpperCase()){
         this.setState({ userBox: userBoxStatus.FIRST_BOX });
@@ -107,14 +120,14 @@ class App extends Component {
     this.setState({ ensAdds });
   }
 
-  addErc = (erc) => {
+  addErc(erc) {
     this.setState({ erc });
   }
 
   render() {
     return(
       <div className="App" style={ pageStyle }>
-        <Header connected={ this.state.connected } />
+        <Header connected={ this.state.connected } width={ this.state.width } />
         <div id="section-main" className="section" style={ mainStyle } >
           <div style={ leftStyle } >
             <PreTrade connected ={ this.state.connected } enableWeb3={ this.enableWeb3 } setAddresses={ this.setAddresses } 
@@ -123,7 +136,8 @@ class App extends Component {
               ensAdds={ this.state.ensAdds } userBox={ this.state.userBox } erc={ this.state.erc }  />
           </div>
           <div style={ rightStyle } >
-            <UserInfo connected ={ this.state.connected } counter={ this.state.counter } enableWeb3={ this.enableWeb3 } addErc={ this.addErc } />
+            <UserInfo connected ={ this.state.connected } counter={ this.state.counter } width={ this.state.width } enableWeb3={ this.enableWeb3 }
+              addErc={ this.addErc } />
           </div>
         </div>
         <Footer />
