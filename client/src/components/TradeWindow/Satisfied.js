@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import abi from "../../abis/abi";
-import { AppAddress, boolStatus, colours } from "../../Static";
+import { boolStatus, colours } from "../../Static";
+import { ArcaSends, ArcaContract, ArcaCalls } from "../../ContractCalls";
 
 class Satisfied extends Component {
 
@@ -55,33 +55,16 @@ class Satisfied extends Component {
       alert("Not connected");
       return;
     }
-    const [add1, add2] = this.props.addresses;
-    let contract;
 
-    try{
-      contract = await new window.web3.eth.Contract(abi, AppAddress());
-    }catch(e){
-      console.log(e);
-    }
-    try{
-      contract.methods.acceptTrade(add2, this.props.partnerNonce).send({
-        from: add1
+    ArcaSends("acceptTrade", [this.props.addresses[1], this.props.partnerNonce])
+      .then(() => {
+        this.props.setSatisfied(boolStatus.TRUE);
+        this.setState({ isAccepted: boolStatus.TRUE });
       })
-        .on("transactionHash", hash => {
-          console.log(hash);
-        })
-        .on("receipt", receipt => {
-          this.props.setSatisfied(boolStatus.TRUE);
-          this.setState({ isAccepted: boolStatus.TRUE });
-        })
-        .on("error", error => {
-          this.props.setSatisfied(boolStatus.FALSE);
-          this.setState({ isAccepted: boolStatus.FALSE });
-          console.error(error);
-        });
-    } catch(e){
-      console.error(e);
-    }
+      .catch((e) => {
+        this.props.setSatisfied(boolStatus.FALSE);
+        this.setState({ isAccepted: boolStatus.FALSE });
+      })
   }
 
   async rejectTrade() {
@@ -89,73 +72,36 @@ class Satisfied extends Component {
       alert("Not connected");
       return;
     }
-    const [add1, add2] = this.props.addresses;
-    let contract;
 
-    try{
-      contract = await new window.web3.eth.Contract(abi, AppAddress());
-    }catch(e){//UNCLEAN
-      console.log(e);
-    }
-
-    try{
-      contract.methods.unacceptTrade(add2).send({
-        from: add1
+    ArcaSends("unacceptTrade", [this.props.addresses[1]])
+      .then(() => {
+        this.props.setSatisfied(boolStatus.FALSE);
+        this.setState({ isAccepted: boolStatus.FALSE });
       })
-        .on("transactionHash", hash => {
-          console.log(hash);
-        })
-        .on("receipt", receipt => {
-          this.props.setSatisfied(boolStatus.FALSE);
-          this.setState({ isAccepted: boolStatus.FALSE });
-        })
-        .on("error", error => {
-          console.error(error);
-        });
-    } catch(e){
-      console.error(e);
-    }
+      .catch((e) => {})
   }
 
   async getSatisfied() {
     if(!this.props.connected){
       return;
     }
+
     const [add1, add2] = this.props.addresses;
-    let contract;
+    const contract = ArcaContract();
 
-    try{
-      contract = await new window.web3.eth.Contract(abi, AppAddress());
-    }catch(e){
-      console.log(e);
-    }    
-    let satisfied = false;
-    try{
-      const partnerNonce = await contract.methods.getPartnerNonce(add1, add2).call({
-        from: add1
+    Promise.all([
+      ArcaCalls("getPartnerNonce", [add1, add2], contract),
+      ArcaCalls("getNonce", [add2, add1], contract)
+    ])
+      .then(res => {
+        if(+res[0] === +res[1]){
+          this.setState({ isAccepted: boolStatus.TRUE} );
+          this.props.setSatisfied(boolStatus.TRUE);
+        }else{
+          this.setState({ isAccepted: boolStatus.FALSE} );
+          this.props.setSatisfied(boolStatus.FALSE);
+        }
       });
-      const nonce = await contract.methods.getNonce(add2, add1).call({
-        from: add1
-      });
-      if(+partnerNonce === +nonce+1){
-        satisfied = true;
-      }
-    } catch(e){
-      return;
-    }
-
-    switch(satisfied){
-      case false:
-        this.setState({ isAccepted: boolStatus.FALSE} );
-        this.props.setSatisfied(boolStatus.FALSE);
-        break;
-      case true:
-        this.setState({ isAccepted: boolStatus.TRUE} );
-        this.props.setSatisfied(boolStatus.TRUE);
-        break;
-      default:
-        return;
-    }
   }
 
   status() {
