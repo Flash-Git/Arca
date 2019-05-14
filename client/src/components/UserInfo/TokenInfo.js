@@ -50,6 +50,7 @@ class TokenInfo extends Component {
               }
               erc.balance = res.div(erc.decimalString).toString();
               if(erc.balance === "0"){
+                this.checkListErc20(i);
                 return;
               }
 
@@ -67,13 +68,13 @@ class TokenInfo extends Component {
                 .then(res => {
                   if(res === null){
                     console.log(listErc20[i]);
-                    erc.allowance = "N/A";
+                    erc.enabled = "N/A";
                     return;
                   }
-                  erc.allowance = res.toString() === "0" ? "False" : "True";
+                  erc.enabled = res.toString() === "0" ? "False" : "True";
                 }));
               Promise.all(promiseArray)
-                .then( () => {
+                .then(() => {
                   this.addErc20(erc);
                 });
           });
@@ -92,6 +93,7 @@ class TokenInfo extends Component {
             }
             erc.balance = res.toString();
             if(erc.balance === "0"){
+              this.checkListErc721(i);
               return;
             }
 
@@ -109,10 +111,10 @@ class TokenInfo extends Component {
               .then(res => {
                 if(res === null){
                   console.log(listErc721[i]);
-                  erc.allowance = "N/A";
+                  erc.enabled = "N/A";
                   return;
                 }
-                erc.allowance = res === false ? "False" : "True";
+                erc.enabled = res === false ? "False" : "True";
               }));
             Promise.all(promiseArray)
               .then(() => {
@@ -141,6 +143,22 @@ class TokenInfo extends Component {
     erc721s.sort((a, b) => { 
       return a.id - b.id;
     });
+    this.setState({ erc721s });
+  }
+
+  checkListErc20(_id) {
+    let erc20s = this.state.erc20s.filter(erc => {
+      return erc.id !== _id;
+    });
+    
+    this.setState({ erc20s });
+  }
+
+  checkListErc721(_id) {
+    let erc721s = this.state.erc721s.filter(erc => {
+      return erc.id !== _id;
+    });
+    
     this.setState({ erc721s });
   }
 
