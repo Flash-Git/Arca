@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import abiErc20 from "../../abis/abiErc20";
-import abiErc721 from "../../abis/abiErc721";
-import { AppAddress, sendStatus, colours } from "../../Static";
+import { sendStatus, colours } from "../../Static";
+import { Erc20Contract, Erc721Contract, ErcCalls, ErcSends } from "../../ContractCalls";
 
 class SubmitBox extends Component {
 
@@ -40,31 +39,31 @@ class SubmitBox extends Component {
       amountId: this.state.amountId,
       sendStatus: sendStatus.UNSENT
     };
-    let ercAbi = "";
 
+    let contract;
     if(method.type.includes("20")){
-      ercAbi = abiErc20;
+      contract = Erc20Contract(method.contractAdd);
       method.type = 0;
     }else if(method.type.includes("721")){
-      ercAbi = abiErc20;
+      contract = Erc721Contract(method.contractAdd);
       method.type = 1;
     }else{
       return;
     }
-    try {
-      const ercContract = await new window.web3.eth.Contract(ercAbi, method.contractAdd);
-      method.name = await ercContract.methods.name().call({
-        from: this.props.address
-      });
-      method.symbol = await ercContract.methods.symbol().call({
-        from: this.props.address
-      });
-    }catch(e){
-      method.name = "";
-      method.symbol = "";
-    }
 
-    this.props.addMethod(method);
+    method.name = "";
+    method.symbol = "";
+
+    ErcCalls("name", contract)
+      .then(res => {
+        method.name = res.toString();
+      })
+    ErcCalls("symbol", contract)
+      .then(res => {
+        method.symbol = res.toString();
+      })
+
+    this.props.addMethod(method);//TODO THIS MIGHT REQUIRE PROMISE.ALL
   }
 
   onChange(e) {
@@ -78,43 +77,37 @@ class SubmitBox extends Component {
     if(!this.props.connected){
       return;
     }
+    const method = {
+      id: "",
+      type: this.state.type,
+      name: "",
+      symbol: "",
+      contractAdd: this.state.contractAdd,
+      amountId: this.state.amountId,
+      sendStatus: sendStatus.UNSENT
+    };
 
-    let ercAbi;
-    let type;
-
-    if(this.state.type.includes("20")){
-      ercAbi = abiErc20;
-      type = 0;
-    }else if(this.state.type.includes("721")){
-      ercAbi = abiErc721;
-      type = 1;
-    }else{
-      return;
-    }
-
-    try{
-      let contract = await new window.web3.eth.Contract(ercAbi, this.state.contractAdd);
-
-      if(type === 0){//ERC20
-        await contract.methods.approve(AppAddress, "10000000000000000000000000000000000").send({
-          from: this.props.address
+    let contract;
+    if(method.type.includes("20")){
+      contract = Erc20Contract(method.contractAdd);
+      method.type = 0;
+      ErcSends("approve", "", contract)
+        .then(res => {
+          alert("Tx Confirmed");
         })
-        .on("transactionHash", (hash) => {
-          console.log("txHash: " + hash);
+        .catch(e => {
+          alert("Tx Failed");
         })
-        .on("error", console.error);
-      }else{//ERC721
-        await contract.methods.setApprovalForAll(AppAddress, true).send({
-          from: this.props.address
+    }else if(method.type.includes("721")){
+      contract = Erc721Contract(method.contractAdd);
+      method.type = 1;
+      ErcSends("setApprovalForAll", "", contract)
+        .then(res => {
+          alert("Tx Confirmed");
         })
-        .on("transactionHash", (hash) => {
-          console.log("txHash: " + hash);
+        .catch(e => {
+          alert("Tx Failed");
         })
-        .on("error", console.error);
-      }
-    }catch(e){
-      console.log(e);
-      return;
     }
   }
 
