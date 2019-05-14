@@ -28,10 +28,11 @@ export function Erc721Contract(_add) {
 export function Tx(_promise) {
   return new Promise((resolve, reject) => {
     _promise.on("transactionHash", hash => {
-      alert("Tx Sent: https://etherscan.com/tx/" + hash);
-      console.log("txHash: " + hash);
+      alert("Tx Sent");
+      console.log("TxHash: " + hash);
     });
     _promise.on("receipt", receipt => {
+      console.log("Receipt received")
       resolve();
     });
     _promise.on("error", e => {
@@ -73,6 +74,7 @@ export function ArcaCalls(_method, _params, _contract = ArcaContract()) {
           from: window.ethereum.selectedAddress
         });
       default:
+        console.log("Invalid method name: " + _method);
     }
   }catch(e){
     console.log("Failed ArcaCall:")
@@ -109,7 +111,7 @@ export function ErcCalls(_method, _contract) {
           from: window.ethereum.selectedAddress
         });
       default:
-        console.log("Default ErcCall");
+        console.log("Invalid method name: " + _method);
     }
   }catch(e){
     console.log("Failed ErcCall:")
@@ -146,7 +148,7 @@ export function ArcaSends(_method, _params, _contract = ArcaContract()) {
           from: window.ethereum.selectedAddress
         }));
       default:
-        console.log("Default ArcaSend");
+        console.log("Invalid method name: " + _method);
     }
   }catch(e){
     console.log("Failed ArcaSend:")
@@ -159,7 +161,7 @@ export function ErcSends(_method, _params, _contract = ArcaContract()) {
   try{
     switch(_method){
       case "approve":
-        return Tx(_contract.methods.approve(AppAddress(), "10000000000000000000000000000000000").send({
+        return Tx(_contract.methods.approve(AppAddress(), "100000000000000000000000000000000000").send({
           from: window.ethereum.selectedAddress
         }));
       case "setApprovalForAll":
@@ -167,7 +169,7 @@ export function ErcSends(_method, _params, _contract = ArcaContract()) {
           from: window.ethereum.selectedAddress
         }));
       default:
-        console.log("Default ErcSend");
+        console.log("Invalid method name: " + _method);
     }
   }catch(e){
     console.log("Failed ErcSend:")
