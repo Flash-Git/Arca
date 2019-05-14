@@ -7,14 +7,7 @@ import { boolStatus, userBoxStatus } from "../Static";
 class TradeWindow extends Component {
   
   state = {
-    executedStatus: boolStatus.FALSE,
-    counts: [0, 0]
-  }
-
-  setCount = (boxNum, count) => {
-    const counts = this.state.counts;
-    counts[boxNum] = count;
-    this.setState({ counts });
+    executedStatus: boolStatus.FALSE
   }
   
   execute = () => {
@@ -32,59 +25,22 @@ class TradeWindow extends Component {
     this.setState({ executedStatus: boolStatus.TOTRUE });
   }
 
-  /*async sendExecute(_add1, _add2) {
-    let contract;
-    try{
-      contract = await new window.web3.eth.Contract(abi, AppAddress);
-    } catch(e){
-      console.log(e);
-    }
-
-    try{
-      this.setState({ executedStatus: boolStatus.TOTRUE });
-      contract.methods.executeTrade(_add2).send({
-        from: _add1
-        //TODO estimate gas
-      })
-        .on("transactionHash", hash => {
-          console.log("Hash: " + hash);
-        })
-        .on("receipt", receipt => {
-          this.setState({ executedStatus: boolStatus.TRUE });
-          alert("Trade Executed!");
-        })
-        .on("error", error => {
-          console.error(error);
-          this.setState({ executedStatus: boolStatus.FALSE });
-          alert("Trade Failed");
-        });
-    } catch(e){
-      console.error(e);
-      this.setState({ executedStatus: boolStatus.TRUE });
-    }
-  }*/
-  
   render() {
     return(
       <div id="section-tradeWindow" className="section" style={ tradeWindowStyle }>
         <div id="boxes" style={ boxesStyle }>
           {/* <h3>{ AppAddress }</h3> */}
-          <Box isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) }
+          <Box connected={ this.props.connected } counter={ this.props.counter } 
+            isUser={ (this.props.userBox === userBoxStatus.SECOND_BOX ? true : false) }
             addresses={ [this.props.addresses[1], this.props.addresses[0]] } ensAdd={ this.props.ensAdds[1] }
-            connected={ this.props.connected } setCount={ this.setCount } boxNum = { 0 } count={ this.state.counts[1] }
-            erc={ this.props.erc } counter={ this.props.counter }
+            boxNum = { 0 } erc={ this.props.erc } 
           />
-          <Box isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) }
+          <Box connected={ this.props.connected } counter={ this.props.counter }
+            isUser={ (this.props.userBox === userBoxStatus.FIRST_BOX ? true : false) }
             addresses={ [this.props.addresses[0], this.props.addresses[1]] } ensAdd={ this.props.ensAdds[0] }
-            connected={ this.props.connected } setCount={ this.setCount } boxNum = { 1 } count={ this.state.counts[0] }
-            erc={ this.props.erc } counter={ this.props.counter }
+            boxNum = { 1 } erc={ this.props.erc }
           />
         </div>
-        {/* (this.props.userBox !== 0 ?
-          <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
-            { (this.executed ? "Trade Executed" : "Execute Trade") }
-          </button>
-        : "") REMOVED CHOICE FOR WHO SPENDS GAS COST*/}
       </div>
     );
   }
@@ -106,26 +62,6 @@ const boxesStyle = {
   justifyContent: "center",
   flexDirection: "row",
 }
-
-/*const btnStyleUnsent = {
-  background: colours.User,
-  padding: "0.7em 5em",
-  border: "none",
-  cursor: "pointer",
-  color: "#FFFFFF",
-  fontWeight: "bold",
-  alignSelf: "center",
-}
-
-const btnStyleSent = {
-  background: colours.User,
-  padding: "0.7em 5em",
-  border: "none",
-  color: "#FFFFFF",
-  fontWeight: "bold",
-  alignSelf: "center",
-}*/
-
 //PropTypes
 TradeWindow.propTypes = {
   userBox: PropTypes.number.isRequired,
