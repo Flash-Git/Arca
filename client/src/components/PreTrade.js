@@ -195,10 +195,10 @@ const btnStyle = {
 
 //PropTypes
 PreTrade.propTypes = {
-  isUser: PropTypes.number.isRequired,
-  setAddresses: PropTypes.func.isRequired,
   connected: PropTypes.bool.isRequired,
-  enableWeb3: PropTypes.func.isRequired
+  enableWeb3: PropTypes.func.isRequired,
+  isUser: PropTypes.number.isRequired,
+  setAddresses: PropTypes.func.isRequired
 }
 
 export default PreTrade;
