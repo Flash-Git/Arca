@@ -114,16 +114,16 @@ class App extends Component {
   render() {
     return(
       <div className="App" style={ pageStyle }>
-        <Header />
+        <Header connected={ this.state.connected } />
         <div id="section-main" className="section" style={ mainStyle } >
           <div style={ leftStyle } >
-            <PreTrade setAddresses={ this.setAddresses } enableWeb3={ this.enableWeb3 }
-              isUser={ this.state.userBox } connected={ this.state.connected }/>
-            <TradeWindow addresses={ this.state.addresses } ensAdds={ this.state.ensAdds } userBox={ this.state.userBox }
-              connected={ this.state.connected } erc={ this.state.erc } counter={ this.state.counter } />
+            <PreTrade connected ={ this.state.connected } enableWeb3={ this.enableWeb3 } setAddresses={ this.setAddresses } 
+              isUser={ this.state.userBox } />
+            <TradeWindow connected ={ this.state.connected } counter={ this.state.counter } addresses={ this.state.addresses }
+              ensAdds={ this.state.ensAdds } userBox={ this.state.userBox } erc={ this.state.erc }  />
           </div>
           <div style={ rightStyle } >
-            <UserInfo enableWeb3={ this.enableWeb3 } connected ={ this.state.connected } addErc={ this.addErc } counter={ this.state.counter } />
+            <UserInfo connected ={ this.state.connected } counter={ this.state.counter } enableWeb3={ this.enableWeb3 } addErc={ this.addErc } />
           </div>
         </div>
         <Footer />
