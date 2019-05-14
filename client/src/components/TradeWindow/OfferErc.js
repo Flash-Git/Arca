@@ -4,14 +4,21 @@ import makeBlockie from "ethereum-blockies-base64";
 
 import { sendStatus, colours } from "../../Static";
 import { ArcaSends } from "../../ContractCalls";
+import { Erc20Contract, Erc721Contract, ErcSends } from "../../ContractCalls";
 
 class OfferErc extends Component {
 
-  state = {
-    sendStatus: sendStatus.UNSENT
+  constructor(props) {
+    super(props);
+    this.state = {
+      sendStatus: sendStatus.UNSENT
+    }
+    this.sendMethod = this.sendMethod.bind(this);
+    this.enableErc = this.enableErc.bind(this);
+    this.removeMethod = this.removeMethod.bind(this);
   }
 
-  sendMethod = () => {
+  sendMethod() {
     if(!this.props.connected){
       alert("Not connected");
       return;
@@ -26,17 +33,49 @@ class OfferErc extends Component {
     }
   }
 
-  removeMethod = () => {
+  async enableErc() {
+    if(!this.props.connected){
+      return;
+    }
+    const method = this.props.method;
+
+    let contract;
+    if(method.type === 0){
+      contract = Erc20Contract(method.contractAdd);
+      method.type = 0;
+      ErcSends("approve", "", contract)
+        .then(res => {
+          alert("Tx Confirmed");
+        })
+        .catch(e => {
+          alert("Tx Failed");
+        })
+      this.props.setMethodEnableStatus(method.id);//Assuming success
+    }else if(method.type === 1){
+      contract = Erc721Contract(method.contractAdd);
+      method.type = 1;
+      ErcSends("setApprovalForAll", "", contract)
+        .then(res => {
+          alert("Tx Confirmed");
+        })
+        .catch(e => {
+          alert("Tx Failed");
+        })
+      this.props.setMethodEnableStatus(method.id);//Assuming success
+    }
+  }
+
+  removeMethod() {
     if(!this.props.connected){
       alert("Not connected");
       return;
     }
 
     if(this.props.local){
-      this.props.remove(this.props.method.id, this.props.method.type);
+      this.props.remove(this.props.method.id);
       return;
     }
-    this.props.removing(this.props.method);
+    this.props.removing(this.props.method.id);
     this.broadcastRemove(this.props.method);
   }
 
@@ -57,32 +96,36 @@ class OfferErc extends Component {
     if(method.type === 0){
       ArcaSends("removeOfferErc20", [this.props.addresses[1], method.id.split("-")[1]])
         .then(() => {
-          this.props.remove(this.props.method.id, 0);
+          this.props.remove(this.props.method.id);
         })
         .catch((e) => {
-          this.props.removing(this.props.method, false);
+          this.props.removing(this.props.method.id, false);
         });
     }else if(method.type === 1){
       ArcaSends("removeOfferErc721", [this.props.addresses[1], method.id.split("-")[1]])
         .then(() => {
-          this.props.remove(this.props.method.id, 1);
+          this.props.remove(this.props.method.id);
         })
         .catch((e) => {
-          this.props.removing(this.props.method, false);
+          this.props.removing(this.props.method.id, false);
         });
     }
   }
 
-  buttonText = () => {
-    if(this.props.method.sendStatus === sendStatus.SENT){
-      return <span> Resend </span>;
-    } 
-    if(this.props.method.sendStatus === sendStatus.UNSENT){
-      return <span> Send </span>;      
+  offerButton(method) {
+    if(!method.enabled){
+      return <button onClick={ this.enableErc } style={( {...btnStyleSend, ...btnStyleUnsent}) } >
+          <span> Enable </span>
+        </button>;
     }
+
+    return <button onClick={ this.sendMethod } style={( method.sendStatus === sendStatus.SENT ?
+        {...btnStyleSend, ...btnStyleSent} : {...btnStyleSend, ...btnStyleUnsent}) }>
+        { this.props.method.sendStatus === sendStatus.SENT ? <span> Resend </span> : <span> Send </span> }
+      </button>;
   }
 
-  offer = (method) => {
+  offer(method) {
     return <>
       <img src={ makeBlockie(method.contractAdd) } width="18px" height="18px" alt="blockie" style={{ margin: "0.3rem 0.4rem", float: "left" }} />
       { method.type === 0 ? <div style={{ minWidth: "4rem", margin: "0.2rem" }} >ERC20&nbsp;&nbsp;&nbsp;-</div> : 
@@ -114,10 +157,7 @@ class OfferErc extends Component {
         <div className="display" style={ displayStyle }>
           { this.offer(method) }
         </div>
-        <button onClick={ this.sendMethod } style={( method.sendStatus === sendStatus.SENT ?
-          {...btnStyleSend, ...btnStyleSent} : {...btnStyleSend, ...btnStyleUnsent}) }>
-          { this.buttonText() }
-        </button>
+        { this.offerButton(method) }
       </div>
     );
   }
@@ -191,6 +231,7 @@ OfferErc.propTypes = {
   addresses: PropTypes.array.isRequired,
   isUser: PropTypes.bool.isRequired,
   setMethodSendStatus: PropTypes.func.isRequired,
+  setMethodEnableStatus: PropTypes.func.isRequired,
   connected: PropTypes.bool.isRequired,
   remove: PropTypes.func.isRequired,
   removing: PropTypes.func.isRequired,

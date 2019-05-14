@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 import { sendStatus, colours } from "../../Static";
-import { Erc20Contract, Erc721Contract, ErcCalls, ErcSends } from "../../ContractCalls";
+import { Erc20Contract, Erc721Contract, ErcCalls } from "../../ContractCalls";
 
 class SubmitBox extends Component {
 
@@ -19,7 +19,6 @@ class SubmitBox extends Component {
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-    this.allowErc = this.allowErc.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -72,45 +71,6 @@ class SubmitBox extends Component {
     });
   }
 
-  async allowErc(e) {
-    e.preventDefault();
-    if(!this.props.connected){
-      return;
-    }
-    const method = {
-      id: "",
-      type: this.state.type,
-      name: "",
-      symbol: "",
-      contractAdd: this.state.contractAdd,
-      amountId: this.state.amountId,
-      sendStatus: sendStatus.UNSENT
-    };
-
-    let contract;
-    if(method.type.includes("20")){
-      contract = Erc20Contract(method.contractAdd);
-      method.type = 0;
-      ErcSends("approve", "", contract)
-        .then(res => {
-          alert("Tx Confirmed");
-        })
-        .catch(e => {
-          alert("Tx Failed");
-        })
-    }else if(method.type.includes("721")){
-      contract = Erc721Contract(method.contractAdd);
-      method.type = 1;
-      ErcSends("setApprovalForAll", "", contract)
-        .then(res => {
-          alert("Tx Confirmed");
-        })
-        .catch(e => {
-          alert("Tx Failed");
-        })
-    }
-  }
-
   render() {
     return(
       <form onSubmit={ this.onSubmit } className="method" style={ methodStyle }>
@@ -147,9 +107,6 @@ class SubmitBox extends Component {
           value="Add Offer"
           className="btn"
         />
-        <button style={ btnStyle } onClick={ this.allowErc } className="btn">
-          Enable
-        </button>
       </form>
     );
   }
