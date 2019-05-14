@@ -53,11 +53,11 @@ export function Tx(_promise) {
     });
     _promise.on("error", e => {
       console.log("Error in tx execution: " + e);
-      reject();
+      reject(e);
     });
     _promise.catch(e => {
       console.log("Error in tx send: " + e);
-      reject();
+      reject(e);
     });
   });
 }
@@ -66,6 +66,18 @@ export function ArcaSends(_method, _params, _contract = ArcaContract()) {
   switch(_method){
     case "pushOfferErc20"://address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount
       return Tx(_contract.methods.pushOfferErc20(_params[0], "0", _params[1], _params[2]).send({
+        from: window.ethereum.selectedAddress
+      }));
+    case "pushOfferErc721"://address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id
+      return Tx(_contract.methods.pushOfferErc721(_params[0], "0", _params[1], _params[2]).send({
+        from: window.ethereum.selectedAddress
+      }));
+    case "removeOfferErc20"://address _tradePartner, uint256 _boxNum, uint8 _index
+      return Tx(_contract.methods.removeOfferErc20(_params[0], "0", _params[1]).send({
+        from: window.ethereum.selectedAddress
+      }));
+    case "removeOfferErc721"://address _tradePartner, uint256 _boxNum, uint8 _index
+      return Tx(_contract.methods.removeOfferErc721(_params[0], "0", _params[1]).send({
         from: window.ethereum.selectedAddress
       }));
     default:
