@@ -21,6 +21,13 @@ class Box extends Component {
       chainMethods: []
     }
     this.addLocalMethod = this.addLocalMethod.bind(this);
+    this.addChainErc = this.addChainErc.bind(this);
+    this.setMethodSendStatus = this.setMethodSendStatus.bind(this);
+    this.setMethodEnableStatus = this.setMethodEnableStatus.bind(this);
+    this.getErc20Offers = this.getErc20Offers.bind(this);
+    this.getErc721Offers = this.getErc721Offers.bind(this);
+    this.getMethods = this.getMethods.bind(this);
+    this.removing = this.removing.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -33,12 +40,13 @@ class Box extends Component {
   async addLocalMethod(method) {
     const [add1, add2] = this.props.addresses;
     const arcaContract = ArcaContract();
-    const ercContract = Erc20Contract(method.contractAdd);
     
     if(method.type === 0){
+      const ercContract = Erc20Contract(method.contractAdd);
       Promise.all([
         ArcaCalls("getErc20Count", [add1, add2], arcaContract),
-        ErcCalls("decimals", ercContract)
+        ErcCalls("decimals", ercContract),
+        ErcCalls("allowance", ercContract)
       ])
         .then(res => {
           method.id = method.type+"-"+res[0].toString();
@@ -48,34 +56,87 @@ class Box extends Component {
             method.decimalString+="0";
           }
 
+          method.enabled = res[2].toString() === "0" ? false : true;
+
           this.setState({ localMethods: [...this.state.localMethods, method] });
         })
         .catch(e => {
           this.setState({ localMethods: [...this.state.localMethods, method] });
         });
     }else{
-      ArcaCalls("getErc721Count", [add1, add2], arcaContract)
+      const ercContract = Erc721Contract(method.contractAdd);
+      Promise.all([
+        ArcaCalls("getErc721Count", [add1, add2], arcaContract),
+        ErcCalls("isApprovedForAll", ercContract)
+      ])
         .then(res => {
-          method.id = method.type+"-"+res.toString();
+          method.id = method.type+"-"+res[0].toString();
+
+          method.enabled = res[1];
+
           this.setState({ localMethods: [...this.state.localMethods, method] });
         });
     }
   }
 
-  //Keep sendStatus of methods up to date for safety on execution checks later
-  setMethodSendStatus = (id, sendStatus) => {
+  addChainErc(_erc) {
+    let removals = this.state.chainMethods.filter(erc => {
+      return erc.removing === true;
+    });
+
+    for(let i = 0; i < removals.length; i++){
+      if(removals[i].id === _erc.id){
+        return;
+      }
+    }
+
+    let chainMethods = this.state.chainMethods.filter(erc => {
+      return erc.id !== _erc.id;
+    });
+
+    let localMethods = this.state.localMethods.filter(erc => {
+      return erc.id !== _erc.id;
+    });
+
+    chainMethods.push(_erc);
+    chainMethods.sort((a, b) => {
+      return a.id.split("-").join("") - b.id.split("-").join("");
+    });
+
+    this.setState({ chainMethods, localMethods });
+  }
+
+  //TODO
+  setMethodSendStatus(id, sendStatus) {
     if(!this.props.connected){
       alert("Not connected");
       return;
     }
+
     const newMethods = this.state.localMethods;
-    
     this.state.localMethods.forEach((method, index) => {
       if(method.id === id){
         newMethods[index].sendStatus = sendStatus;
       }
     });
     
+    this.setState({ localMethods: newMethods });
+  }
+
+  setMethodEnableStatus(id) {
+    if(!this.props.connected){
+      alert("Not connected");
+      return;
+    }
+    
+    const newMethods = this.state.localMethods;
+    this.state.localMethods.forEach((method, index) => {
+      if(method.id === id){
+        newMethods[index].enabled = true;
+      }
+    });
+    
+
     this.setState({ localMethods: newMethods });
   }
 
@@ -96,7 +157,8 @@ class Box extends Component {
           Promise.all([
             ErcCalls("decimals", erc20Contract),
             ErcCalls("name", erc20Contract),
-            ErcCalls("symbol", erc20Contract)
+            ErcCalls("symbol", erc20Contract),
+            ErcCalls("allowance", erc20Contract)
           ])
           .then(res => {
             let decimalString = "1";
@@ -106,9 +168,11 @@ class Box extends Component {
             offer.amountId = offer.amountId.div(decimalString).toString();
 
             res[0] = decimalString;
-            res[1].toString();
-            res[2].toString();
-            [offer.decimalString, offer.name, offer.symbol] = res;
+            res[1] = res[1].toString();
+            res[2] = res[2].toString();
+            res[3] = res[3].toString() === "0" ? false : true;
+
+            [offer.decimalString, offer.name, offer.symbol, offer.enabled] = res;
 
             this.addChainErc(offer);
           })
@@ -116,7 +180,7 @@ class Box extends Component {
             offer.amountId = "N/A";
             offer.symbol = "CANCELLED";
             offer.name = "N/A";
-
+            offer.enabled = false;
             //this.addChainErc(offer);
           });
         })
@@ -138,19 +202,21 @@ class Box extends Component {
 
           Promise.all([
             ErcCalls("name", erc721Contract),
-            ErcCalls("symbol", erc721Contract)
+            ErcCalls("symbol", erc721Contract),
+            ErcCalls("isApprovedForAll", erc721Contract)
           ])
           .then(res => {
-            res[0].toString();
-            res[1].toString();
-            [offer.name, offer.symbol] = res;
-
+            res[0] = res[0].toString();
+            res[1] = res[1].toString();
+            [offer.name, offer.symbol, offer.enabled] = res;
+            
             this.addChainErc(offer);
           })
           .catch(e => {
             offer.amountId = "N/A";
             offer.symbol = "N/A";
             offer.name = "N/A";
+            offer.enabled = false;
 
             //this.addChainErc(offer); //Display removed calls
           });
@@ -160,22 +226,6 @@ class Box extends Component {
           return;
         });
     }
-  }
-
-  addChainErc(_erc) {
-    let skip = false;
-    let chainMethods = this.state.chainMethods.filter(erc => {
-      if(erc.removing) skip=true;
-      return erc.id !== _erc.id;
-    });
-    if(!skip){
-      chainMethods.push(_erc);
-    }
-    chainMethods.sort((a, b) => {
-      return a.id.split("-").join("") - b.id.split("-").join("");
-    });
-
-    this.setState({ chainMethods });
   }
 
   async getMethods() {
@@ -220,20 +270,24 @@ class Box extends Component {
       })
   }
 
-  removing(method, remove = true) {
-    this.remove(method.id, method.type);
-    method.removing = remove;
-    this.addChainErc(method);
+  removing(id, remove = true) {
+    const newMethods = this.state.chainMethods;
+    this.state.chainMethods.forEach((method, index) => {
+      if(method.id === id){
+        newMethods[index].removing = remove;
+      }
+    });
+    
+
+    this.setState({ chainMethods: newMethods });
+
   }
 
-  remove = (id, type) => {
-    if(type === 0){
-      let localMethods = this.state.localMethods.filter(meth => meth.id !== id);
-      this.setState({ localMethods });
-    }else{
-      let chainMethods = this.state.chainMethods.filter(meth => meth.id !== id);
-      this.setState({ chainMethods });
-    }
+  remove = (id) => {
+    let localMethods = this.state.localMethods.filter(meth => meth.id !== id);
+    this.setState({ localMethods });
+    let chainMethods = this.state.chainMethods.filter(meth => meth.id !== id);
+    this.setState({ chainMethods });
   }
 
   render() {
@@ -244,14 +298,14 @@ class Box extends Component {
           <div>
             { this.state.chainMethods.map(method =>
               <OfferErc key={ method.id } method={ method }
-                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ false }
+                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ false } setMethodEnableStatus={ this.setMethodEnableStatus }
                 isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } removing={ this.removing } />
             ) }
           </div>
           <div>
             { this.state.localMethods.map(method =>
               <OfferErc key={ method.id } method={ method }
-                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ true }
+                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ true } setMethodEnableStatus={ this.setMethodEnableStatus }
                 isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } removing={ this.removing } />
             ) }
           </div>
