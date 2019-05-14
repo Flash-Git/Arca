@@ -94,7 +94,7 @@ class Satisfied extends Component {
       ArcaCalls("getNonce", [add2, add1], contract)
     ])
       .then(res => {
-        if(+res[0] === +res[1]){
+        if(+res[0] === +res[1]+1){
           this.setState({ isAccepted: boolStatus.TRUE} );
           this.props.setSatisfied(boolStatus.TRUE);
         }else{
