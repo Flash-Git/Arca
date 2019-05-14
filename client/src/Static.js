@@ -38,15 +38,15 @@ const colours = Object.freeze({ "Primary":"#FFFFFF", "Secondary":"#FFFFFF", "Qua
 function AppAddress() {
   try{
     if(window.ethereum.networkVersion === "4"){ //Rinkeby
-      return "0x53dEd708361Ad49a8f742624E249bab79a1E875B";
+      return "0x50d479984fA58474aBE7474aEd2DFF7f44E99680";
     }
     if(window.ethereum.networkVersion === "5"){ //Goerli
-      return "0xCaBA1C5486C811C74427826827444B68449cA28d";
+      return "0x005f729ec568b2e2c69fb3bca7637b49e59ed5c1";
     }
   }catch(e){
     console.log("No connection to Web3");
   }
-  return "0x53dEd708361Ad49a8f742624E249bab79a1E875B";
+  return "0x50d479984fA58474aBE7474aEd2DFF7f44E99680";
 }
 
 export {
