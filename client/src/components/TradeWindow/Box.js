@@ -185,7 +185,7 @@ class Box extends Component {
           });
         })
         .catch(e => {
-          return;
+          return e;
         });
     }
   }
@@ -239,17 +239,19 @@ class Box extends Component {
     ArcaCalls("getErc20Count", [add1, add2], contract)
       .then(res => {
         this.getErc20Offers(+res, contract);
+        this.removeExtraMethods(+res, "0");
       })
       .catch(e => {
-        return;
+        return e;
       });
 
     ArcaCalls("getErc721Count", [add1, add2], contract)
       .then(res => {
-        this.getErc721Offers(+res, contract)
-      })
+        this.getErc721Offers(+res, contract);
+        this.removeExtraMethods(+res, "1");
+        })
       .catch(e => {
-        return;
+        return e;
       });
 
     ArcaCalls("getNonce", [add2, add1], contract)
@@ -261,6 +263,18 @@ class Box extends Component {
       })
   }
 
+  removeExtraMethods = (_offerCount, _type) => {
+    const chainMethods = this.state.chainMethods;
+    for(let i = 0; i < chainMethods.length; i++){
+      const id = chainMethods[i].id.split("-");
+      if(id[0] !== _type) continue;
+      if(+id[1] >= _offerCount){
+        this.remove(chainMethods[i].id);
+        console.log("removing "+ chainMethods[i].id);
+      }
+    }
+  }
+
   removing(id, remove = true) {
     const newMethods = this.state.chainMethods;
     this.state.chainMethods.forEach((method, index) => {
@@ -270,7 +284,6 @@ class Box extends Component {
     });
     
     this.setState({ chainMethods: newMethods });
-
   }
 
   remove = (id) => {
