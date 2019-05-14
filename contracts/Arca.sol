@@ -68,7 +68,7 @@ contract Arca {
     return (boxes[_add1][_add2][_boxNum].offersErc20[_index].add, boxes[_add1][_add2][_boxNum].offersErc20[_index].amount);
   }
   
-  function getOfferErc721(address _add1, address _add2, uint256 _boxNum,uint8 _index) public view returns(address, uint256) {
+  function getOfferErc721(address _add1, address _add2, uint256 _boxNum, uint8 _index) public view returns(address, uint256) {
     return (boxes[_add1][_add2][_boxNum].offersErc721[_index].add, boxes[_add1][_add2][_boxNum].offersErc721[_index].id);
   }
 
