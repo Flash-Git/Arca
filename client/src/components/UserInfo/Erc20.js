@@ -21,7 +21,7 @@ class Erc20 extends Component {
             </div>
             <div>
               Balance:&nbsp;{ this.props.erc.balance }<br/>
-              Enabled:&nbsp;{ this.props.erc.allowance }
+              Enabled:&nbsp;{ this.props.erc.enabled }
             </div>
           </div>
           <button onClick={ this.add } style={ btnStyle }>
