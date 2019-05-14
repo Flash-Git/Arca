@@ -1,11 +1,18 @@
 import React, { Component } from "react";
 //import makeBlockie from "ethereum-blockies-base64";
+import PropTypes from "prop-types";
 
 import { colours } from "../Static";
 
 class Header extends Component {
 
   networkText = () => {
+    if(!this.props.connected){
+      return <div style={ textStyle }>
+          <h5 style={ networkStyle }> NETWORK </h5>
+        </div>;
+    }
+
     if(window.ethereum.networkVersion === "4"){
       return <div style={ textStyle }>
         <h5 style={ networkStyle }> RINKEBY </h5>
@@ -19,7 +26,7 @@ class Header extends Component {
     }
     return <div style={ textStyle }>
       <h5 style={ networkStyle }> NETWORK </h5>
-    </div>;
+    </div>;  
   }
 
   headerText = () => {
@@ -97,5 +104,10 @@ const networkStyle = {
   border:"solid 1px",
   boxShadow: "0px 10px 15px 0px rgba(0,0,0,0.5)"
 }*/
+
+//PropTypes
+Header.propTypes = {
+  connected: PropTypes.bool.isRequired,
+}
 
 export default Header;
