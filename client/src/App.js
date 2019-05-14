@@ -15,8 +15,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      counter: 0,
       connected: false,
+      counter: 0,
       addresses: ["", ""],
       ensAdds: ["", ""],
       erc: { contractAdd: "", type: "" },
@@ -89,20 +89,22 @@ class App extends Component {
     }
     
     //Attempt to open a connection to the Ethereum blockchain
-    window.web3 = new Web3(window.ethereum);
+    window.web3 = new Web3(window.ethereum);//TODO ISSUE BEFORE SIGN IN
     return new Promise((resolve, reject) => {
       window.ethereum.enable()
         .then(acc => {
           if(this.checkConnection()){
             this.setState({ connected: true }, () => resolve());
           }else{
-            reject();
+            console.log("Failed to attempt to enable web3");
+            alert("Please sign yourself into MetaMask");
+            reject("Failed to attempt to enable web3");
           }
         })
         .catch(e => {
           this.setState({ connected: false });
           alert("There was an issue signing you in.");
-          reject();
+          reject(e);
         });
     });
   }
