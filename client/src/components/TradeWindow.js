@@ -81,11 +81,11 @@ class TradeWindow extends Component {
             erc={ this.props.erc } counter={ this.props.counter }
           />
         </div>
-        { (this.props.userBox !== 0 ?
+        {/* (this.props.userBox !== 0 ?
           <button onClick={ this.execute } style={ (this.executed ? btnStyleSent : btnStyleUnsent) }>
             { (this.executed ? "Trade Executed" : "Execute Trade") }
           </button>
-        : "") }
+        : "") REMOVED CHOICE FOR WHO SPENDS GAS COST*/}
       </div>
     );
   }
