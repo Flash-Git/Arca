@@ -17,24 +17,28 @@ export function ArcaContract() {
 
 export function ArcaCalls(_method, _params, _contract = ArcaContract()) {
   switch(_method){
-    case "getErc20Count":
-      return _contract.methods.getErc20Count(_params[0], _params[1]).call({
+    case "getErc20Count"://address _add1, address _add2, uint256 _boxNum
+      return _contract.methods.getErc20Count(_params[0], _params[1], "0").call({
         from: window.ethereum.selectedAddress
       });
-    case "getErc721Count":
-      return _contract.methods.getErc721Count(_params[0], _params[1]).call({
+    case "getErc721Count"://address _add1, address _add2, uint256 _boxNum
+      return _contract.methods.getErc721Count(_params[0], _params[1], "0").call({
         from: window.ethereum.selectedAddress
       });
-    case "getNonce":
-      return _contract.methods.getNonce(_params[0], _params[1]).call({
+    case "getNonce"://address _add1, address _add2, uint256 _boxNum
+      return _contract.methods.getNonce(_params[0], _params[1], "0").call({
         from: window.ethereum.selectedAddress
       });
-    case "getOfferErc20":
-      return _contract.methods.getOfferErc20(_params[0], _params[1], _params[2]).call({
+    case "getPartnerNonce"://address _add1, address _add2, uint256 _boxNum
+      return _contract.methods.getPartnerNonce(_params[0], _params[1], "0").call({
         from: window.ethereum.selectedAddress
       });
-    case "getOfferErc721":
-      return _contract.methods.getOfferErc721(_params[0], _params[1], _params[2]).call({
+    case "getOfferErc20"://address _add1, address _add2, uint256 _boxNum, uint8 _index
+      return _contract.methods.getOfferErc20(_params[0], _params[1], "0", _params[2]).call({
+        from: window.ethereum.selectedAddress
+      });
+    case "getOfferErc721"://address _add1, address _add2, uint256 _boxNum, uint8 _index
+      return _contract.methods.getOfferErc721(_params[0], _params[1], "0", _params[2]).call({
         from: window.ethereum.selectedAddress
       });
     default:
@@ -80,6 +84,15 @@ export function ArcaSends(_method, _params, _contract = ArcaContract()) {
       return Tx(_contract.methods.removeOfferErc721(_params[0], "0", _params[1]).send({
         from: window.ethereum.selectedAddress
       }));
+    case "acceptTrade"://address _tradePartner, uint256 _boxNum, uint256 _partnerNonce
+      return Tx(_contract.methods.acceptTrade(_params[0], "0", _params[1]).send({
+        from: window.ethereum.selectedAddress
+      }));
+    case "unacceptTrade"://address _tradePartner, uint256 _boxNum
+      return Tx(_contract.methods.unacceptTrade(_params[0], "0").send({
+        from: window.ethereum.selectedAddress
+      }));
+      
     default:
       return false;
   }
