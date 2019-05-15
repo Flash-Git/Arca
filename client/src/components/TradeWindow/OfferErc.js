@@ -15,6 +15,8 @@ class OfferErc extends Component {
     }
     this.sendMethod = this.sendMethod.bind(this);
     this.enableErc = this.enableErc.bind(this);
+    this.broadcastAdd = this.broadcastAdd.bind(this);
+    this.broadcastRemove = this.broadcastRemove.bind(this);
     this.removeMethod = this.removeMethod.bind(this);
   }
 
@@ -81,8 +83,7 @@ class OfferErc extends Component {
 
   async broadcastAdd(method) {
     if(method.type === 0){
-      let bnAm = new window.web3.utils.toBN(method.amountId).mul(new window.web3.utils.toBN(method.decimalString)).toString();
-      ArcaSends("pushOfferErc20", [this.props.addresses[1], method.contractAdd, bnAm])
+      ArcaSends("pushOfferErc20", [this.props.addresses[1], method.contractAdd, (+method.amountId*+method.decimalString).toString()])
         .then(() => {})
         .catch((e) => {})
     }else if(method.type === 1){
@@ -140,7 +141,9 @@ class OfferErc extends Component {
 
   render() {
     const method = this.props.method;
-    if(!this.props.isUser||method.removing){
+    
+    if(method.removing) return null;
+    if(!this.props.isUser){
       return(
         <div className="method" style={ methodStyle }>
           <div className="display" style={ displayStyle }>
