@@ -37,7 +37,9 @@ contract Arca {
   event OfferRemovedERC721(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 index, uint256 nonce);
   event BoxCountModifiedERC20(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 count, uint256 nonce);
   event BoxCountModifiedERC721(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 count, uint256 nonce);
+  event KilledContract(address indexed newContract);
 
+  address payable public author;
   mapping(address => mapping(address => mapping(uint256 => Box))) private boxes;
 
   struct OfferErc20 {
@@ -57,6 +59,11 @@ contract Arca {
     uint8 countErc721;
     uint256 nonce;
     uint256 partnerNonce;
+  }
+
+
+  constructor() public {
+    author = msg.sender;
   }
 
 
@@ -271,6 +278,12 @@ contract Arca {
   function directErc721Transfer(address _add1, address _add2, address _erc721Address, uint256 _id) private {
     Erc721(_erc721Address).safeTransferFrom(_add1, _add2, _id); //erc721 transfers don't require a return?
     assert(Erc721(_erc721Address).ownerOf(_id) == _add2);
+  }
+
+  function killContract(address _newContract) public {
+    assert(msg.sender == author);
+    emit KilledContract(_newContract);
+    selfdestruct(author);
   }
 
 }
