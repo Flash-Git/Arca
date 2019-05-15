@@ -60,7 +60,8 @@ class TokenInfo extends Component {
                 console.log(listErc20[i]);
                 return;
               }
-              erc.balance = res.div(erc.decimalString).toString();
+              erc.balance = (+res/(+erc.decimalString)).toString();
+              
               if(erc.balance === "0"){
                 this.checkListErc20(i);
                 return;
