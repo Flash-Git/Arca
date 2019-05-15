@@ -38,7 +38,7 @@ const colours = Object.freeze({ "Primary":"#FFFFFF", "Secondary":"#FFFFFF", "Qua
 function AppAddress() {
   try{
     if(window.ethereum.networkVersion === "4"){ //Rinkeby
-      return "0x50d479984fA58474aBE7474aEd2DFF7f44E99680";
+      return "0x111e9493d50dF3CcE22e700b4B8b28aE5A273035";
     }
     if(window.ethereum.networkVersion === "5"){ //Goerli
       return "0x005f729ec568b2e2c69fb3bca7637b49e59ed5c1";
@@ -46,7 +46,7 @@ function AppAddress() {
   }catch(e){
     console.log("No connection to Web3");
   }
-  return "0x50d479984fA58474aBE7474aEd2DFF7f44E99680";
+  return "0x111e9493d50dF3CcE22e700b4B8b28aE5A273035";
 }
 
 export {
