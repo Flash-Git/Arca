@@ -270,7 +270,6 @@ class Box extends Component {
       if(id[0] !== _type) continue;
       if(+id[1] >= _offerCount){
         this.remove(chainMethods[i].id);
-        console.log("removing "+ chainMethods[i].id);
       }
     }
   }
