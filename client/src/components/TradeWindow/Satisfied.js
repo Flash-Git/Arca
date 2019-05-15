@@ -6,9 +6,19 @@ import { ArcaSends, ArcaContract, ArcaCalls } from "../../ContractCalls";
 
 class Satisfied extends Component {
 
-  state = {
-    connected: false,
-    isAccepted: boolStatus.FALSE
+  constructor(props) {
+    super(props);
+    this.state = {
+      connected: false,
+      isAccepted: boolStatus.FALSE
+    }
+    this.getSatisfied = this.getSatisfied.bind(this);
+    this.acceptTrade = this.acceptTrade.bind(this);
+    this.rejectTrade = this.rejectTrade.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({ connected: this.props.connected }, () => this.getSatisfied());
   }
 
   componentWillReceiveProps(newProps) {
@@ -16,6 +26,30 @@ class Satisfied extends Component {
       || newProps.connected !== this.props.connected || newProps.counter !== this.props.counter){
       this.setState({ connected: newProps.connected }, () => this.getSatisfied());
     }
+  }
+
+  async getSatisfied() {
+    if(!this.state.connected){
+      console.log(this.props.connected);
+      return;
+    }
+
+    const [add1, add2] = this.props.addresses;
+    const contract = ArcaContract();
+
+    Promise.all([
+      ArcaCalls("getPartnerNonce", [add1, add2], contract),
+      ArcaCalls("getNonce", [add2, add1], contract)
+    ])
+      .then(res => {
+        if(+res[0] === +res[1]+1){
+          this.setState({ isAccepted: boolStatus.TRUE} );
+          this.props.setSatisfied(boolStatus.TRUE);
+        }else{
+          this.setState({ isAccepted: boolStatus.FALSE} );
+          this.props.setSatisfied(boolStatus.FALSE);
+        }
+      });
   }
 
   toggleSatisfied = (e) => {//TODO ADD STUFF FOR TRANSITIONAL STATES
@@ -79,29 +113,6 @@ class Satisfied extends Component {
         this.setState({ isAccepted: boolStatus.FALSE });
       })
       .catch((e) => {})
-  }
-
-  async getSatisfied() {
-    if(!this.props.connected){
-      return;
-    }
-
-    const [add1, add2] = this.props.addresses;
-    const contract = ArcaContract();
-
-    Promise.all([
-      ArcaCalls("getPartnerNonce", [add1, add2], contract),
-      ArcaCalls("getNonce", [add2, add1], contract)
-    ])
-      .then(res => {
-        if(+res[0] === +res[1]+1){
-          this.setState({ isAccepted: boolStatus.TRUE} );
-          this.props.setSatisfied(boolStatus.TRUE);
-        }else{
-          this.setState({ isAccepted: boolStatus.FALSE} );
-          this.props.setSatisfied(boolStatus.FALSE);
-        }
-      });
   }
 
   status() {
