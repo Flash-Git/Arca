@@ -37,7 +37,8 @@ contract Arca {
   event OfferRemovedERC721(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 index, uint256 nonce);
   event BoxCountModifiedERC20(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 count, uint256 nonce);
   event BoxCountModifiedERC721(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 count, uint256 nonce);
-  event KilledContract(address indexed newContract);
+  event AuthorUpdated(address indexed oldAuthor, address indexed newAuthor);
+  event KilledContract(address indexed author, address indexed newContract);
 
   address payable public author;
   mapping(address => mapping(address => mapping(uint256 => Box))) private boxes;
@@ -280,9 +281,15 @@ contract Arca {
     assert(Erc721(_erc721Address).ownerOf(_id) == _add2);
   }
 
+  function updateAuthor(address payable _newAuthor) public {
+    require(msg.sender == author, "Not the author");
+    author = _newAuthor;
+    emit AuthorUpdated(msg.sender, author);
+  }
+
   function killContract(address _newContract) public {
-    assert(msg.sender == author);
-    emit KilledContract(_newContract);
+    require(msg.sender == author, "Not the author");
+    emit KilledContract(msg.sender, _newContract);
     selfdestruct(author);
   }
 
