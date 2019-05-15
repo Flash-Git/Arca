@@ -37,6 +37,41 @@ class Box extends Component {
     }
   }
 
+  async getMethods() {
+    if(!this.state.connected){
+      return;
+    }
+
+    const contract = ArcaContract();
+    const [add1, add2] = this.props.addresses;
+
+    ArcaCalls("getErc20Count", [add1, add2], contract)
+      .then(res => {
+        this.getErc20Offers(+res, contract);
+        this.removeExtraMethods(+res, "0");
+      })
+      .catch(e => {
+        return e;
+      });
+
+    ArcaCalls("getErc721Count", [add1, add2], contract)
+      .then(res => {
+        this.getErc721Offers(+res, contract);
+        this.removeExtraMethods(+res, "1");
+        })
+      .catch(e => {
+        return e;
+      });
+
+    ArcaCalls("getNonce", [add2, add1], contract)
+      .then(res => {
+        this.setState({ partnerNonce: +res });
+      })
+      .catch(e => {
+        return;
+      })
+  }
+
   async addLocalMethod(method) {
     const [add1, add2] = this.props.addresses;
     const arcaContract = ArcaContract();
@@ -165,7 +200,7 @@ class Box extends Component {
             for(let i = 0; i < +res[0]; i++){
               decimalString+="0";
             }
-            offer.amountId = offer.amountId.div(decimalString).toString();
+            offer.amountId = (+offer.amountId/+decimalString).toString();
 
             res[0] = decimalString;
             res[1] = res[1].toString();
@@ -228,41 +263,6 @@ class Box extends Component {
     }
   }
 
-  async getMethods() {
-    if(!this.state.connected){
-      return;
-    }
-
-    const contract = ArcaContract();
-    const [add1, add2] = this.props.addresses;
-
-    ArcaCalls("getErc20Count", [add1, add2], contract)
-      .then(res => {
-        this.getErc20Offers(+res, contract);
-        this.removeExtraMethods(+res, "0");
-      })
-      .catch(e => {
-        return e;
-      });
-
-    ArcaCalls("getErc721Count", [add1, add2], contract)
-      .then(res => {
-        this.getErc721Offers(+res, contract);
-        this.removeExtraMethods(+res, "1");
-        })
-      .catch(e => {
-        return e;
-      });
-
-    ArcaCalls("getNonce", [add2, add1], contract)
-      .then(res => {
-        this.setState({ partnerNonce: +res });
-      })
-      .catch(e => {
-        return;
-      })
-  }
-
   removeExtraMethods = (_offerCount, _type) => {
     const chainMethods = this.state.chainMethods;
     for(let i = 0; i < chainMethods.length; i++){
@@ -300,26 +300,26 @@ class Box extends Component {
         <div className="container" style={ containerStyle }>
           <div>
             { this.state.chainMethods.map(method =>
-              <OfferErc key={ method.id } method={ method }
+              <OfferErc key={ method.id } connected={ this.state.connected } method={ method }
                 setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ false } setMethodEnableStatus={ this.setMethodEnableStatus }
-                isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } removing={ this.removing } />
+                isUser={ this.props.isUser } remove={ this.remove } removing={ this.removing } />
             ) }
           </div>
           <div>
             { this.state.localMethods.map(method =>
-              <OfferErc key={ method.id } method={ method }
+              <OfferErc key={ method.id } connected={ this.state.connected } method={ method }
                 setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ true } setMethodEnableStatus={ this.setMethodEnableStatus }
-                isUser={ this.props.isUser } connected={ this.props.connected } remove={ this.remove } removing={ this.removing } />
+                isUser={ this.props.isUser } remove={ this.remove } removing={ this.removing } />
             ) }
           </div>
         </div>
         {this.props.addresses[0].length === 0 ? "" :
-          <Satisfied addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.props.isUser }
-            connected={ this.props.connected } partnerNonce={ this.state.partnerNonce } counter={ this.props.counter } />
+          <Satisfied connected={ this.state.connected } counter={ this.props.counter } addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.props.isUser }
+            partnerNonce={ this.state.partnerNonce } />
         }
         { this.props.isUser ?
-          <SubmitBox address={ this.props.addresses[0] } addMethod={ this.addLocalMethod } erc={ this.props.erc }
-            connected={ this.props.connected } /> : ""
+          <SubmitBox connected={ this.state.connected } address={ this.props.addresses[0] } erc={ this.props.erc } addMethod={ this.addLocalMethod }
+          /> : ""
         }
       </div>
     );
