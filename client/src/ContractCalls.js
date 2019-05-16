@@ -31,19 +31,26 @@ export function Tx(_promise) {
       alert("Tx Sent");
       console.log("TxHash: " + hash);
     });
-    _promise.on("receipt", receipt => {
-      console.log("Receipt received")
-      resolve();
+    /*_promise.on("receipt", receipt => {
+      console.log("Receipt received");
+      return resolve();
+    });*/
+    _promise.on("confirmation", (confirmation, receipt) => {
+      //console.log("Confirmation: " + confirmation);
+      if(confirmation === 1){
+        console.log("Receipt received");
+        return resolve();
+      }
     });
     _promise.on("error", e => {
       console.log("Error in tx execution:");
       console.log(e);
-      reject(e);
+      return reject(e);
     });
     _promise.catch(e => {
       console.log("Error in tx send:");
       console.log(e);
-      reject(e);
+      return reject(e);
     });
   });
 }
