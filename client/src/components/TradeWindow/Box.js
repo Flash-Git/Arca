@@ -20,14 +20,13 @@ class Box extends Component {
       localMethods: [],
       chainMethods: []
     }
+    this.getMethods = this.getMethods.bind(this);
     this.addLocalMethod = this.addLocalMethod.bind(this);
     this.addChainErc = this.addChainErc.bind(this);
-    this.setMethodSendStatus = this.setMethodSendStatus.bind(this);
-    this.setMethodEnableStatus = this.setMethodEnableStatus.bind(this);
     this.getErc20Offers = this.getErc20Offers.bind(this);
     this.getErc721Offers = this.getErc721Offers.bind(this);
-    this.getMethods = this.getMethods.bind(this);
-    this.removing = this.removing.bind(this);
+    this.updateErc = this.updateErc.bind(this);
+    this.remove = this.remove.bind(this);
   }
 
   componentWillReceiveProps(newProps) {
@@ -141,40 +140,6 @@ class Box extends Component {
     this.setState({ chainMethods, localMethods });
   }
 
-  //TODO
-  setMethodSendStatus(id, sendStatus) {
-    if(!this.props.connected){
-      alert("Not connected");
-      return;
-    }
-
-    const newMethods = this.state.localMethods;
-    this.state.localMethods.forEach((method, index) => {
-      if(method.id === id){
-        newMethods[index].sendStatus = sendStatus;
-      }
-    });
-    
-    this.setState({ localMethods: newMethods });
-  }
-
-  setMethodEnableStatus(id) {
-    if(!this.props.connected){
-      alert("Not connected");
-      return;
-    }
-    
-    const newMethods = this.state.localMethods;
-    this.state.localMethods.forEach((method, index) => {
-      if(method.id === id){
-        newMethods[index].enabled = true;
-      }
-    });
-    
-
-    this.setState({ localMethods: newMethods });
-  }
-
   setSatisfied = (satisfied) => {
     this.setState({ satisfied });
   }
@@ -182,7 +147,7 @@ class Box extends Component {
   async getErc20Offers(_erc20Count, _arcaContract) {
     for(let i = 0; i < _erc20Count; i++){
       const [add1, add2] = this.props.addresses;
-      let offer = { id: "0-"+i, type: 0, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
+      let offer = { id: "0-"+i, type: 0, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT, removed: false };
 
       ArcaCalls("getOfferErc20", [add1, add2, i], _arcaContract)
         .then(res => {
@@ -274,15 +239,38 @@ class Box extends Component {
     }
   }
 
-  removing(id, remove = true) {
-    const newMethods = this.state.chainMethods;
-    this.state.chainMethods.forEach((method, index) => {
-      if(method.id === id){
-        newMethods[index].removing = remove;
-      }
-    });
-    
-    this.setState({ chainMethods: newMethods });
+  updateErc(_property, _id, _params) {
+    const chainMethods = this.state.chainMethods;
+    const localMethods = this.state.localMethods;
+
+    switch(_property){
+      case "removing":
+        this.state.chainMethods.forEach((method, index) => {
+          if(method.id === _id){
+            chainMethods[index].removing = _params;
+          }
+        });
+        this.setState({ chainMethods });
+        break;
+      case "sendStatus":
+        this.state.localMethods.forEach((method, index) => {
+          if(method.id === _id){
+            localMethods[index].sendStatus = _params;
+          }
+        });
+        this.setState({ localMethods });
+        break;
+      case "enabled":
+        this.state.localMethods.forEach((method, index) => {
+          if(method.id === _id){
+            localMethods[index].enabled = _params;
+          }
+        });
+        this.setState({ localMethods });
+        break;
+      default:
+        console.log("Invalid property name: " + _property);
+    }
   }
 
   remove = (id) => {
@@ -300,15 +288,15 @@ class Box extends Component {
           <div>
             { this.state.chainMethods.map(method =>
               <OfferErc key={ method.id } connected={ this.state.connected } method={ method }
-                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ false } setMethodEnableStatus={ this.setMethodEnableStatus }
-                isUser={ this.props.isUser } remove={ this.remove } removing={ this.removing } />
+                addresses={ this.props.addresses } local={ false } updateErc={ this.updateErc }
+                isUser={ this.props.isUser } remove={ this.remove } />
             ) }
           </div>
           <div>
             { this.state.localMethods.map(method =>
               <OfferErc key={ method.id } connected={ this.state.connected } method={ method }
-                setMethodSendStatus={ this.setMethodSendStatus } addresses={ this.props.addresses } local={ true } setMethodEnableStatus={ this.setMethodEnableStatus }
-                isUser={ this.props.isUser } remove={ this.remove } removing={ this.removing } />
+                addresses={ this.props.addresses } local={ true } updateErc={ this.updateErc }
+                isUser={ this.props.isUser } remove={ this.remove } />
             ) }
           </div>
         </div>

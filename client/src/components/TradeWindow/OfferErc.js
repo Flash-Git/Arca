@@ -44,26 +44,28 @@ class OfferErc extends Component {
     let contract;
     if(method.type === 0){
       contract = Erc20Contract(method.contractAdd);
-      method.type = 0;
+
       ErcSends("approve", "", contract)
         .then(res => {
-          alert("Tx Confirmed");
+          //alert("Tx Confirmed");
         })
         .catch(e => {
           alert("Tx Failed");
-        })
-      this.props.setMethodEnableStatus(method.id);//Assuming success
+          this.props.updateErc("enabled", method.id, false);
+        });
+      this.props.updateErc("enabled", method.id, true);//Assuming success
     }else if(method.type === 1){
       contract = Erc721Contract(method.contractAdd);
-      method.type = 1;
+
       ErcSends("setApprovalForAll", "", contract)
         .then(res => {
-          alert("Tx Confirmed");
+          //alert("Tx Confirmed");
         })
         .catch(e => {
           alert("Tx Failed");
-        })
-      this.props.setMethodEnableStatus(method.id);//Assuming success
+          this.props.updateErc("enabled", method.id, false);
+        });
+      this.props.updateErc("enabled", method.id, true);//Assuming success
     }
   }
 
@@ -77,19 +79,27 @@ class OfferErc extends Component {
       this.props.remove(this.props.method.id);
       return;
     }
-    this.props.removing(this.props.method.id);
+    this.props.updateErc("removing", this.props.method.id, true);
     this.broadcastRemove(this.props.method);
   }
 
   async broadcastAdd(method) {
     if(method.type === 0){
       ArcaSends("pushOfferErc20", [this.props.addresses[1], method.contractAdd, (+method.amountId*+method.decimalString).toString()])
-        .then(() => {})
-        .catch((e) => {})
+        .then(() => {
+          this.props.updateErc("sendStatus", method.id, sendStatus.SENT);
+        })
+        .catch((e) => {
+          this.props.updateErc("sendStatus", method.id, sendStatus.UNSENT);
+        });
     }else if(method.type === 1){
       ArcaSends("pushOfferErc721", [this.props.addresses[1], method.contractAdd, method.amountId])
-        .then(() => {})
-        .catch((e) => {})
+        .then(() => {
+          this.props.updateErc("sendStatus", method.id, sendStatus.SENT);
+        })
+        .catch((e) => {
+          this.props.updateErc("sendStatus", method.id, sendStatus.UNSENT);
+        });
     }
   }
 
@@ -97,18 +107,20 @@ class OfferErc extends Component {
     if(method.type === 0){
       ArcaSends("removeOfferErc20", [this.props.addresses[1], method.id.split("-")[1]])
         .then(() => {
-          this.props.remove(this.props.method.id);
+          this.props.remove(method.id);
         })
         .catch((e) => {
-          this.props.removing(this.props.method.id, false);
+          this.props.updateErc("removing", method.id, false);
+          //this.props.removing(this.props.method.id, false);
         });
     }else if(method.type === 1){
       ArcaSends("removeOfferErc721", [this.props.addresses[1], method.id.split("-")[1]])
         .then(() => {
-          this.props.remove(this.props.method.id);
+          this.props.remove(method.id);
         })
         .catch((e) => {
-          this.props.removing(this.props.method.id, false);
+          this.props.updateErc("removing", method.id, false);          
+          //this.props.removing(this.props.method.id, false);
         });
     }
   }
@@ -120,9 +132,20 @@ class OfferErc extends Component {
         </button>;
     }
 
-    return <button onClick={ this.sendMethod } style={( method.sendStatus === sendStatus.SENT ?
+    //Erc20
+    if(method.type === 0){
+      return <button onClick={ this.sendMethod } style={( method.sendStatus === sendStatus.SENT ?
         {...btnStyleSend, ...btnStyleSent} : {...btnStyleSend, ...btnStyleUnsent}) }>
         { this.props.method.sendStatus === sendStatus.SENT ? <span> Resend </span> : <span> Send </span> }
+      </button>;
+    }
+
+    //Erc721
+    if(method.sendStatus === sendStatus.SENT){
+      return null;
+    }
+    return <button onClick={ this.sendMethod } style={( {...btnStyleSend, ...btnStyleUnsent}) }>
+        <span> Send </span>
       </button>;
   }
 
@@ -230,15 +253,13 @@ const btnStyleX = {
 
 //PropTypes
 OfferErc.propTypes = {
+  connected: PropTypes.bool.isRequired,
   method: PropTypes.object.isRequired,
   addresses: PropTypes.array.isRequired,
+  local: PropTypes.bool.isRequired,
+  updateErc: PropTypes.func.isRequired,
   isUser: PropTypes.bool.isRequired,
-  setMethodSendStatus: PropTypes.func.isRequired,
-  setMethodEnableStatus: PropTypes.func.isRequired,
-  connected: PropTypes.bool.isRequired,
-  remove: PropTypes.func.isRequired,
-  removing: PropTypes.func.isRequired,
-  local: PropTypes.bool.isRequired
+  remove: PropTypes.func.isRequired
 }
 
 export default OfferErc;
