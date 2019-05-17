@@ -16,7 +16,6 @@ class TradeWindow extends Component {
   }
 
   setSatisfied(_boxNum, _satisfied) {
-    console.log(_satisfied);
     let satisfied = this.state.satisfied;
     if(satisfied[_boxNum] ===_satisfied) return;
 
