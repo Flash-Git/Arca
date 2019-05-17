@@ -6,7 +6,7 @@ import Satisfied from "./Satisfied";
 import SubmitBox from "./SubmitBox";
 import OfferErc from "./OfferErc";
 
-import { sendStatus, boolStatus, colours } from "../../Static";
+import { sendStatus, colours } from "../../Static";
 import { ArcaContract, ArcaCalls, Erc20Contract, Erc721Contract, ErcCalls } from "../../ContractCalls";
 
 class Box extends Component {
