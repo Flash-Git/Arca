@@ -15,7 +15,6 @@ class Box extends Component {
     super(props);
     this.state = {
       connected: false,
-      satisfied: boolStatus.FALSE,
       partnerNonce: 0,
       localMethods: [],
       chainMethods: []
@@ -138,10 +137,6 @@ class Box extends Component {
     });
 
     this.setState({ chainMethods, localMethods });
-  }
-
-  setSatisfied = (satisfied) => {
-    this.setState({ satisfied });
   }
 
   async getErc20Offers(_erc20Count, _arcaContract) {
@@ -300,9 +295,9 @@ class Box extends Component {
             ) }
           </div>
         </div>
-        {this.props.addresses[0].length === 0 ? "" :
-          <Satisfied connected={ this.state.connected } counter={ this.props.counter } addresses={ this.props.addresses } setSatisfied={ this.setSatisfied } isUser={ this.props.isUser }
-            partnerNonce={ this.state.partnerNonce } />
+        { this.props.addresses[0].length === 0 ? "" :
+          <Satisfied connected={ this.state.connected } counter={ this.props.counter } addresses={ this.props.addresses } boxNum={ this.props.boxNum }
+            isUser={ this.props.isUser } partnerNonce={ this.state.partnerNonce } setSatisfied={ this.props.setSatisfied } />
         }
         { this.props.isUser ?
           <SubmitBox connected={ this.state.connected } address={ this.props.addresses[0] } erc={ this.props.erc } addMethod={ this.addLocalMethod }
@@ -350,7 +345,8 @@ Box.propTypes = {
   ensAdd: PropTypes.string.isRequired,
   connected: PropTypes.bool.isRequired,
   erc: PropTypes.object.isRequired,
-  counter: PropTypes.number.isRequired
+  counter: PropTypes.number.isRequired,
+  setSatisfied: PropTypes.func.isRequired
 }
 
 export default Box;

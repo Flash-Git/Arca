@@ -30,7 +30,6 @@ class Satisfied extends Component {
 
   async getSatisfied() {
     if(!this.state.connected){
-      console.log(this.props.connected);
       return;
     }
 
@@ -43,16 +42,22 @@ class Satisfied extends Component {
     ])
       .then(res => {
         if(+res[0] === +res[1]+1){
+          if(this.state.isAccepted === boolStatus.TRUE || this.state.isAccepted === boolStatus.TOFALSE) {
+            return;
+          }
           this.setState({ isAccepted: boolStatus.TRUE} );
-          this.props.setSatisfied(boolStatus.TRUE);
+          this.props.setSatisfied(this.props.boxNum, boolStatus.TRUE);
         }else{
+          if(this.state.isAccepted === boolStatus.TRUE || this.state.isAccepted === boolStatus.TOTRUE) {
+            return;
+          }          
           this.setState({ isAccepted: boolStatus.FALSE} );
-          this.props.setSatisfied(boolStatus.FALSE);
+          this.props.setSatisfied(this.props.boxNum, boolStatus.FALSE);
         }
       });
   }
 
-  toggleSatisfied = (e) => {//TODO ADD STUFF FOR TRANSITIONAL STATES
+  toggleSatisfied = (e) => {
     if(!this.props.isUser){
       return;
     }
@@ -81,7 +86,7 @@ class Satisfied extends Component {
     }
 
     this.setState({ isAccepted });
-    this.props.setSatisfied(isAccepted);
+    this.props.setSatisfied(this.props.boxNum, isAccepted);
   }
 
   async acceptTrade() {
@@ -92,11 +97,11 @@ class Satisfied extends Component {
 
     ArcaSends("acceptTrade", [this.props.addresses[1], this.props.partnerNonce])
       .then(() => {
-        this.props.setSatisfied(boolStatus.TRUE);
+        this.props.setSatisfied(this.props.boxNum, boolStatus.TRUE);
         this.setState({ isAccepted: boolStatus.TRUE });
       })
       .catch((e) => {
-        this.props.setSatisfied(boolStatus.FALSE);
+        this.props.setSatisfied(this.props.boxNum, boolStatus.FALSE);
         this.setState({ isAccepted: boolStatus.FALSE });
       })
   }
@@ -109,7 +114,7 @@ class Satisfied extends Component {
 
     ArcaSends("unacceptTrade", [this.props.addresses[1]])
       .then(() => {
-        this.props.setSatisfied(boolStatus.FALSE);
+        this.props.setSatisfied(this.props.boxNum, boolStatus.FALSE);
         this.setState({ isAccepted: boolStatus.FALSE });
       })
       .catch((e) => {})
@@ -213,12 +218,13 @@ const statusStyleNotAccepted = {
 
 //PropTypes
 Satisfied.propTypes = {
-  setSatisfied: PropTypes.func.isRequired,
-  addresses: PropTypes.array.isRequired,
-  isUser: PropTypes.bool.isRequired,
   connected: PropTypes.bool.isRequired,
+  counter: PropTypes.number.isRequired,
+  addresses: PropTypes.array.isRequired,
+  boxNum: PropTypes.number.isRequired,
+  isUser: PropTypes.bool.isRequired,
   partnerNonce: PropTypes.number.isRequired,
-  counter: PropTypes.number.isRequired
+  setSatisfied: PropTypes.func.isRequired
 }
 
 export default Satisfied;
