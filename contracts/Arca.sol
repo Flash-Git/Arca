@@ -246,7 +246,7 @@ contract Arca {
   */
 
   function executeTransfersErc20(address _add1, address _add2, uint256 _boxNum) private {
-    Box memory box = boxes[_add1][_add2][_boxNum];//should be memory?
+    Box memory box = boxes[_add1][_add2][_boxNum];
 
     OfferErc20[] memory offers = box.offersErc20;
     for(uint8 i = 0; i < box.countErc20; i++){
@@ -257,7 +257,7 @@ contract Arca {
   }
   
   function executeTransfersErc721(address _add1, address _add2, uint256 _boxNum) private {
-    Box memory box = boxes[_add1][_add2][_boxNum];//should be memory?
+    Box memory box = boxes[_add1][_add2][_boxNum];
 
     OfferErc721[] memory offers = box.offersErc721;
     for(uint8 i = 0; i < box.countErc721; i++){
