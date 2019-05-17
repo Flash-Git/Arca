@@ -20,8 +20,8 @@ class Erc20 extends Component {
               <img src={ makeBlockie(this.props.erc.contractAdd) } width="12px" height="12px" alt="blockie" /><br/>
             </div>
             <div>
-              Balance:&nbsp;{ this.props.erc.balance }<br/>
-              Enabled:&nbsp;{ this.props.erc.enabled }
+              <span>Balance:&nbsp;{ this.props.erc.balance }<br/></span>
+              <span>Enabled:&nbsp;{ this.props.erc.enabled }</span>
             </div>
           </div>
           <button onClick={ this.add } style={ btnStyle }>
