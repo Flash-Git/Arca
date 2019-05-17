@@ -1,9 +1,9 @@
 {
   "short_name": "Arca",
-  "name": "EthArca",
+  "name": "Arca - The Ethereum Trading Platform",
   "icons": [
     {
-      "src": "logo64.png",
+      "src": "arcaLO.png",
       "sizes": "64x64",
       "type": "image/png"
     }
@@ -11,5 +11,5 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#E9E9E9"
+  "background_color": "#F5F5F5"
 }
