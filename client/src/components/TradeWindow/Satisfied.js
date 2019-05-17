@@ -10,7 +10,7 @@ class Satisfied extends Component {
     super(props);
     this.state = {
       connected: false,
-      isAccepted: boolStatus.FALSE
+      satisfied: boolStatus.FALSE
     }
     this.getSatisfied = this.getSatisfied.bind(this);
     this.acceptTrade = this.acceptTrade.bind(this);
@@ -42,16 +42,16 @@ class Satisfied extends Component {
     ])
       .then(res => {
         if(+res[0] === +res[1]+1){
-          if(this.state.isAccepted === boolStatus.TRUE || this.state.isAccepted === boolStatus.TOFALSE) {
+          if(this.state.satisfied === boolStatus.TRUE || this.state.satisfied === boolStatus.TOFALSE) {
             return;
           }
-          this.setState({ isAccepted: boolStatus.TRUE} );
+          this.setState({ satisfied: boolStatus.TRUE} );
           this.props.setSatisfied(this.props.boxNum, boolStatus.TRUE);
         }else{
-          if(this.state.isAccepted === boolStatus.TRUE || this.state.isAccepted === boolStatus.TOTRUE) {
+          if(this.state.satisfied === boolStatus.TRUE || this.state.satisfied === boolStatus.TOTRUE) {
             return;
           }          
-          this.setState({ isAccepted: boolStatus.FALSE} );
+          this.setState({ satisfied: boolStatus.FALSE} );
           this.props.setSatisfied(this.props.boxNum, boolStatus.FALSE);
         }
       });
@@ -61,23 +61,23 @@ class Satisfied extends Component {
     if(!this.props.isUser){
       return;
     }
-    let isAccepted;
 
-    switch(this.state.isAccepted){
+    let satisfied;
+    switch(this.state.satisfied){
       case boolStatus.TRUE:
-        isAccepted = boolStatus.TOFALSE;
+        satisfied = boolStatus.TOFALSE;
         this.rejectTrade();
         break;
       case boolStatus.FALSE:
-        isAccepted = boolStatus.TOTRUE;
+        satisfied = boolStatus.TOTRUE;
         this.acceptTrade();
         break;
       case boolStatus.TOTRUE:
-        isAccepted = boolStatus.TOFALSE;
+        satisfied = boolStatus.TOFALSE;
         this.rejectTrade();
         break;
       case boolStatus.TOFALSE:
-        isAccepted = boolStatus.TOTRUE;
+        satisfied = boolStatus.TOTRUE;
         this.acceptTrade();
         break;
       default:
@@ -85,8 +85,8 @@ class Satisfied extends Component {
         return;
     }
 
-    this.setState({ isAccepted });
-    this.props.setSatisfied(this.props.boxNum, isAccepted);
+    this.setState({ satisfied });
+    this.props.setSatisfied(this.props.boxNum, satisfied);
   }
 
   async acceptTrade() {
@@ -98,11 +98,11 @@ class Satisfied extends Component {
     ArcaSends("acceptTrade", [this.props.addresses[1], this.props.partnerNonce])
       .then(() => {
         this.props.setSatisfied(this.props.boxNum, boolStatus.TRUE);
-        this.setState({ isAccepted: boolStatus.TRUE });
+        this.setState({ satisfied: boolStatus.TRUE });
       })
       .catch((e) => {
         this.props.setSatisfied(this.props.boxNum, boolStatus.FALSE);
-        this.setState({ isAccepted: boolStatus.FALSE });
+        this.setState({ satisfied: boolStatus.FALSE });
       })
   }
 
@@ -115,13 +115,16 @@ class Satisfied extends Component {
     ArcaSends("unacceptTrade", [this.props.addresses[1]])
       .then(() => {
         this.props.setSatisfied(this.props.boxNum, boolStatus.FALSE);
-        this.setState({ isAccepted: boolStatus.FALSE });
+        this.setState({ satisfied: boolStatus.FALSE });
       })
-      .catch((e) => {})
+      .catch((e) => {
+        this.props.setSatisfied(this.props.boxNum, boolStatus.TRUE);
+        this.setState({ satisfied: boolStatus.TRUE });
+      })
   }
 
   status() {
-    if(this.state.isAccepted === boolStatus.TRUE){
+    if(this.state.satisfied === boolStatus.TRUE){
       return <div style={ {...statusStyle, ...statusStyleAccepted} }>
           Accepted
         </div>;
@@ -133,7 +136,7 @@ class Satisfied extends Component {
 
   button() {
     if(!this.props.isUser) return;
-    if(this.state.isAccepted === boolStatus.TRUE){
+    if(this.state.satisfied === boolStatus.TRUE){
       return <button onClick={ this.toggleSatisfied }
           style={ {...btnStyle, ...btnStyleAccepted} }>
           Unaccept
