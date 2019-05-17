@@ -6,7 +6,7 @@ import makeBlockie from "ethereum-blockies-base64";
 
 import { colours } from "../Static";
 
-class UserInfo extends Component {
+class UserInfo extends Component {//TODO add button to side sidebar
   render() {
     if(this.props.width <= 650){
       return null;
@@ -41,7 +41,7 @@ const userInfoStyle = {
   display: "flex",
   flexDirection: "column",
   color: colours.Quaternary,
-  width: "11rem",
+  //width: "11rem",
   textAlign: "center",
   justifyContent: "center",
   maxHeight: "100%",
@@ -52,7 +52,8 @@ const topStyle = {
   marginBottom: "0.8rem",
   marginTop: "0",
   padding: "0.4rem",
-  margin: "0.5rem"
+  margin: "0.5rem",
+  minWidth: "9rem"
 }
 
 const bottomStyle = {

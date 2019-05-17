@@ -19,7 +19,7 @@ class Erc20 extends Component {
               <span style={ symbolStyle }>{ this.props.erc.symbol }&nbsp;</span>
               <img src={ makeBlockie(this.props.erc.contractAdd) } width="12px" height="12px" alt="blockie" /><br/>
             </div>
-            <div>
+            <div style={{ marginRight: "0.2rem" }}>
               <span>Balance:&nbsp;{ this.props.erc.balance }<br/></span>
               <span>Enabled:&nbsp;{ this.props.erc.enabled }</span>
             </div>
