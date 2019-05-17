@@ -55,17 +55,13 @@ class App extends Component {
       if(typeof window.ethereum === "undefined"){
         alert("Please use a Web3 enabled browser (install MetaMask)");
         this.setState({ connected: false });
-        return false;
-      }
-
-      if(!window.web3.utils.isAddress(window.ethereum.selectedAddress)){
-        this.setState({ connected: false });
-        return false;
+        return 2;
       }
       
       if(window.ethereum.networkVersion === undefined){
-        alert("window.ethereum.networkVersion is undefined, please refresh the page");
-        return false;
+        alert("Please refresh the page");
+        this.setState({ connected: false });
+        return 2;
       }
 
       //Check whether the user is on the correct network
@@ -73,19 +69,28 @@ class App extends Component {
         console.log("Current network: " + window.ethereum.networkVersion);
         alert("The Ethereum contract is currently only running on the rinkeby and goerli test networks.");
         this.setState({ connected: false });
-        return false;
+        return 2;
+      }
+
+      if(!window.web3.utils.isAddress(window.ethereum.selectedAddress)){
+        this.setState({ connected: false });
+        return 1;
       }
     }catch(e){
       this.setState({ connected: false });
-      return false;
+      return 1;
     }
     
-    return true;
+    return 0;
   }
 
   async enableWeb3() {
-    if(this.checkConnection()){
+    const connection = this.checkConnection();
+    if(connection === 0){
       return this.setState({ connected: true });
+    }
+    if(connection === 2){
+      return new Error("No connection");
     }
     
     //Attempt to open a connection to the Ethereum blockchain
@@ -93,7 +98,7 @@ class App extends Component {
     return new Promise((resolve, reject) => {
       window.ethereum.enable()
         .then(acc => {
-          if(this.checkConnection()){
+          if(this.checkConnection() === 0){
             this.setState({ connected: true }, () => resolve());
           }else{
             console.log("Failed to attempt to enable web3");
