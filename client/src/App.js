@@ -84,7 +84,7 @@ class App extends Component {
     return 0;
   }
 
-  async enableWeb3() {
+  enableWeb3() {
     const connection = this.checkConnection();
     if(connection === 0){
       return this.setState({ connected: true });
@@ -162,10 +162,10 @@ const pageStyle = {
 
 const mainStyle = {
   display: "flex",
-  flexDirection: "row",
   flexWrap: "nowrap",
-  textAlign: "center",
+  flexDirection: "row",
   justifyContent: "center",
+  textAlign: "center"
 }
 
 const leftStyle = {
