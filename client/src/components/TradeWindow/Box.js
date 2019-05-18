@@ -25,6 +25,7 @@ class Box extends Component {
     this.getErc20Offers = this.getErc20Offers.bind(this);
     this.getErc721Offers = this.getErc721Offers.bind(this);
     this.updateErc = this.updateErc.bind(this);
+    this.removeExtraMethods = this.removeExtraMethods.bind(this);
     this.remove = this.remove.bind(this);
   }
 
@@ -35,7 +36,7 @@ class Box extends Component {
     }
   }
 
-  async getMethods() {
+  getMethods() {
     if(!this.state.connected){
       return;
     }
@@ -70,7 +71,7 @@ class Box extends Component {
       })
   }
 
-  async addLocalMethod(method) {
+  addLocalMethod(method) {
     const [add1, add2] = this.props.addresses;
     const arcaContract = ArcaContract();
     
@@ -139,7 +140,7 @@ class Box extends Component {
     this.setState({ chainMethods, localMethods });
   }
 
-  async getErc20Offers(_erc20Count, _arcaContract) {
+  getErc20Offers(_erc20Count, _arcaContract) {
     for(let i = 0; i < _erc20Count; i++){
       const [add1, add2] = this.props.addresses;
       let offer = { id: "0-"+i, type: 0, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT, removed: false };
@@ -185,7 +186,7 @@ class Box extends Component {
     }
   }
 
-  async getErc721Offers(_erc721Count, _arcaContract) {
+  getErc721Offers(_erc721Count, _arcaContract) {
     for(let i = 0; i < _erc721Count; i++){
       const [add1, add2] = this.props.addresses;
       let offer = { id: "1-"+i, type: 1, contractAdd: "", amountId: "", sendStatus: sendStatus.SENT };
@@ -223,7 +224,7 @@ class Box extends Component {
     }
   }
 
-  removeExtraMethods = (_offerCount, _type) => {
+  removeExtraMethods(_offerCount, _type)  {
     const chainMethods = this.state.chainMethods;
     for(let i = 0; i < chainMethods.length; i++){
       const id = chainMethods[i].id.split("-");
@@ -268,7 +269,7 @@ class Box extends Component {
     }
   }
 
-  remove = (id) => {
+  remove(id) {
     let localMethods = this.state.localMethods.filter(meth => meth.id !== id);
     this.setState({ localMethods });
     let chainMethods = this.state.chainMethods.filter(meth => meth.id !== id);
@@ -313,39 +314,38 @@ const boxStyle = {
   gridColumnGap: "3px",
   gridTemplateRows: "2rem 3fr",
   gridTemplateColumns: "4fr 1fr",
-  textAlign: "center",
   justifyContent: "center",
-  margin: "1rem 1.25rem",
+  textAlign: "center",
+  width: "100%",
+  minWidth: "11rem",
   background: colours.Secondary,
+  boxShadow: "0px 0px 25px -2px rgba(0,0,0,0.25)",
   color: colours.Quaternary,
   fontWeight: "normal",
-  minWidth: "11rem",
   padding: "0.3rem",
-  boxShadow: "0px 0px 25px -2px rgba(0,0,0,0.25)",
-  width: "100%"//
-
+  margin: "1rem 1.25rem"
 }
 
 const containerStyle = {
   gridColumn: "1 auto",
   gridRow: "2 auto",
-  margin: "0.1rem",
   overflowY: "auto",
-  scrollbarWidth: "thin",
   minHeight: "7.5rem",
   maxHeight: "14.45rem",
-  paddingRight: "0.2rem"
+  scrollbarWidth: "thin",
+  paddingRight: "0.2rem",
+  margin: "0.1rem"
 }
 
 //PropTypes
 Box.propTypes = {
+  connected: PropTypes.bool.isRequired,
+  counter: PropTypes.number.isRequired,
+  addresses: PropTypes.array.isRequired,
   boxNum: PropTypes.number.isRequired,
   isUser: PropTypes.bool.isRequired,
-  addresses: PropTypes.array.isRequired,
   ensAdd: PropTypes.string.isRequired,
-  connected: PropTypes.bool.isRequired,
   erc: PropTypes.object.isRequired,
-  counter: PropTypes.number.isRequired,
   setSatisfied: PropTypes.func.isRequired
 }
 
