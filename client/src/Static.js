@@ -29,12 +29,6 @@ function ListErc721() {
   return [];
 }
 
-const boolStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
-const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
-const userBoxStatus = Object.freeze({ "NO_BOX":0, "FIRST_BOX":2, "SECOND_BOX":3 });
-const colours = Object.freeze({ "Primary":"#FFFFFF", "Secondary":"#FFFFFF", "Quaternary":"#000000",
-  "User":"#667788", "Accent":"#667788" }); //Light Mode
-
 function AppAddress() {
   try{
     if(window.ethereum.networkVersion === "4"){ //Rinkeby
@@ -48,6 +42,12 @@ function AppAddress() {
   }
   return "0x111e9493d50dF3CcE22e700b4B8b28aE5A273035";
 }
+
+const boolStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
+const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
+const userBoxStatus = Object.freeze({ "NO_BOX":0, "FIRST_BOX":2, "SECOND_BOX":3 });
+const colours = Object.freeze({ "Primary":"#FFFFFF", "Secondary":"#FFFFFF", "Quaternary":"#000000",
+  "User":"#667788", "Accent":"#667788" }); //Light Mode
 
 export {
   AppAddress,
