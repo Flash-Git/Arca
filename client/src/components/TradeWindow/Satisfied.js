@@ -13,6 +13,7 @@ class Satisfied extends Component {
       satisfied: boolStatus.FALSE
     }
     this.getSatisfied = this.getSatisfied.bind(this);
+    this.toggleSatisfied = this.toggleSatisfied.bind(this);
     this.acceptTrade = this.acceptTrade.bind(this);
     this.rejectTrade = this.rejectTrade.bind(this);
   }
@@ -28,7 +29,7 @@ class Satisfied extends Component {
     }
   }
 
-  async getSatisfied() {
+  getSatisfied() {
     if(!this.state.connected){
       return;
     }
@@ -57,7 +58,7 @@ class Satisfied extends Component {
       });
   }
 
-  toggleSatisfied = (e) => {
+  toggleSatisfied(e) {
     if(!this.props.isUser){
       return;
     }
@@ -89,7 +90,7 @@ class Satisfied extends Component {
     this.props.setSatisfied(this.props.boxNum, satisfied);
   }
 
-  async acceptTrade() {
+  acceptTrade() {
     if(!this.props.connected){
       alert("Not connected");
       return;
@@ -106,7 +107,7 @@ class Satisfied extends Component {
       })
   }
 
-  async rejectTrade() {
+  rejectTrade() {
     if(!this.props.connected){
       alert("Not connected");
       return;
@@ -164,57 +165,55 @@ const satisfiedStyle = {
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-evenly",
-  alignItems: "center",
   textAlign: "center",
+  alignItems: "center",
   background: colours.Secondary,
   color: colours.Quaternary,
+  lineHeight: "1.5em",
+  fontWeight: "bold",
   marginLeft: "0",
   marginRight: "0.3rem",
   marginBottom: "0.3rem",
-  marginTop: "0.4rem",
-  lineHeight: "1.5em",
-  fontWeight: "bold",
+  marginTop: "0.4rem"
 }
 
 const btnStyle = {
   gridColumn: "2",
   gridRow: "1 / 3",
   border: "none",
+  borderRadius: "0.8rem",
   color: colours.Secondary,
   fontWeight: "bold",
-  margin: "0.2rem",
-  padding: "0.6rem 1.1rem",
   cursor: "pointer",
-  borderRadius: "0.8rem",
+  padding: "0.6rem 1.1rem",
+  margin: "0.2rem"
 }
 
 const btnStyleAccepted = {
-  background: colours.User,
+  background: colours.User
 }
 
 const btnStyleNotAccepted = {
-  background: colours.User,
+  background: colours.User
 }
 
 const statusStyle = {
   gridColumn: "2",
   gridRow: "1 / 3",
+  width: "100%",
+  background: colours.Secondary,
+  color: colours.Quaternary,
   fontWeight: "bold",
   padding: "0.3rem 0",
-  width: "100%",
-  margin: "0.2rem 0",
-  color: colours.Quaternary,
-  background: colours.Secondary,
+  margin: "0.2rem 0"
 }
 
 const statusStyleAccepted = {
-  //color: colours.isUser,
   borderTop: "solid 2px green",
   borderBottom: "solid 2px green"
 }
 
 const statusStyleNotAccepted = {
-  //color: colours.NotUser,
   borderTop: "solid 2px red",
   borderBottom: "solid 2px red"
 }
