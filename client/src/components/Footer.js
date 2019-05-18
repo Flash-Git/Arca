@@ -44,23 +44,23 @@ const footerStyle = {
 }
 
 const ulStyle = {
-  listStyle: "none",
-  margin: "0.5rem",
-  padding: "0",
   display: "flex",
   flexWrap: "wrap",
   flexDirection: "row",
-  maxWidth: "24rem",
   justifyContent: "center",
   textAlign: "center",
+  maxWidth: "24rem",
+  listStyle: "none",
+  padding: "0",
+  margin: "0.5rem"
 }
 
 const linkStyle = {
-  textDecoration: "none",
-  color: "#FFFFFF",
-  margin: "0.5rem 0.75rem",
-  width: "6rem",
   textAlign: "left",
+  width: "6rem",
+  color: "#FFFFFF",
+  textDecoration: "none",
+  margin: "0.5rem 0.75rem"
 
 }
 
