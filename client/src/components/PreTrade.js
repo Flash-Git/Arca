@@ -24,13 +24,9 @@ class PreTrade extends Component {
   }
 
   async checkAddress(index, input) {
-    try{
-      if(!this.props.connected){
-        this.setState({ validInput1: false, validInput2: false });
-        return;
-      }
-    }catch(e){
-      await this.props.enableWeb3();
+    if(!this.props.connected){
+      this.setState({ validInput1: false, validInput2: false });
+      return;
     }
     
     if(!input.includes(".eth")&&!input.includes(".test")){
@@ -67,7 +63,7 @@ class PreTrade extends Component {
     }
   }
 
-  async onChange1(e) {
+  onChange1(e) {
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -75,7 +71,7 @@ class PreTrade extends Component {
     this.checkAddress(0, e.target.value);
   }
 
-  async onChange2(e) {
+  onChange2(e) {
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -129,17 +125,15 @@ const preTradeStyle = {
   display: "flex",
   flexWrap: "wrap",
   flexDirection: "row",
-  textAlign: "center",
   justifyContent: "center",
-  //margin: "0 0.4rem"
+  textAlign: "center"
 }
 
 const formStyle = {
   display: "flex",
-  textAlign: "center",
   justifyContent: "center",
-  //width: "24em",
-  maxWidth: "100%",
+  textAlign: "center",
+  maxWidth: "100%"
 }
 
 const addressesStyle = {
@@ -148,35 +142,32 @@ const addressesStyle = {
   justifyContent: "space-around",
   textAlign: "center",
   width: "20em",
-  //minWidth: "6em",//oddly fucky
   maxWidth: "100%",
   paddingRight: "8px"
 }
 
 const inputStyle = {
   textAlign: "center",
-  //margin: "0.05rem 0",
+  width: "100%",
+  backgroundColor: colours.Primary,
   borderColor: "#888888",
   borderWidth: "1px",
   borderLeft: "solid 4px green",
   borderStyle: "solid",
-  padding: "0.1rem",
-  backgroundColor: colours.Primary,
   color: colours.Quaternary,
-  width: "100%"
+  padding: "0.1rem"
 }
 
 const badInputStyle = {
   textAlign: "center",
-  //margin: "0.05rem 0",
+  width: "100%",
+  backgroundColor: colours.Primary,
   borderColor: "#888888",
   borderWidth: "1px",
   borderLeft: "solid 4px red",
   borderStyle: "solid",
-  padding: "0.1rem",
-  backgroundColor: colours.Primary,
   color: colours.Quaternary,
-  width: "100%"
+  padding: "0.1rem"
 }
 
 const btnStyle = {
@@ -184,13 +175,13 @@ const btnStyle = {
   justifyContent: "center",
   textAlign: "center",
   background: colours.User,
-  padding: "10px 14px",
   border: "none",
   borderRadius: "0.4rem",
-  cursor: "pointer",
   color: colours.Secondary,
   fontWeight: "bold",
-  margin: "0.4rem",
+  cursor: "pointer",
+  padding: "10px 14px",
+  margin: "0.4rem"
 }
 
 //PropTypes
