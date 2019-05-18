@@ -6,7 +6,7 @@ import { colours } from "../Static";
 
 class Header extends Component {
 
-  networkText = () => {
+  networkText() {
     if(!this.props.connected){
       return <div style={ textStyle }>
           <h5 style={ networkStyle }> NETWORK </h5>
@@ -29,11 +29,11 @@ class Header extends Component {
     </div>;  
   }
 
-  headerText = () => {
+  headerText() {
     return <h1 style={ h1Style }> A R C A</h1>;
   }
 
-  leftText = () => {
+  leftText() {
     return <div style={ textStyle }>
       <h5 style={ leftStyle }>  </h5>
     </div>;
@@ -61,49 +61,46 @@ class Header extends Component {
 const headerStyle = {
   display: "flex",
   flexDirection: "row",
-  textAlign: "center",
   justifyContent: "space-between",
+  textAlign: "center",
+  width: "100%",
   backgroundColor: colours.Secondary,
   boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.3)",
-  marginBottom: "1rem",
-  width: "100%"
+  marginBottom: "1rem"
 }
 
 const textStyle = {
   display: "flex",
   flexDirection: "row",
-  color: colours.Quaternary,
-  textAlign: "center",
   justifyContent: "center",
-  marginBottom: "0",
+  textAlign: "center",
+  color: colours.Quaternary,
   letterSpacing: "15px",
-  margin: "0",
   padding: "0",
-  //minWidth: "9rem"
+  margin: "0"
 }
 
 const leftStyle = {
-  letterSpacing: "7px",
   width: "0",
-  minWidth: "0"
+  minWidth: "0",
+  letterSpacing: "7px"
 }
 
 const h1Style = {
+  minWidth: "15rem",
   padding: "0.45rem",
   margin: "0.6rem",
-  marginBottom: "1rem",
-  minWidth: "15rem"
-  //boxShadow: "0px 10px 25px 2px rgba(0,0,0,0.02)",
+  marginBottom: "1rem"
 }
 
 const networkStyle = {
   alignSelf: "center",
   justifySelf: "center",
+  letterSpacing: "7px",
   padding: "0.6rem",
   paddingRight: "1.8rem",
   paddingLeft: "0",
-  margin: "0rem",  
-  letterSpacing: "7px",
+  margin: "0rem"
 }
 
 /*const blockyStyle = {
