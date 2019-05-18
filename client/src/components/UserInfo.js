@@ -40,36 +40,35 @@ class UserInfo extends Component {//TODO add button to side sidebar
 const userInfoStyle = {
   display: "flex",
   flexDirection: "column",
-  color: colours.Quaternary,
-  //width: "11rem",
-  textAlign: "center",
   justifyContent: "center",
   maxHeight: "100%",
+  color: colours.Quaternary,
+  textAlign: "center",
   marginLeft: "auto"//
 }
 
 const topStyle = {
-  marginBottom: "0.8rem",
-  marginTop: "0",
+  minWidth: "9rem",
   padding: "0.4rem",
   margin: "0.5rem",
-  minWidth: "9rem"
+  marginBottom: "0.8rem",
+  marginTop: "0"
 }
 
 const bottomStyle = {
-  borderRadius: "20px",
   maxHeight: "26rem",//?
+  borderRadius: "20px",
   overflowY: "auto",
-  scrollbarWidth: "thin",
+  scrollbarWidth: "thin"
 }
 
 //PropTypes
 UserInfo.propTypes = {
   connected: PropTypes.bool.isRequired,
+  counter: PropTypes.number.isRequired,
+  width: PropTypes.number.isRequired,
   enableWeb3: PropTypes.func.isRequired,
   addErc: PropTypes.func.isRequired,
-  counter: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired
 }
 
 export default UserInfo;
