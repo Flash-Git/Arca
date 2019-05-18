@@ -33,12 +33,12 @@ const summaryStyle = {
   justifyContent: "center",
   textAlign: "center",
   background: colours.Secondary,
-  boxShadow: "0px 5px 7px -5px rgba(0,0,0,0.65)"
+  boxShadow: "0px 5px 7px -5px rgba(0,0,0,0.65)",
   color: colours.Quaternary,
   lineHeight: "1.8em",
   padding: "0.1rem",
   margin: "0",
-  marginTop:"0.1rem",
+  marginTop:"0.1rem"
 }
 
 //PropTypes
