@@ -39,7 +39,6 @@ const footerStyle = {
   justifyContent: "center",
   textAlign: "center",
   backgroundColor: colours.Accent,
-  color: "#FFFFFF",
   marginTop: "auto"
 }
 
@@ -58,10 +57,9 @@ const ulStyle = {
 const linkStyle = {
   textAlign: "left",
   width: "6rem",
-  color: "#FFFFFF",
+  color: colours.Secondary,
   textDecoration: "none",
   margin: "0.5rem 0.75rem"
-
 }
 
 const iconStyle = {
