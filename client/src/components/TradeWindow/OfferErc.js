@@ -26,16 +26,11 @@ class OfferErc extends Component {
       return;
     }
 
-    try{
-      this.setState({ sendStatus: sendStatus.SENDING });
-      this.broadcastAdd(this.props.method);
-    }catch(e){
-      console.error(e);
-      this.setState({ sendStatus: sendStatus.UNSENT });
-    }
+    this.setState({ sendStatus: sendStatus.SENDING });
+    this.broadcastAdd(this.props.method);
   }
 
-  async enableErc() {
+  enableErc() {
     if(!this.props.connected){
       return;
     }
@@ -83,7 +78,7 @@ class OfferErc extends Component {
     this.broadcastRemove(this.props.method);
   }
 
-  async broadcastAdd(method) {
+  broadcastAdd(method) {
     if(method.type === 0){
       ArcaSends("pushOfferErc20", [this.props.addresses[1], method.contractAdd, (+method.amountId*+method.decimalString).toString()])
         .then(() => {
@@ -103,7 +98,7 @@ class OfferErc extends Component {
     }
   }
 
-  async broadcastRemove(method) {
+  broadcastRemove(method) {
     if(method.type === 0){
       ArcaSends("removeOfferErc20", [this.props.addresses[1], method.id.split("-")[1]])
         .then(() => {
@@ -193,38 +188,38 @@ const methodStyle = {
   display: "grid",
   gridColumnGap: "3px",
   gridTemplateColumns: "auto 5fr auto",
-  textAlign: "center",
   justifyContent: "center",
+  textAlign: "center",
   background: colours.Secondary,
+  boxShadow: "0px 5px 5px -5px rgba(0,0,0,0.5)",
+  lineHeight: "1.4em",
+  fontSize: "0.95em",
+  fontWeight: "normal",
   margin: "0.2rem",
   marginLeft: "0",
-  marginRight: "0",
-  fontSize: "0.95em",
-  lineHeight: "1.4em",
-  fontWeight: "normal",
-  boxShadow: "0px 5px 5px -5px rgba(0,0,0,0.5)"
+  marginRight: "0"
 }
 
 const displayStyle = {
   gridColumn: "2 / 3",  
-  background: colours.Secondary,
-  color: colours.Quaternary,
-  margin: "0.1rem",
-  fontSize: "0.95em",
   display: "flex",
+  flexWrap: "wrap",
   flexDirection: "row",
   justifyContent: "center",
-  flexWrap: "wrap",
   textAlign: "start",
+  background: colours.Secondary,
+  color: colours.Quaternary,
+  fontSize: "0.95em",
+  margin: "0.1rem"
 }
 
 const btnStyleSend = {
   gridColumn: "3",
   border: "none",
-  cursor: "pointer",
-  color: "#FFFFFF",
   width: "5rem",
+  color: "#FFFFFF",
   fontWeight: "bold",
+  cursor: "pointer",
   margin: "0.2rem"
 }
 
@@ -238,17 +233,15 @@ const btnStyleSent = {
 
 const btnStyleX = {
   gridColumn: "1",
-  cursor: "pointer",
-  border: "none",
-  background: colours.Secondary,
-  color: colours.Quaternary,
-  textAlign: "center",
   justifyContent: "center",
-  //width: "1.2rem",
-  //height: "1.2rem",
-  fontWeight: "normal",
+  textAlign: "center",
+  background: colours.Secondary,
+  border: "none",
+  color: colours.Quaternary,
   fontSize: "130%",
-  marginLeft: "0.6rem",
+  fontWeight: "normal",
+  cursor: "pointer",
+  marginLeft: "0.6rem"
 }
 
 //PropTypes
@@ -257,9 +250,9 @@ OfferErc.propTypes = {
   method: PropTypes.object.isRequired,
   addresses: PropTypes.array.isRequired,
   local: PropTypes.bool.isRequired,
-  updateErc: PropTypes.func.isRequired,
   isUser: PropTypes.bool.isRequired,
-  remove: PropTypes.func.isRequired
+  remove: PropTypes.func.isRequired,
+  updateErc: PropTypes.func.isRequired
 }
 
 export default OfferErc;
