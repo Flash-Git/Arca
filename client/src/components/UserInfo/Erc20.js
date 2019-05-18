@@ -35,40 +35,41 @@ class Erc20 extends Component {
 
 const ercStyle = {
   textAlign: "left",
-  margin: "0.15rem",
-  marginBottom: "0.5rem",
+  borderRadius: "0.4rem",
   padding: "0.2rem",
   paddingRight: "0rem",
-  borderRadius: "0.4rem",
+  margin: "0.15rem",
+  marginBottom: "0.5rem"
 }
 
 const liStyle = {
   display: "flex",
   listStyleType: "none",
-  fontSize: "72%",
-  lineHeight: "120%"
+  lineHeight: "120%",
+  fontSize: "72%"
 }
 
 const symbolStyle = { 
   fontWeight: "bold",
-  marginLeft: "2rem",
-  fontSize: "115%",
   lineHeight: "110%",
+  fontSize: "115%",
+  marginLeft: "2rem"
 }
 
 const btnStyle = {
-  marginLeft: "auto",
-  textAlign: "center",
+  alignSelf: "center",
   justifyContent: "center",
+  textAlign: "center",
   background: colours.Accent,
-  color: "#FFFFFF",
   border: "none",
   borderRadius: "30%",
+  color: "#FFFFFF",
+  fontSize: "130%",
   fontWeight: "bold",
-  padding: "0.4rem 0.6rem",
-  alignSelf: "center",
   cursor: "pointer",
-  fontSize: "130%"
+  padding: "0.4rem 0.6rem",
+  marginLeft: "auto",
+  marginRight: "0.1rem"
 }
 
 //PropTypes
