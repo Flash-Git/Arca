@@ -30,15 +30,15 @@ const summaryStyle = {
   display: "flex",
   gridColumn: "1 / 3",
   gridRow: "1",
-  textAlign: "center",
   justifyContent: "center",
+  textAlign: "center",
   background: colours.Secondary,
+  boxShadow: "0px 5px 7px -5px rgba(0,0,0,0.65)"
   color: colours.Quaternary,
+  lineHeight: "1.8em",
+  padding: "0.1rem",
   margin: "0",
   marginTop:"0.1rem",
-  padding: "0.1rem",
-  lineHeight: "1.8em",
-  boxShadow: "0px 5px 7px -5px rgba(0,0,0,0.65)"
 }
 
 //PropTypes
