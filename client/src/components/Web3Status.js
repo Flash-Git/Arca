@@ -20,28 +20,28 @@ class Web3Status extends Component {
 }
 
 const web3StatusStyle = {
-  width: "100%",
-  textAlign: "center",
   justifyContent: "center",
+  textAlign: "center",
+  width: "100%"
 }
 
 const btnStyleUnsent = {
   background: colours.Accent,
-  padding: "6px 26px",
   border: "none",
   borderRadius: "1rem",
-  cursor: "pointer",
   color: "#FFFFFF",
-  fontWeight: "bold"
+  fontWeight: "bold",
+  cursor: "pointer",
+  padding: "6px 26px"
 }
 
 const btnStyleSent = {
-  background: "#8A9096",
-  padding: "4px 16px",
+  backgroundColor: "#8A9096",
   border: "none",
   borderRadius: "0",
   color: "#FFFFFF",
   fontWeight: "bold",
+  padding: "4px 16px",
   marginTop: "0.1rem"
 }
 
