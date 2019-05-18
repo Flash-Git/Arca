@@ -137,7 +137,7 @@ const btnStyle = {
   background: colours.User,
   border: "none",
   borderRadius: "0.4rem",
-  color: "#FFFFFF",
+  color: colours.Secondary,
   fontWeight: "bold",
   cursor: "pointer",
   padding: "0.35rem 0.5rem",
@@ -149,8 +149,8 @@ const btnStyle = {
 SubmitBox.propTypes = {
   connected: PropTypes.bool.isRequired,
   address: PropTypes.string.isRequired,
-  addMethod: PropTypes.func.isRequired,
-  erc: PropTypes.object.isRequired
+  erc: PropTypes.object.isRequired,
+  addMethod: PropTypes.func.isRequired
 }
 
 export default SubmitBox;
