@@ -54,18 +54,18 @@ class TradeWindow extends Component {
 const tradeWindowStyle = {
   display: "flex",
   flexDirection: "column",
-  textAlign: "center",
   justifyContent: "center",
-  marginBottom: "1.15rem",
-  maxWidth: "55rem"
+  textAlign: "center",
+  maxWidth: "55rem",
+  marginBottom: "1.15rem"
 }
 
 const boxesStyle = {
   display: "flex",
   flexWrap: "wrap",
-  textAlign: "center",
-  justifyContent: "center",
   flexDirection: "row",
+  justifyContent: "center",
+  textAlign: "center"
 }
 //PropTypes
 TradeWindow.propTypes = {
