@@ -115,8 +115,8 @@ class SubmitBox extends Component {
 const methodStyle = {
   gridColumn: "1 / 3",
   gridRow: "3",
-  textAlign: "center",
   justifyContent: "center",
+  textAlign: "center",
   background: colours.Secondary,
   color: colours.Quaternary
 }
@@ -124,33 +124,33 @@ const methodStyle = {
 const baseInputStyle = {
   textAlign: "left",
   margin: "0.2rem",
+  minWidth: "6em",
+  backgroundColor: colours.Primary,
   borderColor: "#888888",
   borderWidth: "1px",
   borderStyle: "solid",
-  padding: "0.1rem",
-  minWidth: "6em",
-  backgroundColor: colours.Primary,
   color: colours.Quaternary,
+  padding: "0.1rem"
 }
 
 const btnStyle = {
   background: colours.User,
-  padding: "0.35rem 0.5rem",
   border: "none",
   borderRadius: "0.4rem",
-  cursor: "pointer",
   color: "#FFFFFF",
   fontWeight: "bold",
+  cursor: "pointer",
+  padding: "0.35rem 0.5rem",
   margin: "0.2rem 0.5rem",
   marginTop: "0.4rem"
 }
 
 //PropTypes
 SubmitBox.propTypes = {
+  connected: PropTypes.bool.isRequired,
   address: PropTypes.string.isRequired,
   addMethod: PropTypes.func.isRequired,
-  erc: PropTypes.object.isRequired,
-  connected: PropTypes.bool.isRequired
+  erc: PropTypes.object.isRequired
 }
 
 export default SubmitBox;
