@@ -342,9 +342,9 @@ Box.propTypes = {
   connected: PropTypes.bool.isRequired,
   counter: PropTypes.number.isRequired,
   addresses: PropTypes.array.isRequired,
+  ensAdd: PropTypes.string.isRequired,
   boxNum: PropTypes.number.isRequired,
   isUser: PropTypes.bool.isRequired,
-  ensAdd: PropTypes.string.isRequired,
   erc: PropTypes.object.isRequired,
   setSatisfied: PropTypes.func.isRequired
 }
