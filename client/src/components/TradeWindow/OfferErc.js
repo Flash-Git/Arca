@@ -190,7 +190,7 @@ const methodStyle = {
   gridTemplateColumns: "auto 5fr auto",
   justifyContent: "center",
   textAlign: "center",
-  background: colours.Secondary,
+  background: colours.Primary,
   boxShadow: "0px 5px 5px -5px rgba(0,0,0,0.5)",
   lineHeight: "1.4em",
   fontSize: "0.95em",
@@ -207,8 +207,8 @@ const displayStyle = {
   flexDirection: "row",
   justifyContent: "center",
   textAlign: "start",
-  background: colours.Secondary,
-  color: colours.Quaternary,
+  background: colours.Primary,
+  color: colours.Secondary,
   fontSize: "0.95em",
   margin: "0.1rem"
 }
@@ -224,20 +224,20 @@ const btnStyleSend = {
 }
 
 const btnStyleUnsent = {
-  background: colours.User
+  background: colours.Button
 }
 
 const btnStyleSent = {
-  background: colours.User
+  background: colours.ButtonPressed
 }
 
 const btnStyleX = {
   gridColumn: "1",
   justifyContent: "center",
   textAlign: "center",
-  background: colours.Secondary,
+  background: colours.Primary,
   border: "none",
-  color: colours.Quaternary,
+  color: colours.Secondary,
   fontSize: "130%",
   fontWeight: "normal",
   cursor: "pointer",

@@ -44,7 +44,7 @@ const sidebarStyle = {
   justifyContent: "center",
   textAlign: "center",
   maxHeight: "100%",
-  color: colours.Quaternary,
+  color: colours.Secondary,
   marginLeft: "auto"
 }
 

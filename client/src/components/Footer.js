@@ -38,7 +38,7 @@ const footerStyle = {
   flexDirection: "row",
   justifyContent: "center",
   textAlign: "center",
-  backgroundColor: colours.Accent,
+  backgroundColor: colours.Button,
   marginTop: "auto"
 }
 
@@ -57,7 +57,7 @@ const ulStyle = {
 const linkStyle = {
   textAlign: "left",
   width: "6rem",
-  color: colours.Secondary,
+  color: colours.Primary,
   textDecoration: "none",
   margin: "0.5rem 0.75rem"
 }

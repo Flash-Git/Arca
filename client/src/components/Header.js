@@ -70,7 +70,7 @@ const headerStyle = {
   justifyContent: "space-between",
   textAlign: "center",
   width: "100%",
-  backgroundColor: colours.Secondary,
+  backgroundColor: colours.Primary,
   boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.3)",
   marginBottom: "1rem"
 }
@@ -80,7 +80,7 @@ const textStyle = {
   flexDirection: "row",
   justifyContent: "center",
   textAlign: "center",
-  color: colours.Quaternary,
+  color: colours.Secondary,
   letterSpacing: "15px",
   padding: "0",
   margin: "0"

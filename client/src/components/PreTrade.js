@@ -154,7 +154,7 @@ const inputStyle = {
   borderWidth: "1px",
   borderLeft: "solid 4px green",
   borderStyle: "solid",
-  color: colours.Quaternary,
+  color: colours.Secondary,
   padding: "0.1rem"
 }
 
@@ -166,7 +166,7 @@ const badInputStyle = {
   borderWidth: "1px",
   borderLeft: "solid 4px red",
   borderStyle: "solid",
-  color: colours.Quaternary,
+  color: colours.Secondary,
   padding: "0.1rem"
 }
 
@@ -174,10 +174,10 @@ const btnStyle = {
   display: "flex",
   justifyContent: "center",
   textAlign: "center",
-  background: colours.User,
+  background: colours.Button,
   border: "none",
   borderRadius: "0.4rem",
-  color: colours.Secondary,
+  color: colours.Primary,
   fontWeight: "bold",
   cursor: "pointer",
   padding: "10px 14px",
@@ -187,9 +187,9 @@ const btnStyle = {
 //PropTypes
 PreTrade.propTypes = {
   connected: PropTypes.bool.isRequired,
-  enableWeb3: PropTypes.func.isRequired,
   isUser: PropTypes.number.isRequired,
-  setAddresses: PropTypes.func.isRequired
+  setAddresses: PropTypes.func.isRequired,
+  enableWeb3: PropTypes.func.isRequired
 }
 
 export default PreTrade;

@@ -60,7 +60,7 @@ const btnStyle = {
   alignSelf: "center",
   justifyContent: "center",
   textAlign: "center",
-  background: colours.Accent,
+  background: colours.Button,
   border: "none",
   borderRadius: "30%",
   color: "#FFFFFF",

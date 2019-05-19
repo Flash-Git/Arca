@@ -26,20 +26,21 @@ const web3StatusStyle = {
 }
 
 const btnStyleUnsent = {
-  background: colours.Accent,
+  background: colours.Button,
+  width: "80%",
   border: "none",
-  borderRadius: "1rem",
-  color: "#FFFFFF",
+  borderRadius: "0.65rem",
+  color: colours.Primary,
   fontWeight: "bold",
   cursor: "pointer",
-  padding: "6px 26px"
+  padding: "5px 20px"
 }
 
 const btnStyleSent = {
-  backgroundColor: "#8A9096",
+  backgroundColor: colours.ButtonPressed,
   border: "none",
   borderRadius: "0",
-  color: "#FFFFFF",
+  color: colours.Primary,
   fontWeight: "bold",
   padding: "4px 16px",
   marginTop: "0.1rem"

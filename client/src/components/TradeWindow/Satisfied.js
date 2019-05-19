@@ -167,8 +167,8 @@ const satisfiedStyle = {
   justifyContent: "space-evenly",
   textAlign: "center",
   alignItems: "center",
-  background: colours.Secondary,
-  color: colours.Quaternary,
+  background: colours.Primary,
+  color: colours.Secondary,
   lineHeight: "1.5em",
   fontWeight: "bold",
   marginLeft: "0",
@@ -182,7 +182,7 @@ const btnStyle = {
   gridRow: "1 / 3",
   border: "none",
   borderRadius: "0.8rem",
-  color: colours.Secondary,
+  color: colours.Primary,
   fontWeight: "bold",
   cursor: "pointer",
   padding: "0.6rem 1.1rem",
@@ -190,19 +190,19 @@ const btnStyle = {
 }
 
 const btnStyleAccepted = {
-  background: colours.User
+  background: colours.ButtonPressed
 }
 
 const btnStyleNotAccepted = {
-  background: colours.User
+  background: colours.Button
 }
 
 const statusStyle = {
   gridColumn: "2",
   gridRow: "1 / 3",
   width: "100%",
-  background: colours.Secondary,
-  color: colours.Quaternary,
+  background: colours.Primary,
+  color: colours.Secondary,
   fontWeight: "bold",
   padding: "0.3rem 0",
   margin: "0.2rem 0"

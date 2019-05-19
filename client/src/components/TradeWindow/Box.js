@@ -318,9 +318,9 @@ const boxStyle = {
   textAlign: "center",
   width: "100%",
   minWidth: "11rem",
-  background: colours.Secondary,
+  background: colours.Primary,
   boxShadow: "0px 0px 25px -2px rgba(0,0,0,0.25)",
-  color: colours.Quaternary,
+  color: colours.Secondary,
   fontWeight: "normal",
   padding: "0.3rem",
   margin: "1rem 1.25rem"

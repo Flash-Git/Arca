@@ -117,8 +117,8 @@ const methodStyle = {
   gridRow: "3",
   justifyContent: "center",
   textAlign: "center",
-  background: colours.Secondary,
-  color: colours.Quaternary
+  background: colours.Primary,
+  color: colours.Secondary
 }
 
 const baseInputStyle = {
@@ -129,15 +129,15 @@ const baseInputStyle = {
   borderColor: "#888888",
   borderWidth: "1px",
   borderStyle: "solid",
-  color: colours.Quaternary,
+  color: colours.Secondary,
   padding: "0.1rem"
 }
 
 const btnStyle = {
-  background: colours.User,
+  background: colours.Button,
   border: "none",
   borderRadius: "0.4rem",
-  color: colours.Secondary,
+  color: colours.Primary,
   fontWeight: "bold",
   cursor: "pointer",
   padding: "0.35rem 0.5rem",
