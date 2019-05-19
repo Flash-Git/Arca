@@ -17,10 +17,10 @@ class PreTrade extends Component {
       validInput1: false,
       validInput2: false
     }
+    this.checkAddress = this.checkAddress.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange1 = this.onChange1.bind(this);
     this.onChange2 = this.onChange2.bind(this);
-    this.checkAddress = this.checkAddress.bind(this);
   }
 
   async checkAddress(index, input) {
