@@ -12,6 +12,12 @@ class Header extends Component {
           <h5 style={ networkStyle }> NETWORK </h5>
         </div>;
     }
+    
+    if(window.ethereum.networkVersion === "1"){
+      return <div style={ textStyle }>
+        <h5 style={ networkStyle }> LIVE </h5>
+      </div>;
+    }
 
     if(window.ethereum.networkVersion === "4"){
       return <div style={ textStyle }>
