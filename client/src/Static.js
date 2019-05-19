@@ -46,8 +46,7 @@ function AppAddress() {
 const boolStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
 const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
 const userBoxStatus = Object.freeze({ "NO_BOX":0, "FIRST_BOX":2, "SECOND_BOX":3 });
-const colours = Object.freeze({ "Primary":"#FFFFFF", "Secondary":"#FFFFFF", "Quaternary":"#000000",
-  "User":"#667788", "Accent":"#667788" }); //Light Mode
+const colours = Object.freeze({ "Primary":"#FFFFFF", "Secondary":"#000000", "Button":"#667788", "ButtonPressed": "#9296A0" }); //Light Mode
 
 export {
   AppAddress,
