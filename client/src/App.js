@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Web3 from "web3";
 
 import Header from "./components/Header";
-import UserInfo from "./components/UserInfo";
+import Sidebar from "./components/Sidebar";
 import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
 import Footer from "./components/Footer";
@@ -143,7 +143,7 @@ class App extends Component {
               ensAdds={ this.state.ensAdds } userBox={ this.state.userBox } erc={ this.state.erc }  />
           </div>
           <div style={ rightStyle } >
-            <UserInfo connected ={ this.state.connected } counter={ this.state.counter } width={ this.state.width } enableWeb3={ this.enableWeb3 }
+            <Sidebar connected ={ this.state.connected } counter={ this.state.counter } width={ this.state.width } enableWeb3={ this.enableWeb3 }
               addErc={ this.addErc } />
           </div>
         </div>
