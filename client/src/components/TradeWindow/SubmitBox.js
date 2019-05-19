@@ -84,16 +84,19 @@ class SubmitBox extends Component {
           value={ this.state.contractAdd }
           onChange={ this.onChange }
         />
-        <input style={ this.state.type.includes("20")||this.state.type.includes("721") ?
+        <select style={ this.state.type.includes("20")||this.state.type.includes("721") ?
             {...baseInputStyle, ...{ maxWidth: "10em", borderLeft: "solid 4px green" }} :
             {...baseInputStyle, ...{ maxWidth: "10em", borderLeft: "solid 4px red" }}
           }
           type="text"
           name="type"
-          placeholder="ERC20 / ERC721"
+          //placeholder="ERC20 / ERC721"
           value={ this.state.type }
           onChange={ this.onChange }
-        />
+        >
+          <option value={ "ERC20" }>ERC20</option>
+          <option value={ "ERC721" }>ERC721</option>
+        </select>
         <input style={ {...baseInputStyle, ...{ maxWidth:"10em" }} }
           type="text"
           name="amountId"
