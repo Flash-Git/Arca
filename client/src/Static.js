@@ -43,9 +43,9 @@ function AppAddress() {
   return "0x111e9493d50dF3CcE22e700b4B8b28aE5A273035";
 }
 
-const boolStatus = Object.freeze({ "TRUE":1, "FALSE":2, "TOTRUE":3, "TOFALSE":4 });
-const sendStatus = Object.freeze({ "UNSENT":1, "SENDING":2, "SENT":3 });
-const userBoxStatus = Object.freeze({ "NO_BOX":0, "FIRST_BOX":2, "SECOND_BOX":3 });
+const boolStatus = Object.freeze({ "TRUE": 1, "FALSE": 2, "TOTRUE": 3, "TOFALSE": 4 });
+const sendStatus = Object.freeze({ "UNSENT": 1, "SENDING": 2, "SENT": 3 });
+const userBoxStatus = Object.freeze({ "NO_BOX": 0, "FIRST_BOX": 2, "SECOND_BOX": 3 });
 const colours = Object.freeze({ "Primary":"#FFFFFF", "Secondary":"#000000", "Button":"#667788", "ButtonPressed": "#9296A0" }); //Light Mode
 
 export {
