@@ -94,7 +94,7 @@ class App extends Component {
     }
     
     //Attempt to open a connection to the Ethereum blockchain
-    window.web3 = new Web3(window.ethereum);//TODO ISSUE BEFORE SIGN IN
+    window.web3 = new Web3(window.ethereum);
     return new Promise((resolve, reject) => {
       window.ethereum.enable()
         .then(acc => {
