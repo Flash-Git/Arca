@@ -5,7 +5,7 @@ Arca lets anyone open a trading box with any other Ethereum address and safely t
 Currently supports both ERC20 and ERC721 tokens.
 ___
 
-## Instructions
+## Instructions:
 
 ### Step 1 - Connect  
 -Go to https://etharca.com  
