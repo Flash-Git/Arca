@@ -37,10 +37,10 @@ contract Arca {
   event OfferRemovedERC721(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 index, uint256 nonce);
   event BoxCountModifiedERC20(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 count, uint256 nonce);
   event BoxCountModifiedERC721(address indexed sender, address indexed partner, uint256 indexed boxNum, uint8 count, uint256 nonce);
-  event AuthorUpdated(address indexed oldAuthor, address indexed newAuthor);
-  event KilledContract(address indexed author, address indexed newContract);
+  event OwnerUpdated(address indexed oldOwner, address indexed newOwner);
+  event KilledContract(address indexed owner, address indexed newContract);
 
-  address payable public author;
+  address payable public owner;
   mapping(address => mapping(address => mapping(uint256 => Box))) private boxes;
 
   struct OfferErc20 {
@@ -64,8 +64,15 @@ contract Arca {
 
 
   constructor() public {
-    author = msg.sender;
+    owner = msg.sender;
   }
+
+  modifier isOwner() {
+    require(msg.sender == owner, "Sender isn't the contract's owner");
+
+    _;//Continue to run
+  }
+
 
 
   /*
@@ -268,29 +275,24 @@ contract Arca {
   }
 
   function directErc20Transfer(address _add1, address _add2, address _erc20Address, uint256 _amount) private {
-    //Not all "erc20" transfers have a return DESPITE THE STANDARD?
-    //bool success = Erc20(_erc20Address).transferFrom(_add1, _add2, _amount);
-    //require(success, "Failed to transfer erc20 tokens");
     uint startBalance = Erc20(_erc20Address).balanceOf(_add2);
     Erc20(_erc20Address).transferFrom(_add1, _add2, _amount);
-    assert(startBalance + _amount == Erc20(_erc20Address).balanceOf(_add2));
+    require(startBalance + _amount == Erc20(_erc20Address).balanceOf(_add2), "Balance of ERC20 failed to update");
   }
 
   function directErc721Transfer(address _add1, address _add2, address _erc721Address, uint256 _id) private {
-    Erc721(_erc721Address).safeTransferFrom(_add1, _add2, _id); //erc721 transfers don't require a return?
-    assert(Erc721(_erc721Address).ownerOf(_id) == _add2);
+    Erc721(_erc721Address).safeTransferFrom(_add1, _add2, _id);
+    require(Erc721(_erc721Address).ownerOf(_id) == _add2, "Owner of ERC721 failed to update");
   }
 
-  function updateAuthor(address payable _newAuthor) public {
-    require(msg.sender == author, "Not the author");
-    author = _newAuthor;
-    emit AuthorUpdated(msg.sender, author);
+  function updateOwner(address payable _newOwner) public isOwner() {
+    owner = _newOwner;
+    emit OwnerUpdated(msg.sender, owner);
   }
 
-  function killContract(address _newContract) public {
-    require(msg.sender == author, "Not the author");
+  function killContract(address _newContract) public isOwner() {
     emit KilledContract(msg.sender, _newContract);
-    selfdestruct(author);
+    selfdestruct(owner);
   }
 
 }
