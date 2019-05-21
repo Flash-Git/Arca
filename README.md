@@ -19,7 +19,7 @@ ___
 
 ### Step 3 - Execute Trade  
 -Accept the trade  
--Wait for trade parnter to accept  
+-Wait for your trade partner to accept  
 -The Arca contract will execute the swap (make sure to have the tokens in your wallet)  
 -Done  
 ![Image of Arca_1](https://i.imgur.com/tLwVBVv.png)
