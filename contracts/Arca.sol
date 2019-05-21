@@ -79,27 +79,27 @@ contract Arca {
   * GETTERS
   */
 
-  function getOfferErc20(address _add1, address _add2, uint256 _boxNum, uint8 _index) public view returns(address, uint256) {
+  function getOfferErc20(address _add1, address _add2, uint256 _boxNum, uint8 _index) external view returns(address, uint256) {
     return (boxes[_add1][_add2][_boxNum].offersErc20[_index].add, boxes[_add1][_add2][_boxNum].offersErc20[_index].amount);
   }
   
-  function getOfferErc721(address _add1, address _add2, uint256 _boxNum, uint8 _index) public view returns(address, uint256) {
+  function getOfferErc721(address _add1, address _add2, uint256 _boxNum, uint8 _index) external view returns(address, uint256) {
     return (boxes[_add1][_add2][_boxNum].offersErc721[_index].add, boxes[_add1][_add2][_boxNum].offersErc721[_index].id);
   }
 
-  function getErc20Count(address _add1, address _add2, uint256 _boxNum) public view returns(uint8) {
+  function getErc20Count(address _add1, address _add2, uint256 _boxNum) external view returns(uint8) {
     return boxes[_add1][_add2][_boxNum].countErc20;
   }
 
-  function getErc721Count(address _add1, address _add2, uint256 _boxNum) public view returns(uint8) {
+  function getErc721Count(address _add1, address _add2, uint256 _boxNum) external view returns(uint8) {
     return boxes[_add1][_add2][_boxNum].countErc721;
   }
 
-  function getNonce(address _add1, address _add2, uint256 _boxNum) public view returns(uint256) {
+  function getNonce(address _add1, address _add2, uint256 _boxNum) external view returns(uint256) {
     return boxes[_add1][_add2][_boxNum].nonce;
   }
 
-  function getPartnerNonce(address _add1, address _add2, uint256 _boxNum) public view returns(uint256) {
+  function getPartnerNonce(address _add1, address _add2, uint256 _boxNum) external view returns(uint256) {
     return boxes[_add1][_add2][_boxNum].partnerNonce;
   }
 
@@ -108,7 +108,7 @@ contract Arca {
   * TRADE ACTIONS
   */
 
-  function acceptTrade(address _tradePartner, uint256 _boxNum, uint256 _partnerNonce) public {
+  function acceptTrade(address _tradePartner, uint256 _boxNum, uint256 _partnerNonce) external {
     boxes[msg.sender][_tradePartner][_boxNum].partnerNonce = _partnerNonce+1; //Offset serves to avoid explicit "satisfied" variable
     emit TradeAccepted(msg.sender, _tradePartner, _boxNum, _partnerNonce+1);
 
@@ -117,7 +117,7 @@ contract Arca {
     }
   }
 
-  function unacceptTrade(address _tradePartner, uint256 _boxNum) public {
+  function unacceptTrade(address _tradePartner, uint256 _boxNum) external {
     boxes[msg.sender][_tradePartner][_boxNum].partnerNonce = 0;
     emit TradeUnaccepted(msg.sender, _tradePartner, _boxNum);
   }
@@ -162,7 +162,7 @@ contract Arca {
   * BOX FUNCTIONS
   */
 
-  function pushOfferErc20(address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount) public {
+  function pushOfferErc20(address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount) external {
     addOfferErc20(_tradePartner, _boxNum, _erc20Address, _amount, boxes[msg.sender][_tradePartner][_boxNum].countErc20);
   }
 
@@ -187,7 +187,7 @@ contract Arca {
     emit OfferModifiedERC20(msg.sender, _tradePartner, _boxNum, _erc20Address, _amount, _index, box.nonce);
   }
   
-  function pushOfferErc721(address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id) public {
+  function pushOfferErc721(address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id) external {
     addOfferErc721(_tradePartner, _boxNum, _erc721Address, _id, boxes[msg.sender][_tradePartner][_boxNum].countErc721);
   }
   
@@ -213,7 +213,7 @@ contract Arca {
     emit OfferModifiedERC721(msg.sender, _tradePartner, _boxNum, _erc721Address, _id, _index, box.nonce);
   }
 
-  function removeOfferErc20(address _tradePartner, uint256 _boxNum, uint8 _index) public {
+  function removeOfferErc20(address _tradePartner, uint256 _boxNum, uint8 _index) external {
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.offersErc20[_index].add = address(0);
 
@@ -221,7 +221,7 @@ contract Arca {
     emit OfferRemovedERC20(msg.sender, _tradePartner, _boxNum, _index, box.nonce);
   }
 
-  function removeOfferErc721(address _tradePartner, uint256 _boxNum, uint8 _index) public {
+  function removeOfferErc721(address _tradePartner, uint256 _boxNum, uint8 _index) external {
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.offersErc721[_index].add = address(0);
 
@@ -230,7 +230,7 @@ contract Arca {
   }
 
   //Set to 0 to clear
-  function setCountErc20(address _tradePartner, uint256 _boxNum, uint8 _count) public {
+  function setCountErc20(address _tradePartner, uint256 _boxNum, uint8 _count) external {
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.countErc20 = _count;
 
@@ -239,7 +239,7 @@ contract Arca {
   }
 
   //Set to 0 to clear
-  function setCountErc721(address _tradePartner, uint256 _boxNum, uint8 _count) public {
+  function setCountErc721(address _tradePartner, uint256 _boxNum, uint8 _count) external {
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.countErc721 = _count;
 
@@ -285,12 +285,12 @@ contract Arca {
     require(Erc721(_erc721Address).ownerOf(_id) == _add2, "Owner of ERC721 failed to update");
   }
 
-  function updateOwner(address payable _newOwner) public isOwner() {
+  function updateOwner(address payable _newOwner) external isOwner() {
     owner = _newOwner;
     emit OwnerUpdated(msg.sender, owner);
   }
 
-  function killContract(address _newContract) public isOwner() {
+  function killContract(address _newContract) external isOwner() {
     emit KilledContract(msg.sender, _newContract);
     selfdestruct(owner);
   }
