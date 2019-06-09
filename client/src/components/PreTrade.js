@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+//import ENS from "ethereum-ens";
 import PropTypes from "prop-types";
 
 import { colours } from "../Static";
