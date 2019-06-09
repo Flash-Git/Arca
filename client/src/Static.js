@@ -32,7 +32,7 @@ function ListErc721() {
 function AppAddress() {
   try{
     if(window.ethereum.networkVersion === "4"){ //Rinkeby
-      return "0x111e9493d50dF3CcE22e700b4B8b28aE5A273035";
+      return "0x255bca69542f6515af3b172223e903dfb302038b";
     }
     if(window.ethereum.networkVersion === "5"){ //Goerli
       return "0x005f729ec568b2e2c69fb3bca7637b49e59ed5c1";
@@ -40,7 +40,7 @@ function AppAddress() {
   }catch(e){
     console.log("No connection to Web3");
   }
-  return "0x111e9493d50dF3CcE22e700b4B8b28aE5A273035";
+  return "0x255bca69542f6515af3b172223e903dfb302038b";
 }
 
 const boolStatus = Object.freeze({ "TRUE": 1, "FALSE": 2, "TOTRUE": 3, "TOFALSE": 4 });
