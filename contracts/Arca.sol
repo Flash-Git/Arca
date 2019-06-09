@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.9;
 
 /*
 * @Author Flash
@@ -168,23 +168,21 @@ contract Arca {
 
   function addOfferErc20(address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount, uint8 _index) public {
     require(Erc20(_erc20Address).allowance(msg.sender, address(this)) >= _amount, "Insufficient allowance");
-
-    OfferErc20 memory offer;
-    offer.add = _erc20Address;
-    offer.amount = _amount;
-
+    
+    OfferErc20 memory offer = OfferErc20({add: _erc20Address, amount:_amount});
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
+    
     if(box.offersErc20.length > _index){
       box.offersErc20[_index] = offer;
     }else{
       box.offersErc20.push(offer);
     }
+
     if(box.countErc20 <= _index){
       box.countErc20++;
     }
 
-    box.nonce++;
-    emit OfferModifiedERC20(msg.sender, _tradePartner, _boxNum, _erc20Address, _amount, _index, box.nonce);
+    emit OfferModifiedERC20(msg.sender, _tradePartner, _boxNum, _erc20Address, _amount, _index, box.nonce++);
   }
   
   function pushOfferErc721(address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id) external {
@@ -195,38 +193,34 @@ contract Arca {
     require(Erc721(_erc721Address).ownerOf(_id) == msg.sender, "Sender isn't owner of this erc721 token");
     require(Erc721(_erc721Address).isApprovedForAll(msg.sender, address(this)) == true, "Contract not approved for erc721 token transfers");
 
-    OfferErc721 memory offer;
-    offer.add = _erc721Address;
-    offer.id = _id;
-
+    OfferErc721 memory offer = OfferErc721({add: _erc721Address, id:_id});
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
+
     if(box.offersErc721.length > _index){
       box.offersErc721[_index] = offer;
     }else{
       box.offersErc721.push(offer);
     }
+
     if(box.countErc721 <= _index){
       box.countErc721++;
     }
 
-    box.nonce++;
-    emit OfferModifiedERC721(msg.sender, _tradePartner, _boxNum, _erc721Address, _id, _index, box.nonce);
+    emit OfferModifiedERC721(msg.sender, _tradePartner, _boxNum, _erc721Address, _id, _index, box.nonce++);
   }
 
   function removeOfferErc20(address _tradePartner, uint256 _boxNum, uint8 _index) external {
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.offersErc20[_index].add = address(0);
 
-    box.nonce++;
-    emit OfferRemovedERC20(msg.sender, _tradePartner, _boxNum, _index, box.nonce);
+    emit OfferRemovedERC20(msg.sender, _tradePartner, _boxNum, _index, box.nonce++);
   }
 
   function removeOfferErc721(address _tradePartner, uint256 _boxNum, uint8 _index) external {
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.offersErc721[_index].add = address(0);
 
-    box.nonce++;
-    emit OfferRemovedERC721(msg.sender, _tradePartner, _boxNum, _index, box.nonce);
+    emit OfferRemovedERC721(msg.sender, _tradePartner, _boxNum, _index, box.nonce++);
   }
 
   //Set to 0 to clear
@@ -234,8 +228,7 @@ contract Arca {
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.countErc20 = _count;
 
-    box.nonce++;
-    emit BoxCountModifiedERC20(msg.sender, _tradePartner, _boxNum, _count, box.nonce);
+    emit BoxCountModifiedERC20(msg.sender, _tradePartner, _boxNum, _count, box.nonce++);
   }
 
   //Set to 0 to clear
@@ -243,8 +236,7 @@ contract Arca {
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
     box.countErc721 = _count;
 
-    box.nonce++;
-    emit BoxCountModifiedERC721(msg.sender, _tradePartner, _boxNum, _count, box.nonce);
+    emit BoxCountModifiedERC721(msg.sender, _tradePartner, _boxNum, _count, box.nonce++);
   }
 
 
@@ -294,5 +286,4 @@ contract Arca {
     emit KilledContract(msg.sender, _newContract);
     selfdestruct(owner);
   }
-
 }
