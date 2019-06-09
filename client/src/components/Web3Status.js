@@ -27,7 +27,7 @@ const web3StatusStyle = {
 
 const btnStyleUnsent = {
   background: colours.Button,
-  width: "80%",
+  maxWidth: "8rem",
   border: "none",
   borderRadius: "0.65rem",
   color: colours.Primary,
