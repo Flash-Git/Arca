@@ -1,6 +1,7 @@
 {
-  "short_name": "Arca",
   "name": "Arca - The Ethereum Trading Platform",
+  "short_name": "Arca",
+  "description": "Arca is an Ethereum application that uses autonomous smart contracts to allow you to exchange various Ethereum based assets straight from your wallet",
   "icons": [
     {
       "src": "arcaLO.png",
