@@ -1,7 +1,7 @@
 # ARCA - The Ethereum Trading Platform  
 ##### [Ethereum ÐApp live on the Rinkeby and Goerli testnets](https://etharca.com)
 
-Arca lets anyone open a trading box with any other Ethereum address and safely trade multiple different tokens at a time dicrectly from your wallet.
+Arca lets anyone open a trading box with any other Ethereum address and safely trade multiple different tokens at a time directly from your wallet.
 Currently supports both ERC20 and ERC721 tokens.
 ___
 
