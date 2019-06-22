@@ -14,7 +14,7 @@ class Footer extends Component {
           <a style={ linkStyle } href="https://etherscan.io/address/jaquinn.eth">
             <FontAwesomeIcon style={ iconStyle } icon={ faEthereum } />&nbsp;Donations
           </a>
-          <a style={ linkStyle } href="mailto:contact@etharca.com">
+          <a style={ linkStyle } href="mailto:arca@jaquinn.com">
             <FontAwesomeIcon style={ iconStyle } icon={ faAt } />&nbsp;Inquiries
           </a>
           <a style={ linkStyle } href="https://blockstream.info/address/bc1qvn7u88k5qpq2m7g8mu8swh88v7q59msxa4w6vg">
