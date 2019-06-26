@@ -1,4 +1,4 @@
-pragma solidity ^0.5.9;
+pragma solidity ^0.5.10;
 
 /*
 * @Author Flash
@@ -9,7 +9,7 @@ pragma solidity ^0.5.9;
 * @Author Flash
 * @title Arca
 *
-* @dev Allows for the trade of multiple asset types
+* @dev Allows for the simultaneous trade of multiple asset types
 * Handles escrowless ERC20 and ERC721 transfers
 */
 
@@ -72,7 +72,6 @@ contract Arca {
 
     _;//Continue to run
   }
-
 
 
   /*
@@ -276,6 +275,11 @@ contract Arca {
     Erc721(_erc721Address).safeTransferFrom(_add1, _add2, _id);
     require(Erc721(_erc721Address).ownerOf(_id) == _add2, "Owner of ERC721 failed to update");
   }
+
+
+  /*
+  * OWNER
+  */
 
   function updateOwner(address payable _newOwner) external isOwner() {
     owner = _newOwner;
