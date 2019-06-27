@@ -7,34 +7,38 @@ export function Normalise(_name) {
     return namehash.normalize(_name);
   }catch(e){
     console.log(e);
+    return e;
   }
 }
 
 export function Hash(_name) {
-  try{//TODO Does this catch lacking .eth
+  try{
     return namehash.hash(_name);
   }catch(e){
     console.log(e);
+    return e;
   }
 }
 
 export function SetENS() {
-  ens = new ENS(window.web3.providers.HttpProvider());
+  ens = new ENS(window.web3.givenProvider);
 }
 
 export function IsOwner(_name, _owner) {
   try{
-    return new Promise((resolve, reject) => {
-      return ens.owner(_name)
-        .then(owner => owner === _owner ? resolve() : reject())
-        .catch(reject()
-      );
-    });
+    return ens.owner(_name)
+      .then(owner => {
+        return owner === _owner ? true : false;
+      })
+      .catch(e => {
+        console.log("Failed isOwner:")
+        console.log(e);
+        return false;
+      }
+    );
   }catch(e){
     console.log("Failed isOwner:")
     console.log(e);
-    return new Error(e);
+    return false;
   }
-
-
 }
