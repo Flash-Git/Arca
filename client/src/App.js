@@ -66,9 +66,9 @@ class App extends Component {
       }
 
       //Check whether the user is on the correct network
-      if(window.ethereum.networkVersion !== "4" && window.ethereum.networkVersion !== "5"){
+      if(window.ethereum.networkVersion !== "1" && window.ethereum.networkVersion !== "4" && window.ethereum.networkVersion !== "5"){
         console.log("Current network: " + window.ethereum.networkVersion);
-        alert("The Ethereum contract is currently only running on the rinkeby and goerli test networks.");
+        alert("The Ethereum contract is currently only running on the main, rinkeby and goerli test networks.");
         this.setState({ connected: false });
         return 2;
       }
