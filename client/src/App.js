@@ -6,6 +6,7 @@ import Sidebar from "./components/Sidebar";
 import TradeWindow from "./components/TradeWindow";
 import PreTrade from "./components/PreTrade";
 import Footer from "./components/Footer";
+import { SetENS } from "./components/ENS";
 
 import { userBoxStatus } from "./Static";
 import "./App.css";
@@ -99,7 +100,7 @@ class App extends Component {
       window.ethereum.enable()
         .then(acc => {
           if(this.checkConnection() === 0){
-            this.setState({ connected: true }, () => resolve());
+            this.setState({ connected: true }, () => resolve(), SetENS());
           }else{
             console.log("Failed to attempt to enable web3");
             alert("Please sign yourself into MetaMask");
