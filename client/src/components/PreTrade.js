@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-//import ENS from "ethereum-ens";
 import PropTypes from "prop-types";
 
+import { IsEns } from "./ENS";
 import { colours } from "../Static";
 
 class PreTrade extends Component {
@@ -29,38 +29,30 @@ class PreTrade extends Component {
       this.setState({ validInput1: false, validInput2: false });
       return;
     }
-    
-    if(!input.includes(".eth")&&!input.includes(".test")){
-      if(input.length !== 42){
-        index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
-        return;
-      }
-
-      try{
-        const sumAdd = await window.web3.utils.toChecksumAddress(input);
-        if(window.web3.utils.isAddress(sumAdd)){
-          index === 0 ? this.setState({ validInput1: true, address1: sumAdd, ensAdd1: "" }) : this.setState({ validInput2: true, address2: sumAdd, ensAdd2: "" });
-          return;
-        }
-        index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
-        return;
-      }catch(e){
-        index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
-        return;
-      }
-    }
 
     try{
-      let ensAdd = await window.web3.eth.ens.getAddress(input);
-      ensAdd = await window.web3.utils.toChecksumAddress(ensAdd);
-      if(!window.web3.utils.isAddress(ensAdd)){
-        index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
+      const chks = window.web3.utils.toChecksumAddress(input);
+      if(window.web3.utils.isAddress(chks)){
+        index === 0 ? this.setState({ validInput1: true, address1: input, ensAdd1: "" }) : this.setState({ validInput2: true, address2: input, ensAdd2: "" });
+        return;
+      }else{
+        index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
+        return;
       }
-      index === 0 ? this.setState({ validInput1: true, address1: ensAdd, ensAdd1: input }) : this.setState({ validInput2: true, address2: ensAdd, ensAdd2: input });
-      return;
     }catch(e){
-      index === 0 ? this.setState({ validInput1: false }) : this.setState({ validInput2: false });
-      return;
+      return IsEns(input)
+        .then(res => {
+          if(res){
+            index === 0 ? this.setState({ validInput1: true, address1: res, ensAdd1: input }) : this.setState({ validInput2: true, address2: res, ensAdd2: input });
+            return;
+          }else{
+            index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
+            return
+          }
+        })
+        .catch(e => {
+          index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
+        });
     }
   }
 
@@ -85,6 +77,7 @@ class PreTrade extends Component {
     if(!this.props.connected){
       await this.props.enableWeb3();
     }
+
     Promise.all([this.checkAddress(0, this.state.input1), this.checkAddress(1, this.state.input2)])
       .then( () => {
         if(this.state.validInput1 && this.state.validInput1){
