@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 
-import { IsEns } from "./ENS";
+import { IsEns, IsReverse } from "./ENS";
 import { colours } from "../Static";
 
 class PreTrade extends Component {
@@ -24,31 +24,41 @@ class PreTrade extends Component {
     this.onChange2 = this.onChange2.bind(this);
   }
 
-  async checkAddress(index, input) {
+  checkAddress(index, input) {
     if(!this.props.connected){
       this.setState({ validInput1: false, validInput2: false });
       return;
     }
 
     try{
-      const chks = window.web3.utils.toChecksumAddress(input);
-      if(window.web3.utils.isAddress(chks)){
-        index === 0 ? this.setState({ validInput1: true, address1: input, ensAdd1: "" }) : this.setState({ validInput2: true, address2: input, ensAdd2: "" });
-        return;
-      }
-      index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
-    }catch(e){
-      return IsEns(input)
+      input = input.toLowerCase();
+      if(window.web3.utils.isAddress(input)){
+        return IsReverse(input)
+          .then(res => {
+            if(res) index === 0 ? this.setState({ validInput1: true, address1: input, ensAdd1: res }) : this.setState({ validInput2: true, address2: input, ensAdd2: res });
+            else index === 0 ? this.setState({ validInput1: true, address1: input, ensAdd1: "" }) : this.setState({ validInput2: true, address2: input, ensAdd2: "" });
+          })
+          .catch(e => {
+            console.log("Error in IsReverse");
+            index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
+          });
+      }else{
+        return IsEns(input)
         .then(res => {
           if(res){
+            res = res.toLowerCase();
             index === 0 ? this.setState({ validInput1: true, address1: res, ensAdd1: input }) : this.setState({ validInput2: true, address2: res, ensAdd2: input });
           }else{
             index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
           }
         })
         .catch(e => {
+          console.log("Error in IsEns");
           index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
         });
+      }
+    }catch(e){
+      index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
     }
   }
 
