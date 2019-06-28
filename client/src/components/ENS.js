@@ -38,6 +38,20 @@ export function IsEns(_name) {
   }
 }
 
+export function IsReverse(_add) {
+  try{
+    return ens.reverse(_add).name()
+      .then(name => {
+        return name;
+      })
+      .catch(e => {
+        return false;
+      })
+  }catch(e){
+    return false;
+  }
+}
+
 export function IsOwner(_name, _owner) {
   try{
     return ens.owner(_name)
