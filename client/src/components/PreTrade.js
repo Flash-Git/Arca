@@ -34,20 +34,16 @@ class PreTrade extends Component {
       const chks = window.web3.utils.toChecksumAddress(input);
       if(window.web3.utils.isAddress(chks)){
         index === 0 ? this.setState({ validInput1: true, address1: input, ensAdd1: "" }) : this.setState({ validInput2: true, address2: input, ensAdd2: "" });
-        return;
       }else{
         index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
-        return;
       }
     }catch(e){
       return IsEns(input)
         .then(res => {
           if(res){
             index === 0 ? this.setState({ validInput1: true, address1: res, ensAdd1: input }) : this.setState({ validInput2: true, address2: res, ensAdd2: input });
-            return;
           }else{
             index === 0 ? this.setState({ validInput1: false, address1: "", ensAdd1: "" }) : this.setState({ validInput2: false, address2: "", ensAdd2: "" });
-            return
           }
         })
         .catch(e => {
