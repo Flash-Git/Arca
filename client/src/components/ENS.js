@@ -24,6 +24,20 @@ export function SetENS() {
   ens = new ENS(window.web3.givenProvider);
 }
 
+export function IsEns(_name) {
+  try{
+    return ens.resolver(_name).addr()
+      .then(add => {
+        return add;
+      })
+      .catch(e => {
+        return false;
+      })
+  }catch(e){
+    return false;
+  }
+}
+
 export function IsOwner(_name, _owner) {
   try{
     return ens.owner(_name)
