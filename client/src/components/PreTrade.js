@@ -70,9 +70,7 @@ class PreTrade extends Component {
 
   async onSubmit(e) {
     e.preventDefault();
-    if(!this.props.connected){
-      await this.props.enableWeb3();
-    }
+    if(!this.props.connected) await this.props.enableWeb3();
 
     Promise.all([this.checkAddress(0, this.state.input1), this.checkAddress(1, this.state.input2)])
       .then( () => {
