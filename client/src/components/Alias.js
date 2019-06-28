@@ -7,7 +7,7 @@ export function KnownContracts(_address) {
       //ens
       switch(_address){
         case "0xFaC7BEA255a6990f749363002136aF6556b31e04":
-          return "ENS;
+          return "ENS";
         default:
           return _address;
       }
@@ -31,5 +31,5 @@ export function KnownContracts(_address) {
     console.log("Error in KnownContracts:");
     console.log(e);
     return e;
-
+  }
 }
