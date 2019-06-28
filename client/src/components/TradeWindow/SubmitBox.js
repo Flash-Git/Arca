@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import { sendStatus, colours } from "../../Static";
 import { Erc20Contract, Erc721Contract, ErcCalls } from "../../ContractCalls";
-
+import { KnownContracts } from "../Alias"
 class SubmitBox extends Component {
 
   constructor(props) {
@@ -36,7 +36,8 @@ class SubmitBox extends Component {
       symbol: "",
       contractAdd: this.state.contractAdd,
       amountId: this.state.amountId,
-      sendStatus: sendStatus.UNSENT
+      sendStatus: sendStatus.UNSENT,
+      contractName: ""
     };
 
     let contract;
@@ -56,13 +57,17 @@ class SubmitBox extends Component {
     ErcCalls("name", contract)
       .then(res => {
         method.name = res.toString();
-      })
+      });
     ErcCalls("symbol", contract)
       .then(res => {
         method.symbol = res.toString();
-      })
+      });
 
-    this.props.addMethod(method);//TODO THIS MIGHT REQUIRE PROMISE.ALL
+    KnownContracts()
+      .then(name => {
+        method.contractName = name;
+        this.props.addMethod(method);//TODO THIS MIGHT REQUIRE PROMISE.ALL
+      });
   }
 
   onChange(e) {
