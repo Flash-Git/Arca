@@ -10,7 +10,6 @@ import { SetENS } from "./components/ENS";
 
 import { userBoxStatus } from "./Static";
 import "./App.css";
-
 class App extends Component {
 
   constructor(props) {
@@ -81,7 +80,6 @@ class App extends Component {
       this.setState({ connected: false });
       return 1;
     }
-    
     return 0;
   }
 
@@ -100,7 +98,8 @@ class App extends Component {
       window.ethereum.enable()
         .then(acc => {
           if(this.checkConnection() === 0){
-            this.setState({ connected: true }, () => resolve(), SetENS());
+            Promise.all([SetENS(), this.setState({ connected: true })])
+              .then(() => resolve());
           }else{
             console.log("Failed to attempt to enable web3");
             alert("Please sign yourself into MetaMask");
