@@ -99,7 +99,8 @@ class App extends Component {
         .then(acc => {
           if(this.checkConnection() === 0){
             Promise.all([SetENS(), this.setState({ connected: true })])
-              .then(() => resolve());
+              .then(() => resolve())
+              .catch(e => reject());
           }else{
             console.log("Failed to attempt to enable web3");
             alert("Please sign yourself into MetaMask");
