@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import makeBlockie from "ethereum-blockies-base64";
 
 import { sendStatus, colours } from "../../Static";
-import { ArcaSends } from "../../ContractCalls";
-import { Erc20Contract, Erc721Contract, ErcSends } from "../../ContractCalls";
+import { CheckName } from "../ENS";
+import { ArcaSends, Erc20Contract, Erc721Contract, ErcSends } from "../../ContractCalls";
 
 class OfferErc extends Component {
 
@@ -145,16 +145,30 @@ class OfferErc extends Component {
   }
 
   offer(method) {
-    return <>
-      <img src={ makeBlockie(method.contractAdd) } width="18px" height="18px" alt="blockie" style={{ margin: "0.3rem 0.4rem", float: "left" }} />
-      { method.type === 0 ? <div style={{ minWidth: "4rem", margin: "0.2rem" }} >ERC20&nbsp;&nbsp;&nbsp;-</div> : 
-          <div style={{ minWidth: "4rem", margin: "0.2rem" }} >ERC721&nbsp;&nbsp;-</div> }
-      <div style={{ minWidth: "4rem", margin: "0.25rem", fontWeight: "normal" }} >
-        { method.symbol }
-      </div>
-      { method.type === 0 ? <div style={{ minWidth: "6rem", margin: "0.25rem" }} >Amount:&nbsp;{ method.amountId } </div> :
-          <div style={{ minWidth: "6rem", margin: "0.25rem" }} >ID:&nbsp;{ method.amountId } </div> }
-    </>
+    switch(method.contractName){
+      case "ENS":
+        return <> 
+          <img src={ makeBlockie(method.contractAdd) } width="18px" height="18px" alt="blockie" style={{ margin: "0.3rem 0.4rem", float: "left" }} />
+          <div style={{ minWidth: "4rem", margin: "0.2rem" }} >ERC721&nbsp;&nbsp;-</div>
+          <div style={{ minWidth: "4rem", margin: "0.25rem", fontWeight: "normal" }} >
+            { method.symbol }
+          </div>
+          <div style={{ minWidth: "6rem", margin: "0.25rem" }} >ENS NAME ID:&nbsp;{ method.amountId } </div> 
+        </>;
+      default:
+        return <>
+          <img src={ makeBlockie(method.contractAdd) } width="18px" height="18px" alt="blockie" style={{ margin: "0.3rem 0.4rem", float: "left" }} />
+          { method.type === 0 ? <div style={{ minWidth: "4rem", margin: "0.2rem" }} >ERC20&nbsp;&nbsp;&nbsp;-</div> : 
+              <div style={{ minWidth: "4rem", margin: "0.2rem" }} >ERC721&nbsp;&nbsp;-</div> }
+          <div style={{ minWidth: "4rem", margin: "0.25rem", fontWeight: "normal" }} >
+            { method.symbol }
+          </div>
+          { method.type === 0 ? 
+              <div style={{ minWidth: "6rem", margin: "0.25rem" }} >Amount:&nbsp;{ method.amountId } </div> :
+              <div style={{ minWidth: "6rem", margin: "0.25rem" }} >ID:&nbsp;{ method.amountId } </div> 
+          }
+        </>
+    }
   }
 
   render() {
