@@ -84,7 +84,7 @@ class PreTrade extends Component {
 
     Promise.all([this.checkAddress(0, this.state.input1), this.checkAddress(1, this.state.input2)])
       .then( () => {
-        if(this.state.validInput1 && this.state.validInput1){
+        if(this.state.validInput1 && this.state.validInput2){
           this.props.setAddresses([this.state.address1, this.state.address2], [this.state.ensAdd1, this.state.ensAdd2]);
         }
       });
