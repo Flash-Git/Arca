@@ -70,3 +70,20 @@ export function IsOwner(_name, _owner) {
     return false;
   }
 }
+
+export function CheckName(_name, _id) {
+  try{
+    return namehash.hash(_name)
+      .then(hash => {
+        //TODO call contract to convert hash to ID by casting bytes32 to uint32
+      })
+      .catch(e => {
+
+      }
+    );
+  }catch(e) {
+    console.log("Failed CheckName:")
+    console.log(e);
+    return false;
+  };
+}
