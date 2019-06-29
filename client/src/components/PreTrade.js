@@ -83,7 +83,7 @@ class PreTrade extends Component {
     if(!this.props.connected) await this.props.enableWeb3();
 
     Promise.all([this.checkAddress(0, this.state.input1), this.checkAddress(1, this.state.input2)])
-      .then( () => {
+      .then(() => {
         if(this.state.validInput1 && this.state.validInput2){
           this.props.setAddresses([this.state.address1, this.state.address2], [this.state.ensAdd1, this.state.ensAdd2]);
         }
