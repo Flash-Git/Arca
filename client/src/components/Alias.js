@@ -1,4 +1,4 @@
-import ENS from "ethereum-ens";
+//import  from "./ENS";
 
 
 export function KnownContracts(_address) {
