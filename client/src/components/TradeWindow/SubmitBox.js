@@ -63,7 +63,7 @@ class SubmitBox extends Component {
         method.symbol = res.toString();
       });
 
-    KnownContracts()
+    KnownContracts(method.contractAdd)
       .then(name => {
         method.contractName = name;
         this.props.addMethod(method);//TODO THIS MIGHT REQUIRE PROMISE.ALL
