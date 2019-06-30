@@ -7,7 +7,7 @@ pragma solidity ^0.5.10;
 
 /*
 * @Author Flash
-* @title ENSUtils
+* @title Utils v1
 *
 * @dev Utility contract
 */
