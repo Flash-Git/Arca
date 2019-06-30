@@ -14,7 +14,7 @@ pragma solidity ^0.5.10;
 
 contract Utils {
   //@dev get the ENS erc721 ID
-  function namehashToID(bytes32 _namehash) view returns(uint32) {
-    return uint32(_namehash);
+  function namehashToID(bytes32 _namehash) external pure returns(uint256) {
+    return uint256(_namehash);
   }
 }
