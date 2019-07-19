@@ -1,7 +1,6 @@
 html {
-  background-color: #EBEBEB;
-  background-image: radial-gradient(#E0E0E0, #EBEBEB, #DADADA);
-  
+  background-color: #F3F3F3;
+  /*background-image: radial-gradient(#E0E0E0, #EBEBEB, #DADADA);*/
   background-repeat: no-repeat;
   background-size: auto;
   min-width: 100%;
@@ -9,7 +8,7 @@ html {
 }
 
 body {
-  background-color: #EBEBEB;
+  background-color: #F3F3F3;
   min-height: 100%;
   min-width: 100%;
   margin: 0;
