@@ -1,7 +1,7 @@
 import React, { useReducer } from "react";
 
-import UserContext from "./UserContext";
-import UserReducer from "./Web3Reducer";
+import Web3Context from "./Web3Context";
+import Web3Reducer from "./Web3Reducer";
 
 import { CONNECT_WEB3, UPDATE_WEB3 } from "../types";
 
@@ -11,7 +11,7 @@ const Web3State = props => {
     network: null
   };
 
-  const [state, dispatch] = useReducer(UserReducer, initialState);
+  const [state, dispatch] = useReducer(Web3Reducer, initialState);
 
   /*
    * Actions
@@ -30,7 +30,7 @@ const Web3State = props => {
   };
 
   return (
-    <UserContext.Provider
+    <Web3Context.Provider
       value={{
         connected: state.connected,
         network: state.network,
@@ -39,7 +39,7 @@ const Web3State = props => {
       }}
     >
       {props.children}
-    </UserContext.Provider>
+    </Web3Context.Provider>
   );
 };
 export default Web3State;
