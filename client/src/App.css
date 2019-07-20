@@ -243,6 +243,35 @@ img {
   margin-right: 0.6rem;
 }
 
+/* Sidebar */
+.sidebar {
+  float: right;
+  display: flex;
+  /* flex-direction: column; */
+  align-items: left;
+  padding: 0.7rem 2rem;
+  z-index: 1;
+  height: 100%;
+  border-left: solid 1px var(--primary-color);
+  opacity: 0.9;
+  margin-left: 1rem;
+}
+
+.sidebar ul {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar a {
+  color: #fff;
+  padding: 0.45rem;
+  margin: 0 0.25rem;
+}
+
+.sidebar a:hover {
+  color: var(--light-color);
+}
+
 /* Mobile Styles */
 @media (max-width: 700px) {
   .hide-sm {

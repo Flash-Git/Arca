@@ -1,12 +1,13 @@
 import React, { useContext } from "react";
 
 import UserContext from "../../context/user/UserContext";
+import UserState from "../../context/user/UserState";
 
 const Sidebar = () => {
   const userContext = useContext(UserContext);
-
-  const { settings, user } = userContext;
-  const { connected } = userContext.web3;
+  console.log(userContext);
+  const { settings, user, web3 } = userContext;
+  const { connected } = web3;
 
   const tokens = () => (
     <ul>
@@ -14,7 +15,7 @@ const Sidebar = () => {
       {user.ownedTokens.erc20Tokens.map(token => (
         <li>{token.name}</li>
       ))}
-      <h3>Erc20s</h3>
+      <h3>Erc721s</h3>
       {user.ownedTokens.erc721Tokens.map(token => (
         <li>{token.name}</li>
       ))}
