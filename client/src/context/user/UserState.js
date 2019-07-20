@@ -40,7 +40,8 @@ const UserState = props => {
       }
     },
     web3: {
-      connected: false
+      connected: false,
+      network: null
     }
   };
 
