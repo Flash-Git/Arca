@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import UserContext from "../../context/user/UserContext";
 
@@ -15,7 +15,7 @@ const Sidebar = () => {
         <li>{token.name}</li>
       ))}
       <h3>Erc20s</h3>
-      {user.ownedTokens.erc20Tokens.map(token => (
+      {user.ownedTokens.erc721Tokens.map(token => (
         <li>{token.name}</li>
       ))}
     </ul>
