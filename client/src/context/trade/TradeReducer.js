@@ -1,4 +1,9 @@
-import { ADD_TRADE_ITEM, REMOVE_TRADE_ITEM, SET_CURRENT_ITEM } from "../types";
+import {
+  ADD_TRADE_ITEM,
+  REMOVE_TRADE_ITEM,
+  SET_CURRENT_ITEM,
+  CLEAR_CURRENT_ITEM
+} from "../types";
 
 export default (state, action) => {
   switch (action.type) {
