@@ -93,6 +93,7 @@ const UserState = props => {
         web3: state.web3,
         user: state.user,
         tradePartner: state.tradePartner,
+        settings: state.settings,
         setWeb3,
         setUser,
         setTradePartner,
