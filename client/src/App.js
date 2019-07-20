@@ -6,6 +6,7 @@ import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
 
 import Alerts from "./components/layout/Alerts";
 import Navbar from "./components/layout/Navbar";
+import Sidebar from "./components/layout/Sidebar";
 import Home from "./components/pages/Home";
 import About from "./components/pages/About";
 import NotFound from "./components/pages/NotFound";
@@ -29,6 +30,7 @@ const App = () => (
         <Router>
           <Fragment>
             <Navbar />
+            <Sidebar />
             <div className="container">
               <Alerts />
               <Switch>
