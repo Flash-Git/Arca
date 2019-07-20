@@ -29,6 +29,27 @@ const Web3State = props => {
     });
   };
 
+  const getERC20Token = (tokenAddress, userAddress) => {
+    dispatch({
+      type: GET_ERC20,
+      payload: { tokenAddress, userAddress }
+    });
+  };
+
+  const getERC721Token = (tokenAddress, userAddress) => {
+    dispatch({
+      type: GET_ERC721,
+      payload: { tokenAddress, userAddress }
+    });
+  };
+
+  const getENSItem = (id, userAddress) => {
+    dispatch({
+      type: GET_ENS_ITEM,
+      payload: { id, userAddress }
+    });
+  };
+
   return (
     <Web3Context.Provider
       value={{
