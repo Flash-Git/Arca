@@ -4,20 +4,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import PropTypes from "prop-types";
 
+import UserContext from "../../context/user/UserContext";
+
 const Navbar = ({ title, icon }) => {
-  const connected = true;
-  const network = 1;
+  const userContext = useContext(UserContext);
+
+  const { connected, network } = userContext.web3;
 
   const networkText = () => {
     switch (network) {
       case 1:
-        return "Network: LIVE";
+        return <strong>LIVE</strong>;
       case 4:
-        return "Network: RINKEBY";
+        return <strong>RINKEBY</strong>;
       case 5:
-        return "Network: GOERLI";
+        return <strong>GOERLI</strong>;
       default:
-        return "Network: UNSUPPORTED";
+        return <strong>UNSUPPORTED</strong>;
     }
   };
 
