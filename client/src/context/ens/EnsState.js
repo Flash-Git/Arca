@@ -14,6 +14,8 @@ const EnsState = props => {
    * Actions
    */
 
+  //Get erc721 id out of name => namehash => id
+
   return <EnsContext.Provider value={{}}>{props.children}</EnsContext.Provider>;
 };
 export default EnsState;
