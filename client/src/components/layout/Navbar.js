@@ -2,7 +2,7 @@ import React from "react";
 //import makeBlockie from "ethereum-blockies-base64";
 import PropTypes from "prop-types";
 
-import { colours } from "../Static";
+import { colours } from "../../Static";
 
 const Navbar = () => {
   const connected = true;
