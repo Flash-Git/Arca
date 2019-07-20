@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faBoxOpen } from "@fortawesome/free-solid-svg-icons";
+import { faBoxOpen, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import Alerts from "./components/layout/Alerts";
 import Navbar from "./components/layout/Navbar";
@@ -19,7 +19,7 @@ import setAuthToken from "./utils/setAuthToken.js";
 
 import "./App.css";
 
-library.add(faBoxOpen);
+library.add(faBoxOpen, faInfoCircle);
 
 localStorage.token && setAuthToken(localStorage.token);
 
