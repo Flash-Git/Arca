@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
 
 import UserContext from "../../context/user/UserContext";
-import UserState from "../../context/user/UserState";
 
 const Sidebar = () => {
   const userContext = useContext(UserContext);
-  console.log(userContext);
+
   const { settings, user, web3 } = userContext;
   const { connected } = web3;
 
