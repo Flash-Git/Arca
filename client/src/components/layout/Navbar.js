@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -33,9 +33,7 @@ const Navbar = ({ title, icon }) => {
       </h1>
       <ul>
         <li>
-          <Link to="/">
-            {!connected ? "Not Connected" : networkText(network)}
-          </Link>
+          <Link to="/">{!connected ? "Not Connected" : networkText}</Link>
         </li>
         <li>
           <Link to="/about">About</Link>
