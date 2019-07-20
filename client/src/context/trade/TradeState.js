@@ -10,7 +10,7 @@ import {
   CLEAR_CURRENT_ITEM
 } from "../types";
 
-const TradeState = () => {
+const TradeState = props => {
   const initialState = {
     tradeItems: [],
     currentItem: null

@@ -10,7 +10,7 @@ import {
   CLEAR_TRADE_PARTNER
 } from "../types";
 
-const UserState = () => {
+const UserState = props => {
   const initialState = {
     user: {
       address: "",
