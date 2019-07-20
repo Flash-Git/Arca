@@ -42,6 +42,9 @@ const UserState = props => {
     web3: {
       connected: false,
       network: null
+    },
+    settings: {
+      nickname: null
     }
   };
 
