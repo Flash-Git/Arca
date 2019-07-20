@@ -4,6 +4,7 @@ import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
 
 import {
+  SET_WEB3,
   SET_USER,
   SET_TRADE_PARTNER,
   CLEAR_USER,
@@ -37,6 +38,9 @@ const UserState = props => {
         erc20Tokens: [],
         erc721Tokens: []
       }
+    },
+    web3: {
+      connected: false
     }
   };
 
@@ -45,6 +49,13 @@ const UserState = props => {
   /*
    * Actions
    */
+
+  const setWeb3 = web3 => {
+    dispatch({
+      type: SET_WEB3,
+      payload: web3
+    });
+  };
 
   const setUser = user => {
     dispatch({
@@ -75,8 +86,10 @@ const UserState = props => {
   return (
     <UserContext.Provider
       value={{
+        web3: state.web3,
         user: state.user,
         tradePartner: state.tradePartner,
+        setWeb3,
         setUser,
         setTradePartner,
         clearUser,
