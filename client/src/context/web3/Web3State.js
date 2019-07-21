@@ -3,12 +3,16 @@ import React, { useReducer } from "react";
 import Web3Context from "./Web3Context";
 import Web3Reducer from "./Web3Reducer";
 
-import { CONNECT_WEB3, UPDATE_WEB3 } from "../types";
+import {
+  CONNECT_WEB3,
+  UPDATE_WEB3
+} from "../types";
 
 const Web3State = props => {
   const initialState = {
     connected: false,
-    network: null
+    network: null,
+    loading: false
   };
 
   const [state, dispatch] = useReducer(Web3Reducer, initialState);
@@ -28,7 +32,7 @@ const Web3State = props => {
       type: UPDATE_WEB3
     });
   };
-
+/*
   const getERC20Token = (tokenAddress, userAddress) => {
     dispatch({
       type: GET_ERC20,
@@ -49,12 +53,13 @@ const Web3State = props => {
       payload: { id, userAddress }
     });
   };
-
+*/
   return (
     <Web3Context.Provider
       value={{
         connected: state.connected,
         network: state.network,
+        loading: state.loading,
         connect,
         updateNetwork
       }}
@@ -63,4 +68,5 @@ const Web3State = props => {
     </Web3Context.Provider>
   );
 };
+
 export default Web3State;
