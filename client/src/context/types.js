@@ -9,8 +9,11 @@ export const SET_CURRENT_ITEM = "SET_CURRENT_ITEM";
 export const CLEAR_CURRENT_ITEM = "CLEAR_CURRENT_ITEM";
 
 // User
-export const SET_WEB3 = "SET_WEB3";
 export const SET_USER = "SET_USER";
 export const SET_TRADE_PARTNER = "SET_TRADE_PARTNER";
 export const CLEAR_USER = "CLEAR_USER";
 export const CLEAR_TRADE_PARTNER = "CLEAR_TRADE_PARTNER";
+
+// Web3
+export const CONNECT_WEB3 = "CONNECT_WEB3";
+export const UPDATE_WEB3 = "UPDATE_WEB3";
