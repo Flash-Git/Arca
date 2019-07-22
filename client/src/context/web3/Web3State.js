@@ -1,18 +1,45 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext } from "react";
+import uuid from "uuid";
 
 import Web3Context from "./Web3Context";
 import Web3Reducer from "./Web3Reducer";
+import AlertContext from "../alert/AlertContext";
+
+import abi from "../../abis/abi";
+import abiErc20 from "../../abis/abiErc20";
+import abiErc721 from "../../abis/abiErc721";
 
 import {
   CONNECT_WEB3,
-  UPDATE_WEB3
+  UPDATE_WEB3,
+  ADD_CONTRACT_OBJECT,
+  REMOVE_CONTRACT_OBJECT,
+  CONTRACT_OBJECT_ERROR
 } from "../types";
 
 const Web3State = props => {
+  const alertContext = useContext(AlertContext);
+
+  const { setAlert } = alertContext;
+
   const initialState = {
+    web3: null,
     connected: false,
     network: null,
-    loading: false
+    loading: false,
+    contractObjs: [],
+    activeCalls: [/*{
+      id: uuid.v4(),
+      type: "USER_BALANCE",
+      date: Date.now()
+    }*/],
+    activeTxs: [/*{
+      id: txHash,
+      type: "PUSH_TRADE",
+      nonce: 5,
+      date: Date.now()
+      }*/],
+      errors: []
   };
 
   const [state, dispatch] = useReducer(Web3Reducer, initialState);
@@ -32,6 +59,47 @@ const Web3State = props => {
       type: UPDATE_WEB3
     });
   };
+
+  const addContractObj = async(address, abiName) => {
+    const abi = await getAbi(abiName);
+    
+    if(!abi){
+      setAlert(`Failed get abi ${abiName}`, "danger");
+      return;
+    }
+    
+    try{
+      //Create contract obj
+
+      dispatch({
+        type: ADD_CONTRACT_OBJECT,
+        payload: {address, abi}
+      });
+    }catch{
+      dispatch({
+        type: CONTRACT_OBJECT_ERROR,
+      });
+    }
+  }
+
+  const getAbi = async abiName => {
+    switch(abiName){
+      case "ARCA":
+        return abi;
+      case "erc20":
+        return abiErc20;
+      case "erc721":
+        return abiErc721;
+      default:
+        return null;
+    }
+  }
+
+  const dismissError = id => {
+
+  }
+
+
 /*
   const getERC20Token = (tokenAddress, userAddress) => {
     dispatch({
@@ -57,6 +125,7 @@ const Web3State = props => {
   return (
     <Web3Context.Provider
       value={{
+        web3: state.web3,
         connected: state.connected,
         network: state.network,
         loading: state.loading,
