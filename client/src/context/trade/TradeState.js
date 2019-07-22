@@ -4,6 +4,7 @@ import TradeContext from "./TradeContext";
 import TradeReducer from "./TradeReducer";
 
 import {
+  SET_USER_BOX,
   ADD_TRADE_ITEM,
   REMOVE_TRADE_ITEM,
   SET_CURRENT_ITEM,
@@ -12,7 +13,20 @@ import {
 
 const TradeState = props => {
   const initialState = {
-    tradeItems: [],
+    userBox: null,
+    user: {
+      tradeItems: [
+        /*{
+        sent: UNSENT/UNCONFIRMED/CONFIRMED,
+        txHash: null/"",
+        type: erc20/erc721/ens,
+        data: {}
+      }*/
+      ]
+    },
+    tradePartner: {
+      tradeItems: []
+    },
     currentItem: null
   };
 
@@ -22,6 +36,21 @@ const TradeState = props => {
    * Actions
    */
 
+  const setUserBox = id => {
+    dispatch({
+      type: SET_USER_BOX,
+      payload: id
+    });
+  };
+
+  const getTradeItems = () => {
+    //get user trade items from db
+    //get partner trade items from db
+    //get user items from contract
+    //get partner items from contract
+    //dispatch trade items to reducer
+  };
+
   const addTradeItem = tradeItem => {
     dispatch({
       type: ADD_TRADE_ITEM,
@@ -29,7 +58,10 @@ const TradeState = props => {
     });
   };
 
-  const removeTradeItem = id => {
+  const cancelTradeItem = id => {
+    //cancel trade item on contract
+    //remove trade item on db
+
     dispatch({
       type: REMOVE_TRADE_ITEM,
       payload: id
@@ -52,10 +84,11 @@ const TradeState = props => {
   return (
     <TradeContext.Provider
       value={{
-        tradeItems: state.tradeItems,
+        userBox: state.userBox,
+        user: state.user,
+        tradePartner: state.tradePartner,
         currentItem: state.currentItem,
-        addTradeItem,
-        removeTradeItem,
+        setUserBox,
         setCurrentItem,
         clearCurrentItem
       }}
