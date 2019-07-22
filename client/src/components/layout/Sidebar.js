@@ -1,12 +1,15 @@
 import React, { useContext } from "react";
 
 import UserContext from "../../context/user/UserContext";
+import Web3Context from "../../context/web3/Web3Context";
+import Spinner from "./Spinner";
 
 const Sidebar = () => {
   const userContext = useContext(UserContext);
+  const web3Context = useContext(Web3Context);
 
-  const { settings, user, web3 } = userContext;
-  const { connected, loading } = web3;
+  const { settings, user } = userContext;
+  const { connected, loading } = web3Context;
 
   const tokens = () => (
     <ul>
