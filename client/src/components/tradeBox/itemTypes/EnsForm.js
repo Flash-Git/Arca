@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-const EnsForm = id => {
-  const [item, setItem] = useState({
+import EnsContext from "../../../context/ens/EnsContext";
+
+const EnsForm = item => {
+  const ensContext = useContext(EnsContext);
+
+  const [ensItem, setEnsItem] = useState({
     name: "",
     namehash: "",
-    id: id,
+    id: item.id,
     verified: false
   });
 
-  const { name, namehash, id, verified } = item;
+  const { name, namehash, id, verified } = ensItem;
 
   useEffect(() => {
     //eslint-disable-next-line
@@ -17,31 +21,28 @@ const EnsForm = id => {
 
   //Input
   const onChange = e => {
-    setItem({ ...item, [e.target.name]: e.target.value });
+    setEnsItem({ ...ensItem, [e.target.name]: e.target.value });
     //name => namehash => id
     //if ids match then verify
   };
 
   //Render
   return (
-    <div>
-      <form>
-        <h2 className="text-primary">ID:{id}</h2>
-        <input
-          type="text"
-          placeholder="Name"
-          name="name"
-          value={name}
-          onChange={onChange}
-        />
-        {verified && "ICON"}
-      </form>
-    </div>
+    <form>
+      <input
+        type="text"
+        placeholder="Name"
+        name="name"
+        value={name}
+        onChange={onChange}
+      />
+      {verified && "ICON"}
+    </form>
   );
 };
 
 EnsForm.propTypes = {
-  id: PropTypes.string.isRequired
+  item: PropTypes.object.isRequired
 };
 
 export default EnsForm;
