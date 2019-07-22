@@ -14,6 +14,8 @@ import NotFound from "./components/pages/NotFound";
 import AlertState from "./context/alert/AlertState";
 import TradeState from "./context/trade/TradeState";
 import UserState from "./context/user/UserState";
+import Web3State from "./context/web3/Web3State";
+import EnsState from "./context/ens/EnsState";
 
 import setAuthToken from "./utils/setAuthToken.js";
 
@@ -27,20 +29,24 @@ const App = () => (
   <TradeState>
     <UserState>
       <AlertState>
-        <Router>
-          <Fragment>
-            <Navbar />
-            <Sidebar />
-            <div className="container">
-              <Alerts />
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/about" component={About} />
-                <Route component={NotFound} />
-              </Switch>
-            </div>
-          </Fragment>
-        </Router>
+        <Web3State>
+          <EnsState>
+            <Router>
+              <Fragment>
+                <Navbar />
+                <Sidebar />
+                <div className="container">
+                  <Alerts />
+                  <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/about" component={About} />
+                    <Route component={NotFound} />
+                  </Switch>
+                </div>
+              </Fragment>
+            </Router>
+          </EnsState>
+        </Web3State>
       </AlertState>
     </UserState>
   </TradeState>
