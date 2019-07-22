@@ -11,6 +11,7 @@ import Home from "./components/pages/Home";
 import About from "./components/pages/About";
 import NotFound from "./components/pages/NotFound";
 
+import AppState from "./context/app/AppState";
 import AlertState from "./context/alert/AlertState";
 import TradeState from "./context/trade/TradeState";
 import UserState from "./context/user/UserState";
@@ -26,30 +27,32 @@ library.add(faBoxOpen, faInfoCircle);
 localStorage.token && setAuthToken(localStorage.token);
 
 const App = () => (
-  <TradeState>
-    <UserState>
-      <AlertState>
-        <Web3State>
-          <EnsState>
-            <Router>
-              <Fragment>
-                <Navbar />
-                <Sidebar />
-                <div className="container">
-                  <Alerts />
-                  <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/about" component={About} />
-                    <Route component={NotFound} />
-                  </Switch>
-                </div>
-              </Fragment>
-            </Router>
-          </EnsState>
-        </Web3State>
-      </AlertState>
-    </UserState>
-  </TradeState>
+  <AppState>
+    <TradeState>
+      <UserState>
+        <AlertState>
+          <Web3State>
+            <EnsState>
+              <Router>
+                <Fragment>
+                  <Navbar />
+                  <Sidebar />
+                  <div className="container">
+                    <Alerts />
+                    <Switch>
+                      <Route exact path="/" component={Home} />
+                      <Route exact path="/about" component={About} />
+                      <Route component={NotFound} />
+                    </Switch>
+                  </div>
+                </Fragment>
+              </Router>
+            </EnsState>
+          </Web3State>
+        </AlertState>
+      </UserState>
+    </TradeState>
+  </AppState>
 );
 
 export default App;
