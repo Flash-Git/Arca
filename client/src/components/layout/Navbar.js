@@ -5,11 +5,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
 import UserContext from "../../context/user/UserContext";
+import Web3Context from "../../context/web3/Web3Context";
 
 const Navbar = ({ title, icon }) => {
-  const userContext = useContext(UserContext);
-
-  const { connected, network } = userContext.web3;
+  const web3Context = useContext(Web3Context);
+  
+  const { connected, network } = web3Context;
 
   const networkText = () => {
     switch (network) {
