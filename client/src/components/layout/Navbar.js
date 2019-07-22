@@ -1,27 +1,32 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import PropTypes from "prop-types";
 
-import UserContext from "../../context/user/UserContext";
+import AppContext from "../../context/app/AppContext";
 import Web3Context from "../../context/web3/Web3Context";
 
 const Navbar = ({ title, icon }) => {
   const web3Context = useContext(Web3Context);
-  
+  const appContext = useContext(AppContext);
+
+  const { location } = appContext;
   const { connected, network } = web3Context;
 
   const networkText = () => {
+    if (!connected) {
+      return "Not Connected";
+    }
+
     switch (network) {
       case 1:
-        return <strong>LIVE</strong>;
+        return "LIVE";
       case 4:
-        return <strong>RINKEBY</strong>;
+        return "RINKEBY";
       case 5:
-        return <strong>GOERLI</strong>;
+        return "GOERLI";
       default:
-        return <strong>UNSUPPORTED</strong>;
+        return "UNSUPPORTED";
     }
   };
 
@@ -34,7 +39,9 @@ const Navbar = ({ title, icon }) => {
       </h1>
       <ul>
         <li>
-          <Link to="/">{!connected ? "Not Connected" : networkText}</Link>
+          <Link to="/">
+            <strong>{location === "home" ? networkText() : "Home"}</strong>
+          </Link>
         </li>
         <li>
           <Link to="/about">About</Link>
