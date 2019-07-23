@@ -13,7 +13,7 @@ import {
 
 const TradeState = props => {
   const initialState = {
-    userBox: null,
+    userBox: 1,
     user: {
       tradeItems: [
         /*{
@@ -22,10 +22,23 @@ const TradeState = props => {
         type: erc20/erc721/ens,
         data: {}
       }*/
+        {
+          sent: "UNSENT",
+          txHash: null,
+          type: "erc20",
+          id: 0
+        }
       ]
     },
     tradePartner: {
-      tradeItems: []
+      tradeItems: [
+        {
+          sent: "UNSENT",
+          txHash: null,
+          type: "erc20",
+          id: 0
+        }
+      ]
     },
     currentItem: null
   };
@@ -88,6 +101,7 @@ const TradeState = props => {
         user: state.user,
         tradePartner: state.tradePartner,
         currentItem: state.currentItem,
+        addTradeItem,
         setUserBox,
         setCurrentItem,
         clearCurrentItem
