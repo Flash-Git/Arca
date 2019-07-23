@@ -10,12 +10,20 @@ export default (state, action) => {
     case ADD_TRADE_ITEM:
       return {
         ...state,
-        tradeItems: [...state.tradeItems, action.payload]
+        user: {
+          ...state.user,
+          tradeItems: [...state.user.tradeItems, action.payload]
+        }
       };
     case REMOVE_TRADE_ITEM:
       return {
         ...state,
-        tradeItems: state.tradeItems.filter(item => item.id !== action.payload)
+        user: {
+          ...state.user,
+          tradeItems: state.user.tradeItems.filter(
+            item => item.id !== action.payload
+          )
+        }
       };
     case SET_CURRENT_ITEM:
       return {
