@@ -7,10 +7,10 @@ import Erc721 from "./itemTypes/Erc721";
 import EnsForm from "./itemTypes/EnsForm";
 import TradeContext from "../../context/trade/TradeContext";
 
-const Items = ({ user }) => {
+const Items = ({ isUser }) => {
   const tradeContext = useContext(TradeContext);
 
-  const items = user
+  const items = isUser
     ? tradeContext.user.tradeItems
     : tradeContext.tradePartner.tradeItems;
 
@@ -39,11 +39,14 @@ const Items = ({ user }) => {
 };
 
 const itemStyle = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-around",
   boxShadow: "0px 5px 5px -5px rgba(0,0,0,0.5)"
 };
 
 Items.propTypes = {
-  user: PropTypes.bool.isRequired
+  isUser: PropTypes.bool.isRequired
 };
 
 export default Items;
