@@ -30,12 +30,16 @@ const Items = ({ user }) => {
   return (
     items.length > 0 &&
     items.map(item => (
-      <div>
+      <div key={item.id} style={itemStyle}>
         <h3 className="text-primary">ID:{item.id}</h3>
         {internal(item)}
       </div>
     ))
   );
+};
+
+const itemStyle = {
+  boxShadow: "0px 5px 5px -5px rgba(0,0,0,0.5)"
 };
 
 Items.propTypes = {
