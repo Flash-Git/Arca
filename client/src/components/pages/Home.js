@@ -18,8 +18,8 @@ const Home = props => {
 
   return (
     <div>
-      {userBox === 0 ? <Box user={true} /> : <Box />}
-      {userBox === 1 ? <Box user={true} /> : <Box />}
+      {userBox === 0 ? <Box isUser={true} /> : <Box />}
+      {userBox === 1 ? <Box isUser={true} /> : <Box />}
     </div>
   );
 };
