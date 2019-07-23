@@ -1,24 +1,44 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
 import ItemForm from "./ItemForm";
 import Items from "./Items";
+import UserContext from "../../context/user/UserContext";
 
-const Box = ({ user }) => {
+const Box = ({ isUser }) => {
+  const userContext = useContext(UserContext);
+
+  const [trader, setTrader] = useState({
+    address: "initialAdd",
+    ens: "ens"
+  });
+
+  const { address, ens } = trader;
+
+  useEffect(() => {
+    if (isUser) {
+      setTrader(userContext.user);
+    } else {
+      setTrader(userContext.tradePartner);
+    }
+    //eslint-disable-next-line
+  }, [isUser, userContext.user, userContext.tradePartner]);
+
   return (
     <div>
-      <Items user={user} />
-      {user && <ItemForm />}
+      <strong>{ens ? ens : address && address}</strong>
+      <Items isUser={isUser} />
+      {isUser && <ItemForm />}
     </div>
   );
 };
 
 Box.defaultProps = {
-  user: false
+  isUser: false
 };
 
 Box.propTypes = {
-  user: PropTypes.bool.isRequired
+  isUser: PropTypes.bool.isRequired
 };
 
 export default Box;
