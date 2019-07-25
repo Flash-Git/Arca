@@ -35,17 +35,15 @@ const PreTradeForm = () => {
     checkInput(2);
   }, [input2]);
 
-  checkInput = inputNum => {
-    inputNum === 1 &&
-      {
-        //check if input1 is valid ens address
-        //*if true, check whether it points to a valid address
-        //**if true, ens1 = input1, address1 = returned ens address, valid = true and return
-        //*else, ens1 to null
-        //else, check if input1 is valid address
-        //*if true, set address1 = input1, valid = true and return
-        //else, address1 = null, valid = false, push to context and return
-      };
+  const checkInput = inputNum => {
+    inputNum === 1 && console.log("checking");
+    //check if input1 is valid ens address
+    //*if true, check whether it points to a valid address
+    //**if true, ens1 = input1, address1 = returned ens address, valid = true and return
+    //*else, ens1 to null
+    //else, check if input1 is valid address
+    //*if true, set address1 = input1, valid = true and return
+    //else, address1 = null, valid = false, push to context and return
 
     //check if input2 is valid ens address
     //*if true, check whether it points to a valid address
