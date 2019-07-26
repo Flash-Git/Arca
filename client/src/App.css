@@ -41,7 +41,7 @@ img {
 input,
 select {
   margin: 0.1rem;
-  padding: 0.5em;
+  padding: 0.2rem;
 }
 
 /* Utilities */
@@ -181,6 +181,10 @@ select {
 .mx-3 {
   margin: 0 3rem;
 }
+.mtop-2 {
+  margin-top: 2rem;
+}
+
 /* Grid */
 .grid-2 {
   display: grid;
@@ -377,12 +381,14 @@ select {
 
 /* Box */
 .box {
-  min-height: 6rem;
-  margin-top: 0.5rem;
+  min-height: 10rem;
+  margin: 1rem;
+  padding: 0.25rem;
 }
 
 /* Trade Form */
 .flexColumn {
+  /*TODO*/
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -390,7 +396,7 @@ select {
   margin: 0 auto;
 }
 
-.flexRow {
+.flex-row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -409,6 +415,32 @@ select {
 }
 .address {
   max-width: 22rem;
+}
+
+.shadow {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+}
+.shadow-top {
+  box-shadow: 0px -5px 5px -5px rgba(0, 0, 0, 0.5);
+}
+.shadow-bot {
+  box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.5);
+}
+.shadow-bot-7 {
+  box-shadow: 0px 7px 5px -5px rgba(0, 0, 0, 0.5);
+}
+.shadow-right {
+  box-shadow: 5px 0px 5px -5px rgba(0, 0, 0, 0.5);
+}
+.shadow-left {
+  box-shadow: -5px 0px 5px -5px rgba(0, 0, 0, 0.5);
+}
+.item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding-top: 0.5rem;
+  padding-bottom: 0.4rem;
 }
 
 /* Mobile Styles */
