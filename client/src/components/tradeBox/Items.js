@@ -30,19 +30,12 @@ const Items = ({ isUser }) => {
   return (
     items.length > 0 &&
     items.map(item => (
-      <div key={item.id} style={itemStyle}>
+      <div className="item shadow-bot" key={item.id}>
         <h3 className="text-primary">ID:{item.id}</h3>
         {internal(item)}
       </div>
     ))
   );
-};
-
-const itemStyle = {
-  display: "flex",
-  flexDirection: "row",
-  justifyContent: "space-around",
-  boxShadow: "0px 5px 5px -5px rgba(0,0,0,0.5)"
 };
 
 Items.propTypes = {
