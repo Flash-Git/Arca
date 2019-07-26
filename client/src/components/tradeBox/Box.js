@@ -25,9 +25,13 @@ const Box = ({ isUser }) => {
   }, [isUser, userContext.user, userContext.tradePartner]);
 
   return (
-    <div className="box">
-      <h2 className="text-center">{ens ? ens : address ? address : "Box"}</h2>
-      <Items isUser={isUser} />
+    <div className="box shadow">
+      <div style={{ minHeight: "10rem" }}>
+        <h2 className="text-center shadow-bot-10">
+          {ens ? ens : address ? address : "Box"}
+        </h2>
+        <Items isUser={isUser} />
+      </div>
       {isUser && <ItemForm />}
     </div>
   );
