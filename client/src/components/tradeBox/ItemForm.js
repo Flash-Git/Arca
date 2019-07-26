@@ -94,19 +94,15 @@ const ItemForm = () => {
 
   //Render
   return (
-    <form onSubmit={onSubmit} className="my-2">
-      <div className="flexRow">
+    <form onSubmit={onSubmit}>
+      <div className="flex-row">
         <select type="text" name="type" value={type} onChange={onChange}>
           <option value={"ens"}>ENS</option>
           <option value={"erc20"}>ERC20</option>
           <option value={"erc721"}>ERC721</option>
         </select>
         {form()}
-        <input
-          type="submit"
-          value="Add Trade Item"
-          className="btn btn-dark btn-block"
-        />
+        <input type="submit" value="Add Trade Item" className="btn btn-dark" />
       </div>
     </form>
   );
