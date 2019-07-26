@@ -83,11 +83,7 @@ const PreTradeForm = () => {
           value={input2}
           onChange={onChange}
         />
-        <input
-          type="submit"
-          value="Open Box"
-          className="btn btn-primary btn-sm"
-        />
+        <input type="submit" value="Open Box" className="btn btn-primary" />
       </form>
     </div>
   );
