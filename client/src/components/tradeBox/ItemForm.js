@@ -10,9 +10,9 @@ const ItemForm = () => {
   const [item, setItem] = useState({
     type: "ens",
     contractAdd: "",
-    id: null,
-    amount: null,
-    name: null,
+    id: "",
+    amount: "",
+    name: "",
     verified: true
   });
 
@@ -102,12 +102,12 @@ const ItemForm = () => {
           <option value={"erc721"}>ERC721</option>
         </select>
         {form()}
+        <input
+          type="submit"
+          value="Add Trade Item"
+          className="btn btn-dark btn-block"
+        />
       </div>
-      <input
-        type="submit"
-        value="Add Trade Item"
-        className="btn btn-dark btn-block"
-      />
     </form>
   );
 };
