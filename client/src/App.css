@@ -385,7 +385,7 @@ input {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  max-width: 42em;
+  max-width: 43em;
   margin: 0 auto;
 }
 
@@ -403,6 +403,9 @@ input {
 }
 .grow-3 {
   flex-grow: 3;
+}
+.address {
+  max-width: 43em;
 }
 
 /* Mobile Styles */
