@@ -38,6 +38,10 @@ img {
   width: 100%;
 }
 
+input {
+  margin: 0.2rem;
+}
+
 /* Utilities */
 .container {
   max-width: 1100px;
@@ -189,7 +193,6 @@ img {
   font-size: 1rem;
   border: none;
   cursor: pointer;
-  margin-right: 0.5rem;
   transition: opacity 0.2s ease-in;
   outline: none;
 }
