@@ -351,6 +351,21 @@ img {
   color: var(--light-color);
 }
 
+/* Box */
+.box {
+  display: flex;
+  min-height: 3rem;
+}
+
+/* Trade Form */
+.flexColumn {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 42em;
+  margin: 0 auto;
+}
+
 /* Mobile Styles */
 @media (max-width: 700px) {
   .hide-sm {
