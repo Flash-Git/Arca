@@ -69,10 +69,6 @@ input {
   margin-bottom: 1rem;
 }
 
-.text-center {
-  text-align: center;
-}
-
 .text-primary {
   color: var(--primary-color);
 }
@@ -391,6 +387,22 @@ input {
   flex-direction: column;
   max-width: 42em;
   margin: 0 auto;
+}
+
+.flexRow {
+  display: flex;
+  flex-direction: row;
+  margin: 0 auto;
+}
+
+.grow-1 {
+  flex-grow: 1;
+}
+.grow-2 {
+  flex-grow: 2;
+}
+.grow-3 {
+  flex-grow: 3;
 }
 
 /* Mobile Styles */
