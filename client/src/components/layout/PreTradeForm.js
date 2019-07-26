@@ -86,7 +86,7 @@ const PreTradeForm = () => {
         <input
           type="submit"
           value="Open Box"
-          className="btn btn-primary btn-block"
+          className="btn btn-primary btn-sm"
         />
       </form>
     </div>
