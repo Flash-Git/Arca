@@ -67,27 +67,29 @@ const PreTradeForm = () => {
   };
 
   return (
-    <form onSubmit={onSubmit} className="my-2">
-      <input
-        type="text"
-        placeholder="Address/ENS 1"
-        name="input1"
-        value={input1}
-        onChange={onChange}
-      />
-      <input
-        type="text"
-        placeholder="Address/ENS 2"
-        name="input2"
-        value={input2}
-        onChange={onChange}
-      />
-      <input
-        type="submit"
-        value="Open Box"
-        className="btn btn-primary btn-block"
-      />
-    </form>
+    <div className="my-2">
+      <form onSubmit={onSubmit} className="flexColumn">
+        <input
+          type="text"
+          placeholder="Address/ENS 1"
+          name="input1"
+          value={input1}
+          onChange={onChange}
+        />
+        <input
+          type="text"
+          placeholder="Address/ENS 2"
+          name="input2"
+          value={input2}
+          onChange={onChange}
+        />
+        <input
+          type="submit"
+          value="Open Box"
+          className="btn btn-primary btn-block"
+        />
+      </form>
+    </div>
   );
 };
 
