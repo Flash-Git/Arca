@@ -25,8 +25,8 @@ const Box = ({ isUser }) => {
   }, [isUser, userContext.user, userContext.tradePartner]);
 
   return (
-    <div>
-      <strong>{ens ? ens : address && address}</strong>
+    <div className="box">
+      <h2 className="text-center">{ens ? ens : address ? address : "Box"}</h2>
       <Items isUser={isUser} />
       {isUser && <ItemForm />}
     </div>
