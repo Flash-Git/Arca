@@ -40,7 +40,9 @@ const Navbar = ({ title, icon }) => {
       <ul>
         <li>
           <Link to="/">
-            <strong>{location === "home" ? networkText() : "Home"}</strong>
+            <strong>
+              {location === "home" ? networkText() : "Trade Windows"}
+            </strong>
           </Link>
         </li>
         <li>
