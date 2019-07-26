@@ -27,7 +27,7 @@ const Box = ({ isUser }) => {
   return (
     <div className="box shadow">
       <div style={{ minHeight: "10rem" }}>
-        <h2 className="text-center shadow-bot-10">
+        <h2 className="text-center shadow-bot-7">
           {ens ? ens : address ? address : "Box"}
         </h2>
         <Items isUser={isUser} />
