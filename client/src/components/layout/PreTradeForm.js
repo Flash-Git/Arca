@@ -67,7 +67,7 @@ const PreTradeForm = () => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="my-2">
       <input
         type="text"
         placeholder="Address/ENS 1"
@@ -81,6 +81,11 @@ const PreTradeForm = () => {
         name="input2"
         value={input2}
         onChange={onChange}
+      />
+      <input
+        type="submit"
+        value="Open Box"
+        className="btn btn-primary btn-block"
       />
     </form>
   );

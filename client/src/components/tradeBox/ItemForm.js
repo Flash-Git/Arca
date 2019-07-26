@@ -27,7 +27,7 @@ const ItemForm = () => {
 
   //Render
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} className="my-2">
       <input
         type="text"
         placeholder="Contract Address"
@@ -53,7 +53,7 @@ const ItemForm = () => {
       <input
         type="submit"
         value="Add Trade"
-        className="btn btn-primary btn-block"
+        className="btn btn-dark btn-block"
       />
     </form>
   );
