@@ -39,7 +39,8 @@ img {
 }
 
 input {
-  margin: 0.2rem;
+  margin: 0.1rem;
+  padding: 0.1rem 0.5em;
 }
 
 /* Utilities */
