@@ -382,8 +382,7 @@ select {
 /* Box */
 .box {
   min-height: 10rem;
-  margin: 1rem;
-  padding: 0.25rem;
+  padding: 0.4rem;
 }
 
 .inner-box {
@@ -397,6 +396,7 @@ select {
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
+  margin-bottom: 0.5rem;
 }
 .item {
   display: flex;
