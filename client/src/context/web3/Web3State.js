@@ -26,21 +26,17 @@ const Web3State = props => {
     web3: null,
     connected: false,
     network: null,
-    loading: false,
-    contractObjs: [],
-    activeCalls: [/*{
-      id: uuid.v4(),
-      type: "USER_BALANCE",
-      date: Date.now()
-    }*/],
-    activeTxs: [/*{
-      id: txHash,
-      type: "PUSH_TRADE",
-      nonce: 5,
-      date: Date.now()
-      }*/],
-      errors: []
+    activeReqs: [],
+    completedReqs: [],
+    activeTxs: [],
+    completedTxs: []
   };
+
+  // {
+  //   id: "",//uuid.v4(),
+  //   type: "",
+  //   date,// Date.now()
+  // }
 
   const [state, dispatch] = useReducer(Web3Reducer, initialState);
 
@@ -60,31 +56,31 @@ const Web3State = props => {
     });
   };
 
-  const addContractObj = async(address, abiName) => {
+  const addContractObj = async (address, abiName) => {
     const abi = await getAbi(abiName);
-    
-    if(!abi){
+
+    if (!abi) {
       setAlert(`Failed get abi ${abiName}`, "danger");
       return;
     }
-    
-    try{
+
+    try {
       //Create contract obj
 
       dispatch({
         type: ADD_CONTRACT_OBJECT,
-        payload: {address, abi}
+        payload: { address, abi }
       });
-    }catch{
+    } catch {
       dispatch({
-        type: CONTRACT_OBJECT_ERROR,
+        type: CONTRACT_OBJECT_ERROR
       });
     }
-  }
+  };
 
   const getAbi = async abiName => {
-    switch(abiName){
-      case "ARCA":
+    switch (abiName) {
+      case "arca":
         return abi;
       case "erc20":
         return abiErc20;
@@ -93,14 +89,9 @@ const Web3State = props => {
       default:
         return null;
     }
-  }
+  };
 
-  const dismissError = id => {
-
-  }
-
-
-/*
+  /*
   const getERC20Token = (tokenAddress, userAddress) => {
     dispatch({
       type: GET_ERC20,
@@ -122,13 +113,17 @@ const Web3State = props => {
     });
   };
 */
+
   return (
     <Web3Context.Provider
       value={{
         web3: state.web3,
         connected: state.connected,
         network: state.network,
-        loading: state.loading,
+        activeReqs: state.activeReqs,
+        completedReqs: state.completedReqs,
+        activeTxs: state.activeTxs,
+        completedTxs: state.completedTxs,
         connect,
         updateNetwork
       }}
