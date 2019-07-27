@@ -67,7 +67,7 @@ const PreTradeForm = () => {
   };
 
   return (
-    <form onSubmit={onSubmit} className="flexColumn address">
+    <form onSubmit={onSubmit} className="flex-column address">
       <input
         className="text-center"
         type="text"
