@@ -19,9 +19,9 @@ const PreTradeForm = () => {
     input1: "",
     address1: null,
     ens1: null,
-    input1: "",
-    address1: null,
-    ens1: null
+    input2: "",
+    address2: null,
+    ens2: null
   });
 
   const { input1, address1, ens1, input2, address2, ens2 } = formState;
@@ -36,7 +36,7 @@ const PreTradeForm = () => {
   }, [input2]);
 
   const checkInput = inputNum => {
-    inputNum === 1 && console.log("checking");
+    inputNum === 1 && console.log("checking1");
     //check if input1 is valid ens address
     //*if true, check whether it points to a valid address
     //**if true, ens1 = input1, address1 = returned ens address, valid = true and return
@@ -45,6 +45,7 @@ const PreTradeForm = () => {
     //*if true, set address1 = input1, valid = true and return
     //else, address1 = null, valid = false, push to context and return
 
+    inputNum === 2 && console.log("checking2");
     //check if input2 is valid ens address
     //*if true, check whether it points to a valid address
     //**if true, ens2 = input2, address2 = returned ens address, valid = true and return
