@@ -386,8 +386,29 @@ select {
   padding: 0.25rem;
 }
 
+.inner-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-self: flex-start;
+  flex-grow: 2;
+  padding-top: 0.5rem;
+  padding-bottom: 0.4rem;
+}
+.accepted {
+  display: flex;
+  justify-content: center;
+  align-self: flex-start;
+  padding: 2rem;
+}
+
 /* Trade Form */
-.flexColumn {
+.flex-column {
   /*TODO*/
   display: flex;
   justify-content: center;
@@ -434,13 +455,6 @@ select {
 }
 .shadow-left {
   box-shadow: -5px 0px 5px -5px rgba(0, 0, 0, 0.5);
-}
-.item {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  padding-top: 0.5rem;
-  padding-bottom: 0.4rem;
 }
 
 /* Mobile Styles */
