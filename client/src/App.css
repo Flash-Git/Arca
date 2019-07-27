@@ -411,6 +411,7 @@ select {
   align-items: center;
   justify-content: center;
   min-height: 100%;
+  min-width: 8rem;
 }
 
 /* Trade Form */

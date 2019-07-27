@@ -54,7 +54,16 @@ const ItemForm = () => {
               onChange={onChange}
             />
             {verified && (
-              <strong className=" grow-1 mx text-center">VERIFIED</strong>
+              <strong
+                className="grow-1 mx"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+              >
+                VERIFIED
+              </strong>
             )}
           </Fragment>
         );
