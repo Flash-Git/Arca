@@ -18,7 +18,7 @@ const Accepted = ({ isUser }) => {
       ) : accepted === false ? (
         <h3 className="m-2">Not Accepted</h3>
       ) : (
-        <Spinner height={true} />
+        <Spinner size={7} />
       )}
     </div>
   );
