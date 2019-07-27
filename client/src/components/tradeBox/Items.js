@@ -28,13 +28,15 @@ const Items = ({ isUser }) => {
   };
 
   return (
-    items.length > 0 &&
-    items.map(item => (
-      <div className="item shadow-bot" key={item.id}>
-        <h3 className="text-primary">ID:{item.id}</h3>
-        {internal(item)}
-      </div>
-    ))
+    <div className="items">
+      {items.length > 0 &&
+        items.map(item => (
+          <div className="item shadow-bot" key={item.id}>
+            <h3 className="text-primary">ID:{item.id}</h3>
+            {internal(item)}
+          </div>
+        ))}
+    </div>
   );
 };
 
