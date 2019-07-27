@@ -17,10 +17,16 @@ const UserState = props => {
       ens: null,
       balance: null,
       ownedTokens: {
+        web3Loading: false,
+        dbLoading: false,
+        synced: false, //synced is set when loading is set to false
         erc20Tokens: [],
         erc721Tokens: []
       },
       requestedTokens: {
+        web3Loading: false,
+        dbLoading: false,
+        synced: false, //synced is set when loading is set to false
         erc20Tokens: [],
         erc721Tokens: []
       }
@@ -30,10 +36,16 @@ const UserState = props => {
       ens: null,
       balance: null,
       ownedTokens: {
+        web3Loading: false,
+        dbLoading: false,
+        synced: false, //synced is set when loading is set to false
         erc20Tokens: [],
         erc721Tokens: []
       },
       requestedTokens: {
+        web3Loading: false,
+        dbLoading: false,
+        synced: false, //synced is set when loading is set to false
         erc20Tokens: [],
         erc721Tokens: []
       }
