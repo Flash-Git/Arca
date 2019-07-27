@@ -11,36 +11,56 @@ import {
   CLEAR_CURRENT_ITEM
 } from "../types";
 
+import { LOCAL, SENT, UNSENT } from "../sentStatus";
+
 const TradeState = props => {
   const initialState = {
     userBox: 1,
+    currentItem: null,
     user: {
       tradeItems: [
-        /*{
-        sent: UNSENT/UNCONFIRMED/CONFIRMED,
-        txHash: null/"",
-        type: erc20/erc721/ens,
-        data: {}
-      }*/
-        {
-          sent: "UNSENT",
-          txHash: null,
-          type: "erc20",
-          id: 0
-        }
+        // {
+        //   id: "", //uuid,
+        //   txHash: null,
+        //   web3Loading: false,
+        //   dbLoading: false,
+        //   synced: false, //lock edits until synced
+        //   slot: null,
+        //   tab: 0,
+        //   type: "",
+        //   sent: "",
+        //   data: {
+        //     contractAdd: "",
+        //     id: "", //erc721/ens
+        //     amount: "", //erc20
+        //     name: "", //ens
+        //     verified: false //ens
+        //   }
+        // }
       ]
     },
     tradePartner: {
       tradeItems: [
-        {
-          sent: "UNSENT",
-          txHash: null,
-          type: "erc20",
-          id: 0
-        }
+        // {
+        //   id: "", //uuid,
+        //   txHash: null,
+        //   web3Loading: false,
+        //   dbLoading: false,
+        //   synced: false, //lock edits until synced
+        //   slot: null,
+        //   tab: 0,
+        //   type: "",
+        //   sent: "",
+        //   data: {
+        //     contractAdd: "",
+        //     id: "", //erc721/ens
+        //     amount: "", //erc20
+        //     name: "", //ens
+        //     verified: false //ens
+        //   }
+        // }
       ]
-    },
-    currentItem: null
+    }
   };
 
   const [state, dispatch] = useReducer(TradeReducer, initialState);
