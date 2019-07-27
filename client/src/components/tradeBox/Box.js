@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 
 import ItemForm from "./ItemForm";
 import Items from "./Items";
+import Accepted from "./Accepted";
 import UserContext from "../../context/user/UserContext";
 
 const Box = ({ isUser }) => {
@@ -30,7 +31,10 @@ const Box = ({ isUser }) => {
         <h2 className="text-center shadow-bot-7">
           {ens ? ens : address ? address : "Box"}
         </h2>
-        <Items isUser={isUser} />
+        <div className="inner-box">
+          <Items isUser={isUser} />
+          <Accepted isUser={isUser} />
+        </div>
       </div>
       {isUser && <ItemForm />}
     </div>
