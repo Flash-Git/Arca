@@ -410,7 +410,6 @@ select {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 2rem;
   min-height: 100%;
 }
 
