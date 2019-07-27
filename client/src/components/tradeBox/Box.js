@@ -9,6 +9,8 @@ import UserContext from "../../context/user/UserContext";
 const Box = ({ isUser }) => {
   const userContext = useContext(UserContext);
 
+  const contextTrader = isUser() ? userContext.user : userContext.tradePartner;
+
   const [trader, setTrader] = useState({
     address: "initialAdd",
     ens: "ens"
@@ -17,13 +19,10 @@ const Box = ({ isUser }) => {
   const { address, ens } = trader;
 
   useEffect(() => {
-    if (isUser) {
-      setTrader(userContext.user);
-    } else {
-      setTrader(userContext.tradePartner);
-    }
+    setTrader(contextTrader);
+
     //eslint-disable-next-line
-  }, [isUser, userContext.user, userContext.tradePartner]);
+  }, [isUser, contextTrader]); // Might need userContext.user, userContext.tradePartner
 
   return (
     <div className="box shadow">
