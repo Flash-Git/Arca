@@ -9,7 +9,7 @@ import UserContext from "../../context/user/UserContext";
 const Box = ({ isUser }) => {
   const userContext = useContext(UserContext);
 
-  const contextTrader = isUser() ? userContext.user : userContext.tradePartner;
+  const contextTrader = isUser ? userContext.user : userContext.tradePartner;
 
   const [trader, setTrader] = useState({
     address: "initialAdd",
