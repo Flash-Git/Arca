@@ -9,6 +9,8 @@ const Sidebar = () => {
   const web3Context = useContext(Web3Context);
 
   const { settings, user } = userContext;
+  const { nickname } = settings;
+
   const { connected, loading } = web3Context;
 
   const tokens = () => (
@@ -34,7 +36,7 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <h2>{settings.nickname && settings.nickname}</h2>
+      <h2>{nickname && nickname}</h2>
       <div>{connected ? <p>Not Connected</p> : tokens()}</div>
     </div>
   );
