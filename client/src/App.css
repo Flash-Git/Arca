@@ -54,9 +54,11 @@ select {
 
 /* Utilities */
 .container {
+  display: flex;
+  flex-direction: column;
   max-width: 850px;
-  margin: auto;
   overflow: hidden;
+  margin: 0 auto;
 }
 
 /* Text Styles*/
@@ -426,11 +428,12 @@ select {
 }
 
 /* Trade Form */
-.flex-column {
-  /*TODO*/
+.pre-trade {
   display: flex;
+  justify-self: center;
   justify-content: center;
   flex-direction: column;
+  width: 100%;
   max-width: 43em;
   margin: 0 auto;
 }
@@ -511,5 +514,9 @@ select {
   .navbar ul {
     text-align: center;
     justify-content: center;
+  }
+
+  .sidebar {
+    display: none;
   }
 }
