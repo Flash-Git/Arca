@@ -70,6 +70,7 @@ const TradeState = props => {
             contractAdd: "0x",
             id: "5",
             name: "jimmy.eth",
+            namehash: "0xnamehash",
             verified: true
           }
         }
