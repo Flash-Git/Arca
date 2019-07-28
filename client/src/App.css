@@ -23,7 +23,6 @@ body {
 }
 
 #root {
-  min-width: 100vw;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -392,12 +391,14 @@ select {
 
 /* Box */
 .box {
-  min-height: 10rem;
+  min-height: 11rem;
+  max-height: 15rem;
   padding: 0.4rem;
   overflow: hidden;
   overflow-y: auto;
   overflow-x: auto;
   scrollbar-width: thin;
+  font-size: 80%;
 }
 
 .inner-box {
