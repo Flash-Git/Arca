@@ -22,8 +22,8 @@ const UserState = props => {
   const initialState = {
     user: {
       addressObj: {
-        address: "",
-        ens: null
+        address: "0x",
+        ens: "jaquinn.eth"
       },
 
       balance: null,
