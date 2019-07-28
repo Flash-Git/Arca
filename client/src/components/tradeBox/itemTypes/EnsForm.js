@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 
-import EnsContext from "../../../context/ens/EnsContext";
-
 const EnsForm = item => {
-  const ensContext = useContext(EnsContext);
-
   const [ensItem, setEnsItem] = useState({
     name: "",
     namehash: "",
