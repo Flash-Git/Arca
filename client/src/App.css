@@ -19,6 +19,14 @@ body {
   line-height: 1.6;
   background-color: #fff;
   color: #333;
+  scroll-behavior: smooth;
+}
+
+#root {
+  min-width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 a {
@@ -49,7 +57,6 @@ select {
   max-width: 850px;
   margin: auto;
   overflow: hidden;
-  /* padding: 0 2rem; */
 }
 
 /* Text Styles*/
