@@ -31,7 +31,11 @@ const ItemForm = () => {
 
   const erc = () => (
     <input
-      className="grow-2 address"
+      className={
+        contractAdd
+          ? "grow-2 address is-valid valid"
+          : "grow-2 address is-valid invalid"
+      }
       type="text"
       placeholder="Contract Address"
       name="contractAdd"
@@ -46,7 +50,9 @@ const ItemForm = () => {
         return (
           <Fragment>
             <input
-              className="grow-1"
+              className={
+                name ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
+              }
               type="text"
               placeholder="Name"
               name="name"
@@ -72,7 +78,9 @@ const ItemForm = () => {
           <Fragment>
             {erc()}
             <input
-              className="grow-1"
+              className={
+                amount ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
+              }
               type="amount"
               placeholder="Token Amount"
               name="amount"
@@ -86,7 +94,9 @@ const ItemForm = () => {
           <Fragment>
             {erc()}
             <input
-              className="grow-1"
+              className={
+                id ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
+              }
               type="id"
               placeholder="Token ID"
               name="id"

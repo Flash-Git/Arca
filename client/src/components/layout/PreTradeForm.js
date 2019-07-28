@@ -70,7 +70,11 @@ const PreTradeForm = () => {
   return (
     <form onSubmit={onSubmit} className="flex-column address">
       <input
-        className="text-center"
+        className={
+          address1
+            ? "text-center is-valid valid"
+            : "text-center is-valid invalid"
+        }
         type="text"
         placeholder="Address/ENS 1"
         name="input1"
@@ -78,7 +82,11 @@ const PreTradeForm = () => {
         onChange={onChange}
       />
       <input
-        className="text-center"
+        className={
+          address1
+            ? "text-center is-valid valid"
+            : "text-center is-valid invalid"
+        }
         type="text"
         placeholder="Address/ENS 2"
         name="input2"

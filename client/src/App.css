@@ -463,6 +463,17 @@ select {
 .shadow-left {
   box-shadow: -5px 0px 5px -5px rgba(0, 0, 0, 0.5);
 }
+.is-valid {
+  border-color: #888888;
+  border-width: 1px;
+  border-style: solid;
+}
+.valid {
+  border-left: solid 4px green;
+}
+.invalid {
+  border-left: solid 4px red;
+}
 
 /* Mobile Styles */
 @media (max-width: 700px) {
