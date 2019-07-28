@@ -11,13 +11,13 @@ const About = () => {
     //eslint-disable-next-line
   }, []);
   return (
-    <Fragment>
+    <div style={{ display: "block" }}>
       <h1>About</h1>
       <p className="my-1">Ethereum Application</p>
       <p className="bg-dark p">
         <strong>Version: </strong> 1.0.0
       </p>
-    </Fragment>
+    </div>
   );
 };
 

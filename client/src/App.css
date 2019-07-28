@@ -52,15 +52,6 @@ select {
   padding: 0.2rem;
 }
 
-/* Utilities */
-.container {
-  display: flex;
-  flex-direction: column;
-  max-width: 850px;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
 /* Text Styles*/
 .x-large {
   font-size: 4rem;
@@ -328,6 +319,16 @@ select {
   border-radius: 50%;
 }
 
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 850px;
+  min-height: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
 /* Navbar */
 .navbar {
   display: flex;
@@ -363,10 +364,11 @@ select {
 .sidebar {
   float: right;
   display: flex;
-  /* flex-direction: column; */
+  align-self: flex-end;
   align-items: left;
   padding: 0 1.5rem;
   z-index: 1;
+  min-height: 100%;
   height: 100%;
   border-left: solid 1px var(--primary-color);
   opacity: 0.9;
