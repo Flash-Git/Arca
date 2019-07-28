@@ -27,7 +27,7 @@ const Box = ({ isUser }) => {
   }, [isUser, addressObj]); // Might need userContext.user, userContext.tradePartner
 
   return (
-    <div className="box shadow m-2">
+    <div className="box shadow m-1">
       <div style={{ minHeight: "10rem" }}>
         <h2 className="text-center shadow-bot-7">
           {ens ? ens : address ? address : "Box"}
