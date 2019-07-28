@@ -2,12 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 
 import TradeContext from "../../context/trade/TradeContext";
 import Web3Context from "../../context/web3/Web3Context";
-import EnsContext from "../../context/ens/EnsContext";
 
 const PreTradeForm = () => {
   const tradeContext = useContext(TradeContext);
   const web3Context = useContext(Web3Context);
-  const ensContext = useContext(EnsContext);
 
   //get ens checker
   //get web3 connection
