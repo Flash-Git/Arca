@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 
-const EnsForm = item => {
+const EnsForm = ({ item }) => {
   const [ensItem, setEnsItem] = useState({
     name: "",
     namehash: "",
@@ -24,16 +24,19 @@ const EnsForm = item => {
 
   //Render
   return (
-    <form>
-      <input
-        type="text"
-        placeholder="Name"
-        name="name"
-        value={name}
-        onChange={onChange}
-      />
-      {verified && "ICON"}
-    </form>
+    <Fragment>
+      <h3>ENS</h3>
+      <form>
+        <input
+          type="text"
+          placeholder="Name"
+          name="name"
+          value={name}
+          onChange={onChange}
+        />
+        {verified && "ICON"}
+      </form>
+    </Fragment>
   );
 };
 

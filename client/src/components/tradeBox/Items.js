@@ -15,7 +15,7 @@ const Items = ({ isUser }) => {
     : tradeContext.tradePartner.tradeItems;
 
   const internal = item => {
-    switch (item.type) {
+    switch (item.data.type) {
       case "erc20":
         return <Erc20 item={item} />;
       case "erc721":
@@ -32,7 +32,6 @@ const Items = ({ isUser }) => {
       {items.length > 0 &&
         items.map(item => (
           <div className="item shadow-bot" key={item.id}>
-            <h3 className="text-primary">ID:{item.id}</h3>
             {internal(item)}
           </div>
         ))}
