@@ -389,6 +389,38 @@ select {
   color: var(--light-color);
 }
 
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--dark-color);
+  margin-top: auto;
+}
+
+.footer ul {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  max-width: 24rem;
+  list-style: none;
+}
+
+.footer a {
+  color: #fff;
+  text-align: left;
+  width: 6rem;
+  text-decoration: none;
+  margin: 0.5rem 0.75rem;
+}
+
+.footer a:hover {
+  color: var(--light-color);
+}
+
 /* Box */
 .box {
   min-height: 11rem;
