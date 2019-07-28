@@ -383,6 +383,10 @@ select {
 .box {
   min-height: 10rem;
   padding: 0.4rem;
+  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
 .inner-box {
