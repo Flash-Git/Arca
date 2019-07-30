@@ -6,9 +6,9 @@ const Erc20 = ({ item }) => {
 
   return (
     <Fragment>
-      <h3>ERC20</h3>
-      <span>contractAdd</span>
-      <span>amount</span>
+      <h3 className="item-text">ERC20</h3>
+      <span className="item-text">{contractAdd}</span>
+      <span className="item-text">{amount}</span>
     </Fragment>
   );
 };

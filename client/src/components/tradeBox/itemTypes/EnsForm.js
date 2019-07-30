@@ -25,8 +25,8 @@ const EnsForm = ({ item }) => {
   //Render
   return (
     <Fragment>
-      <h3>ENS</h3>
-      <form>
+      <h3 className="item-text">ENS</h3>
+      <form className="item-text">
         <input
           type="text"
           placeholder="Name"

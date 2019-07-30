@@ -449,10 +449,15 @@ select {
 .item {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-evenly;
   width: 100%;
   padding-top: 0.5rem;
   padding-bottom: 0.4rem;
+}
+.item-text {
+  display: flex;
+  min-width: 5rem;
+  justify-content: center;
 }
 .accepted {
   display: flex;
@@ -522,6 +527,9 @@ select {
 }
 .invalid {
   border-left: solid 4px red;
+}
+.grid-item {
+  grid-column: auto;
 }
 
 /* Mobile Styles */

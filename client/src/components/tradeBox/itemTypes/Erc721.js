@@ -6,9 +6,9 @@ const Erc721 = ({ item }) => {
 
   return (
     <Fragment>
-      <h3>ERC721</h3>
-      <span>contractAdd</span>
-      <span>id</span>
+      <h3 className="item-text">ERC721</h3>
+      <span className="item-text">{contractAdd}</span>
+      <span className="item-text">{id}</span>
     </Fragment>
   );
 };
