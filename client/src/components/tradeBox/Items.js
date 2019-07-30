@@ -31,7 +31,7 @@ const Items = ({ isUser }) => {
     <div className="items">
       {items.length > 0 &&
         items.map(item => (
-          <div className="item shadow-bot" key={item.id}>
+          <div className="item shadow-bot grid-3" key={item.id}>
             {internal(item)}
           </div>
         ))}
