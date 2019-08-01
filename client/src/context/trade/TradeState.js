@@ -34,7 +34,7 @@ const TradeState = props => {
           data: {
             type: "erc20",
             contractAdd: "0x",
-            amount: ""
+            amount: "50"
           }
         },
         {
