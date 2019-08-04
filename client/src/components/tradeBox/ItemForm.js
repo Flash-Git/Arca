@@ -112,7 +112,7 @@ const ItemForm = () => {
 
   //Render
   return (
-    <form onSubmit={onSubmit}>
+    <form className="shadow-top ptop" onSubmit={onSubmit}>
       <div className="flex-row">
         <select type="text" name="type" value={type} onChange={onChange}>
           <option value={"ens"}>ENS</option>
