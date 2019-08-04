@@ -30,11 +30,17 @@ const Items = ({ isUser }) => {
   return (
     <div className="items">
       {items.length > 0 &&
-        items.map(item => (
-          <div className="item shadow-bot grid-3" key={item.id}>
-            {internal(item)}
-          </div>
-        ))}
+        items.map((item, i) =>
+          i < items.length - 1 ? (
+            <div className="item shadow-bot grid-3" key={item.id}>
+              {internal(item)}
+            </div>
+          ) : (
+            <div className="item grid-3" key={item.id}>
+              {internal(item)}
+            </div>
+          )
+        )}
     </div>
   );
 };
