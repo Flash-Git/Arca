@@ -29,7 +29,7 @@ const Box = ({ isUser }) => {
   return (
     <div className="box shadow m-1">
       <div>
-        <h2 className="text-center shadow-bot-7">
+        <h2 className="text-center shadow-bot-7 pbot">
           {ens ? ens : address ? address : "Box"}
         </h2>
         <div className="inner-box">
