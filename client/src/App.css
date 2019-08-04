@@ -439,12 +439,7 @@ select {
 /* Box */
 .box {
   min-height: 9rem;
-  max-height: 15rem;
   padding: 0.4rem;
-  overflow: hidden;
-  overflow-y: auto;
-  overflow-x: auto;
-  scrollbar-width: thin;
   font-size: 80%;
 }
 
@@ -459,6 +454,13 @@ select {
   flex-direction: column;
   justify-content: space-between;
   width: 100%;
+  max-height: 14rem;
+  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  margin: 0.2rem;
+  padding: 0.2rem;
 }
 .item {
   display: flex;
