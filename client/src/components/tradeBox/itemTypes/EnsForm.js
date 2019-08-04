@@ -34,8 +34,8 @@ const EnsForm = ({ item }) => {
           value={name}
           onChange={onChange}
         />
-        {verified && "ICON"}
       </form>
+      <span className="item-text">{verified && "ICON"}</span>
     </Fragment>
   );
 };
