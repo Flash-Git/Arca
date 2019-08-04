@@ -25,7 +25,6 @@ const UserState = props => {
         address: "0x",
         ens: "jaquinn.eth"
       },
-
       balance: null,
       ownedTokens: {
         web3Loading: false,
@@ -44,7 +43,7 @@ const UserState = props => {
     },
     tradePartner: {
       addressObj: {
-        address: "",
+        address: "0x",
         ens: null
       },
       balance: null,

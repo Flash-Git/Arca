@@ -33,8 +33,25 @@ const TradeState = props => {
           },
           data: {
             type: "erc20",
-            contractAdd: "0x",
+            contractAdd: "0x1",
             amount: "50"
+          }
+        },
+        {
+          id: uuid.v4(),
+          network: {
+            sent: UNSENT,
+            txHash: null,
+            web3Loading: false,
+            dbLoading: false,
+            synced: true,
+            slot: 1,
+            tab: 0
+          },
+          data: {
+            type: "erc20",
+            contractAdd: "0x2",
+            amount: "10"
           }
         },
         {
@@ -45,7 +62,7 @@ const TradeState = props => {
             web3Loading: false,
             dbLoading: false,
             synced: true,
-            slot: 1,
+            slot: 2,
             tab: 0
           },
           data: {
@@ -62,7 +79,27 @@ const TradeState = props => {
             web3Loading: false,
             dbLoading: false,
             synced: true,
-            slot: 2,
+            slot: 3,
+            tab: 0
+          },
+          data: {
+            type: "ens",
+            contractAdd: "0x",
+            id: "5",
+            name: "jimmy.eth",
+            namehash: "0xnamehash",
+            verified: true
+          }
+        },
+        {
+          id: uuid.v4(),
+          network: {
+            sent: SENT,
+            txHash: "0x2",
+            web3Loading: false,
+            dbLoading: false,
+            synced: true,
+            slot: 4,
             tab: 0
           },
           data: {
@@ -94,42 +131,6 @@ const TradeState = props => {
             type: "erc20",
             contractAdd: "0x",
             amount: ""
-          }
-        },
-        {
-          id: uuid.v4(),
-          network: {
-            sent: SENT,
-            txHash: "0x",
-            web3Loading: false,
-            dbLoading: false,
-            synced: true,
-            slot: 1,
-            tab: 0
-          },
-          data: {
-            type: "erc721",
-            contractAdd: "0x",
-            id: "52"
-          }
-        },
-        {
-          id: uuid.v4(),
-          network: {
-            sent: SENT,
-            txHash: "0x",
-            web3Loading: false,
-            dbLoading: false,
-            synced: true,
-            slot: 2,
-            tab: 0
-          },
-          data: {
-            type: "ens",
-            contractAdd: "0x",
-            id: "5",
-            name: "jimmy.eth",
-            verified: true
           }
         }
       ],
