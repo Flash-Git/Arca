@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 import spinner from "./spinner.gif";
 
 const Spinner = ({ size }) => {
@@ -7,24 +9,18 @@ const Spinner = ({ size }) => {
     display: "block"
   };
 
-  switch (size) {
-    case 5:
-      style.width = "5rem";
-      style.height = "5rem";
-      break;
-    case 7:
-      style.width = "7rem";
-      style.height = "7rem";
-      break;
-    case 10:
-      style.width = "10rem";
-      style.height = "10rem";
-      break;
-    default:
-      style.width = "100%";
+  if (size) {
+    style.width = size + "rem";
+    style.height = size + "rem";
+  } else {
+    style.width = "100%";
   }
 
   return <img src={spinner} alt="Loading..." style={style} />;
+};
+
+Spinner.propTypes = {
+  size: PropTypes.number
 };
 
 export default Spinner;
