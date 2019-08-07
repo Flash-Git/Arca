@@ -473,8 +473,16 @@ select {
 .item-text {
   display: flex;
   min-width: 3rem;
+  width: 9rem;
+  justify-content: left;
+  padding: 0 0.5rem;
+}
+.item-input {
+  display: flex;
+  min-width: 3rem;
   width: 10rem;
   justify-content: left;
+  padding: 0;
 }
 .accepted {
   display: flex;
