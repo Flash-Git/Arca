@@ -148,9 +148,6 @@ select {
 .ptop-1 {
   padding-top: 1rem;
 }
-.pbot {
-  padding-bottom: 0.5rem;
-}
 
 /* Margin */
 .m {
@@ -197,6 +194,9 @@ select {
 }
 .mtop-2 {
   margin-top: 2rem;
+}
+.mbot {
+  margin-bottom: 0.5rem;
 }
 
 /* Grid */
@@ -379,7 +379,7 @@ select {
   float: right;
   display: flex;
   align-self: flex-end;
-  align-items: left;
+  align-items: flex-start;
   padding: 0 1.5rem;
   z-index: 1;
   min-height: 100%;
