@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useContext } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import UserContext from "../../context/user/UserContext";
 import Web3Context from "../../context/web3/Web3Context";
@@ -42,8 +43,17 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <button onClick={onClick} className="btn btn-dark center mbot">
-        {hidden ? "Hide" : "Show"}
+      <button
+        onClick={onClick}
+        className="btn-sm btn-dark mbot"
+        style={{
+          alignSelf: "flex-end",
+          marginRight: "-1rem",
+          padding: "0.3rem 0.6rem"
+        }}
+      >
+        <FontAwesomeIcon icon={["fas", "bars"]} />
+        {/* {hidden ? "Hide" : "Show"} */}
       </button>
       {hidden && (
         <Fragment>

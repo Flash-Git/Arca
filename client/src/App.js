@@ -5,7 +5,8 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faBoxOpen,
   faInfoCircle,
-  faAt
+  faAt,
+  faBars
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faGithub,
@@ -35,6 +36,7 @@ library.add(
   faBoxOpen,
   faInfoCircle,
   faAt,
+  faBars,
   faGithub,
   faTwitter,
   faEthereum,
