@@ -1,15 +1,19 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useContext } from "react";
 import uuid from "uuid";
 
 import TradeContext from "./TradeContext";
 import TradeReducer from "./TradeReducer";
+
+import UserContext from "../user/UserContext";
 
 import {
   SET_USER_BOX,
   ADD_TRADE_ITEM,
   REMOVE_TRADE_ITEM,
   SET_CURRENT_ITEM,
-  CLEAR_CURRENT_ITEM
+  CLEAR_CURRENT_ITEM,
+  UPDATE_ACCEPTED,
+  SET_ACCEPTED
 } from "../types";
 
 import { SENT, UNSENT } from "../sentStatus";
@@ -159,6 +163,13 @@ const TradeState = props => {
 
   const [state, dispatch] = useReducer(TradeReducer, initialState);
 
+  const userContext = useContext(UserContext);
+
+  const getAddress = user =>
+    user
+      ? userContext.user.addressObj.address
+      : userContext.tradePartner.addressObj.address;
+
   /*
    * Actions
    */
@@ -205,6 +216,28 @@ const TradeState = props => {
   const clearCurrentItem = () => {
     dispatch({
       type: CLEAR_CURRENT_ITEM
+    });
+  };
+
+  const getAccepted = user => {
+    const address = getAddress(user);
+
+    //get accepted from db
+    //get accepted from web3 (added to WEB3STATE CALLS)
+    const accepted = false;
+    dispatch({
+      type: UPDATE_ACCEPTED,
+      payload: { user, accepted }
+    });
+  };
+
+  const setAccepted = accepted => {
+    //set accepted on contract
+    //set accepted on db
+
+    dispatch({
+      type: SET_ACCEPTED,
+      payload: accepted
     });
   };
 
