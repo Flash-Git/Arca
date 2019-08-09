@@ -1,13 +1,14 @@
 import React, { useReducer, useContext } from "react";
 import uuid from "uuid";
 
+import {} from "../../web3/Web3Calls";
+import abi from "../../web3/abis/abi";
+import abiErc20 from "../../web3/abis/abiErc20";
+import abiErc721 from "../../web3/abis/abiErc721";
+
 import Web3Context from "./Web3Context";
 import Web3Reducer from "./Web3Reducer";
 import AlertContext from "../alert/AlertContext";
-
-import abi from "../../abis/abi";
-import abiErc20 from "../../abis/abiErc20";
-import abiErc721 from "../../abis/abiErc721";
 
 import {
   CONNECT_WEB3,
@@ -16,6 +17,7 @@ import {
   REMOVE_CONTRACT_OBJECT,
   CONTRACT_OBJECT_ERROR
 } from "../types";
+import { MAIN, RINKEBY, GOERLI } from "../networkStatus";
 
 const Web3State = props => {
   const alertContext = useContext(AlertContext);
