@@ -11,14 +11,15 @@ const Accepted = ({ isUser }) => {
     ? tradeContext.user.accepted
     : tradeContext.tradePartner.accepted;
 
+  const bord = accepted ? "bord-hori-green" : "bord-hori-red";
+  const acceptMsg = accepted ? "Accepted" : "Not Accepted";
+
   return (
-    <div className="accepted">
-      {accepted ? (
-        <h3 className="m-2">Accepted</h3>
-      ) : accepted === false ? (
-        <h3 className="m-2">Not Accepted</h3>
-      ) : (
+    <div className="accepted text-center">
+      {accepted === null ? (
         <Spinner size={7} />
+      ) : (
+        <h3 className={bord + " p width100"}>{acceptMsg}</h3>
       )}
     </div>
   );

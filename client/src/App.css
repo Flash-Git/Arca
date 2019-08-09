@@ -45,6 +45,10 @@ img {
   width: 100%;
 }
 
+.width100 {
+  width: 100%;
+}
+
 input,
 select {
   margin: 0.1rem;
@@ -449,7 +453,6 @@ select {
 /* Box */
 .box {
   min-height: 9rem;
-  padding: 0.4rem;
   font-size: 80%;
 }
 
@@ -497,9 +500,22 @@ select {
 .accepted {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: stretch;
   min-height: 100%;
-  min-width: 8rem;
+  min-width: 7rem;
+  width: 8rem;
+}
+.bord-hori-green {
+  border-top: solid 3px green;
+  border-bottom: solid 3px green;
+}
+.bord-hori-red {
+  border-top: solid 3px red;
+  border-bottom: solid 3px red;
+}
+.bord-vert-green {
+  border-left: solid 3px green;
+  border-right: solid 3px green;
 }
 
 /* Trade Form */
