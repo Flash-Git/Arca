@@ -19,10 +19,10 @@ const Box = ({ isUser }) => {
   //TODO make this a flash animation
   const bord = isUser
     ? tradeContext.user.accepted
-      ? "bord-hori-green bord-vert-green"
+      ? "bord-hori-green"
       : ""
     : tradeContext.tradePartner.accepted
-    ? "bord-hori-green bord-vert-green"
+    ? "bord-hori-green"
     : "";
 
   const [trader, setTrader] = useState({
