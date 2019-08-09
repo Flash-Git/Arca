@@ -472,8 +472,7 @@ select {
   overflow-y: auto;
   overflow-x: auto;
   scrollbar-width: thin;
-  margin: 0.2rem;
-  padding: 0.2rem;
+  margin-top: -0.5rem;
 }
 .item {
   display: flex;
@@ -560,7 +559,7 @@ select {
   box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.5);
 }
 .shadow-bot-7 {
-  box-shadow: 0px 7px 5px -5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 7px 7px -5px rgba(0, 0, 0, 0.5);
 }
 .shadow-right {
   box-shadow: 5px 0px 5px -5px rgba(0, 0, 0, 0.5);
