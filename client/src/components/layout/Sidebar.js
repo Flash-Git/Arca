@@ -43,15 +43,7 @@ const Sidebar = () => {
 
   return (
     <div className="sidebar">
-      <button
-        onClick={onClick}
-        className="btn-sm btn-dark mbot"
-        style={{
-          alignSelf: "flex-end",
-          marginRight: "-1rem",
-          padding: "0.3rem 0.6rem"
-        }}
-      >
+      <button onClick={onClick} className="btn-sm btn-dark side-btn mbot">
         <FontAwesomeIcon icon={["fas", "bars"]} />
         {/* {hidden ? "Hide" : "Show"} */}
       </button>
