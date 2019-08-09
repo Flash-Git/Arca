@@ -40,24 +40,18 @@ const Sidebar = () => {
     </ul>
   );
 
-  return hidden ? (
-    <div style={{ float: "right", margin: "1rem" }}>
-      <button onClick={onClick} className="btn btn-dark">
-        Show
+  return (
+    <div className="sidebar">
+      <button onClick={onClick} className="btn btn-dark center mbot">
+        {hidden ? "Hide" : "Show"}
       </button>
+      {hidden && (
+        <Fragment>
+          <h2>{nickname && nickname}</h2>
+          <div>{connected ? <p>Not Connected</p> : tokens()}</div>
+        </Fragment>
+      )}
     </div>
-  ) : (
-    <Fragment>
-      <div style={{ float: "right", margin: "1rem" }}>
-        <button onClick={onClick} className="btn btn-dark">
-          Hide
-        </button>
-      </div>
-      <div className="sidebar">
-        <h2>{nickname && nickname}</h2>
-        <div>{connected ? <p>Not Connected</p> : tokens()}</div>
-      </div>
-    </Fragment>
   );
 };
 
