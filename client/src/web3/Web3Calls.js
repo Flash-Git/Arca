@@ -10,7 +10,7 @@ const AppAddress = () => {
   return web3Context.appAddress;
 };
 
-NewContract = (_abi, _add) => {
+const NewContract = (_abi, _add) => {
   try {
     return new window.web3.eth.Contract(_abi, _add);
   } catch (e) {
