@@ -12,6 +12,7 @@ import AlertContext from "../alert/AlertContext";
 
 import {
   CONNECT_WEB3,
+  DISCONNECT_WEB3,
   UPDATE_WEB3,
   ADD_CONTRACT_OBJECT,
   REMOVE_CONTRACT_OBJECT,
@@ -47,14 +48,23 @@ const Web3State = props => {
    */
 
   const connect = () => {
+    const web3 = window.web3;
+    if (!web3) {
+      dispatch({
+        type: DISCONNECT_WEB3
+      });
+      return;
+    }
+
     dispatch({
-      type: CONNECT_WEB3
+      type: CONNECT_WEB3,
+      dispatch: web3
     });
   };
 
   const updateNetwork = () => {
     dispatch({
-      type: UPDATE_WEB3
+      type: UPDATE_NETWORK
     });
   };
 
