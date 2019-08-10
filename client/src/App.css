@@ -553,22 +553,22 @@ select {
 }
 
 .shadow {
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
 }
 .shadow-top {
-  box-shadow: 0px -5px 5px -5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px -5px 5px -5px rgba(0, 0, 0, 0.4);
 }
 .shadow-bot {
-  box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 5px 5px -5px rgba(0, 0, 0, 0.4);
 }
 .shadow-bot-7 {
-  box-shadow: 0px 7px 7px -5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 7px 7px -5px rgba(0, 0, 0, 0.4);
 }
 .shadow-right {
-  box-shadow: 5px 0px 5px -5px rgba(0, 0, 0, 0.5);
+  box-shadow: 5px 0px 5px -5px rgba(0, 0, 0, 0.4);
 }
 .shadow-left {
-  box-shadow: -5px 0px 5px -5px rgba(0, 0, 0, 0.5);
+  box-shadow: -5px 0px 5px -5px rgba(0, 0, 0, 0.4);
 }
 .is-valid {
   border-color: #888888;
