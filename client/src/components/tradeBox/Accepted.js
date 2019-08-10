@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { Fragment, useContext } from "react";
 import TradeContext from "../../context/trade/TradeContext";
 import PropTypes from "prop-types";
 
@@ -19,7 +19,14 @@ const Accepted = ({ isUser }) => {
       {accepted === null ? (
         <Spinner size={7} />
       ) : (
-        <h3 className={bord + " p width100"}>{acceptMsg}</h3>
+        <Fragment>
+          <h3 className={bord + " p width100"}>{acceptMsg}</h3>
+          {isUser && (
+            <button className="btn btn-sm btn-dark">
+              {accepted ? "Accept" : "Reject"}
+            </button>
+          )}
+        </Fragment>
       )}
     </div>
   );
