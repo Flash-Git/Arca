@@ -21,10 +21,10 @@ const Accepted = ({ isUser }) => {
   return (
     <div className="accepted text-center">
       {accepted === null ? (
-        <Spinner size={7} />
+        <Spinner />
       ) : (
         <Fragment>
-          <h3 className={bord + " p width100"}>{acceptMsg}</h3>
+          <h3 className={bord + " width100"}>{acceptMsg}</h3>
           {isUser && (
             <button onClick={onClick} className="btn btn-sm btn-dark">
               {accepted ? "Accept" : "Reject"}

@@ -28,6 +28,7 @@ const EnsForm = ({ item }) => {
       <h3 className="item-text">ENS</h3>
       <form className="item-input">
         <input
+          style={{ minWidth: "1rem" }}
           type="text"
           placeholder="Name"
           name="name"

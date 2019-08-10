@@ -7,6 +7,7 @@ import Web3Context from "../../context/web3/Web3Context";
 import Spinner from "./Spinner";
 
 const Sidebar = () => {
+  //TODO add search
   const appContext = useContext(AppContext);
   const userContext = useContext(UserContext);
   const web3Context = useContext(Web3Context);

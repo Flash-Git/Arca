@@ -11,7 +11,7 @@ const About = () => {
     //eslint-disable-next-line
   }, []);
   return (
-    <div style={{ display: "block" }}>
+    <div className="m-1" style={{ display: "block" }}>
       <h1>About</h1>
       <p className="my-1">Ethereum Application</p>
       <p className="bg-dark p">

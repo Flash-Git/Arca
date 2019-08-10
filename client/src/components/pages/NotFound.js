@@ -12,7 +12,7 @@ const NotFound = props => {
   }, []);
 
   return (
-    <div style={{ display: "block" }}>
+    <div className="m-1" style={{ display: "block" }}>
       <h1>Not Found</h1>
       <p className="lead">The page you are looking for does not exist.</p>
     </div>
