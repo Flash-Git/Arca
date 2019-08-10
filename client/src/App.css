@@ -2,7 +2,7 @@
 :root {
   --primary-color: #003699;
   --dark-color: #333333;
-  --light-color: #f4f4f4;
+  --light-color: #f0f0f0;
   --danger-color: #dc3545;
   --success-color: #28a745;
 }
@@ -352,7 +352,7 @@ select {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.7rem 2rem;
+  padding: 0.3rem 3rem;
   z-index: 1;
   width: 100%;
   border-bottom: solid 1px var(--primary-color);
@@ -400,6 +400,7 @@ select {
 .sidebar ul {
   display: flex;
   flex-direction: column;
+  width: 10rem;
 }
 
 .sidebar a {
@@ -498,8 +499,9 @@ select {
 }
 .accepted {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: stretch;
+  justify-content: space-evenly;
   min-height: 100%;
   min-width: 7rem;
   width: 8rem;

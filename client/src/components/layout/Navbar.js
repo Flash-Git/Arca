@@ -31,18 +31,24 @@ const Navbar = () => {
   return (
     <nav className="navbar bg-dark">
       <h1>
-        <Link to="/">A R C A</Link>
+        <a>
+          <Link to="/">A R C A</Link>
+        </a>
       </h1>
       <ul>
         <li>
-          <Link to="/">
-            <strong>
-              {location === "home" ? networkText() : "Trade Window"}
-            </strong>
-          </Link>
+          <a>
+            <Link to="/">
+              <strong>
+                {location === "home" ? networkText() : "Trade Window"}
+              </strong>
+            </Link>{" "}
+          </a>
         </li>
         <li>
-          <Link to="/about">About</Link>
+          <a>
+            <Link to="/about">About</Link>
+          </a>
         </li>
       </ul>
     </nav>
