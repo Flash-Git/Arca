@@ -251,7 +251,8 @@ const TradeState = props => {
         addTradeItem,
         setUserBox,
         setCurrentItem,
-        clearCurrentItem
+        clearCurrentItem,
+        setAccepted
       }}
     >
       {props.children}
