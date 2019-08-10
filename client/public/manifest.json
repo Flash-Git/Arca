@@ -4,7 +4,7 @@
   "description": "Arca is an Ethereum application that uses autonomous smart contracts to allow you to exchange various Ethereum based assets straight from your wallet",
   "icons": [
     {
-      "src": "arcaLO.png",
+      "src": "arcaLOGO.png",
       "sizes": "64x64",
       "type": "image/png"
     }
