@@ -252,7 +252,8 @@ const TradeState = props => {
         setCurrentItem,
         clearCurrentItem,
         toggleAccepted,
-        getTradeItems
+        getTradeItems,
+        setAddresses
       }}
     >
       {props.children}

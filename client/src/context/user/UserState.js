@@ -6,8 +6,8 @@ import UserReducer from "./UserReducer";
 import {
   CLEAR_USER,
   CLEAR_TRADE_PARTNER,
-  SET_ADDRESS,
-  CLEAR_ADDRESS,
+  SET_ADDRESSES,
+  CLEAR_ADDRESSES,
   SET_BALANCE,
   CLEAR_BALANCE,
   SET_OWNED_TOKENS,
@@ -85,18 +85,16 @@ const UserState = props => {
     });
   };
 
-  const getAddress = (user, addressObj) => {
-    //GET addressObj from web3state (browser)
+  const setAddresses = (userAddressObj, tradePartnerAddressObj) => {
     dispatch({
-      type: SET_ADDRESS,
-      payload: { user, addressObj }
+      type: SET_ADDRESSES,
+      payload: { userAddressObj, tradePartnerAddressObj }
     });
   };
 
-  const clearAddress = user => {
+  const clearAddresses = () => {
     dispatch({
-      type: CLEAR_ADDRESS,
-      payload: user
+      type: CLEAR_ADDRESSES
     });
   };
 
@@ -173,8 +171,8 @@ const UserState = props => {
         settings: state.settings,
         clearUser,
         clearTradePartner,
-        getAddress,
-        clearAddress,
+        setAddresses,
+        clearAddresses,
         getBalance,
         clearBalance,
         getOwnedTokens,

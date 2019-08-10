@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 
-import TradeContext from "../../context/trade/TradeContext";
+import UserContext from "../../context/user/UserContext";
 import Web3Context from "../../context/web3/Web3Context";
 
 const PreTradeForm = () => {
-  const tradeContext = useContext(TradeContext);
+  const userContext = useContext(UserContext);
   const web3Context = useContext(Web3Context);
+
+  const { setAddresses } = userContext;
 
   //get ens checker
   //get web3 connection
@@ -34,7 +36,9 @@ const PreTradeForm = () => {
   }, [input2]);
 
   const checkInput = inputNum => {
-    inputNum === 1 && console.log("checking1");
+    inputNum === 1 &&
+      setFormState({ ...formState, address1: input1, ens1: "hello" }); //console.log("checking2");
+
     //check if input1 is valid ens address
     //*if true, check whether it points to a valid address
     //**if true, ens1 = input1, address1 = returned ens address, valid = true and return
@@ -43,7 +47,7 @@ const PreTradeForm = () => {
     //*if true, set address1 = input1, valid = true and return
     //else, address1 = null, valid = false, push to context and return
 
-    inputNum === 2 && console.log("checking2");
+    inputNum === 2 && setFormState({ ...formState, address2: input2 }); //console.log("checking2");
     //check if input2 is valid ens address
     //*if true, check whether it points to a valid address
     //**if true, ens2 = input2, address2 = returned ens address, valid = true and return
@@ -51,6 +55,8 @@ const PreTradeForm = () => {
     //else, check if input2 is valid address
     //*if true, set address2 = input2, valid = true and return
     //address2 = null, valid = false, push to context and return
+
+    return true; //TEMP
   };
 
   const onChange = e => {
@@ -60,9 +66,12 @@ const PreTradeForm = () => {
   const onSubmit = e => {
     e.preventDefault();
 
-    checkInput(1);
-    checkInput(2);
-    //Push to context state
+    if (checkInput(1) && checkInput(2)) {
+      setAddresses(
+        { address: address1, ens: ens1 },
+        { address: address2, ens: ens2 }
+      );
+    }
   };
 
   return (
