@@ -248,9 +248,11 @@ const TradeState = props => {
         tradePartner: state.tradePartner,
         currentItem: state.currentItem,
         addTradeItem,
+        cancelTradeItem,
         setUserBox,
         setCurrentItem,
         clearCurrentItem,
+        getAccepted,
         toggleAccepted,
         getTradeItems
       }}
