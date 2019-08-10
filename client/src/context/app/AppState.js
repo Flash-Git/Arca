@@ -1,13 +1,15 @@
 import React, { useReducer } from "react";
 
-import { SET_LOCATION } from "../types";
+import { SET_LOCATION, TOGGLE_SIDEBAR } from "../types";
 
 import AppContext from "./AppContext";
 import AppReducer from "./AppReducer";
 
 const AppState = props => {
-  const location = "";
-  const initialState = location;
+  const initialState = {
+    location: "",
+    sidebar: true
+  };
 
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
@@ -31,11 +33,19 @@ const AppState = props => {
     });
   };
 
+  const toggleSidebar = () => {
+    dispatch({
+      type: TOGGLE_SIDEBAR
+    });
+  };
+
   return (
     <AppContext.Provider
       value={{
-        location: state,
-        setLocation
+        location: state.location,
+        sidebar: state.sidebar,
+        setLocation,
+        toggleSidebar
       }}
     >
       {props.children}

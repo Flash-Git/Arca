@@ -1,5 +1,6 @@
 // App
 export const SET_LOCATION = "SET_LOCATION";
+export const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR";
 
 // Alerts
 export const SET_ALERT = "SET_ALERT";

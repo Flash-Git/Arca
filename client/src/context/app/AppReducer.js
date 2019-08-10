@@ -1,9 +1,11 @@
-import { SET_LOCATION } from "../types";
+import { SET_LOCATION, TOGGLE_SIDEBAR } from "../types";
 
 export default (state, action) => {
   switch (action.type) {
     case SET_LOCATION:
-      return action.payload;
+      return { ...state, location: action.payload };
+    case TOGGLE_SIDEBAR:
+      return { ...state, sidebar: !state.sidebar };
     default:
       return state;
   }

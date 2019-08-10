@@ -1,23 +1,24 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+import AppContext from "../../context/app/AppContext";
 import UserContext from "../../context/user/UserContext";
 import Web3Context from "../../context/web3/Web3Context";
 import Spinner from "./Spinner";
 
 const Sidebar = () => {
+  const appContext = useContext(AppContext);
   const userContext = useContext(UserContext);
   const web3Context = useContext(Web3Context);
 
+  const { sidebar, toggleSidebar } = appContext;
   const { settings, user } = userContext;
   const { nickname } = settings;
 
   const { connected, loading } = web3Context;
 
-  const [hidden, setHidden] = useState(true);
-
   const onClick = e => {
-    setHidden(!hidden);
+    toggleSidebar();
   };
 
   const tokens = () => (
@@ -45,9 +46,8 @@ const Sidebar = () => {
     <div className="sidebar">
       <button onClick={onClick} className="btn btn-sm btn-dark side-btn mbot">
         <FontAwesomeIcon icon={["fas", "bars"]} />
-        {/* {hidden ? "Hide" : "Show"} */}
       </button>
-      {hidden && (
+      {sidebar && (
         <Fragment>
           <h2>{nickname && nickname}</h2>
           <div>{connected ? <p>Not Connected</p> : tokens()}</div>
