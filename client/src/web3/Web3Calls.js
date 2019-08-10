@@ -3,6 +3,7 @@ import { useContext } from "react";
 import abiErc20 from "./abis/abiErc20";
 import abiErc721 from "./abis/abiErc721";
 import abiArca from "./abis/abi";
+
 import Web3Context from "../context/web3/Web3Context";
 
 const AppAddress = () => {
@@ -10,9 +11,14 @@ const AppAddress = () => {
   return web3Context.appAddress;
 };
 
+const Web3 = () => {
+  const web3Context = useContext(Web3Context);
+  return web3Context.web3;
+};
+
 const NewContract = (_abi, _add) => {
   try {
-    return new window.web3.eth.Contract(_abi, _add);
+    return new Web3().eth.Contract(_abi, _add);
   } catch (e) {
     console.log("Failed NewContract:");
     console.log(e);
