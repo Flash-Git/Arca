@@ -15,7 +15,8 @@ const Accepted = ({ isUser }) => {
   const acceptMsg = accepted ? "Accepted" : "Not Accepted";
 
   const onClick = e => {
-    tradeContext.setAccepted(accepted);
+    if (accepted === null) return;
+    tradeContext.toggleAccepted();
   };
 
   return (
@@ -27,7 +28,7 @@ const Accepted = ({ isUser }) => {
           <h3 className={bord + " width100"}>{acceptMsg}</h3>
           {isUser && (
             <button onClick={onClick} className="btn btn-sm btn-dark">
-              {accepted ? "Accept" : "Reject"}
+              {accepted ? "Reject" : "Accept"}
             </button>
           )}
         </Fragment>

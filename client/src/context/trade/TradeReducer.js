@@ -2,7 +2,8 @@ import {
   ADD_TRADE_ITEM,
   REMOVE_TRADE_ITEM,
   SET_CURRENT_ITEM,
-  CLEAR_CURRENT_ITEM
+  CLEAR_CURRENT_ITEM,
+  TOGGLE_ACCEPTED
 } from "../types";
 
 export default (state, action) => {
@@ -34,6 +35,14 @@ export default (state, action) => {
       return {
         ...state,
         currentItem: null
+      };
+    case TOGGLE_ACCEPTED:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          accepted: !state.user.accepted
+        }
       };
     default:
       return state;

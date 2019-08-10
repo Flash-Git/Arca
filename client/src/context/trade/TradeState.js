@@ -13,7 +13,7 @@ import {
   SET_CURRENT_ITEM,
   CLEAR_CURRENT_ITEM,
   UPDATE_ACCEPTED,
-  SET_ACCEPTED
+  TOGGLE_ACCEPTED
 } from "../types";
 
 import { SENT, UNSENT } from "../sentStatus";
@@ -231,13 +231,12 @@ const TradeState = props => {
     });
   };
 
-  const setAccepted = accepted => {
+  const toggleAccepted = () => {
     //set accepted on contract
     //set accepted on db
 
     dispatch({
-      type: SET_ACCEPTED,
-      payload: accepted
+      type: TOGGLE_ACCEPTED
     });
   };
 
@@ -252,7 +251,7 @@ const TradeState = props => {
         setUserBox,
         setCurrentItem,
         clearCurrentItem,
-        setAccepted
+        toggleAccepted
       }}
     >
       {props.children}

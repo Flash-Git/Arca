@@ -14,7 +14,7 @@ export const SET_CURRENT_ITEM = "SET_CURRENT_ITEM";
 export const CLEAR_CURRENT_ITEM = "CLEAR_CURRENT_ITEM";
 
 export const UPDATE_ACCEPTED = "UPDATE_ACCEPTED";
-export const SET_ACCEPTED = "SET_ACCEPTED";
+export const TOGGLE_ACCEPTED = "TOGGLE_ACCEPTED";
 
 // User
 export const CLEAR_USER = "CLEAR_USER";
