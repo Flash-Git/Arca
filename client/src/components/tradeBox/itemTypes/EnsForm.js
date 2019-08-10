@@ -11,9 +11,7 @@ const EnsForm = ({ item }) => {
 
   const { name, namehash, id, verified } = ensItem;
 
-  useEffect(() => {
-    //eslint-disable-next-line
-  }, []);
+  useEffect(() => {}, []);
 
   //Input
   const onChange = e => {

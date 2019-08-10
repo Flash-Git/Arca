@@ -16,7 +16,6 @@ const Home = props => {
 
   useEffect(() => {
     setLocation("home");
-    //eslint-disable-next-line
   }, []);
 
   return (

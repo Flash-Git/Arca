@@ -8,7 +8,6 @@ const NotFound = props => {
 
   useEffect(() => {
     setLocation("notFound");
-    //eslint-disable-next-line
   }, []);
 
   return (

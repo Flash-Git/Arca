@@ -34,8 +34,6 @@ const Box = ({ isUser }) => {
 
   useEffect(() => {
     setTrader(addressObj);
-
-    //eslint-disable-next-line
   }, [isUser, addressObj]); // Might need userContext.user, userContext.tradePartner
 
   return (

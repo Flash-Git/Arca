@@ -8,8 +8,8 @@ const About = () => {
 
   useEffect(() => {
     setLocation("about");
-    //eslint-disable-next-line
   }, []);
+
   return (
     <div className="m-1" style={{ display: "block" }}>
       <h1>About</h1>
