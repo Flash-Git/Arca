@@ -251,7 +251,8 @@ const TradeState = props => {
         setUserBox,
         setCurrentItem,
         clearCurrentItem,
-        toggleAccepted
+        toggleAccepted,
+        getTradeItems
       }}
     >
       {props.children}

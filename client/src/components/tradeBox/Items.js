@@ -5,14 +5,21 @@ import PropTypes from "prop-types";
 import Erc20 from "./itemTypes/Erc20";
 import Erc721 from "./itemTypes/Erc721";
 import EnsForm from "./itemTypes/EnsForm";
+
 import TradeContext from "../../context/trade/TradeContext";
 
 const Items = ({ isUser }) => {
   const tradeContext = useContext(TradeContext);
 
+  const { getTradeItems } = tradeContext;
+
   const items = isUser
     ? tradeContext.user.tradeItems
     : tradeContext.tradePartner.tradeItems;
+
+  useEffect(() => {
+    getTradeItems();
+  }, []);
 
   const internal = item => {
     switch (item.data.type) {
