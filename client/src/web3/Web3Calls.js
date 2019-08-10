@@ -45,6 +45,9 @@ export const Tx = _promise => {
     _promise.on("confirmation", (confirmation, receipt) => {
       //console.log("Confirmation: " + confirmation);
       if (confirmation === 1) {
+        console.log("Receipt found");
+      }
+      if (confirmation > 1) {
         console.log("Receipt received");
         return resolve();
       }
