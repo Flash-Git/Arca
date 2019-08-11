@@ -40,14 +40,23 @@ const PreTradeForm = () => {
 
   const checkInput = inputNum => {
     if (inputNum === 1) {
-      ens &&
+      if (web3) {
+        console.log(web3);
+        web3.utils.isAddress(input1).then(d => console.log(d));
+      }
+      /*
+      if (ens) {
         ens
           .resolver(input1)
           .addr()
-          .then(add => console.log(add))
-          .error(r => console.log(r));
-
-      setFormState({ ...formState, address1: input1, ens1: "hello" }); //console.log("checking2");
+          .then(add => {
+            setFormState({ ...formState, address1: add, ens1: input1 });
+            return true;
+          })
+          .catch(e => web3.utils.isAddress(input1));
+      } else if (web3) {
+        web3.utils.isAddress(input1).then(d => console.log(d));
+      }*/
     }
     //check if input1 is valid ens address
     //*if true, check whether it points to a valid address
@@ -57,7 +66,16 @@ const PreTradeForm = () => {
     //*if true, set address1 = input1, valid = true and return
     //else, address1 = null, valid = false, push to context and return
 
-    inputNum === 2 && setFormState({ ...formState, address2: input2 }); //console.log("checking2");
+    if (inputNum === 2) {
+      ens &&
+        ens
+          .resolver(input2)
+          .addr()
+          .then(add => {
+            setFormState({ ...formState, address2: add, ens2: input2 });
+            return true;
+          });
+    }
     //check if input2 is valid ens address
     //*if true, check whether it points to a valid address
     //**if true, ens2 = input2, address2 = returned ens address, valid = true and return
@@ -104,7 +122,7 @@ const PreTradeForm = () => {
       />
       <input
         className={
-          address1
+          address2
             ? "text-center is-valid valid"
             : "text-center is-valid invalid"
         }
