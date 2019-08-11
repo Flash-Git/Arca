@@ -1,4 +1,6 @@
 import React, { useReducer, useContext } from "react";
+import ENS from "ethereum-ens";
+
 import uuid from "uuid";
 
 import {} from "../../web3/Web3Calls";
@@ -12,7 +14,9 @@ import AlertContext from "../alert/AlertContext";
 
 import {
   CONNECT_WEB3,
+  CONNECT_ENS,
   DISCONNECT_WEB3,
+  DISCONNECT_ENS,
   UPDATE_NETWORK,
   ADD_CONTRACT_OBJECT,
   REMOVE_CONTRACT_OBJECT,
@@ -27,6 +31,7 @@ const Web3State = props => {
 
   const initialState = {
     web3: null,
+    ens: null,
     connected: false,
     network: null,
     activeReqs: [],
@@ -59,6 +64,23 @@ const Web3State = props => {
     dispatch({
       type: CONNECT_WEB3,
       dispatch: web3
+    });
+
+    connectEns(web3);
+  };
+
+  const connectEns = web3 => {
+    const ens = new ENS(web3.currentProvider);
+    if (!ens) {
+      dispatch({
+        type: DISCONNECT_ENS
+      });
+      return;
+    }
+
+    dispatch({
+      type: CONNECT_ENS,
+      dispatch: ens
     });
   };
 
@@ -130,6 +152,7 @@ const Web3State = props => {
     <Web3Context.Provider
       value={{
         web3: state.web3,
+        ens: state.ens,
         connected: state.connected,
         network: state.network,
         activeReqs: state.activeReqs,
@@ -137,7 +160,8 @@ const Web3State = props => {
         activeTxs: state.activeTxs,
         completedTxs: state.completedTxs,
         connect,
-        updateNetwork
+        updateNetwork,
+        connectEns
       }}
     >
       {props.children}

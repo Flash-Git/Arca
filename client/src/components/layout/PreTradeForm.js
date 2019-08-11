@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 
+//import { getAddress } from "../../web3/Ens";
+
 import UserContext from "../../context/user/UserContext";
 import Web3Context from "../../context/web3/Web3Context";
 
@@ -8,6 +10,7 @@ const PreTradeForm = () => {
   const web3Context = useContext(Web3Context);
 
   const { setAddresses } = userContext;
+  const { web3, ens, connect, connectEns } = web3Context;
 
   //get ens checker
   //get web3 connection
@@ -36,9 +39,16 @@ const PreTradeForm = () => {
   }, [input2]);
 
   const checkInput = inputNum => {
-    inputNum === 1 &&
-      setFormState({ ...formState, address1: input1, ens1: "hello" }); //console.log("checking2");
+    if (inputNum === 1) {
+      ens &&
+        ens
+          .resolver(input1)
+          .addr()
+          .then(add => console.log(add))
+          .error(r => console.log(r));
 
+      setFormState({ ...formState, address1: input1, ens1: "hello" }); //console.log("checking2");
+    }
     //check if input1 is valid ens address
     //*if true, check whether it points to a valid address
     //**if true, ens1 = input1, address1 = returned ens address, valid = true and return
@@ -63,8 +73,12 @@ const PreTradeForm = () => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = e => {
+  const onSubmit = async e => {
     e.preventDefault();
+
+    if (!web3) {
+      connect();
+    }
 
     if (checkInput(1) && checkInput(2)) {
       setAddresses(
