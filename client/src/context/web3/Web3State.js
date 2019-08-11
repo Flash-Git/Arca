@@ -61,9 +61,11 @@ const Web3State = props => {
       return;
     }
 
+    const network = +web3.currentProvider.networkVersion;
+
     dispatch({
       type: CONNECT_WEB3,
-      dispatch: web3
+      payload: { web3, network }
     });
 
     connectEns(web3);
@@ -80,7 +82,7 @@ const Web3State = props => {
 
     dispatch({
       type: CONNECT_ENS,
-      dispatch: ens
+      payload: ens
     });
   };
 
