@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-
+import { utils as Utils } from "web3";
 //import { getAddress } from "../../web3/Ens";
 
 import UserContext from "../../context/user/UserContext";
@@ -41,22 +41,34 @@ const PreTradeForm = () => {
   const checkInput = inputNum => {
     if (inputNum === 1) {
       if (web3) {
-        console.log(web3);
-        web3.utils.isAddress(input1).then(d => console.log(d));
+        const isAdd = Utils.isAddress(input1.toUpperCase());
+        if (isAdd) console.log("true");
+        else {
+          console.log("false");
+        }
       }
-      /*
+
       if (ens) {
         ens
           .resolver(input1)
           .addr()
           .then(add => {
             setFormState({ ...formState, address1: add, ens1: input1 });
-            return true;
+            return;
           })
-          .catch(e => web3.utils.isAddress(input1));
+          .catch(e => {
+            if (Utils.isAddress(input1.toUpperCase())) {
+              setFormState({ ...formState, address1: input1, ens1: null });
+              return;
+            }
+            setFormState({ ...formState, address1: null, ens1: null });
+            return;
+          });
       } else if (web3) {
-        web3.utils.isAddress(input1).then(d => console.log(d));
-      }*/
+        if (Utils.isAddress(input1.toUpperCase())) {
+          setFormState({ ...formState, address1: input1, ens1: null });
+          return;
+        }
     }
     //check if input1 is valid ens address
     //*if true, check whether it points to a valid address
