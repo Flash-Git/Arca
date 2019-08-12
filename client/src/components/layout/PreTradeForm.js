@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { utils as Utils } from "web3";
-//import { getAddress } from "../../web3/Ens";
 
 import UserContext from "../../context/user/UserContext";
 import Web3Context from "../../context/web3/Web3Context";
@@ -12,105 +11,97 @@ const PreTradeForm = () => {
   const { setAddresses } = userContext;
   const { web3, ens, connect, connectEns } = web3Context;
 
-  //get ens checker
-  //get web3 connection
-  //get web3 address validator
-  //get trade address and ens setter
-  //get trade validation setter
-
-  const [formState, setFormState] = useState({
+  const [form1State, setForm1State] = useState({
     input1: "",
     address1: null,
-    ens1: null,
+    ens1: null
+  });
+
+  const [form2State, setForm2State] = useState({
     input2: "",
     address2: null,
     ens2: null
   });
 
-  const { input1, address1, ens1, input2, address2, ens2 } = formState;
+  const { input1, address1, ens1 } = form1State;
+  const { input2, address2, ens2 } = form2State;
 
-  //Input
   useEffect(() => {
-    checkInput(1);
+    connect();
+  }, [window.web3]);
+
+  useEffect(() => {
+    if (Utils.isAddress(input1.toUpperCase())) {
+      setForm1State({ ...form1State, address1: input1, ens1: null });
+    } else {
+      setForm1State({ ...form1State, address1: null, ens1: null });
+    }
   }, [input1]);
 
   useEffect(() => {
-    checkInput(2);
+    if (Utils.isAddress(input2.toUpperCase())) {
+      setForm2State({ ...form2State, address2: input2, ens2: null });
+    } else {
+      setForm2State({ ...form2State, address2: null, ens2: null });
+    }
   }, [input2]);
 
-  const checkInput = inputNum => {
-    if (inputNum === 1) {
-      if (web3) {
-        const isAdd = Utils.isAddress(input1.toUpperCase());
-        if (isAdd) console.log("true");
-        else {
-          console.log("false");
-        }
-      }
-
-      if (ens) {
-        ens
-          .resolver(input1)
-          .addr()
-          .then(add => {
-            setFormState({ ...formState, address1: add, ens1: input1 });
-            return;
-          })
-          .catch(e => {
-            if (Utils.isAddress(input1.toUpperCase())) {
-              setFormState({ ...formState, address1: input1, ens1: null });
-              return;
-            }
-            setFormState({ ...formState, address1: null, ens1: null });
-            return;
-          });
-      } else if (web3) {
-        if (Utils.isAddress(input1.toUpperCase())) {
-          setFormState({ ...formState, address1: input1, ens1: null });
-          return;
-        }
+  const checkInput1 = async () => {
+    if (Utils.isAddress(input1.toUpperCase())) {
+      setForm1State({ ...form1State, address1: input1, ens1: null });
+      return;
     }
-    //check if input1 is valid ens address
-    //*if true, check whether it points to a valid address
-    //**if true, ens1 = input1, address1 = returned ens address, valid = true and return
-    //*else, ens1 to null
-    //else, check if input1 is valid address
-    //*if true, set address1 = input1, valid = true and return
-    //else, address1 = null, valid = false, push to context and return
 
-    if (inputNum === 2) {
-      ens &&
-        ens
-          .resolver(input2)
-          .addr()
-          .then(add => {
-            setFormState({ ...formState, address2: add, ens2: input2 });
-            return true;
-          });
+    if (!ens) return;
+
+    const input = input1;
+    try {
+      const add = await ens.resolver(input1).addr();
+      if (input !== input1) return;
+      setForm1State({ input1, address1: add, ens1: input1 });
+      return;
+    } catch {
+      if (input !== input1) return;
+      setForm1State({ input1, address1: null, ens1: null });
     }
-    //check if input2 is valid ens address
-    //*if true, check whether it points to a valid address
-    //**if true, ens2 = input2, address2 = returned ens address, valid = true and return
-    //*else, ens2 to null
-    //else, check if input2 is valid address
-    //*if true, set address2 = input2, valid = true and return
-    //address2 = null, valid = false, push to context and return
-
-    return true; //TEMP
   };
 
-  const onChange = e => {
-    setFormState({ ...formState, [e.target.name]: e.target.value });
+  const checkInput2 = async () => {
+    if (Utils.isAddress(input2.toUpperCase())) {
+      setForm2State({ ...form2State, address2: input2, ens2: null });
+      return;
+    }
+
+    if (!ens) return;
+
+    const input = input2;
+    try {
+      const add = await ens.resolver(input2).addr();
+      if (input !== input2) return;
+      setForm2State({ input2, address2: add, ens2: input2 });
+      return;
+    } catch {
+      if (input !== input2) return;
+      setForm2State({ input2, address2: null, ens2: null });
+    }
+  };
+
+  const onChange1 = e => {
+    setForm1State({ ...form1State, [e.target.name]: e.target.value });
+  };
+  const onChange2 = e => {
+    setForm2State({ ...form2State, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async e => {
     e.preventDefault();
 
-    if (!web3) {
-      connect();
-    }
+    if (!web3) connect();
+    if (!ens) connectEns();
 
-    if (checkInput(1) && checkInput(2)) {
+    await Promise.all([checkInput1(), checkInput2()]);
+
+    if (address1 && address2) {
       setAddresses(
         { address: address1, ens: ens1 },
         { address: address2, ens: ens2 }
@@ -130,7 +121,7 @@ const PreTradeForm = () => {
         placeholder="Address/ENS 1"
         name="input1"
         value={input1}
-        onChange={onChange}
+        onChange={onChange1}
       />
       <input
         className={
@@ -142,7 +133,7 @@ const PreTradeForm = () => {
         placeholder="Address/ENS 2"
         name="input2"
         value={input2}
-        onChange={onChange}
+        onChange={onChange2}
       />
       <input type="submit" value="Open Box" className="btn btn-dark" />
     </form>
