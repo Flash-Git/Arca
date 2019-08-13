@@ -23,7 +23,7 @@ const EnsForm = ({ item }) => {
   //Render
   return (
     <Fragment>
-      <h3 className="item-text">ENS</h3>
+      <h3 className="item-text-1">ENS</h3>
       <form className="item-input">
         <input
           style={{ minWidth: "1rem" }}
@@ -34,7 +34,7 @@ const EnsForm = ({ item }) => {
           onChange={onChange}
         />
       </form>
-      <span className="item-text">{verified && "ICON"}</span>
+      <span className="item-text-1">{verified && "ICON"}</span>
     </Fragment>
   );
 };
