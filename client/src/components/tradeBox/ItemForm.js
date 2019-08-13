@@ -10,6 +10,16 @@ const ItemForm = () => {
 
   const { addTradeItem } = tradeContext;
 
+  const emptyData = {
+    type: "ens",
+    contractAdd: "",
+    id: "", //erc721
+    amount: "", //erc20
+    name: "", //ens
+    namehash: "", //ens
+    verified: false //ens
+  };
+
   const [item, setItem] = useState({
     id: uuid.v4(),
     network: {
@@ -19,28 +29,8 @@ const ItemForm = () => {
       dbLoading: false,
       synced: false
     },
-    data: {
-      type: "",
-      contractAdd: "",
-      id: "", //erc721
-      amount: "", //erc20
-      name: "", //ens
-      namehash: "", //ens
-      verified: false //ens
-    }
+    data: emptyData
   });
-
-  const emptyData = {
-    data: {
-      type: "",
-      contractAdd: "",
-      id: "", //erc721
-      amount: "", //erc20
-      name: "", //ens
-      namehash: "", //ens
-      verified: false //ens
-    }
-  };
 
   const { type, contractAdd, id, amount, name, namehash, verified } = item.data;
 
