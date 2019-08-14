@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 
-const Erc20 = ({ item }) => {
+const Erc20 = ({ item, isUser }) => {
   const { contractAdd, amount } = item.data;
 
   return (

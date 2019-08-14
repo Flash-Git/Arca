@@ -24,11 +24,11 @@ const Items = ({ isUser }) => {
   const internal = item => {
     switch (item.data.type) {
       case "erc20":
-        return <Erc20 item={item} />;
+        return <Erc20 item={item} isUser={isUser} />;
       case "erc721":
-        return <Erc721 item={item} />;
+        return <Erc721 item={item} isUser={isUser} />;
       case "ens":
-        return <EnsForm item={item} />;
+        return <EnsForm item={item} isUser={isUser} />;
       default:
         return "";
     }
