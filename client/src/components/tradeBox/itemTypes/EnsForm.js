@@ -1,7 +1,15 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 
+import Web3Context from "../../../context/web3/Web3Context";
+
+let offset = 0;
+
 const EnsForm = ({ item }) => {
+  const web3Context = useContext(Web3Context);
+
+  const { ens } = web3Context;
+
   const [ensItem, setEnsItem] = useState({
     name: "",
     namehash: "",
@@ -11,7 +19,15 @@ const EnsForm = ({ item }) => {
 
   const { name, namehash, id, verified } = ensItem;
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    offset++;
+    setTimeout(validate, 1000);
+  }, [name]);
+
+  const validate = () => {
+    offset--;
+    if (offset !== 0) return;
+  };
 
   //Input
   const onChange = e => {
