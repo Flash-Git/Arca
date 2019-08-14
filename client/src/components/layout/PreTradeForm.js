@@ -11,6 +11,7 @@ const PreTradeForm = () => {
   const { setAddresses } = userContext;
   const { web3, ens, connect, connectEns } = web3Context;
 
+  //FORM STATE
   const [form1State, setForm1State] = useState({
     input1: "",
     address1: null,
@@ -30,6 +31,7 @@ const PreTradeForm = () => {
     connect();
   }, [window.web3]);
 
+  //Inputs
   useEffect(() => {
     if (Utils.isAddress(input1.toUpperCase())) {
       setForm1State({ ...form1State, address1: input1, ens1: null });
@@ -37,7 +39,6 @@ const PreTradeForm = () => {
       setForm1State({ ...form1State, address1: null, ens1: null });
     }
   }, [input1]);
-
   useEffect(() => {
     if (Utils.isAddress(input2.toUpperCase())) {
       setForm2State({ ...form2State, address2: input2, ens2: null });
