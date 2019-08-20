@@ -52,13 +52,13 @@ const Web3State = props => {
    * Actions
    */
 
-  const connect = () => {
+  const connect = async () => {
     const web3 = window.web3;
     if (!web3) {
       dispatch({
         type: DISCONNECT_WEB3
       });
-      return;
+      return false;
     }
 
     const network = +web3.currentProvider.networkVersion;
@@ -68,22 +68,19 @@ const Web3State = props => {
       payload: { web3, network }
     });
 
-    connectEns(web3);
-  };
-
-  const connectEns = web3 => {
-    const ens = new ENS(web3.currentProvider);
+    const ens = await new ENS(web3.currentProvider);
     if (!ens) {
       dispatch({
         type: DISCONNECT_ENS
       });
-      return;
+      return false;
     }
 
     dispatch({
       type: CONNECT_ENS,
       payload: ens
     });
+    return true;
   };
 
   const updateNetwork = () => {
@@ -162,8 +159,7 @@ const Web3State = props => {
         activeTxs: state.activeTxs,
         completedTxs: state.completedTxs,
         connect,
-        updateNetwork,
-        connectEns
+        updateNetwork
       }}
     >
       {props.children}

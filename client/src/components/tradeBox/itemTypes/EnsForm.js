@@ -1,7 +1,20 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 
-const EnsForm = ({ item }) => {
+import Web3Context from "../../../context/web3/Web3Context";
+import UserContext from "../../../context/user/UserContext";
+
+let offset = 0;
+
+const EnsForm = ({ item, isUser }) => {
+  const web3Context = useContext(Web3Context);
+  const userContext = useContext(UserContext);
+
+  const { ens } = web3Context;
+  const { address } = isUser
+    ? userContext.user.addressObj
+    : userContext.tradePartner.addressObj;
+
   const [ensItem, setEnsItem] = useState({
     name: "",
     namehash: "",
@@ -11,7 +24,25 @@ const EnsForm = ({ item }) => {
 
   const { name, namehash, id, verified } = ensItem;
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    offset++;
+    setTimeout(validate, 500);
+  }, [name]);
+
+  const validate = async () => {
+    offset--;
+    if (offset !== 0) return;
+
+    if (!ens) return;
+    try {
+      const owner = await ens.owner(name);
+      if (owner === address) {
+        setEnsItem({ ...ensItem, verified: true });
+      } else {
+        setEnsItem({ ...ensItem, verified: false });
+      }
+    } catch (e) {}
+  };
 
   //Input
   const onChange = e => {
@@ -23,7 +54,7 @@ const EnsForm = ({ item }) => {
   //Render
   return (
     <Fragment>
-      <h3 className="item-text">ENS</h3>
+      <h3 className="item-text-1">ENS</h3>
       <form className="item-input">
         <input
           style={{ minWidth: "1rem" }}
@@ -34,7 +65,7 @@ const EnsForm = ({ item }) => {
           onChange={onChange}
         />
       </form>
-      <span className="item-text">{verified && "ICON"}</span>
+      <span className="item-text-1">{verified && "ICON"}</span>
     </Fragment>
   );
 };

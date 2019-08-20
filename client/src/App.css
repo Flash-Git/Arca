@@ -486,17 +486,27 @@ select {
   padding-top: 0.5rem;
   padding-bottom: 0.4rem;
 }
-.item-text {
+.item-text-1 {
   display: flex;
+  flex-grow: 1;
   min-width: 3.8rem;
   width: 9rem;
   justify-content: left;
   padding: 0 0.5rem;
 }
+.item-text-2 {
+  display: flex;
+  flex-grow: 2;
+  min-width: 3.8rem;
+  width: 13rem;
+  justify-content: left;
+  padding: 0 0.5rem;
+}
 .item-input {
   display: flex;
-  min-width: 3rem;
-  width: 10rem;
+  flex-grow: 2;
+  min-width: 3.8rem;
+  width: 13rem;
   justify-content: left;
   padding: 0;
 }

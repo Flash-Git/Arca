@@ -1,32 +1,52 @@
 import React, { Fragment, useContext, useState } from "react";
+import uuid from "uuid";
 
 import TradeContext from "../../context/trade/TradeContext";
+
+import { SENT, UNSENT } from "../../context/sentStatus";
 
 const ItemForm = () => {
   const tradeContext = useContext(TradeContext);
 
   const { addTradeItem } = tradeContext;
 
-  const [item, setItem] = useState({
+  const emptyData = {
     type: "ens",
     contractAdd: "",
-    id: "",
-    amount: "",
-    name: "",
-    verified: true
+    id: "", //erc721
+    amount: "", //erc20
+    name: "", //ens
+    namehash: "", //ens
+    verified: false //ens
+  };
+
+  const [item, setItem] = useState({
+    id: uuid.v4(),
+    network: {
+      sent: UNSENT,
+      txHash: null,
+      web3Loading: false,
+      dbLoading: false,
+      synced: false
+    },
+    data: emptyData
   });
 
-  const { contractAdd, type, id, amount, name, verified } = item;
+  const { type, contractAdd, id, amount, name, namehash, verified } = item.data;
 
   //Input
   const onChange = e => {
-    setItem({ ...item, [e.target.name]: e.target.value });
+    setItem({
+      ...item,
+      data: { ...item.data, [e.target.name]: e.target.value }
+    });
   };
 
   const onSubmit = e => {
     e.preventDefault();
 
     addTradeItem(item);
+    setItem({ ...item, id: uuid.v4(), data: emptyData });
   };
 
   const erc = () => (
@@ -81,7 +101,7 @@ const ItemForm = () => {
               className={
                 amount ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
               }
-              type="amount"
+              type="text"
               placeholder="Token Amount"
               name="amount"
               value={amount}
@@ -97,7 +117,7 @@ const ItemForm = () => {
               className={
                 id ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
               }
-              type="id"
+              type="text"
               placeholder="Token ID"
               name="id"
               value={id}

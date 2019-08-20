@@ -51,7 +51,7 @@ const Sidebar = () => {
       {sidebar && (
         <Fragment>
           <h2>{nickname && nickname}</h2>
-          <div>{connected ? <p>Not Connected</p> : tokens()}</div>
+          <div>{connected ? tokens() : <span>Not Connected</span>}</div>
         </Fragment>
       )}
     </div>

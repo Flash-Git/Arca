@@ -1,14 +1,14 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 
-const Erc20 = ({ item }) => {
+const Erc20 = ({ item, isUser }) => {
   const { contractAdd, amount } = item.data;
 
   return (
     <Fragment>
-      <h3 className="item-text">ERC20</h3>
-      <span className="item-text">{contractAdd}</span>
-      <span className="item-text">{amount}</span>
+      <h3 className="item-text-1">ERC20</h3>
+      <span className="item-text-2">{contractAdd}</span>
+      <span className="item-text-1">{amount}</span>
     </Fragment>
   );
 };

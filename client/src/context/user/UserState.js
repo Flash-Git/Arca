@@ -22,8 +22,8 @@ const UserState = props => {
   const initialState = {
     user: {
       addressObj: {
-        address: "0x",
-        ens: "jaquinn.eth"
+        address: "",
+        ens: null
       },
       balance: null,
       ownedTokens: {
@@ -43,7 +43,7 @@ const UserState = props => {
     },
     tradePartner: {
       addressObj: {
-        address: "0x",
+        address: "",
         ens: null
       },
       balance: null,
