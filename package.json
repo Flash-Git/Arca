@@ -1,7 +1,7 @@
 {
   "name": "arca",
   "version": "1.0.0",
-  "description": "",
+  "description": "Escrowless Ethereum trading application",
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
