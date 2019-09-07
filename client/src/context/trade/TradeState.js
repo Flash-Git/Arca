@@ -27,7 +27,7 @@ const TradeState = props => {
         {
           id: uuid.v4(),
           network: {
-            sent: UNSENT,
+            status: UNSENT,
             txHash: null,
             web3Loading: false,
             dbLoading: false,
@@ -44,7 +44,7 @@ const TradeState = props => {
         {
           id: uuid.v4(),
           network: {
-            sent: UNSENT,
+            status: UNSENT,
             txHash: null,
             web3Loading: false,
             dbLoading: false,
@@ -61,7 +61,7 @@ const TradeState = props => {
         {
           id: uuid.v4(),
           network: {
-            sent: SENT,
+            status: SENT,
             txHash: "0x",
             web3Loading: false,
             dbLoading: false,
@@ -78,7 +78,7 @@ const TradeState = props => {
         {
           id: uuid.v4(),
           network: {
-            sent: SENT,
+            status: SENT,
             txHash: "0x",
             web3Loading: false,
             dbLoading: false,
@@ -98,7 +98,7 @@ const TradeState = props => {
         {
           id: uuid.v4(),
           network: {
-            sent: SENT,
+            status: SENT,
             txHash: "0x2",
             web3Loading: false,
             dbLoading: false,
@@ -123,7 +123,7 @@ const TradeState = props => {
         {
           id: uuid.v4(),
           network: {
-            sent: UNSENT,
+            status: UNSENT,
             txHash: null,
             web3Loading: false,
             dbLoading: false,
