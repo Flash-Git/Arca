@@ -55,6 +55,10 @@ const EnsForm = ({ item, isUser }) => {
     //if ids match then verify
   };
 
+  const txData = () => {
+    //pass data to create tx
+  };
+
   //Render
   return (
     <Fragment>
@@ -70,7 +74,7 @@ const EnsForm = ({ item, isUser }) => {
         />
       </form>
       <span className="item-text-1">{verified && "ICON"}</span>
-      <SendBtn status={status} />
+      <SendBtn status={status} txData={txData} />
     </Fragment>
   );
 };
