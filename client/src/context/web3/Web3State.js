@@ -52,7 +52,7 @@ const Web3State = props => {
    * Actions
    */
 
-  const connect = async () => {
+  const connect = () => {
     const web3 = window.web3;
     if (!web3) {
       dispatch({
@@ -68,7 +68,11 @@ const Web3State = props => {
       payload: { web3, network }
     });
 
-    const ens = await new ENS(web3.currentProvider);
+    connectEns();
+  };
+
+  const connectEns = async () => {
+    const ens = await new ENS(state.web3.currentProvider);
     if (!ens) {
       dispatch({
         type: DISCONNECT_ENS
@@ -80,6 +84,8 @@ const Web3State = props => {
       type: CONNECT_ENS,
       payload: ens
     });
+    console.log(state.ens);
+
     return true;
   };
 
@@ -87,6 +93,19 @@ const Web3State = props => {
     dispatch({
       type: UPDATE_NETWORK
     });
+  };
+
+  const getAbi = async abiName => {
+    switch (abiName) {
+      case "arca":
+        return abi;
+      case "erc20":
+        return abiErc20;
+      case "erc721":
+        return abiErc721;
+      default:
+        return null;
+    }
   };
 
   const addContractObj = async (address, abiName) => {
@@ -108,19 +127,6 @@ const Web3State = props => {
       dispatch({
         type: CONTRACT_OBJECT_ERROR
       });
-    }
-  };
-
-  const getAbi = async abiName => {
-    switch (abiName) {
-      case "arca":
-        return abi;
-      case "erc20":
-        return abiErc20;
-      case "erc721":
-        return abiErc721;
-      default:
-        return null;
     }
   };
 
@@ -147,6 +153,8 @@ const Web3State = props => {
   };
 */
 
+  const sendTx = txData => {};
+
   return (
     <Web3Context.Provider
       value={{
@@ -159,7 +167,8 @@ const Web3State = props => {
         activeTxs: state.activeTxs,
         completedTxs: state.completedTxs,
         connect,
-        updateNetwork
+        updateNetwork,
+        sendTx
       }}
     >
       {props.children}
