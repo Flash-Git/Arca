@@ -232,6 +232,36 @@ select {
   margin-bottom: 0.5rem;
 }
 
+/* Width */
+.w {
+  width: 1rem;
+}
+
+.w-2 {
+  width: 2rem;
+}
+
+.w-3 {
+  width: 3rem;
+}
+
+.w-4 {
+  width: 4rem;
+}
+
+.w-5 {
+  width: 5rem;
+}
+
+/* Height */
+.h {
+  height: 1rem;
+}
+
+.h-2 {
+  height: 2rem;
+}
+
 /* Grid */
 .grid-2 {
   display: grid;
@@ -283,7 +313,7 @@ select {
 .btn-sm {
   font-size: 0.8rem;
   padding: 0.3rem 1rem;
-  margin-right: 0.2rem;
+  margin: 0 0.2rem;
 }
 
 .badge {
