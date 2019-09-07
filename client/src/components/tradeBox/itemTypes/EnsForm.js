@@ -1,6 +1,8 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import PropTypes from "prop-types";
 
+import SendBtn from "./SendBtn";
+
 import Web3Context from "../../../context/web3/Web3Context";
 import UserContext from "../../../context/user/UserContext";
 
@@ -9,6 +11,8 @@ let offset = 0;
 const EnsForm = ({ item, isUser }) => {
   const web3Context = useContext(Web3Context);
   const userContext = useContext(UserContext);
+
+  const { status } = item.network;
 
   const { ens } = web3Context;
   const { address } = isUser
@@ -66,6 +70,7 @@ const EnsForm = ({ item, isUser }) => {
         />
       </form>
       <span className="item-text-1">{verified && "ICON"}</span>
+      <SendBtn status={status} />
     </Fragment>
   );
 };
