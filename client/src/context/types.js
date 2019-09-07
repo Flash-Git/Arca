@@ -44,5 +44,6 @@ export const CONTRACT_OBJECT_ERROR = "CONTRACT_OBJECT_ERROR";
 export const SET_UTIL_CONTRACT = "SET_UTIL_CONTRACT";
 
 export const SET_ARCA = "SET_ARCA";
+export const ADD_ERC = "ADD_ERC";
 export const DISCONNECT = "DISCONNECT";
 //export const UPDATE_NETWORK = "UPDATE_NETWORK";

@@ -9,7 +9,7 @@ import abiArca from "./../../web3/abis/abi";
 
 import Web3Context from "./../web3/Web3Context";
 
-import { SET_ARCA, UPDATE_NETWORK, DISCONNECT } from "../types";
+import { SET_ARCA, ADD_ERC, UPDATE_NETWORK, DISCONNECT } from "../types";
 
 const TxState = props => {
   const web3Context = useContext(Web3Context);
@@ -20,15 +20,21 @@ const TxState = props => {
     // web3: null,
     // ens: null,
     network: null,
+    address: "",
     arca: null,
     ercs: [],
-    1: {
-      address: "",
+    main: {
+      address: "0xb8F590D50D7d58A5BCd1e669209375026aFb1123",
       arca: null,
       ercs: []
     },
-    4: {
-      address: "",
+    rinkeby: {
+      address: "0x255bca69542f6515af3b172223e903dfb302038b",
+      arca: null,
+      ercs: []
+    },
+    goerli: {
+      address: "0x005f729ec568b2e2c69fb3bca7637b49e59ed5c1",
       arca: null,
       ercs: []
     }
@@ -45,7 +51,7 @@ const TxState = props => {
       const network = web3.currentProvider.networkVersion;
 
       if (network !== state.network) {
-        setNetwork(network);
+        updateNetwork(network);
       }
     } catch (e) {
       disconnect();
@@ -59,6 +65,39 @@ const TxState = props => {
    * Methods
    */
 
+  const Tx = _promise => {
+    return new Promise((resolve, reject) => {
+      _promise.on("transactionHash", hash => {
+        alert("Tx Sent");
+        console.log("TxHash: " + hash);
+      });
+      /*_promise.on("receipt", receipt => {
+        console.log("Receipt received");
+        return resolve();
+      });*/
+      _promise.on("confirmation", (confirmation, receipt) => {
+        //console.log("Confirmation: " + confirmation);
+        if (confirmation === 1) {
+          console.log("Receipt found");
+        }
+        if (confirmation > 1) {
+          console.log("Receipt received");
+          return resolve();
+        }
+      });
+      _promise.on("error", e => {
+        console.log("Error in tx execution:");
+        console.log(e);
+        return reject(e);
+      });
+      _promise.catch(e => {
+        console.log("Error in tx send:");
+        console.log(e);
+        return reject(e);
+      });
+    });
+  };
+
   const NewContract = (_abi, _add) => {
     try {
       return new web3.eth.Contract(_abi, _add);
@@ -70,7 +109,7 @@ const TxState = props => {
   };
 
   const ArcaContract = () => {
-    return NewContract(abiArca, AppAddress());
+    return NewContract(abiArca, state.address);
   };
 
   const Erc20Contract = _add => {
@@ -86,11 +125,14 @@ const TxState = props => {
    */
 
   const updateNetwork = network => {
-    //Switches arca, ercs and network
+    //Switches address, arca, ercs, network
     dispatch({
       type: UPDATE_NETWORK,
       payload: network
     });
+    if (state.arca === null) {
+      setArca();
+    }
   };
 
   const disconnect = () => {
@@ -101,7 +143,7 @@ const TxState = props => {
 
   const setArca = async () => {
     try {
-      const arca = await NewContract(abiArca, AppAddress());
+      const arca = await ArcaContract();
       dispatch({
         type: SET_ARCA,
         payload: arca
@@ -111,12 +153,24 @@ const TxState = props => {
     }
   };
 
-  const addErc = async () => {
+  const addErc20 = async _address => {
     try {
-      const arca = await NewContract(abiArca, AppAddress());
+      const erc = await Erc20Contract(_address);
       dispatch({
-        type: SET_ARCA,
-        payload: arca
+        type: ADD_ERC,
+        payload: erc
+      });
+    } catch (e) {
+      //Alert
+    }
+  };
+
+  const addErc721 = async _address => {
+    try {
+      const erc = await Erc721Contract(_address);
+      dispatch({
+        type: ADD_ERC,
+        payload: erc
       });
     } catch (e) {
       //Alert
@@ -153,7 +207,9 @@ const TxState = props => {
       value={{
         arca: state.arca,
         erc,
-        setArca
+        addErc20,
+        addErc721,
+        sendTx
       }}
     >
       {props.children}
