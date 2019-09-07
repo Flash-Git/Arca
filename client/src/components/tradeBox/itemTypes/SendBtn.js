@@ -29,7 +29,7 @@ const SendBtn = ({ status, txData }) => {
   };
 
   return (
-    <button className="btn btn-sm" onClick={createTx(txData)}>
+    <button className="btn btn-sm w-5" onClick={createTx(txData)}>
       {content(status)}
     </button>
   );
