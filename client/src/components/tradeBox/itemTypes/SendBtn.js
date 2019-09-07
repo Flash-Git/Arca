@@ -10,7 +10,7 @@ const SendBtn = ({ status, txData }) => {
 
   const { sendTx } = web3Context;
 
-  const content = status => {
+  const content = () => {
     switch (status) {
       case SENT:
         return "Cancel";
@@ -21,7 +21,7 @@ const SendBtn = ({ status, txData }) => {
     }
   };
 
-  const createTx = txData => {
+  const createTx = () => {
     //Create tx
     //Send tx and add it to active reqs in web3Context
     sendTx(txData);
@@ -29,7 +29,7 @@ const SendBtn = ({ status, txData }) => {
   };
 
   return (
-    <button className="btn btn-sm w-5" onClick={createTx(txData)}>
+    <button className="btn btn-sm w-5" onClick={createTx}>
       {content(status)}
     </button>
   );
