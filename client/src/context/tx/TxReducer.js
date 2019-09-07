@@ -77,6 +77,8 @@ export default (state, action) => {
     case DISCONNECT:
       return {
         ...state,
+        web3: null,
+        ens: null,
         network: null,
         address: "",
         arca: null,

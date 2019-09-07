@@ -1,4 +1,5 @@
 import React, { useReducer, useContext, useEffect } from "react";
+import ENS from "ethereum-ens";
 
 import TxContext from "./TxContext";
 import TxReducer from "./TxReducer";
@@ -7,18 +8,21 @@ import abiErc20 from "./../../web3/abis/abiErc20";
 import abiErc721 from "./../../web3/abis/abiErc721";
 import abiArca from "./../../web3/abis/abi";
 
-import Web3Context from "./../web3/Web3Context";
-
-import { SET_ARCA, ADD_ERC, UPDATE_NETWORK, DISCONNECT } from "../types";
+import {
+  SET_ARCA,
+  ADD_ERC,
+  UPDATE_NETWORK,
+  CONNECT_WEB3,
+  CONNECT_ENS,
+  DISCONNECT
+} from "../types";
 
 const TxState = props => {
-  const web3Context = useContext(Web3Context);
-  const { web3 } = web3Context;
   //STORE TRANSACTIONS THAT ARE CURRENTLY IN WEB3 STATE IN HERE
 
   const initialState = {
-    // web3: null,
-    // ens: null,
+    web3: null,
+    ens: null,
     network: null,
     address: "",
     arca: null,
@@ -47,15 +51,21 @@ const TxState = props => {
    */
 
   useEffect(() => {
-    try {
-      const network = web3.currentProvider.networkVersion;
+    connectWeb3(window.web3);
+  }, [window.web3]);
 
-      if (network !== state.network) {
-        updateNetwork(network);
-      }
-    } catch (e) {
-      disconnect();
+  useEffect(() => {
+    if (web3 === null) return;
+    const network = web3.currentProvider.networkVersion;
+
+    if (network !== state.network) {
+      updateNetwork(network);
     }
+  }, [web3]);
+
+  useEffect(() => {
+    if (web3 === null) return;
+    connectEns();
   }, [web3]);
 
   const erc = address =>
@@ -123,6 +133,26 @@ const TxState = props => {
   /*
    * Actions
    */
+
+  const connectWeb3 = web3 => {
+    if (web3 === null) {
+      disconnect();
+      return;
+    }
+    dispatch({
+      type: CONNECT_WEB3,
+      payload: { web3 }
+    });
+  };
+
+  const connectEns = async () => {
+    const ens = await new ENS(state.web3.currentProvider);
+
+    dispatch({
+      type: CONNECT_ENS,
+      payload: ens
+    });
+  };
 
   const updateNetwork = network => {
     //Switches address, arca, ercs, network
