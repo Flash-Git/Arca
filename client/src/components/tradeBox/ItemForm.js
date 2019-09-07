@@ -23,7 +23,7 @@ const ItemForm = () => {
   const [item, setItem] = useState({
     id: uuid.v4(),
     network: {
-      sent: UNSENT,
+      status: UNSENT,
       txHash: null,
       web3Loading: false,
       dbLoading: false,
