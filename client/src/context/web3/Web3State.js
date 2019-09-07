@@ -3,7 +3,13 @@ import ENS from "ethereum-ens";
 
 import uuid from "uuid";
 
-import {} from "../../web3/Web3Calls";
+import {
+  ArcaCalls,
+  ErcCalls,
+  Erc20Contract,
+  Erc721Contract,
+  Tx
+} from "../../web3/Web3Calls";
 import abi from "../../web3/abis/abi";
 import abiErc20 from "../../web3/abis/abiErc20";
 import abiErc721 from "../../web3/abis/abiErc721";
@@ -153,7 +159,30 @@ const Web3State = props => {
   };
 */
 
-  const sendTx = txData => {};
+  const sendTx = txData => {
+    //txData.method;
+    //txData.contractType;
+    //txData.params;
+    //txData.ercAddress;
+
+    let tx;
+    let hash = "";
+
+    switch (txData.contractType) {
+      case "ARCA":
+        tx = Tx(ArcaCalls(txData.method, txData.params));
+        break;
+      case "ERC20":
+        tx = Tx(ErcCalls(txData.method, Erc20Contract(txData.ercAddress)));
+        break;
+      case "ERC721":
+        tx = Tx(ErcCalls(txData.method, Erc721Contract(txData.ercAddress)));
+        break;
+      default:
+        console.log("Failed to send tx");
+    }
+    console.log(tx);
+  };
 
   return (
     <Web3Context.Provider
