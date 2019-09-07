@@ -24,7 +24,7 @@ const SendBtn = ({ status, txData }) => {
   const createTx = txData => {
     //Create tx
     //Send tx and add it to active reqs in web3Context
-    sendTx();
+    sendTx(txData);
     //Modify item status
   };
 
