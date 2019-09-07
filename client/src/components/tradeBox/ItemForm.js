@@ -3,7 +3,7 @@ import uuid from "uuid";
 
 import TradeContext from "../../context/trade/TradeContext";
 
-import { SENT, UNSENT } from "../../context/sentStatus";
+import { UNSENT } from "../../context/sentStatus";
 
 const ItemForm = () => {
   const tradeContext = useContext(TradeContext);
