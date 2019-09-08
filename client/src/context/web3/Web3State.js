@@ -30,7 +30,7 @@ const Web3State = props => {
     main: {
       address: "0xb8F590D50D7d58A5BCd1e669209375026aFb1123",
       arca: null,
-      ercs: []
+      ercs: [] //{address, type, contract}
     },
     rinkeby: {
       address: "0x255bca69542f6515af3b172223e903dfb302038b",
@@ -74,12 +74,31 @@ const Web3State = props => {
     }
   }, [state.network]);
 
-  const erc = address =>
-    state.ercs.filter(contract => contract.address === address);
+  const erc = address => state.ercs.filter(erc => erc.address === address);
 
   /*
    * Methods
    */
+
+  const getErcContract = async (_address, _type) => {
+    const erc = erc(_address);
+    if (erc) return erc.contract;
+
+    let contract = {};
+    switch (erc) {
+      case "erc20":
+        contract = await Erc20Contract(_address);
+        addErc20({ _address, _type, contract });
+        return contract;
+      case "erc721":
+        contract = await Erc721Contract(_address);
+        addErc721({ _address, _type, contract });
+        return contract;
+      default:
+        console.log("Failed getContract");
+        return contract;
+    }
+  };
 
   const Tx = _promise => {
     return new Promise((resolve, reject) => {
@@ -161,35 +180,36 @@ const Web3State = props => {
     }
   };
 
-  const ErcCalls = (_method, _contract) => {
+  const ErcCalls = async (_method, _address, _type = "erc20") => {
+    const contract = await getErcContract(_address, _type);
     try {
       switch (_method) {
         case "decimals":
-          return _contract.methods.decimals().call({
+          return contract.methods.decimals().call({
             from: window.ethereum.selectedAddress
           });
         case "balanceOf":
-          return _contract.methods
+          return contract.methods
             .balanceOf(window.ethereum.selectedAddress)
             .call({
               from: window.ethereum.selectedAddress
             });
         case "symbol":
-          return _contract.methods.symbol().call({
+          return contract.methods.symbol().call({
             from: window.ethereum.selectedAddress
           });
         case "name":
-          return _contract.methods.name().call({
+          return contract.methods.name().call({
             from: window.ethereum.selectedAddress
           });
         case "allowance":
-          return _contract.methods
+          return contract.methods
             .allowance(window.ethereum.selectedAddress, state.address)
             .call({
               from: window.ethereum.selectedAddress
             });
         case "isApprovedForAll":
-          return _contract.methods
+          return contract.methods
             .isApprovedForAll(window.ethereum.selectedAddress, state.address)
             .call({
               from: window.ethereum.selectedAddress
@@ -261,20 +281,23 @@ const Web3State = props => {
     }
   };
 
-  const ErcSends = (_method, _params, _contract = state.arca) => {
+  const ErcSends = async (_method, _address) => {
+    let contract;
     try {
       switch (_method) {
         case "approve":
+          contract = await getErcContract(_address, "erc20");
           return Tx(
-            _contract.methods
+            contract.methods
               .approve(state.address, "100000000000000000000000000000000000")
               .send({
                 from: window.ethereum.selectedAddress
               })
           );
         case "setApprovalForAll":
+          contract = await getErcContract(_address, "erc721");
           return Tx(
-            _contract.methods.setApprovalForAll(state.address, true).send({
+            contract.methods.setApprovalForAll(state.address, true).send({
               from: window.ethereum.selectedAddress
             })
           );
@@ -289,13 +312,8 @@ const Web3State = props => {
   };
 
   const NewContract = (_abi, _add) => {
-    try {
-      return new state.web3.eth.Contract(_abi, _add);
-    } catch (e) {
-      console.log("Failed NewContract:");
-      console.log(e);
-      return new Error(e);
-    }
+    if (state.web3 === null) return;
+    return new state.web3.eth.Contract(_abi, _add);
   };
 
   const ArcaContract = () => {
@@ -359,54 +377,44 @@ const Web3State = props => {
     }
   };
 
-  const addErc20 = async _address => {
-    try {
-      const erc = await Erc20Contract(_address);
-      dispatch({
-        type: ADD_ERC,
-        payload: erc
-      });
-    } catch (e) {
-      //Alert
-    }
+  const addErc20 = erc => {
+    dispatch({
+      type: ADD_ERC,
+      payload: erc
+    });
   };
 
-  const addErc721 = async _address => {
-    try {
-      const erc = await Erc721Contract(_address);
-      dispatch({
-        type: ADD_ERC,
-        payload: erc
-      });
-    } catch (e) {
-      //Alert
-    }
+  const addErc721 = erc => {
+    dispatch({
+      type: ADD_ERC,
+      payload: erc
+    });
   };
 
-  const sendTx = txData => {
-    //txData.method;
-    //txData.contractType;
-    //txData.params;
-    //txData.ercAddress;
+  // const sendTx = txData => {
+  //   //txData.method;
+  //   //txData.contractType;
+  //   //txData.params;
+  //   //txData.ercAddress;
 
-    let tx;
-    let hash = "";
+  //   let tx;
+  //   let hash = "";
 
-    switch (txData.contractType) {
-      case "ARCA":
-        tx = Tx(ArcaCalls(txData.method, txData.params));
-        break;
-      case "ERC20":
-        tx = Tx(ErcCalls(txData.method, Erc20Contract(txData.ercAddress)));
-        break;
-      case "ERC721":
-        tx = Tx(ErcCalls(txData.method, Erc721Contract(txData.ercAddress)));
-        break;
-      default:
-        console.log("Failed to send tx");
-    }
-    console.log(tx);
-  };
+  //   switch (txData.contractType) {
+  //     case "ARCA":
+  //       tx = Tx(ArcaCalls(txData.method, txData.params));
+  //       break;
+  //     case "ERC20":
+  //       tx = Tx(ErcCalls(txData.method, Erc20Contract(txData.ercAddress)));
+  //       break;
+  //     case "ERC721":
+  //       tx = Tx(ErcCalls(txData.method, Erc721Contract(txData.ercAddress)));
+  //       break;
+  //     default:
+  //       console.log("Failed to send tx");
+  //   }
+  //   console.log(tx);
+  // };
 
   return (
     <Web3Context.Provider
@@ -418,8 +426,7 @@ const Web3State = props => {
         connectWeb3,
         erc,
         addErc20,
-        addErc721,
-        sendTx
+        addErc721
       }}
     >
       {props.children}
