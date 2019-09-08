@@ -16,7 +16,8 @@ const Sidebar = () => {
   const { settings, user } = userContext;
   const { nickname } = settings;
 
-  const { connected, loading } = web3Context;
+  const { web3 } = web3Context; //loading
+  const loading = false;
 
   const onClick = e => {
     toggleSidebar();
@@ -51,7 +52,7 @@ const Sidebar = () => {
       {sidebar && (
         <Fragment>
           <h2>{nickname && nickname}</h2>
-          <div>{connected ? tokens() : <span>Not Connected</span>}</div>
+          <div>{web3 !== null ? tokens() : <span>Not Connected</span>}</div>
         </Fragment>
       )}
     </div>
