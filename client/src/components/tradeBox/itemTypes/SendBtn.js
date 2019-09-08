@@ -33,10 +33,9 @@ const SendBtn = ({ status, txData }) => {
     }
   }, [status]);
 
-  const onClick = () => {
+  const onClick = e => {
     ArcaSends(txData.method, txData.params);
     modifyTradeItemStatus(status);
-    console.log("clicky");
   };
 
   return (
