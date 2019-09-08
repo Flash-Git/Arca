@@ -10,6 +10,7 @@ import {
   SET_USER_BOX,
   ADD_TRADE_ITEM,
   REMOVE_TRADE_ITEM,
+  MODIFY_TRADE_ITEM_STATUS,
   SET_CURRENT_ITEM,
   CLEAR_CURRENT_ITEM,
   UPDATE_ACCEPTED,
@@ -206,6 +207,13 @@ const TradeState = props => {
     });
   };
 
+  const modifyTradeItemStatus = (id, status) => {
+    dispatch({
+      type: MODIFY_TRADE_ITEM_STATUS,
+      payload: { id, status }
+    });
+  };
+
   const setCurrentItem = tradeItem => {
     dispatch({
       type: SET_CURRENT_ITEM,
@@ -249,6 +257,7 @@ const TradeState = props => {
         currentItem: state.currentItem,
         addTradeItem,
         cancelTradeItem,
+        modifyTradeItemStatus,
         setUserBox,
         setCurrentItem,
         clearCurrentItem,

@@ -1,6 +1,7 @@
 import {
   ADD_TRADE_ITEM,
   REMOVE_TRADE_ITEM,
+  MODIFY_TRADE_ITEM_STATUS,
   SET_CURRENT_ITEM,
   CLEAR_CURRENT_ITEM,
   TOGGLE_ACCEPTED
@@ -26,6 +27,19 @@ export default (state, action) => {
           )
         }
       };
+    case MODIFY_TRADE_ITEM_STATUS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          tradeItems: state.user.tradeItems.map(
+            item =>
+              item.id === action.payload.id &&
+              (item.status = action.payload.status)
+          )
+        }
+      };
+
     case SET_CURRENT_ITEM:
       return {
         ...state,
