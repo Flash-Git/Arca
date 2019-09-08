@@ -9,7 +9,7 @@ const PreTradeForm = () => {
   const web3Context = useContext(Web3Context);
 
   const { setAddresses } = userContext;
-  const { web3, ens, connect, connectEns } = web3Context;
+  const { web3, ens } = web3Context;
 
   //FORM STATE
   const [form1State, setForm1State] = useState({
@@ -26,10 +26,6 @@ const PreTradeForm = () => {
 
   const { input1, address1, ens1 } = form1State;
   const { input2, address2, ens2 } = form2State;
-
-  useEffect(() => {
-    connect();
-  }, [window.web3]);
 
   //Inputs
   useEffect(() => {
@@ -53,7 +49,7 @@ const PreTradeForm = () => {
       return;
     }
 
-    if (!ens) return;
+    if (ens === null) return;
 
     const input = input1;
     try {
@@ -73,7 +69,7 @@ const PreTradeForm = () => {
       return;
     }
 
-    if (!ens) return;
+    if (ens === null) return;
 
     const input = input2;
     try {
@@ -97,8 +93,14 @@ const PreTradeForm = () => {
   const onSubmit = async e => {
     e.preventDefault();
 
-    if (!web3) connect();
-    if (!ens) connectEns();
+    if (web3 === null) {
+      //TODO Alert
+      return;
+    }
+    if (ens === null) {
+      //TODO Alert
+      return;
+    }
 
     await Promise.all([checkInput1(), checkInput2()]);
 

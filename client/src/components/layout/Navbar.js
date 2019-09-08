@@ -5,14 +5,14 @@ import AppContext from "../../context/app/AppContext";
 import Web3Context from "../../context/web3/Web3Context";
 
 const Navbar = () => {
-  const web3Context = useContext(Web3Context);
   const appContext = useContext(AppContext);
+  const web3Context = useContext(Web3Context);
 
   const { location } = appContext;
-  const { connected, network } = web3Context;
+  const { web3, network } = web3Context;
 
   const networkText = () => {
-    if (!connected) {
+    if (web3 === null) {
       return "Not Connected";
     }
 
