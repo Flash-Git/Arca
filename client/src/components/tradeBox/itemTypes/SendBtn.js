@@ -1,36 +1,47 @@
-import React, { useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { SENT, UNSENT } from "../../../context/sentStatus";
 
 import Web3Context from "../../../context/web3/Web3Context";
+import TradeContext from "../../../context/trade/TradeContext";
 
 const SendBtn = ({ status, txData }) => {
+  //txData{ method:"pushOfferErc20" }
+  //erc - allow
+  //arca - send
+  //arca - remove
   const web3Context = useContext(Web3Context);
+  const tradeContext = useContext(TradeContext);
 
-  const { sendTx } = web3Context;
+  const { ArcaSends } = web3Context;
+  const { modifyTradeItemStatus } = tradeContext;
 
-  const content = () => {
+  const [content, setContent] = useState("Loading");
+
+  useEffect(() => {
     switch (status) {
       case SENT:
-        return "Cancel";
+        setContent("Cancel");
+        break;
       case UNSENT:
-        return "Send";
+        setContent("Send");
+        break;
       default:
-        return "Error";
+        setContent("Error");
+        break;
     }
-  };
+  }, [status]);
 
-  const createTx = () => {
-    //Create tx
-    //Send tx and add it to active reqs in web3Context
-    sendTx(txData);
-    //Modify item status
+  const onClick = () => {
+    ArcaSends(txData.method, txData.params);
+    modifyTradeItemStatus(status);
+    console.log("clicky");
   };
 
   return (
-    <button className="btn btn-sm w-5" onClick={createTx}>
-      {content(status)}
+    <button className="btn btn-sm w-5" onClick={onClick}>
+      {content}
     </button>
   );
 };
