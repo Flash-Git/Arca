@@ -74,64 +74,11 @@ const Web3State = props => {
     }
   }, [state.network]);
 
-  const erc = address => state.ercs.filter(erc => erc.address === address);
+  const getErc = address => state.ercs.filter(erc => erc.address === address);
 
   /*
    * Methods
    */
-
-  const getErcContract = async (_address, _type) => {
-    const erc = erc(_address);
-    if (erc) return erc.contract;
-
-    let contract = {};
-    switch (erc) {
-      case "erc20":
-        contract = await Erc20Contract(_address);
-        addErc20({ _address, _type, contract });
-        return contract;
-      case "erc721":
-        contract = await Erc721Contract(_address);
-        addErc721({ _address, _type, contract });
-        return contract;
-      default:
-        console.log("Failed getContract");
-        return contract;
-    }
-  };
-
-  const Tx = _promise => {
-    return new Promise((resolve, reject) => {
-      _promise.on("transactionHash", hash => {
-        alert("Tx Sent");
-        console.log("TxHash: " + hash);
-      });
-      /*_promise.on("receipt", receipt => {
-        console.log("Receipt received");
-        return resolve();
-      });*/
-      _promise.on("confirmation", (confirmation, receipt) => {
-        //console.log("Confirmation: " + confirmation);
-        if (confirmation === 1) {
-          console.log("Receipt found");
-        }
-        if (confirmation > 1) {
-          console.log("Receipt received");
-          return resolve();
-        }
-      });
-      _promise.on("error", e => {
-        console.log("Error in tx execution:");
-        console.log(e);
-        return reject(e);
-      });
-      _promise.catch(e => {
-        console.log("Error in tx send:");
-        console.log(e);
-        return reject(e);
-      });
-    });
-  };
 
   const ArcaCalls = (_method, _params, _contract = state.arca) => {
     try {
@@ -311,6 +258,59 @@ const Web3State = props => {
     }
   };
 
+  const getErcContract = async (_address, _type) => {
+    const erc = getErc(_address);
+    if (erc) return erc.contract;
+
+    let contract = {};
+    switch (erc) {
+      case "erc20":
+        contract = await Erc20Contract(_address);
+        addErc20({ _address, _type, contract });
+        return contract;
+      case "erc721":
+        contract = await Erc721Contract(_address);
+        addErc721({ _address, _type, contract });
+        return contract;
+      default:
+        console.log("Failed getContract");
+        return contract;
+    }
+  };
+
+  const Tx = _promise => {
+    return new Promise((resolve, reject) => {
+      _promise.on("transactionHash", hash => {
+        alert("Tx Sent");
+        console.log("TxHash: " + hash);
+      });
+      /*_promise.on("receipt", receipt => {
+        console.log("Receipt received");
+        return resolve();
+      });*/
+      _promise.on("confirmation", (confirmation, receipt) => {
+        //console.log("Confirmation: " + confirmation);
+        if (confirmation === 1) {
+          console.log("Receipt found");
+        }
+        if (confirmation > 1) {
+          console.log("Receipt received");
+          return resolve();
+        }
+      });
+      _promise.on("error", e => {
+        console.log("Error in tx execution:");
+        console.log(e);
+        return reject(e);
+      });
+      _promise.catch(e => {
+        console.log("Error in tx send:");
+        console.log(e);
+        return reject(e);
+      });
+    });
+  };
+
   const NewContract = (_abi, _add) => {
     if (state.web3 === null) return;
     return new state.web3.eth.Contract(_abi, _add);
@@ -391,31 +391,6 @@ const Web3State = props => {
     });
   };
 
-  // const sendTx = txData => {
-  //   //txData.method;
-  //   //txData.contractType;
-  //   //txData.params;
-  //   //txData.ercAddress;
-
-  //   let tx;
-  //   let hash = "";
-
-  //   switch (txData.contractType) {
-  //     case "ARCA":
-  //       tx = Tx(ArcaCalls(txData.method, txData.params));
-  //       break;
-  //     case "ERC20":
-  //       tx = Tx(ErcCalls(txData.method, Erc20Contract(txData.ercAddress)));
-  //       break;
-  //     case "ERC721":
-  //       tx = Tx(ErcCalls(txData.method, Erc721Contract(txData.ercAddress)));
-  //       break;
-  //     default:
-  //       console.log("Failed to send tx");
-  //   }
-  //   console.log(tx);
-  // };
-
   return (
     <Web3Context.Provider
       value={{
@@ -423,10 +398,12 @@ const Web3State = props => {
         web3: state.web3,
         ens: state.ens,
         network: state.network,
-        connectWeb3,
-        erc,
         addErc20,
-        addErc721
+        addErc721,
+        ArcaCalls,
+        ErcCalls,
+        ArcaSends,
+        ErcSends
       }}
     >
       {props.children}
