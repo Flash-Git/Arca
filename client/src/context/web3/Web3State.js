@@ -80,39 +80,41 @@ const Web3State = props => {
    * Methods
    */
 
-  const ArcaCalls = (_method, _params, _contract = state.arca) => {
+  const ArcaCalls = async (_method, _params) => {
+    const contract = await getArcaContract();
+
     try {
       switch (_method) {
         case "getErc20Count": //address _add1, address _add2, uint256 _boxNum
-          return _contract.methods
+          return contract.methods
             .getErc20Count(_params[0], _params[1], "0")
             .call({
               from: window.ethereum.selectedAddress
             });
         case "getErc721Count": //address _add1, address _add2, uint256 _boxNum
-          return _contract.methods
+          return contract.methods
             .getErc721Count(_params[0], _params[1], "0")
             .call({
               from: window.ethereum.selectedAddress
             });
         case "getNonce": //address _add1, address _add2, uint256 _boxNum
-          return _contract.methods.getNonce(_params[0], _params[1], "0").call({
+          return contract.methods.getNonce(_params[0], _params[1], "0").call({
             from: window.ethereum.selectedAddress
           });
         case "getPartnerNonce": //address _add1, address _add2, uint256 _boxNum
-          return _contract.methods
+          return contract.methods
             .getPartnerNonce(_params[0], _params[1], "0")
             .call({
               from: window.ethereum.selectedAddress
             });
         case "getOfferErc20": //address _add1, address _add2, uint256 _boxNum, uint8 _index
-          return _contract.methods
+          return contract.methods
             .getOfferErc20(_params[0], _params[1], "0", _params[2])
             .call({
               from: window.ethereum.selectedAddress
             });
         case "getOfferErc721": //address _add1, address _add2, uint256 _boxNum, uint8 _index
-          return _contract.methods
+          return contract.methods
             .getOfferErc721(_params[0], _params[1], "0", _params[2])
             .call({
               from: window.ethereum.selectedAddress
@@ -127,7 +129,7 @@ const Web3State = props => {
     }
   };
 
-  const ErcCalls = async (_method, _address, _type = "erc20") => {
+  const ErcCalls = async (_method, _address, _type) => {
     const contract = await getErcContract(_address, _type);
     try {
       switch (_method) {
@@ -171,12 +173,14 @@ const Web3State = props => {
     }
   };
 
-  const ArcaSends = (_method, _params, _contract = state.arca) => {
+  const ArcaSends = async (_method, _params) => {
+    const contract = await getArcaContract();
+
     try {
       switch (_method) {
         case "pushOfferErc20": //address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount
           return Tx(
-            _contract.methods
+            contract.methods
               .pushOfferErc20(_params[0], "0", _params[1], _params[2])
               .send({
                 from: window.ethereum.selectedAddress
@@ -184,7 +188,7 @@ const Web3State = props => {
           );
         case "pushOfferErc721": //address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id
           return Tx(
-            _contract.methods
+            contract.methods
               .pushOfferErc721(_params[0], "0", _params[1], _params[2])
               .send({
                 from: window.ethereum.selectedAddress
@@ -192,7 +196,7 @@ const Web3State = props => {
           );
         case "removeOfferErc20": //address _tradePartner, uint256 _boxNum, uint8 _index
           return Tx(
-            _contract.methods
+            contract.methods
               .removeOfferErc20(_params[0], "0", _params[1])
               .send({
                 from: window.ethereum.selectedAddress
@@ -200,7 +204,7 @@ const Web3State = props => {
           );
         case "removeOfferErc721": //address _tradePartner, uint256 _boxNum, uint8 _index
           return Tx(
-            _contract.methods
+            contract.methods
               .removeOfferErc721(_params[0], "0", _params[1])
               .send({
                 from: window.ethereum.selectedAddress
@@ -208,13 +212,13 @@ const Web3State = props => {
           );
         case "acceptTrade": //address _tradePartner, uint256 _boxNum, uint256 _partnerNonce
           return Tx(
-            _contract.methods.acceptTrade(_params[0], "0", _params[1]).send({
+            contract.methods.acceptTrade(_params[0], "0", _params[1]).send({
               from: window.ethereum.selectedAddress
             })
           );
         case "unacceptTrade": //address _tradePartner, uint256 _boxNum
           return Tx(
-            _contract.methods.unacceptTrade(_params[0], "0").send({
+            contract.methods.unacceptTrade(_params[0], "0").send({
               from: window.ethereum.selectedAddress
             })
           );
@@ -256,6 +260,12 @@ const Web3State = props => {
       console.log(e);
       return new Error(e);
     }
+  };
+
+  const getArcaContract = async () => {
+    if (state.arca) return state.arca;
+    setArca();
+    return state.arca;
   };
 
   const getErcContract = async (_address, _type) => {
@@ -312,7 +322,7 @@ const Web3State = props => {
   };
 
   const NewContract = (_abi, _add) => {
-    if (state.web3 === null) return;
+    if (state.web3 === null) return null;
     return new state.web3.eth.Contract(_abi, _add);
   };
 
