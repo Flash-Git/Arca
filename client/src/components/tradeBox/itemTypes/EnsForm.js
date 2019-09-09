@@ -12,21 +12,24 @@ const EnsForm = ({ item, isUser }) => {
   const web3Context = useContext(Web3Context);
   const userContext = useContext(UserContext);
 
-  const { status } = item.network;
-
   const { ens } = web3Context;
   const { address } = isUser
     ? userContext.user.addressObj
     : userContext.tradePartner.addressObj;
 
+  const { addressObj } = userContext.tradePartner;
+  const tradePartnerAdd = addressObj.address;
+
+  const { status } = item.network;
+  const { id, contractAdd } = item.data;
+
   const [ensItem, setEnsItem] = useState({
     name: "",
     namehash: "",
-    id: item.id,
     verified: false
   });
 
-  const { name, namehash, id, verified } = ensItem;
+  const { name, namehash, verified } = ensItem;
 
   useEffect(() => {
     offset++;
@@ -55,9 +58,10 @@ const EnsForm = ({ item, isUser }) => {
     //if ids match then verify
   };
 
-  const txData = () =>
-    //pass data to create tx
-    ({});
+  const txData = {
+    method: "pushOfferErc721",
+    params: [tradePartnerAdd, contractAdd, id]
+  };
 
   //Render
   return (
@@ -74,7 +78,7 @@ const EnsForm = ({ item, isUser }) => {
         />
       </form>
       <span className="item-text-1">{verified && "ICON"}</span>
-      <SendBtn status={status} txData={txData()} />
+      <SendBtn status={status} txData={txData} isUser={isUser} />
     </Fragment>
   );
 };
