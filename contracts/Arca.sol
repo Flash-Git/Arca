@@ -81,7 +81,7 @@ contract Arca {
   function getOfferErc20(address _add1, address _add2, uint256 _boxNum, uint8 _index) external view returns(address, uint256) {
     return (boxes[_add1][_add2][_boxNum].offersErc20[_index].add, boxes[_add1][_add2][_boxNum].offersErc20[_index].amount);
   }
-  
+
   function getOfferErc721(address _add1, address _add2, uint256 _boxNum, uint8 _index) external view returns(address, uint256) {
     return (boxes[_add1][_add2][_boxNum].offersErc721[_index].add, boxes[_add1][_add2][_boxNum].offersErc721[_index].id);
   }
@@ -146,7 +146,7 @@ contract Arca {
     prtnerBox.countErc20 = 0;
     senderBox.countErc721 = 0;
     prtnerBox.countErc721 = 0;
-    
+
     emit BoxCountModifiedERC20(msg.sender, _tradePartner, _boxNum, 0, senderBox.nonce);
     emit BoxCountModifiedERC20(_tradePartner, msg.sender, _boxNum, 0, prtnerBox.nonce);
 
@@ -167,10 +167,10 @@ contract Arca {
 
   function addOfferErc20(address _tradePartner, uint256 _boxNum, address _erc20Address, uint256 _amount, uint8 _index) public {
     require(Erc20(_erc20Address).allowance(msg.sender, address(this)) >= _amount, "Insufficient allowance");
-    
+
     OfferErc20 memory offer = OfferErc20({add: _erc20Address, amount:_amount});
     Box storage box = boxes[msg.sender][_tradePartner][_boxNum];
-    
+
     if(box.offersErc20.length > _index){
       box.offersErc20[_index] = offer;
     }else{
@@ -183,11 +183,11 @@ contract Arca {
 
     emit OfferModifiedERC20(msg.sender, _tradePartner, _boxNum, _erc20Address, _amount, _index, box.nonce++);
   }
-  
+
   function pushOfferErc721(address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id) external {
     addOfferErc721(_tradePartner, _boxNum, _erc721Address, _id, boxes[msg.sender][_tradePartner][_boxNum].countErc721);
   }
-  
+
   function addOfferErc721(address _tradePartner, uint256 _boxNum, address _erc721Address, uint256 _id, uint8 _index) public {
     require(Erc721(_erc721Address).ownerOf(_id) == msg.sender, "Sender isn't owner of this erc721 token");
     require(Erc721(_erc721Address).isApprovedForAll(msg.sender, address(this)) == true, "Contract not approved for erc721 token transfers");
@@ -253,7 +253,7 @@ contract Arca {
       }
     }
   }
-  
+
   function executeTransfersErc721(address _add1, address _add2, uint256 _boxNum) private {
     Box memory box = boxes[_add1][_add2][_boxNum];
 
