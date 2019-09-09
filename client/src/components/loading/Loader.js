@@ -34,7 +34,7 @@ const Loader = () => {
     const offers = [];
 
     Promise.all(erc20Promises).then(erc20s => {
-      erc20s.map(erc20 => {
+      erc20s.map((erc20, i) => {
         let offer = {
           id: "0-" + i,
           network: { slot: i },
@@ -60,7 +60,7 @@ const Loader = () => {
       const offers = [];
 
       Promise.all(erc721Promises).then(erc721s => {
-        erc721s.map(erc721 => {
+        erc721s.map((erc721, i) => {
           let offer = {
             id: "1-" + i,
             network: { slot: i },
