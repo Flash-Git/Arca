@@ -77,13 +77,13 @@ const Loader = () => {
     });
   };
 
-  //Hook based async
-  useEffect(() => {
+  const load = () => {
     if (web3 === null) {
       setUser(initialState);
       setPartner(initialState);
       return;
     }
+
     // Load boxes
     setUser({ ...user, loadedErc20s: false, loadedErc721s: false });
     setPartner({ ...partner, loadedErc20s: false, loadedErc721s: false });
@@ -120,6 +120,11 @@ const Loader = () => {
         setPartner({ ...partner, erc721s, loadedErc721s: true })
       );
     });
+  };
+
+  //Hook based async
+  useEffect(() => {
+    load();
   }, [userAdd, partnerAdd]);
 
   useEffect(() => {
@@ -134,7 +139,7 @@ const Loader = () => {
     //seterc20s on trade context
   }, [partner.erc20s, partner.erc721s]);
 
-  //return <button className="btn btn-dark">Reload</button>;
+  //return <button className="btn btn-dark" onClick={load}>Reload</button>;
   return null;
 };
 
