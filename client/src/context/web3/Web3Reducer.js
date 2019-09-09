@@ -1,4 +1,5 @@
 import {
+  CONNECT,
   CONNECT_WEB3,
   CONNECT_ENS,
   UPDATE_NETWORK,
@@ -9,6 +10,11 @@ import {
 
 export default (state, action) => {
   switch (action.type) {
+    case CONNECT:
+      return {
+        ...state,
+        connected: true
+      };
     case CONNECT_WEB3:
       return {
         ...state,

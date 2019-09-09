@@ -32,6 +32,7 @@ export const UPDATE_SETTINGS = "UPDATE_SETTINGS";
 export const CLEAR_SETTINGS = "CLEAR_SETTINGS";
 
 // Web3
+export const CONNECT = "CONNECT";
 export const CONNECT_WEB3 = "CONNECT_WEB3";
 export const CONNECT_ENS = "CONNECT_ENS";
 export const DISCONNECT_WEB3 = "DISCONNECT_WEB3";

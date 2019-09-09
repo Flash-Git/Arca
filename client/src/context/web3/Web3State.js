@@ -9,6 +9,7 @@ import abiErc721 from "../../web3/abis/abiErc721";
 import abiArca from "../../web3/abis/abi";
 
 import {
+  CONNECT,
   SET_ARCA,
   ADD_ERC,
   UPDATE_NETWORK,
@@ -21,6 +22,7 @@ const Web3State = props => {
   //STORE TRANSACTIONS THAT ARE CURRENTLY IN WEB3 STATE IN HERE
 
   const initialState = {
+    connected: false,
     web3: null,
     ens: null,
     network: null,
@@ -342,6 +344,13 @@ const Web3State = props => {
    * Actions
    */
 
+  const connect = () => {
+    //TODO add check for rejection in enable
+    dispatch({
+      CONNECT
+    });
+  };
+
   const connectWeb3 = web3 => {
     if (web3 === null) {
       disconnect();
@@ -404,10 +413,12 @@ const Web3State = props => {
   return (
     <Web3Context.Provider
       value={{
+        connected: state.connected,
         arca: state.arca,
         web3: state.web3,
         ens: state.ens,
         network: state.network,
+        connect,
         addErc20,
         addErc721,
         ArcaCalls,
