@@ -15,9 +15,9 @@ const Loader = () => {
     erc20Count: null,
     erc721Count: null,
     erc20s: [],
-    loadedErc20s: false,
+    loadedErc20s: true,
     erc721s: [],
-    loadedErc721s: false
+    loadedErc721s: true
   };
 
   const [user, setUser] = useState(initialState);
@@ -84,6 +84,10 @@ const Loader = () => {
       setPartner(initialState);
       return;
     }
+    // Load boxes
+    setUser({ ...user, loadedErc20s: false, loadedErc721s: false });
+    setPartner({ ...partner, loadedErc20s: false, loadedErc721s: false });
+    console.log("Loading");
 
     ArcaCalls("getErc20Count", [userAdd, partnerAdd]).then(erc20Count => {
       erc20Count = +erc20Count;
@@ -130,7 +134,8 @@ const Loader = () => {
     //seterc20s on trade context
   }, [partner.erc20s, partner.erc721s]);
 
-  return <button className="btn btn-sm">Reload</button>;
+  //return <button className="btn btn-dark">Reload</button>;
+  return null;
 };
 
 export default Loader;
