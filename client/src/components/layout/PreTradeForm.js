@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { utils as Utils } from "web3";
 
+import enable from "../loading/enable";
+
 import UserContext from "../../context/user/UserContext";
 import Web3Context from "../../context/web3/Web3Context";
 
@@ -9,7 +11,7 @@ const PreTradeForm = () => {
   const web3Context = useContext(Web3Context);
 
   const { setAddresses } = userContext;
-  const { web3, ens } = web3Context;
+  const { connect, web3, ens } = web3Context;
 
   //FORM STATE
   const [form1State, setForm1State] = useState({
@@ -101,6 +103,10 @@ const PreTradeForm = () => {
       //TODO Alert
       return;
     }
+
+    const enabled = await enable();
+    if (!enabled) return;
+    connect();
 
     await Promise.all([checkInput1(), checkInput2()]);
 
