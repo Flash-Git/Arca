@@ -110,158 +110,6 @@ select {
   padding-bottom: 0.3rem;
 }
 
-/* Padding */
-.p {
-  padding: 0.5rem;
-}
-
-.p-1 {
-  padding: 1rem;
-}
-
-.p-2 {
-  padding: 2rem;
-}
-
-.p-3 {
-  padding: 3rem;
-}
-
-.py {
-  padding: 0.5rem 0;
-}
-
-.py-1 {
-  padding: 1rem 0;
-}
-
-.py-2 {
-  padding: 2rem 0;
-}
-
-.py-3 {
-  padding: 3rem 0;
-}
-
-.px {
-  padding: 0 0.5rem;
-}
-
-.px-1 {
-  padding: 0 1rem;
-}
-
-.px-2 {
-  padding: 0 2rem;
-}
-
-.px-3 {
-  padding: 0 3rem;
-}
-
-.ptop {
-  padding-top: 0.5rem;
-}
-
-.ptop-1 {
-  padding-top: 1rem;
-}
-
-/* Margin */
-.m {
-  margin: 0.5rem;
-}
-
-.m-1 {
-  margin: 1rem;
-}
-
-.m-2 {
-  margin: 2rem;
-}
-
-.m-3 {
-  margin: 3rem;
-}
-
-.my {
-  margin: 0.5rem 0;
-}
-
-.my-1 {
-  margin: 1rem 0;
-}
-
-.my-2 {
-  margin: 2rem 0;
-}
-
-.my-3 {
-  margin: 3rem 0;
-}
-
-.mx {
-  margin: 0 0.5rem;
-}
-
-.mx-1 {
-  margin: 0 1rem;
-}
-
-.mx-2 {
-  margin: 0 2rem;
-}
-
-.mx-3 {
-  margin: 0 3rem;
-}
-
-.mtop {
-  margin-top: 0.5rem;
-}
-
-.mtop-1 {
-  margin-top: 1rem;
-}
-
-.mtop-2 {
-  margin-top: 2rem;
-}
-
-.mbot {
-  margin-bottom: 0.5rem;
-}
-
-/* Width */
-.w {
-  min-width: 1rem;
-}
-
-.w-2 {
-  min-width: 2rem;
-}
-
-.w-3 {
-  min-width: 3rem;
-}
-
-.w-4 {
-  min-width: 4rem;
-}
-
-.w-5 {
-  min-width: 5rem;
-}
-
-/* Height */
-.h {
-  height: 1rem;
-}
-
-.h-2 {
-  height: 2rem;
-}
-
 /* Grid */
 .grid-2 {
   display: grid;
@@ -509,6 +357,158 @@ select {
 
 .footer a:hover {
   color: var(--light-color);
+}
+
+/* Padding */
+.p {
+  padding: 0.5rem;
+}
+
+.p-1 {
+  padding: 1rem;
+}
+
+.p-2 {
+  padding: 2rem;
+}
+
+.p-3 {
+  padding: 3rem;
+}
+
+.py {
+  padding: 0.5rem 0;
+}
+
+.py-1 {
+  padding: 1rem 0;
+}
+
+.py-2 {
+  padding: 2rem 0;
+}
+
+.py-3 {
+  padding: 3rem 0;
+}
+
+.px {
+  padding: 0 0.5rem;
+}
+
+.px-1 {
+  padding: 0 1rem;
+}
+
+.px-2 {
+  padding: 0 2rem;
+}
+
+.px-3 {
+  padding: 0 3rem;
+}
+
+.ptop {
+  padding-top: 0.5rem;
+}
+
+.ptop-1 {
+  padding-top: 1rem;
+}
+
+/* Margin */
+.m {
+  margin: 0.5rem;
+}
+
+.m-1 {
+  margin: 1rem;
+}
+
+.m-2 {
+  margin: 2rem;
+}
+
+.m-3 {
+  margin: 3rem;
+}
+
+.my {
+  margin: 0.5rem 0;
+}
+
+.my-1 {
+  margin: 1rem 0;
+}
+
+.my-2 {
+  margin: 2rem 0;
+}
+
+.my-3 {
+  margin: 3rem 0;
+}
+
+.mx {
+  margin: 0 0.5rem;
+}
+
+.mx-1 {
+  margin: 0 1rem;
+}
+
+.mx-2 {
+  margin: 0 2rem;
+}
+
+.mx-3 {
+  margin: 0 3rem;
+}
+
+.mtop {
+  margin-top: 0.5rem;
+}
+
+.mtop-1 {
+  margin-top: 1rem;
+}
+
+.mtop-2 {
+  margin-top: 2rem;
+}
+
+.mbot {
+  margin-bottom: 0.5rem;
+}
+
+/* Width */
+.w {
+  min-width: 1rem;
+}
+
+.w-2 {
+  min-width: 2rem;
+}
+
+.w-3 {
+  min-width: 3rem;
+}
+
+.w-4 {
+  min-width: 4rem;
+}
+
+.w-5 {
+  min-width: 5rem;
+}
+
+/* Height */
+.h {
+  height: 1rem;
+}
+
+.h-2 {
+  height: 2rem;
 }
 
 /* Box */
