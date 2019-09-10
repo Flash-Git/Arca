@@ -53,14 +53,10 @@ const Web3State = props => {
 
   useEffect(() => {
     if (!window.web3) return;
-    connectWeb3(new Web3(Web3.givenProvider));
+    const web3 = new Web3(Web3.givenProvider);
+    connectWeb3(web3);
+    connectEns(web3.currentProvider);
   }, [window.web3]);
-
-  useEffect(() => {
-    if (!state.web3) return;
-
-    state.ens === null && connectEns();
-  }, [state.web3]);
 
   useEffect(() => {
     if (!state.web3) return;
@@ -368,9 +364,8 @@ const Web3State = props => {
     });
   };
 
-  const connectEns = async () => {
-    const ens = await new ENS(state.web3.currentProvider);
-
+  const connectEns = async provider => {
+    const ens = new ENS(provider);
     dispatch({
       type: CONNECT_ENS,
       payload: ens
