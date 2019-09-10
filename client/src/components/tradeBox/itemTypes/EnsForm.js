@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
 import SendBtn from "./SendBtn";
+import RemoveButton from "./RemoveButton";
 
 import Web3Context from "../../../context/web3/Web3Context";
 import UserContext from "../../../context/user/UserContext";
@@ -67,6 +68,7 @@ const EnsForm = ({ item, isUser }) => {
   //Render
   return (
     <Fragment>
+      <RemoveButton id={item.id} isUser={isUser} />
       <h3 className="item-text-1">ENS</h3>
       <form className="item-input">
         <input

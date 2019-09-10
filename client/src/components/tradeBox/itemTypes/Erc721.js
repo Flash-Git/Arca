@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
 import SendBtn from "./SendBtn";
+import RemoveButton from "./RemoveButton";
 
 import UserContext from "../../../context/user/UserContext";
 
@@ -20,6 +21,7 @@ const Erc721 = ({ item, isUser }) => {
 
   return (
     <Fragment>
+      <RemoveButton id={item.id} isUser={isUser} />
       <h3 className="item-text-1">ERC721</h3>
       <span className="item-text-2">{contractAdd}</span>
       <span className="item-text-1">{id}</span>
