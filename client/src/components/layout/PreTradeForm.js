@@ -11,7 +11,7 @@ const PreTradeForm = () => {
   const web3Context = useContext(Web3Context);
 
   const { setAddresses } = userContext;
-  const { connect, web3, ens } = web3Context;
+  const { connected, web3, ens, connect } = web3Context;
 
   //FORM STATE
   const [form1State, setForm1State] = useState({
@@ -104,9 +104,12 @@ const PreTradeForm = () => {
       return;
     }
 
-    const enabled = await enable();
-    if (!enabled) return;
-    connect();
+    if (!connected) {
+      const enabled = await enable();
+      if (!enabled) return;
+      connect();
+      return;
+    }
 
     await Promise.all([checkInput1(), checkInput2()]);
 

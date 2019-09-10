@@ -57,24 +57,27 @@ const Web3State = props => {
   }, [window.web3]);
 
   useEffect(() => {
-    if (state.web3 === null) return;
-    const network = +state.web3.currentProvider.networkVersion;
+    if (!state.web3) return;
 
-    if (network !== state.network) {
-      updateNetwork(network);
-    }
-  }, [state.web3]);
-
-  useEffect(() => {
-    if (state.web3 === null) return;
     state.ens === null && connectEns();
   }, [state.web3]);
 
   useEffect(() => {
-    if (state.arca === null) {
-      setArca();
-    }
+    if (!state.web3) return;
+
+    const network = +state.web3.currentProvider.networkVersion;
+    network !== state.network && updateNetwork(network);
+  }, [state.web3]);
+
+  useEffect(() => {
+    if (!state.connected) return;
+
+    setArca();
   }, [state.network]);
+
+  window.ethereum.on("accountsChanged", function(accounts) {
+    // Time to reload your interface with accounts[0]!
+  });
 
   const getErc = address => state.ercs.filter(erc => erc.address === address);
 
@@ -324,7 +327,7 @@ const Web3State = props => {
   };
 
   const NewContract = (_abi, _add) => {
-    if (state.web3 === null) return null;
+    if (!state.connected) return null;
     return new state.web3.eth.Contract(_abi, _add);
   };
 
@@ -347,15 +350,11 @@ const Web3State = props => {
   const connect = () => {
     //TODO add check for rejection in enable
     dispatch({
-      CONNECT
+      type: CONNECT
     });
   };
 
   const connectWeb3 = web3 => {
-    if (web3 === null) {
-      disconnect();
-      return;
-    }
     dispatch({
       type: CONNECT_WEB3,
       payload: web3
