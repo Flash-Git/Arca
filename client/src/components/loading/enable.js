@@ -4,6 +4,7 @@ const enable = () => {
     window.ethereum
       .enable()
       .then(addresses => {
+        console.log("Enabled");
         window.ethereum.autoRefreshOnNetworkChange = false; //TODO handle in state
         resolve(true);
       })
