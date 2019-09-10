@@ -14,7 +14,7 @@ const SendBtn = ({ status, txData, isUser }) => {
   const web3Context = useContext(Web3Context);
   const tradeContext = useContext(TradeContext);
 
-  const { ArcaSends } = web3Context;
+  const { connected, ArcaSends } = web3Context;
   const { modifyTradeItemStatus } = tradeContext;
 
   const [content, setContent] = useState("Loading");
@@ -39,6 +39,7 @@ const SendBtn = ({ status, txData, isUser }) => {
   }, [status]);
 
   const onClick = e => {
+    if (!connected) return;
     ArcaSends(txData.method, txData.params);
     //modifyTradeItemStatus(status);
   };
@@ -51,7 +52,7 @@ const SendBtn = ({ status, txData, isUser }) => {
         </button>
       );
     } else {
-      return <div className="btn btn-sm w-5">{content}</div>;
+      return <button className="btn btn-sm w-5">{content}</button>;
     }
   };
 
