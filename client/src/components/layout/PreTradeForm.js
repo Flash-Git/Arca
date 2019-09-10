@@ -37,6 +37,7 @@ const PreTradeForm = () => {
       setForm1State({ ...form1State, address1: null, ens1: null });
     }
   }, [input1]);
+
   useEffect(() => {
     if (Utils.isAddress(input2.toUpperCase())) {
       setForm2State({ ...form2State, address2: input2, ens2: null });
@@ -56,10 +57,10 @@ const PreTradeForm = () => {
     const input = input1;
     try {
       const add = await ens.resolver(input1).addr();
-      if (input !== input1) return;
       setForm1State({ input1, address1: add, ens1: input1 });
       return;
-    } catch {
+    } catch (e) {
+      console.log(e);
       if (input !== input1) return;
       setForm1State({ input1, address1: null, ens1: null });
     }
@@ -70,26 +71,25 @@ const PreTradeForm = () => {
       setForm2State({ ...form2State, address2: input2, ens2: null });
       return;
     }
-
     if (ens === null) return;
 
     const input = input2;
     try {
       const add = await ens.resolver(input2).addr();
-      if (input !== input2) return;
       setForm2State({ input2, address2: add, ens2: input2 });
       return;
-    } catch {
+    } catch (e) {
+      console.log(e);
       if (input !== input2) return;
       setForm2State({ input2, address2: null, ens2: null });
     }
   };
 
   const onChange1 = e => {
-    setForm1State({ ...form1State, [e.target.name]: e.target.value });
+    setForm1State({ ...form1State, [e.target.name]: e.target.value.trim() });
   };
   const onChange2 = e => {
-    setForm2State({ ...form2State, [e.target.name]: e.target.value });
+    setForm2State({ ...form2State, [e.target.name]: e.target.value.trim() });
   };
 
   const onSubmit = async e => {
