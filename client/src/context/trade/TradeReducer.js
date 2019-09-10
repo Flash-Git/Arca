@@ -52,8 +52,10 @@ export default (state, action) => {
           ...state.user,
           tradeItems: state.user.tradeItems.map(
             item =>
-              item.id === action.payload.id &&
-              (item.status = action.payload.status)
+              item.id === action.payload.id && {
+                ...item,
+                network: { ...item.network, status: action.payload.status }
+              }
           )
         }
       };
