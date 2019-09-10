@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
 import SendBtn from "./SendBtn";
