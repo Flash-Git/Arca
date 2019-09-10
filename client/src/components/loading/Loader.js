@@ -90,9 +90,11 @@ const Loader = () => {
   };
 
   const load = () => {
+    setUser(initialState);
+    setPartner(initialState);
+
     if (!connected) {
-      setUser(initialState);
-      setPartner(initialState);
+      console.log("Not Connected");
       return;
     }
 
