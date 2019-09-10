@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import Web3Context from "../../context/web3/Web3Context";
 import UserContext from "../../context/user/UserContext";
+import TradeContext from "../../context/trade/TradeContext";
 
 const Loader = () => {
   const web3Context = useContext(Web3Context);
@@ -10,6 +11,9 @@ const Loader = () => {
   const userContext = useContext(UserContext);
   const userAdd = userContext.user.addressObj.address;
   const partnerAdd = userContext.tradePartner.addressObj.address;
+
+  const tradeContext = useContext(TradeContext);
+  const { setUserItems, setPartnerItems } = tradeContext;
 
   const initialState = {
     erc20Count: null,
@@ -152,16 +156,19 @@ const Loader = () => {
   }, [userAdd, partnerAdd]);
 
   useEffect(() => {
+    if (!connected) return;
     if (!user.loadedErc20s || !user.loadedErc721s) return;
     console.log("User is loaded");
-    //seterc20s on trade context
+
+    setUserItems([...user.erc20s, ...user.erc721s]);
   }, [user.loadedErc20s, user.loadedErc721s]);
 
   useEffect(() => {
+    if (!connected) return;
     if (!partner.loadedErc20s || !partner.loadedErc721s) return;
     console.log("Partner is loaded");
 
-    //seterc20s on trade context
+    setPartnerItems([...partner.erc20s, ...partner.erc721s]);
   }, [partner.loadedErc20s, partner.loadedErc721s]);
 
   return (
