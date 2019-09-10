@@ -390,15 +390,11 @@ const Web3State = props => {
   };
 
   const setArca = async () => {
-    try {
-      const arca = await ArcaContract();
-      dispatch({
-        type: SET_ARCA,
-        payload: arca
-      });
-    } catch (e) {
-      //Alert
-    }
+    const arca = await ArcaContract();
+    dispatch({
+      type: SET_ARCA,
+      payload: arca
+    });
   };
 
   const addErc20 = erc => {
