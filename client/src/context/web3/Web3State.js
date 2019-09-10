@@ -75,8 +75,14 @@ const Web3State = props => {
     setArca();
   }, [state.network]);
 
-  window.ethereum.on("accountsChanged", function(accounts) {
+  window.ethereum.on("accountsChanged", accounts => {
+    //Update User TODO
     // Time to reload your interface with accounts[0]!
+  });
+
+  window.ethereum.on("networkChanged", network => {
+    network = +network;
+    network !== state.network && updateNetwork(network);
   });
 
   const getErc = address => state.ercs.filter(erc => erc.address === address);
