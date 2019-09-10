@@ -1,4 +1,5 @@
 import React, { useReducer, useContext, useEffect } from "react";
+import Web3 from "web3";
 import ENS from "ethereum-ens";
 
 import Web3Context from "./Web3Context";
@@ -19,8 +20,6 @@ import {
 } from "../types";
 
 const Web3State = props => {
-  //STORE TRANSACTIONS THAT ARE CURRENTLY IN WEB3 STATE IN HERE
-
   const initialState = {
     connected: false,
     web3: null,
@@ -53,7 +52,8 @@ const Web3State = props => {
    */
 
   useEffect(() => {
-    connectWeb3(window.web3);
+    if (!window.web3) return;
+    connectWeb3(new Web3(Web3.givenProvider));
   }, [window.web3]);
 
   useEffect(() => {
@@ -335,8 +335,7 @@ const Web3State = props => {
 
   const NewContract = (_abi, _add) => {
     if (!state.connected) return null;
-    //return new state.web3.eth.Contract(_abi, _add);
-    return new window.web3.eth.Contract(_abi, _add);
+    return new state.web3.eth.Contract(_abi, _add);
   };
 
   const ArcaContract = () => {
@@ -393,8 +392,6 @@ const Web3State = props => {
 
   const setArca = async () => {
     const arca = await ArcaContract();
-    console.log("arca");
-    console.log(arca);
     dispatch({
       type: SET_ARCA,
       payload: arca
