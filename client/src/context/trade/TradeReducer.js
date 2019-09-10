@@ -1,5 +1,7 @@
 import {
   ADD_TRADE_ITEM,
+  SET_USER_TRADE_ITEMS,
+  SET_PARTNER_TRADE_ITEMS,
   REMOVE_TRADE_ITEM,
   MODIFY_TRADE_ITEM_STATUS,
   SET_CURRENT_ITEM,
@@ -15,6 +17,22 @@ export default (state, action) => {
         user: {
           ...state.user,
           tradeItems: [...state.user.tradeItems, action.payload]
+        }
+      };
+    case SET_USER_TRADE_ITEMS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          tradeItems: action.payload
+        }
+      };
+    case SET_PARTNER_TRADE_ITEMS:
+      return {
+        ...state,
+        tradePartner: {
+          ...state.tradePartner,
+          tradeItems: action.payload
         }
       };
     case REMOVE_TRADE_ITEM:

@@ -9,6 +9,8 @@ import UserContext from "../user/UserContext";
 import {
   SET_USER_BOX,
   ADD_TRADE_ITEM,
+  SET_USER_TRADE_ITEMS,
+  SET_PARTNER_TRADE_ITEMS,
   REMOVE_TRADE_ITEM,
   MODIFY_TRADE_ITEM_STATUS,
   SET_CURRENT_ITEM,
@@ -182,6 +184,20 @@ const TradeState = props => {
     });
   };
 
+  const setUserItems = tradeItems => {
+    dispatch({
+      type: SET_USER_TRADE_ITEMS,
+      payload: tradeItems
+    });
+  };
+
+  const setPartnerItems = tradeItems => {
+    dispatch({
+      type: SET_PARTNER_TRADE_ITEMS,
+      payload: tradeItems
+    });
+  };
+
   const getTradeItems = () => {
     //get user trade items from db
     //get partner trade items from db
@@ -256,6 +272,8 @@ const TradeState = props => {
         tradePartner: state.tradePartner,
         currentItem: state.currentItem,
         addTradeItem,
+        setUserItems,
+        setPartnerItems,
         cancelTradeItem,
         modifyTradeItemStatus,
         setUserBox,
