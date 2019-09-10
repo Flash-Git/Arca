@@ -27,7 +27,7 @@ const Accepted = ({ isUser }) => {
         <Fragment>
           <h3 className={bord + " width100 py"}>{acceptMsg}</h3>
           {isUser && (
-            <button onClick={onClick} className="btn btn-sm btn-dark">
+            <button onClick={onClick} className="btn btn-sm btn-dark my">
               {accepted ? "Reject" : "Accept"}
             </button>
           )}
