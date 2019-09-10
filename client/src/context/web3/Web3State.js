@@ -93,6 +93,7 @@ const Web3State = props => {
 
   const ArcaCalls = async (_method, _params) => {
     const contract = await getArcaContract();
+    if (!contract) return;
 
     try {
       switch (_method) {
@@ -274,9 +275,9 @@ const Web3State = props => {
   };
 
   const getArcaContract = async () => {
-    if (state.arca) return state.arca;
+    if (state.arca) return await state.arca;
     setArca();
-    return state.arca;
+    return await state.arca;
   };
 
   const getErcContract = async (_address, _type) => {
@@ -334,7 +335,8 @@ const Web3State = props => {
 
   const NewContract = (_abi, _add) => {
     if (!state.connected) return null;
-    return new state.web3.eth.Contract(_abi, _add);
+    //return new state.web3.eth.Contract(_abi, _add);
+    return new window.web3.eth.Contract(_abi, _add);
   };
 
   const ArcaContract = () => {
@@ -391,6 +393,8 @@ const Web3State = props => {
 
   const setArca = async () => {
     const arca = await ArcaContract();
+    console.log("arca");
+    console.log(arca);
     dispatch({
       type: SET_ARCA,
       payload: arca
