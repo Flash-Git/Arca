@@ -151,15 +151,16 @@ const Loader = () => {
 
   useEffect(() => {
     if (!user.loadedErc20s || !user.loadedErc721s) return;
-
+    console.log("User is loaded");
     //seterc20s on trade context
-  }, [user.erc20s, user.erc721s]);
+  }, [user.loadedErc20s, user.loadedErc721s]);
 
   useEffect(() => {
     if (!partner.loadedErc20s || !partner.loadedErc721s) return;
+    console.log("Partner is loaded");
 
     //seterc20s on trade context
-  }, [partner.erc20s, partner.erc721s]);
+  }, [partner.loadedErc20s, partner.loadedErc721s]);
 
   return (
     <button className="btn btn-dark" onClick={load}>
