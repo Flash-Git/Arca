@@ -22,7 +22,7 @@ const Erc721 = ({ item, isUser }) => {
       <h3 className="item-text-1">ERC721</h3>
       <span className="item-text-2">{contractAdd}</span>
       <span className="item-text-1">{id}</span>
-      <SendBtn status={status} txData={txData} isUser={isUser} />
+      <SendBtn id={item.id} status={status} txData={txData} isUser={isUser} />
     </Fragment>
   );
 };

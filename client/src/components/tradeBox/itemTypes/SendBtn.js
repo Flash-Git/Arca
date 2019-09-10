@@ -6,7 +6,7 @@ import { SENT, UNSENT } from "../../../context/sentStatus";
 import Web3Context from "../../../context/web3/Web3Context";
 import TradeContext from "../../../context/trade/TradeContext";
 
-const SendBtn = ({ status, txData, isUser }) => {
+const SendBtn = ({ id, status, txData, isUser }) => {
   //txData{ method:"pushOfferErc20" }
   //erc - allow
   //arca - send
@@ -41,7 +41,7 @@ const SendBtn = ({ status, txData, isUser }) => {
   const onClick = e => {
     if (!connected) return;
     ArcaSends(txData.method, txData.params);
-    //modifyTradeItemStatus(status);
+    modifyTradeItemStatus(id, status === SENT ? UNSENT : SENT);
   };
 
   const button = () => {
@@ -60,6 +60,7 @@ const SendBtn = ({ status, txData, isUser }) => {
 };
 
 SendBtn.propTypes = {
+  id: PropTypes.string.isRequired,
   status: PropTypes.string.isRequired,
   txData: PropTypes.object,
   isUser: PropTypes.bool.isRequired

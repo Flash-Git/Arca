@@ -78,7 +78,7 @@ const EnsForm = ({ item, isUser }) => {
         />
       </form>
       <span className="item-text-1">{verified && "ICON"}</span>
-      <SendBtn status={status} txData={txData} isUser={isUser} />
+      <SendBtn id={item.id} status={status} txData={txData} isUser={isUser} />
     </Fragment>
   );
 };
