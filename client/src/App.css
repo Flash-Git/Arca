@@ -234,23 +234,23 @@ select {
 
 /* Width */
 .w {
-  width: 1rem;
+  min-width: 1rem;
 }
 
 .w-2 {
-  width: 2rem;
+  min-width: 2rem;
 }
 
 .w-3 {
-  width: 3rem;
+  min-width: 3rem;
 }
 
 .w-4 {
-  width: 4rem;
+  min-width: 4rem;
 }
 
 .w-5 {
-  width: 5rem;
+  min-width: 5rem;
 }
 
 /* Height */
