@@ -4,7 +4,6 @@ import Web3Context from "../../context/web3/Web3Context";
 import UserContext from "../../context/user/UserContext";
 import TradeContext from "../../context/trade/TradeContext";
 
-//TODO implement accepted
 const Loader = () => {
   const web3Context = useContext(Web3Context);
   const { connected, ArcaCalls, ErcCalls } = web3Context;
