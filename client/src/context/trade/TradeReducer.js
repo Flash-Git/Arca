@@ -1,5 +1,7 @@
 import {
   ADD_TRADE_ITEM,
+  SET_USER_ACCEPTED,
+  SET_PARTNER_ACCEPTED,
   SET_USER_TRADE_ITEMS,
   SET_PARTNER_TRADE_ITEMS,
   REMOVE_TRADE_ITEM,
@@ -17,6 +19,22 @@ export default (state, action) => {
         user: {
           ...state.user,
           tradeItems: [...state.user.tradeItems, action.payload]
+        }
+      };
+    case SET_USER_ACCEPTED:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          accepted: action.payload
+        }
+      };
+    case SET_PARTNER_ACCEPTED:
+      return {
+        ...state,
+        tradePartner: {
+          ...state.tradePartner,
+          accepted: action.payload
         }
       };
     case SET_USER_TRADE_ITEMS:

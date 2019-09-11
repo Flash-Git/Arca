@@ -9,6 +9,8 @@ import UserContext from "../user/UserContext";
 import {
   SET_USER_BOX,
   ADD_TRADE_ITEM,
+  SET_USER_ACCEPTED,
+  SET_PARTNER_ACCEPTED,
   SET_USER_TRADE_ITEMS,
   SET_PARTNER_TRADE_ITEMS,
   REMOVE_TRADE_ITEM,
@@ -213,6 +215,20 @@ const TradeState = props => {
     });
   };
 
+  const setUserAccepted = accepted => {
+    dispatch({
+      type: SET_USER_ACCEPTED,
+      payload: accepted
+    });
+  };
+
+  const setPartnerAccepted = accepted => {
+    dispatch({
+      type: SET_PARTNER_ACCEPTED,
+      payload: accepted
+    });
+  };
+
   const cancelTradeItem = id => {
     //cancel trade item on contract
     //remove trade item on db
@@ -272,6 +288,8 @@ const TradeState = props => {
         tradePartner: state.tradePartner,
         currentItem: state.currentItem,
         addTradeItem,
+        setUserAccepted,
+        setPartnerAccepted,
         setUserItems,
         setPartnerItems,
         cancelTradeItem,
