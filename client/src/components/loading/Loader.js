@@ -4,6 +4,7 @@ import Web3Context from "../../context/web3/Web3Context";
 import UserContext from "../../context/user/UserContext";
 import TradeContext from "../../context/trade/TradeContext";
 
+//TODO implement accepted
 const Loader = () => {
   const web3Context = useContext(Web3Context);
   const { connected, ArcaCalls, ErcCalls } = web3Context;
@@ -16,16 +17,29 @@ const Loader = () => {
   const { setUserItems, setPartnerItems } = tradeContext;
 
   const initialState = {
-    erc20Count: null,
-    erc721Count: null,
-    erc20s: [],
-    loadedErc20s: true,
-    erc721s: [],
-    loadedErc721s: true
+    loading: false
   };
 
   const [user, setUser] = useState(initialState);
   const [partner, setPartner] = useState(initialState);
+
+  const getAccepted = () => {
+    const userNonces = [];
+    userNonces.push(ArcaCalls("getNonce", [userAdd, partnerAdd]));
+    userNonces.push(ArcaCalls("getPartnerNonce", [userAdd, partnerAdd]));
+    Promise.all(userNonces).then(nonces => {
+      console.log("user");
+      console.log(nonces);
+    });
+
+    const partnerNonces = [];
+    partnerNonces.push(ArcaCalls("getNonce", [partnerAdd, userAdd]));
+    partnerNonces.push(ArcaCalls("getPartnerNonce", [partnerAdd, userAdd]));
+    Promise.all(partnerNonces).then(nonces => {
+      console.log("part");
+      console.log(nonces);
+    });
+  };
 
   const getErc20s = (_erc20Count, _add1, _add2) => {
     if (!connected) return;
@@ -54,9 +68,7 @@ const Loader = () => {
           });
           resolve(offers);
         })
-        .catch(e => {
-          reject(e);
-        })
+        .catch(e => reject(e))
     );
   };
 
@@ -87,9 +99,7 @@ const Loader = () => {
           });
           resolve(offers);
         })
-        .catch(e => {
-          reject(e);
-        })
+        .catch(e => reject(e))
     );
   };
 
@@ -103,51 +113,77 @@ const Loader = () => {
     }
 
     // Load boxes
-    setUser({ ...user, loadedErc20s: false, loadedErc721s: false });
-    setPartner({ ...partner, loadedErc20s: false, loadedErc721s: false });
+    setUser({ loading: true });
+    setPartner({ loading: true });
     console.log("Loading");
 
-    ArcaCalls("getErc20Count", [userAdd, partnerAdd]).then(erc20Count => {
-      erc20Count = +erc20Count;
-      setUser({ ...user, erc20Count });
-      getErc20s(erc20Count, userAdd, partnerAdd)
-        .then(erc20s => setUser({ ...user, erc20s, loadedErc20s: true }))
-        .catch(e => {
-          console.log(e);
-        });
-    });
+    const userPromises = [];
+    const partnerPromises = [];
 
-    ArcaCalls("getErc721Count", [userAdd, partnerAdd]).then(erc721Count => {
-      erc721Count = +erc721Count;
-      setUser({ ...user, erc721Count });
-      getErc721s(erc721Count, userAdd, partnerAdd)
-        .then(erc721s => setUser({ ...user, erc721s, loadedErc721s: true }))
-        .catch(e => {
-          console.log(e);
-        });
-    });
+    userPromises.push(
+      new Promise((resolve, reject) =>
+        ArcaCalls("getErc20Count", [userAdd, partnerAdd]).then(erc20Count => {
+          getErc20s(+erc20Count, userAdd, partnerAdd)
+            .then(erc20s => resolve(erc20s))
+            .catch(e => {
+              reject(e);
+            });
+        })
+      )
+    );
 
-    ArcaCalls("getErc20Count", [partnerAdd, userAdd]).then(erc20Count => {
-      erc20Count = +erc20Count;
-      setPartner({ ...partner, erc20Count });
-      getErc20s(erc20Count, partnerAdd, userAdd)
-        .then(erc20s => setPartner({ ...partner, erc20s, loadedErc20s: true }))
-        .catch(e => {
-          console.log(e);
-        });
-    });
+    userPromises.push(
+      new Promise((resolve, reject) =>
+        ArcaCalls("getErc721Count", [userAdd, partnerAdd]).then(erc721Count => {
+          getErc721s(+erc721Count, userAdd, partnerAdd)
+            .then(erc721s => resolve(erc721s))
+            .catch(e => {
+              reject(e);
+            });
+        })
+      )
+    );
 
-    ArcaCalls("getErc721Count", [partnerAdd, userAdd]).then(erc721Count => {
-      erc721Count = +erc721Count;
-      setPartner({ ...partner, erc721Count });
-      getErc721s(erc721Count, partnerAdd, userAdd)
-        .then(erc721s =>
-          setPartner({ ...partner, erc721s, loadedErc721s: true })
-        )
-        .catch(e => {
-          console.log(e);
-        });
-    });
+    partnerPromises.push(
+      new Promise((resolve, reject) =>
+        ArcaCalls("getErc20Count", [partnerAdd, userAdd]).then(erc20Count => {
+          getErc20s(+erc20Count, partnerAdd, userAdd)
+            .then(erc20s => resolve(erc20s))
+            .catch(e => reject(e));
+        })
+      )
+    );
+
+    partnerPromises.push(
+      new Promise((resolve, reject) =>
+        ArcaCalls("getErc721Count", [partnerAdd, userAdd]).then(erc721Count => {
+          getErc721s(+erc721Count, partnerAdd, userAdd)
+            .then(erc721s => resolve(erc721s))
+            .catch(e => reject(e));
+        })
+      )
+    );
+
+    Promise.all(userPromises)
+      .then(ercs => {
+        setUserItems([...ercs[0], ...ercs[1]]);
+        //setAccepted [erc[2]]
+        setUser({ loading: false });
+      })
+      .catch(e => {
+        console.log(e);
+        setUser({ loading: false });
+      });
+    Promise.all(partnerPromises)
+      .then(ercs => {
+        setPartnerItems([...ercs[0], ...ercs[1]]);
+        //setAccepted [erc[2]]
+        setUser({ loading: false });
+      })
+      .catch(e => {
+        console.log(e);
+        setUser({ loading: false });
+      });
   };
 
   //Hook based async
@@ -155,28 +191,12 @@ const Loader = () => {
     load();
   }, [userAdd, partnerAdd]);
 
-  useEffect(() => {
-    if (!connected) return;
-    if (!user.loadedErc20s || !user.loadedErc721s) return;
-    console.log("User is loaded");
-
-    setUserItems([...user.erc20s, ...user.erc721s]);
-  }, [user.loadedErc20s, user.loadedErc721s]);
-
-  useEffect(() => {
-    if (!connected) return;
-    if (!partner.loadedErc20s || !partner.loadedErc721s) return;
-    console.log("Partner is loaded");
-
-    setPartnerItems([...partner.erc20s, ...partner.erc721s]);
-  }, [partner.loadedErc20s, partner.loadedErc721s]);
-
   return (
     <button className="btn btn-dark" onClick={load}>
       Reload
     </button>
   );
-  return null;
+  //return null;
 };
 
 export default Loader;
