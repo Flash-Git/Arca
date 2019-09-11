@@ -14,7 +14,12 @@ const Loader = () => {
   const partnerAdd = userContext.tradePartner.addressObj.address;
 
   const tradeContext = useContext(TradeContext);
-  const { setUserItems, setPartnerItems } = tradeContext;
+  const {
+    setUserAccepted,
+    setPartnerAccepted,
+    setUserItems,
+    setPartnerItems
+  } = tradeContext;
 
   const initialState = {
     loading: false
@@ -23,22 +28,18 @@ const Loader = () => {
   const [user, setUser] = useState(initialState);
   const [partner, setPartner] = useState(initialState);
 
-  const getAccepted = () => {
-    const userNonces = [];
-    userNonces.push(ArcaCalls("getNonce", [userAdd, partnerAdd]));
-    userNonces.push(ArcaCalls("getPartnerNonce", [userAdd, partnerAdd]));
-    Promise.all(userNonces).then(nonces => {
-      console.log("user");
-      console.log(nonces);
-    });
-
-    const partnerNonces = [];
-    partnerNonces.push(ArcaCalls("getNonce", [partnerAdd, userAdd]));
-    partnerNonces.push(ArcaCalls("getPartnerNonce", [partnerAdd, userAdd]));
-    Promise.all(partnerNonces).then(nonces => {
-      console.log("part");
-      console.log(nonces);
-    });
+  const getAccepted = (_add1, _add2) => {
+    const nonces = [];
+    nonces.push(ArcaCalls("getNonce", [userAdd, partnerAdd]));
+    nonces.push(ArcaCalls("getPartnerNonce", [userAdd, partnerAdd]));
+    return new Promise((resolve, reject) =>
+      Promise.all(nonces)
+        .then(nonces => {
+          console.log(nonces);
+          resolve(+nonces[0] + 1 === +nonces[1]);
+        })
+        .catch(e => reject(e))
+    );
   };
 
   const getErc20s = (_erc20Count, _add1, _add2) => {
@@ -104,6 +105,7 @@ const Loader = () => {
   };
 
   const load = () => {
+    if (user.loading || partner.loading) return;
     setUser(initialState);
     setPartner(initialState);
 
@@ -112,7 +114,6 @@ const Loader = () => {
       return;
     }
 
-    // Load boxes
     setUser({ loading: true });
     setPartner({ loading: true });
     console.log("Loading");
@@ -122,12 +123,18 @@ const Loader = () => {
 
     userPromises.push(
       new Promise((resolve, reject) =>
+        getAccepted(userAdd, partnerAdd)
+          .then(accepted => resolve(accepted))
+          .catch(e => reject(e))
+      )
+    );
+
+    userPromises.push(
+      new Promise((resolve, reject) =>
         ArcaCalls("getErc20Count", [userAdd, partnerAdd]).then(erc20Count => {
           getErc20s(+erc20Count, userAdd, partnerAdd)
             .then(erc20s => resolve(erc20s))
-            .catch(e => {
-              reject(e);
-            });
+            .catch(e => reject(e));
         })
       )
     );
@@ -137,10 +144,16 @@ const Loader = () => {
         ArcaCalls("getErc721Count", [userAdd, partnerAdd]).then(erc721Count => {
           getErc721s(+erc721Count, userAdd, partnerAdd)
             .then(erc721s => resolve(erc721s))
-            .catch(e => {
-              reject(e);
-            });
+            .catch(e => reject(e));
         })
+      )
+    );
+
+    partnerPromises.push(
+      new Promise((resolve, reject) =>
+        getAccepted(partnerAdd, userAdd)
+          .then(accepted => resolve(accepted))
+          .catch(e => reject(e))
       )
     );
 
@@ -165,9 +178,9 @@ const Loader = () => {
     );
 
     Promise.all(userPromises)
-      .then(ercs => {
-        setUserItems([...ercs[0], ...ercs[1]]);
-        //setAccepted [erc[2]]
+      .then(res => {
+        setUserAccepted([res[0]]);
+        setUserItems([...res[1], ...res[2]]);
         setUser({ loading: false });
       })
       .catch(e => {
@@ -175,9 +188,9 @@ const Loader = () => {
         setUser({ loading: false });
       });
     Promise.all(partnerPromises)
-      .then(ercs => {
-        setPartnerItems([...ercs[0], ...ercs[1]]);
-        //setAccepted [erc[2]]
+      .then(res => {
+        setPartnerAccepted([res[0]]);
+        setPartnerItems([...res[1], ...res[2]]);
         setUser({ loading: false });
       })
       .catch(e => {
