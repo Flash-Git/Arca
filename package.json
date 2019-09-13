@@ -9,7 +9,7 @@
     "server": "nodemon server.js",
     "client": "cd client; yarn start; cd ..",
     "dev": "concurrently \"yarn run server\" \"yarn run client\"",
-    "dev-update": "yarn upgrade; cd client; yarn upgrade; cd ..",
+    "update": "yarn upgrade; cd client; yarn upgrade; cd ..",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "repository": {
