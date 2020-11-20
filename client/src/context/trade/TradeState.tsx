@@ -1,4 +1,4 @@
-import React, { useReducer, useContext } from "react";
+import React, { useReducer, useContext, FC } from "react";
 import uuid from "uuid";
 
 import TradeContext from "./TradeContext";
@@ -23,8 +23,28 @@ import {
 
 import { SENT, UNSENT } from "../sentStatus";
 
-const TradeState = props => {
-  const initialState = {
+import {
+  UserContext as IUserContext,
+  TradeState as ITradeState,
+  User,
+  AddTradeItem,
+  CancelTradeItem,
+  GetTradeItems,
+  SetPartnerAccepted,
+  SetPartnerItems,
+  SetUserAccepted,
+  SetUserBox,
+  SetUserItems,
+  SetCurrentItem,
+  ModifyTradeItemStatus,
+  ClearCurrentItem,
+  ToggleAccepted,
+  GetAccepted,
+  Box
+} from "context";
+
+const TradeState: FC = props => {
+  const initialState: ITradeState = {
     userBox: 1,
     currentItem: null,
     user: {
@@ -168,9 +188,9 @@ const TradeState = props => {
 
   const [state, dispatch] = useReducer(TradeReducer, initialState);
 
-  const userContext = useContext(UserContext);
+  const userContext: IUserContext = useContext(UserContext);
 
-  const getAddress = user =>
+  const getAddress = (user: Box) =>
     user
       ? userContext.user.addressObj.address
       : userContext.tradePartner.addressObj.address;
@@ -179,28 +199,28 @@ const TradeState = props => {
    * Actions
    */
 
-  const setUserBox = id => {
+  const setUserBox: SetUserBox = id => {
     dispatch({
       type: SET_USER_BOX,
       payload: id
     });
   };
 
-  const setUserItems = tradeItems => {
+  const setUserItems: SetUserItems = tradeItems => {
     dispatch({
       type: SET_USER_TRADE_ITEMS,
       payload: tradeItems
     });
   };
 
-  const setPartnerItems = tradeItems => {
+  const setPartnerItems: SetPartnerItems = tradeItems => {
     dispatch({
       type: SET_PARTNER_TRADE_ITEMS,
       payload: tradeItems
     });
   };
 
-  const getTradeItems = () => {
+  const getTradeItems: GetTradeItems = () => {
     //get user trade items from db
     //get partner trade items from db
     //get user items from contract
@@ -208,30 +228,30 @@ const TradeState = props => {
     //dispatch trade items to reducer
   };
 
-  const addTradeItem = tradeItem => {
+  const addTradeItem: AddTradeItem = tradeItem => {
     dispatch({
       type: ADD_TRADE_ITEM,
       payload: tradeItem
     });
   };
 
-  const setUserAccepted = accepted => {
+  const setUserAccepted: SetUserAccepted = accepted => {
     dispatch({
       type: SET_USER_ACCEPTED,
       payload: accepted
     });
   };
 
-  const setPartnerAccepted = accepted => {
+  const setPartnerAccepted: SetPartnerAccepted = accepted => {
     dispatch({
       type: SET_PARTNER_ACCEPTED,
       payload: accepted
     });
   };
 
-  const cancelTradeItem = id => {
-    //cancel trade item on contract
-    //remove trade item on db
+  const cancelTradeItem: CancelTradeItem = id => {
+    // cancel trade item on contract
+    // remove trade item on db
 
     dispatch({
       type: REMOVE_TRADE_ITEM,
@@ -239,39 +259,39 @@ const TradeState = props => {
     });
   };
 
-  const modifyTradeItemStatus = (id, status) => {
+  const modifyTradeItemStatus: ModifyTradeItemStatus = (id, status) => {
     dispatch({
       type: MODIFY_TRADE_ITEM_STATUS,
       payload: { id, status }
     });
   };
 
-  const setCurrentItem = tradeItem => {
+  const setCurrentItem: SetCurrentItem = tradeItem => {
     dispatch({
       type: SET_CURRENT_ITEM,
       payload: tradeItem
     });
   };
 
-  const clearCurrentItem = () => {
+  const clearCurrentItem: ClearCurrentItem = () => {
     dispatch({
       type: CLEAR_CURRENT_ITEM
     });
   };
 
-  const getAccepted = user => {
-    const address = getAddress(user);
+  const getAccepted: GetAccepted = id => {
+    const address = getAddress(id);
 
     //get accepted from db
     //get accepted from web3 (added to WEB3STATE CALLS)
     const accepted = false;
     dispatch({
       type: UPDATE_ACCEPTED,
-      payload: { user, accepted }
+      payload: { id, accepted }
     });
   };
 
-  const toggleAccepted = () => {
+  const toggleAccepted: ToggleAccepted = () => {
     //set accepted on contract
     //set accepted on db
 

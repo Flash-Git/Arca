@@ -11,7 +11,9 @@ import {
   TOGGLE_ACCEPTED
 } from "../types";
 
-export default (state, action) => {
+import { Action, TradeState } from "context";
+
+const TradeReducer = (state: TradeState, action: Action): TradeState => {
   switch (action.type) {
     case ADD_TRADE_ITEM:
       return {
@@ -68,16 +70,16 @@ export default (state, action) => {
         ...state,
         user: {
           ...state.user,
-          tradeItems: state.user.tradeItems.map(
-            item =>
-              item.id === action.payload.id && {
-                ...item,
-                network: { ...item.network, status: action.payload.status }
-              }
+          tradeItems: state.user.tradeItems.map(item =>
+            item.id === action.payload.id
+              ? {
+                  ...item,
+                  network: { ...item.network, status: action.payload.status }
+                }
+              : item
           )
         }
       };
-
     case SET_CURRENT_ITEM:
       return {
         ...state,
@@ -100,3 +102,5 @@ export default (state, action) => {
       return state;
   }
 };
+
+export default TradeReducer;

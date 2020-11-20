@@ -1,4 +1,7 @@
 declare module "context" {
+  import { v4 } from "uuid";
+  import { SENT, UNSENT } from "./sentStatus";
+
   export type Action = {
     payload?: any;
     type: string;
@@ -25,7 +28,7 @@ declare module "context" {
   }
 
   /*
-   *Alerts
+   * Alerts
    */
 
   export type Alert = {
@@ -52,3 +55,100 @@ declare module "context" {
     removeAlert: RemoveAlert;
     clearAlerts: ClearAlerts;
   }
+
+  /*
+   * Trade
+   */
+
+  // State
+
+  export type Box = 0 | 1;
+
+  export type Status = SENT | UNSENT;
+
+  export type Network = {
+    status: Status;
+    txHash: string | null;
+    web3Loading: boolean;
+    dbLoading: boolean;
+    synced: boolean;
+    slot: number;
+    tab: number;
+  };
+
+  export type Data = {
+    type: "erc20" | "erc721" | "ens";
+    contractAdd: string;
+    amount?: string;
+    id?: string;
+    name?: string;
+    namehash?: string;
+    verified?: boolean;
+  };
+
+  export type TradeItem = {
+    id: v4;
+    network: Network;
+    data: Data;
+  };
+
+  export type User = {
+    tradeItems: TradeItem[];
+    accepted: boolean | null;
+  };
+
+  export type TradeState = {
+    userBox: Box;
+    currentItem: TradeItem | null;
+    user: User;
+    tradePartner: User;
+  };
+
+  // Actions
+
+  export type AddTradeItem = (tradeItem: TradeItem) => void;
+  export type SetUserAccepted = (id: number) => void;
+  export type SetPartnerAccepted = (id: number) => void;
+  export type SetUserItems = (tradeItems: TradeItem[]) => void;
+  export type SetPartnerItems = (tradeItems: TradeItem[]) => void;
+  export type CancelTradeItem = (id: v4) => void;
+  export type ModifyTradeItemStatus = (id: v4, status: Status) => void;
+  export type SetUserBox = (id: Box) => void;
+  export type SetCurrentItem = (currentItem: TradeItem) => void;
+  export type ClearCurrentItem = () => void;
+  export type GetAccepted = (id: v4) => void;
+  export type ToggleAccepted = (id: Box) => void;
+  export type GetTradeItems = (id: Box) => void;
+
+  export interface TradeContext extends TradeState {
+    addTradeItem: AddTradeItem;
+    setUserAccepted: SetUserAccepted;
+    setPartnerAccepted: SetPartnerAccepted;
+    setUserItems: SetUserItems;
+    setPartnerItems: SetPartnerItems;
+    cancelTradeItem: CancelTradeItem;
+    modifyTradeItemStatus: ModifyTradeItemStatus;
+    setUserBox: SetUserBox;
+    setCurrentItem: SetCurrentItem;
+    clearCurrentItem: ClearCurrentItem;
+    getAccepted: GetAccepted;
+    toggleAccepted: ToggleAccepted;
+    getTradeItems: GetTradeItems;
+  }
+
+  /*
+   * User
+   */
+
+  export type UserState = {};
+
+  export interface UserContext extends UserState {}
+
+  /*
+   * Web3
+   */
+
+  export type Web3State = {};
+
+  export interface Web3Context extends Web3State {}
+}
