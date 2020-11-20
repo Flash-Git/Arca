@@ -1,7 +1,23 @@
-import React, { useReducer } from "react";
+import React, { FC, useReducer } from "react";
 
 import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
+
+import {
+  AddRequestedToken,
+  ClearAddresses,
+  ClearBalance,
+  ClearSettings,
+  ClearTradePartner,
+  ClearUser,
+  GetBalance,
+  GetOwnedTokens,
+  GetRequestedTokens,
+  GetSettings,
+  SetAddresses,
+  UpdateSettings,
+  UserState as IUserState
+} from "context";
 
 import {
   CLEAR_USER,
@@ -18,8 +34,8 @@ import {
   CLEAR_SETTINGS
 } from "../types";
 
-const UserState = props => {
-  const initialState = {
+const UserState: FC = props => {
+  const initialState: IUserState = {
     user: {
       addressObj: {
         address: "",
@@ -73,49 +89,53 @@ const UserState = props => {
    * Actions
    */
 
-  const clearUser = () => {
+  const clearUser: ClearUser = () => {
     dispatch({
       type: CLEAR_USER
     });
   };
 
-  const clearTradePartner = () => {
+  const clearTradePartner: ClearTradePartner = () => {
     dispatch({
       type: CLEAR_TRADE_PARTNER
     });
   };
 
-  const setAddresses = (userAddressObj, tradePartnerAddressObj) => {
+  const setAddresses: SetAddresses = (
+    userAddressObj,
+    tradePartnerAddressObj
+  ) => {
     dispatch({
       type: SET_ADDRESSES,
       payload: { userAddressObj, tradePartnerAddressObj }
     });
   };
 
-  const clearAddresses = () => {
+  const clearAddresses: ClearAddresses = () => {
     dispatch({
       type: CLEAR_ADDRESSES
     });
   };
 
-  const getBalance = (user, balance) => {
+  const getBalance: GetBalance = user => {
     //GET balance from db and web3
+    const balance = "";
     dispatch({
       type: SET_BALANCE,
       payload: { user, balance }
     });
   };
 
-  const clearBalance = user => {
+  const clearBalance: ClearBalance = user => {
     dispatch({
       type: CLEAR_BALANCE,
       payload: user
     });
   };
 
-  const getOwnedTokens = user => {
+  const getOwnedTokens: GetOwnedTokens = user => {
     //GET tokens from db and web3 (with map)
-    const ownedTokens = [];
+    const ownedTokens: any = [];
 
     dispatch({
       type: SET_OWNED_TOKENS,
@@ -123,9 +143,9 @@ const UserState = props => {
     });
   };
 
-  const getRequestedTokens = user => {
+  const getRequestedTokens: GetRequestedTokens = user => {
     //GET tokens from db
-    const ownedTokens = [];
+    const ownedTokens: any = [];
 
     dispatch({
       type: SET_REQUESTED_TOKENS,
@@ -133,14 +153,14 @@ const UserState = props => {
     });
   };
 
-  const addRequestedToken = token => {
+  const addRequestedToken: AddRequestedToken = token => {
     dispatch({
       type: ADD_REQUESTED_TOKEN,
       payload: token
     });
   };
 
-  const getSettings = () => {
+  const getSettings: GetSettings = () => {
     //GET tokens from db
     const settings = {};
 
@@ -150,14 +170,14 @@ const UserState = props => {
     });
   };
 
-  const updateSettings = settings => {
+  const updateSettings: UpdateSettings = settings => {
     dispatch({
       type: UPDATE_SETTINGS,
       payload: settings
     });
   };
 
-  const clearSettings = () => {
+  const clearSettings: ClearSettings = () => {
     dispatch({
       type: CLEAR_SETTINGS
     });

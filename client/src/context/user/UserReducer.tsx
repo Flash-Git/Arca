@@ -1,6 +1,8 @@
 import { SET_ADDRESSES } from "../types";
 
-export default (state, action) => {
+import { Action, UserState } from "context";
+
+const UserReducer = (state: UserState, action: Action): UserState => {
   switch (action.type) {
     case SET_ADDRESSES:
       return {
@@ -18,3 +20,5 @@ export default (state, action) => {
       return state;
   }
 };
+
+export default UserReducer;
