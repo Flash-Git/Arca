@@ -92,7 +92,7 @@ declare module "context" {
     data: Data;
   };
 
-  export type User = {
+  export type UserBox = {
     tradeItems: TradeItem[];
     accepted: boolean | null;
   };
@@ -100,8 +100,8 @@ declare module "context" {
   export type TradeState = {
     userBox: Box;
     currentItem: TradeItem | null;
-    user: User;
-    tradePartner: User;
+    user: UserBox;
+    tradePartner: UserBox;
   };
 
   // Actions
@@ -140,9 +140,70 @@ declare module "context" {
    * User
    */
 
-  export type UserState = {};
+  // State
 
-  export interface UserContext extends UserState {}
+  export type Tokens = {
+    web3Loading: boolean;
+    dbLoading: boolean;
+    synced: boolean;
+    erc20Tokens: string[];
+    erc721Tokens: string[];
+  };
+
+  export type AddressObj = {
+    address: string;
+    ens: null | string;
+  };
+
+  export type User = {
+    addressObj: AddressObj;
+    balance: string | null;
+    ownedTokens: Tokens;
+    requestedTokens: Tokens;
+  };
+
+  export type Settings = {
+    nickname: string | null;
+  };
+
+  export type UserState = {
+    user: User;
+    tradePartner: User;
+    settings: Settings;
+  };
+
+  // Actions
+
+  export type ClearUser = () => void;
+  export type ClearTradePartner = () => void;
+  export type SetAddresses = (
+    userAddressObj: AddressObj,
+    tradePartnerAddressObj: AddressObj
+  ) => void;
+  export type ClearAddresses = () => void;
+  export type GetBalance = (id: Box) => void;
+  export type ClearBalance = (id: Box) => void;
+  export type GetOwnedTokens = (id: Box) => void;
+  export type GetRequestedTokens = (id: Box) => void;
+  export type AddRequestedToken = (id: Box) => void;
+  export type GetSettings = () => void;
+  export type UpdateSettings = (settings: Settings) => void;
+  export type ClearSettings = () => void;
+
+  export interface UserContext extends UserState {
+    clearUser: ClearUser;
+    clearTradePartner: ClearTradePartner;
+    setAddresses: SetAddresses;
+    clearAddresses: ClearAddresses;
+    getBalance: GetBalance;
+    clearBalance: ClearBalance;
+    getOwnedTokens: GetOwnedTokens;
+    getRequestedTokens: GetRequestedTokens;
+    addRequestedToken: AddRequestedToken;
+    getSettings: GetSettings;
+    updateSettings: UpdateSettings;
+    clearSettings: ClearSettings;
+  }
 
   /*
    * Web3
