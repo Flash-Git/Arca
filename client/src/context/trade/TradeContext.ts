@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-const TradeContext = createContext();
+const TradeContext: any = createContext({});
 
 export default TradeContext;

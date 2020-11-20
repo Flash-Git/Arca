@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AlertContext from "../../context/alert/AlertContext";
 
 const Alerts = () => {
-  const alertContext = useContext(AlertContext);
+  const alertContext: IAlertContext = useContext(AlertContext);
 
   return (
     alertContext.alerts.length > 0 &&

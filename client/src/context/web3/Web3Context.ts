@@ -1,5 +1,5 @@
 import { createContext } from "react";
 
-const Web3Context = createContext();
+const Web3Context: any = createContext({});
 
 export default Web3Context;
