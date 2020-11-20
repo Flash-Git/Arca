@@ -1,19 +1,24 @@
-import React, { useContext } from "react";
+import React, { FC, Fragment, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import AlertContext from "../../context/alert/AlertContext";
 
-const Alerts = () => {
+import { AlertContext as IAlertContext } from "context";
+
+const Alerts: FC = () => {
   const alertContext: IAlertContext = useContext(AlertContext);
 
+  if (alertContext.alerts.length === 0) return null;
+
   return (
-    alertContext.alerts.length > 0 &&
-    alertContext.alerts.map(alert => (
-      <div className={`alert alert-${alert.type}`}>
-        <FontAwesomeIcon icon={["fa", "info-circle"]} />
-        {alert.msg}
-      </div>
-    ))
+    <Fragment>
+      {alertContext.alerts.map(alert => (
+        <div className={`alert alert-${alert.type}`}>
+          <FontAwesomeIcon icon={["fa", "info-circle"]} />
+          {alert.msg}
+        </div>
+      ))}
+    </Fragment>
   );
 };
 
