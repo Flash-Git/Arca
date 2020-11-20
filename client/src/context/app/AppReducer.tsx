@@ -1,6 +1,8 @@
 import { SET_LOCATION, TOGGLE_SIDEBAR } from "../types";
 
-export default (state, action) => {
+import { Action, AppState } from "context";
+
+const AppReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
     case SET_LOCATION:
       return { ...state, location: action.payload };
@@ -10,3 +12,5 @@ export default (state, action) => {
       return state;
   }
 };
+
+export default AppReducer;

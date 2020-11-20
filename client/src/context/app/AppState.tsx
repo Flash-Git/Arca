@@ -1,13 +1,15 @@
-import React, { useReducer } from "react";
+import React, { FC, useReducer } from "react";
 
 import { SET_LOCATION, TOGGLE_SIDEBAR } from "../types";
 
 import AppContext from "./AppContext";
 import AppReducer from "./AppReducer";
 
-const AppState = props => {
-  const initialState = {
-    location: "",
+import { SetLocation, ToggleSidebar, AppState as IAppState } from "context";
+
+const AppState: FC = props => {
+  const initialState: IAppState = {
+    location: "home",
     sidebar: true
   };
 
@@ -17,7 +19,7 @@ const AppState = props => {
    * Actions
    */
 
-  const setLocation = location => {
+  const setLocation: SetLocation = location => {
     switch (location) {
       case "home":
       case "about":
@@ -33,7 +35,7 @@ const AppState = props => {
     });
   };
 
-  const toggleSidebar = () => {
+  const toggleSidebar: ToggleSidebar = () => {
     dispatch({
       type: TOGGLE_SIDEBAR
     });
