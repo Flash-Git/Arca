@@ -1,9 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React, { FC, useContext, useEffect } from "react";
 
 import AppContext from "../../context/app/AppContext";
 
-const NotFound = props => {
-  const appContext = useContext(AppContext);
+import { AppContext as IAppContext } from "context";
+
+const NotFound: FC = () => {
+  const appContext: IAppContext = useContext(AppContext);
   const { setLocation } = appContext;
 
   useEffect(() => {

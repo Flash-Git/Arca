@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -45,7 +45,7 @@ library.add(
 
 localStorage.token && setAuthToken(localStorage.token);
 
-const App = () => (
+const App: FC = () => (
   <AppState>
     <TradeState>
       <UserState>

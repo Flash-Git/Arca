@@ -1,12 +1,17 @@
-import React, { useContext } from "react";
+import React, { FC, useContext } from "react";
 import { Link } from "react-router-dom";
 
 import AppContext from "../../context/app/AppContext";
 import Web3Context from "../../context/web3/Web3Context";
 
-const Navbar = () => {
-  const appContext = useContext(AppContext);
-  const web3Context = useContext(Web3Context);
+import {
+  AppContext as IAppContext,
+  Web3Context as IWeb3Context
+} from "context";
+
+const Navbar: FC = () => {
+  const appContext: IAppContext = useContext(AppContext);
+  const web3Context: IWeb3Context = useContext(Web3Context);
 
   const { location } = appContext;
   const { web3, network } = web3Context;
@@ -39,7 +44,7 @@ const Navbar = () => {
             <strong>
               {location === "home" ? networkText() : "Trade Window"}
             </strong>
-          </Link>{" "}
+          </Link>
         </li>
         <li>
           <Link to="/about">About</Link>

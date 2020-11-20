@@ -1,8 +1,8 @@
-import React from "react";
+import React, { FC } from "react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Footer = () => (
+const Footer: FC = () => (
   <footer className="footer">
     <ul>
       <a href="https://etherscan.io/address/jaquinn.eth">
@@ -10,7 +10,7 @@ const Footer = () => (
         &nbsp;Donations
       </a>
       <a href="mailto:arca@jaquinn.com">
-        <FontAwesomeIcon icon={["fa", "at"]} />
+        <FontAwesomeIcon icon={["fas", "at"]} />
         &nbsp;Inquiries
       </a>
       <a href="https://blockstream.info/address/bc1qvn7u88k5qpq2m7g8mu8swh88v7q59msxa4w6vg">
