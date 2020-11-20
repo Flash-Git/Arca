@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 
-import AppContext from "./../../context/app/AppContext";
+import AppContext from "../../context/app/AppContext";
 
 const NotFound = props => {
   const appContext = useContext(AppContext);

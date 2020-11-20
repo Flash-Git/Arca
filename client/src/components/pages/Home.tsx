@@ -5,8 +5,8 @@ import PreTradeForm from "../layout/PreTradeForm";
 import Loader from "../loading/Loader";
 import Box from "../tradeBox/Box";
 
-import AppContext from "./../../context/app/AppContext";
-import TradeContext from "./../../context/trade/TradeContext";
+import AppContext from "../../context/app/AppContext";
+import TradeContext from "../../context/trade/TradeContext";
 
 const Home = props => {
   const appContext = useContext(AppContext);
