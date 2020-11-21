@@ -8,7 +8,9 @@ import {
   DISCONNECT
 } from "../types";
 
-export default (state, action) => {
+import { Action, Web3State } from "context";
+
+const Web3Reducer = (state: Web3State, action: Action): Web3State => {
   switch (action.type) {
     case CONNECT:
       return {
@@ -111,3 +113,5 @@ export default (state, action) => {
       return state;
   }
 };
+
+export default Web3Reducer;

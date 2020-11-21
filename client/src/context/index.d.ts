@@ -1,5 +1,8 @@
 declare module "context" {
+  import Web3 from "web3";
+  import { provider } from "web3-core";
   import { v4 } from "uuid";
+
   import { SENT, UNSENT } from "./sentStatus";
 
   export type Action = {
@@ -77,7 +80,7 @@ declare module "context" {
   };
 
   export type Data = {
-    type: "erc20" | "erc721" | "ens";
+    type: ErcType;
     contractAdd: string;
     amount?: string;
     id?: string;
@@ -117,8 +120,8 @@ declare module "context" {
   export type SetCurrentItem = (currentItem: TradeItem) => void;
   export type ClearCurrentItem = () => void;
   export type GetAccepted = (id: v4) => void;
-  export type ToggleAccepted = (id: Box) => void;
-  export type GetTradeItems = (id: Box) => void;
+  export type ToggleAccepted = () => void;
+  export type GetTradeItems = () => void;
 
   export interface TradeContext extends TradeState {
     addTradeItem: AddTradeItem;
@@ -142,12 +145,16 @@ declare module "context" {
 
   // State
 
+  export type Token = {
+    name: string;
+  };
+
   export type Tokens = {
     web3Loading: boolean;
     dbLoading: boolean;
     synced: boolean;
-    erc20Tokens: string[];
-    erc721Tokens: string[];
+    erc20Tokens: Token[];
+    erc721Tokens: Token[];
   };
 
   export type AddressObj = {
@@ -209,7 +216,98 @@ declare module "context" {
    * Web3
    */
 
-  export type Web3State = {};
+  // State
 
-  export interface Web3Context extends Web3State {}
+  export type ErcType = "erc20" | "erc721" | "ens";
+
+  export type NetworkNum = 1 | 4 | 5;
+
+  export type Erc = {
+    address: string;
+    type: string;
+    contract: any; // Contract
+  };
+
+  export type ArcaContract = {
+    address: string;
+    arca: null | any;
+    ercs: Erc[];
+  };
+
+  export type Web3State = {
+    connected: boolean;
+    web3: Web3 | null;
+    ens: string | null;
+    network: NetworkNum | null;
+    address: string;
+    arca: null;
+    ercs: Erc[];
+    main: ArcaContract;
+    rinkeby: ArcaContract;
+    goerli: ArcaContract;
+  };
+
+  // Actions
+
+  export type Connnect = () => void;
+  export type AddErc20 = (erc: Erc) => void;
+  export type AddErc721 = (erc: Erc) => void;
+  export type ArcaCalls = (
+    method: ArcaCallMethod,
+    params: string[]
+  ) => Promise<string>;
+  export type ErcCalls = (
+    method: ErcCallMethod,
+    address: string,
+    type: ErcType
+  ) => Promise<string>;
+  export type ArcaSends = (method: ArcaSendMethod, params: string[]) => void;
+  export type ErcSends = (method: ErcSendMethod, address: string) => void;
+
+  // Not extending state
+  export interface Web3Context {
+    connected: boolean;
+    arca: null;
+    web3: null | Web3;
+    ens: any | null;
+    network: NetworkNum | null;
+    connect: Connnect;
+    addErc20: AddErc20;
+    addErc721: AddErc721;
+    arcaCalls: ArcaCalls;
+    ercCalls: ErcCalls;
+    ercCalls: ErcCalls;
+    arcaSends: ArcaSends;
+    ercSends: ErcSends;
+  }
+
+  // Arca Methods
+
+  export type ArcaCallMethod =
+    | "getErc20Count"
+    | "getErc721Count"
+    | "getNonce"
+    | "getPartnerNonce"
+    | "getOfferErc20"
+    | "getOfferErc721";
+  export type ErcCallMethod =
+    | "decimals"
+    | "balanceOf"
+    | "symbol"
+    | "name"
+    | "allowance"
+    | "isApprovedForAll";
+  export type ArcaSendMethod =
+    | "pushOfferErc20"
+    | "pushOfferErc721"
+    | "removeOfferErc20"
+    | "removeOfferErc721"
+    | "acceptTrade"
+    | "unacceptTrade";
+  export type ErcSendMethod = "approve" | "setApprovalForAll";
+}
+
+// Does not come with @types TODO PR
+declare module "ethereum-ens" {
+  import { provider } from "web3-core";
 }

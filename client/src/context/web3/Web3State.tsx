@@ -1,5 +1,7 @@
-import React, { useReducer, useContext, useEffect } from "react";
+import React, { useReducer, useEffect, FC } from "react";
 import Web3 from "web3";
+import { provider } from "web3-core";
+import { AbiItem } from "web3-utils";
 import ENS from "ethereum-ens";
 
 import Web3Context from "./Web3Context";
@@ -8,6 +10,20 @@ import Web3Reducer from "./Web3Reducer";
 import abiErc20 from "../../web3/abis/abiErc20";
 import abiErc721 from "../../web3/abis/abiErc721";
 import abiArca from "../../web3/abis/abi";
+
+import {
+  Web3State as IWeb3State,
+  AddErc20,
+  AddErc721,
+  Connnect,
+  NetworkNum,
+  Erc,
+  ErcType,
+  ArcaCalls as IArcaCalls,
+  ErcCalls as IErcCalls,
+  ArcaSends as IArcaSends,
+  ErcSends as IErcSends
+} from "context";
 
 import {
   CONNECT,
@@ -19,8 +35,8 @@ import {
   DISCONNECT
 } from "../types";
 
-const Web3State = props => {
-  const initialState = {
+const Web3State: FC = props => {
+  const initialState: IWeb3State = {
     connected: false,
     web3: null,
     ens: null,
@@ -81,13 +97,14 @@ const Web3State = props => {
     network !== state.network && updateNetwork(network);
   });
 
-  const getErc = address => state.ercs.filter(erc => erc.address === address);
+  const getErc = (address: string) =>
+    state.ercs.find(erc => erc.address === address);
 
   /*
    * Methods
    */
 
-  const ArcaCalls = async (_method, _params) => {
+  const ArcaCalls: IArcaCalls = async (_method, _params) => {
     const contract = await getArcaContract();
     if (!contract) return;
 
@@ -137,7 +154,7 @@ const Web3State = props => {
     }
   };
 
-  const ErcCalls = async (_method, _address, _type) => {
+  const ErcCalls: IErcCalls = async (_method, _address, _type) => {
     const contract = await getErcContract(_address, _type);
     try {
       switch (_method) {
@@ -181,7 +198,7 @@ const Web3State = props => {
     }
   };
 
-  const ArcaSends = async (_method, _params) => {
+  const ArcaSends: IArcaSends = async (_method, _params) => {
     const contract = await getArcaContract();
 
     try {
@@ -240,7 +257,7 @@ const Web3State = props => {
     }
   };
 
-  const ErcSends = async (_method, _address) => {
+  const ErcSends: IErcSends = async (_method, _address) => {
     let contract;
     try {
       switch (_method) {
@@ -276,19 +293,19 @@ const Web3State = props => {
     return await state.arca;
   };
 
-  const getErcContract = async (_address, _type) => {
-    const erc = getErc(_address);
+  const getErcContract = async (address: string, type: ErcType) => {
+    const erc = getErc(address);
     if (erc) return erc.contract;
 
-    let contract = {};
-    switch (erc) {
+    let contract;
+    switch (type) {
       case "erc20":
-        contract = await Erc20Contract(_address);
-        addErc20({ _address, _type, contract });
+        contract = await Erc20Contract(address);
+        addErc20({ address, type, contract });
         return contract;
       case "erc721":
-        contract = await Erc721Contract(_address);
-        addErc721({ _address, _type, contract });
+        contract = await Erc721Contract(address);
+        addErc721({ address, type, contract });
         return contract;
       default:
         console.log("Failed getContract");
@@ -298,7 +315,7 @@ const Web3State = props => {
 
   const Tx = _promise => {
     return new Promise((resolve, reject) => {
-      _promise.on("transactionHash", hash => {
+      _promise.on("transactionHash", (hash: string) => {
         alert("Tx Sent");
         console.log("TxHash: " + hash);
       });
@@ -306,7 +323,7 @@ const Web3State = props => {
         console.log("Receipt received");
         return resolve();
       });*/
-      _promise.on("confirmation", (confirmation, receipt) => {
+      _promise.on("confirmation", (confirmation: number, receipt: any) => {
         //console.log("Confirmation: " + confirmation);
         if (confirmation === 1) {
           console.log("Receipt found");
@@ -316,12 +333,12 @@ const Web3State = props => {
           return resolve();
         }
       });
-      _promise.on("error", e => {
+      _promise.on("error", (e: Error) => {
         console.log("Error in tx execution:");
         console.log(e);
         return reject(e);
       });
-      _promise.catch(e => {
+      _promise.catch((e: Error) => {
         console.log("Error in tx send:");
         console.log(e);
         return reject(e);
@@ -329,7 +346,7 @@ const Web3State = props => {
     });
   };
 
-  const NewContract = (_abi, _add) => {
+  const NewContract = (_abi: AbiItem, _add: string) => {
     if (!state.connected) return null;
     return new state.web3.eth.Contract(_abi, _add);
   };
@@ -338,11 +355,11 @@ const Web3State = props => {
     return NewContract(abiArca, state.address);
   };
 
-  const Erc20Contract = _add => {
+  const Erc20Contract = (_add: string) => {
     return NewContract(abiErc20, _add);
   };
 
-  const Erc721Contract = _add => {
+  const Erc721Contract = (_add: string) => {
     return NewContract(abiErc721, _add);
   };
 
@@ -350,21 +367,21 @@ const Web3State = props => {
    * Actions
    */
 
-  const connect = () => {
+  const connect: Connnect = () => {
     //TODO add check for rejection in enable
     dispatch({
       type: CONNECT
     });
   };
 
-  const connectWeb3 = web3 => {
+  const connectWeb3 = (web3: Web3) => {
     dispatch({
       type: CONNECT_WEB3,
       payload: web3
     });
   };
 
-  const connectEns = async provider => {
+  const connectEns = async (provider: provider) => {
     const ens = new ENS(provider);
     dispatch({
       type: CONNECT_ENS,
@@ -372,7 +389,7 @@ const Web3State = props => {
     });
   };
 
-  const updateNetwork = network => {
+  const updateNetwork = (network: NetworkNum) => {
     dispatch({
       type: UPDATE_NETWORK,
       payload: network
@@ -386,21 +403,21 @@ const Web3State = props => {
   };
 
   const setArca = async () => {
-    const arca = await ArcaContract();
+    const arca: Contract | null = await ArcaContract();
     dispatch({
       type: SET_ARCA,
       payload: arca
     });
   };
 
-  const addErc20 = erc => {
+  const addErc20: AddErc20 = erc => {
     dispatch({
       type: ADD_ERC,
       payload: erc
     });
   };
 
-  const addErc721 = erc => {
+  const addErc721: AddErc721 = erc => {
     dispatch({
       type: ADD_ERC,
       payload: erc
@@ -418,14 +435,15 @@ const Web3State = props => {
         connect,
         addErc20,
         addErc721,
-        ArcaCalls,
-        ErcCalls,
-        ArcaSends,
-        ErcSends
+        arcaCalls: ArcaCalls,
+        ercCalls: ErcCalls,
+        arcaSends: ArcaSends,
+        ercSends: ErcSends
       }}
     >
       {props.children}
     </Web3Context.Provider>
   );
 };
+
 export default Web3State;
