@@ -1,54 +1,65 @@
-import React, { useState, useEffect, useContext } from "react";
-import { utils as Utils } from "web3";
+import React, { useState, useEffect, useContext, FC } from "react";
+import Utils from "web3-utils";
 
 import enable from "../loading/enable";
 
 import UserContext from "../../context/user/UserContext";
 import Web3Context from "../../context/web3/Web3Context";
 
-const PreTradeForm = () => {
-  const userContext = useContext(UserContext);
-  const web3Context = useContext(Web3Context);
+import {
+  UserContext as IUserContext,
+  Web3Context as IWeb3Context
+} from "context";
+
+type FormState = {
+  input: string;
+  address: null | string;
+  ens: null | string;
+};
+
+const PreTradeForm: FC = () => {
+  const userContext: IUserContext = useContext(UserContext);
+  const web3Context: IWeb3Context = useContext(Web3Context);
 
   const { setAddresses } = userContext;
   const { connected, web3, ens, connect } = web3Context;
 
-  //FORM STATE
-  const [form1State, setForm1State] = useState({
-    input1: "",
-    address1: null,
-    ens1: null
+  // FORM STATE
+  const [form1State, setForm1State] = useState<FormState>({
+    input: "",
+    address: null,
+    ens: null
   });
 
-  const [form2State, setForm2State] = useState({
-    input2: "",
-    address2: null,
-    ens2: null
+  const [form2State, setForm2State] = useState<FormState>({
+    input: "",
+    address: null,
+    ens: null
   });
 
-  const { input1, address1, ens1 } = form1State;
-  const { input2, address2, ens2 } = form2State;
+  const { input: input1, address: address1, ens: ens1 } = form1State;
+  const { input: input2, address: address2, ens: ens2 } = form2State;
 
   //Inputs
   useEffect(() => {
     if (Utils.isAddress(input1.toUpperCase())) {
-      setForm1State({ ...form1State, address1: input1, ens1: null });
+      setForm1State({ ...form1State, address: input1, ens: null });
     } else {
-      setForm1State({ ...form1State, address1: null, ens1: null });
+      setForm1State({ ...form1State, address: null, ens: null });
     }
   }, [input1]);
 
   useEffect(() => {
     if (Utils.isAddress(input2.toUpperCase())) {
-      setForm2State({ ...form2State, address2: input2, ens2: null });
+      setForm2State({ ...form2State, address: input2, ens: null });
     } else {
-      setForm2State({ ...form2State, address2: null, ens2: null });
+      setForm2State({ ...form2State, address: null, ens: null });
     }
   }, [input2]);
 
   const checkInput1 = async () => {
     if (Utils.isAddress(input1.toUpperCase())) {
-      setForm1State({ ...form1State, address1: input1, ens1: null });
+      setForm1State({ ...form1State, address: input1, ens: null });
       return;
     }
 
@@ -56,19 +67,19 @@ const PreTradeForm = () => {
 
     const input = input1;
     try {
-      const add = await ens.resolver(input1).addr();
-      setForm1State({ input1, address1: add, ens1: input1 });
+      const add: string = await ens.resolver(input1).addr();
+      setForm1State({ input: input1, address: add, ens: input1 });
       return;
     } catch (e) {
       console.log(e);
       if (input !== input1) return;
-      setForm1State({ input1, address1: null, ens1: null });
+      setForm1State({ input: input1, address: null, ens: null });
     }
   };
 
   const checkInput2 = async () => {
     if (Utils.isAddress(input2.toUpperCase())) {
-      setForm2State({ ...form2State, address2: input2, ens2: null });
+      setForm2State({ ...form2State, address: input2, ens: null });
       return;
     }
     if (ens === null) return;
@@ -76,23 +87,23 @@ const PreTradeForm = () => {
     const input = input2;
     try {
       const add = await ens.resolver(input2).addr();
-      setForm2State({ input2, address2: add, ens2: input2 });
+      setForm2State({ input: input2, address: add, ens: input2 });
       return;
     } catch (e) {
       console.log(e);
       if (input !== input2) return;
-      setForm2State({ input2, address2: null, ens2: null });
+      setForm2State({ input: input2, address: null, ens: null });
     }
   };
 
-  const onChange1 = e => {
+  const onChange1 = (e: any) => {
     setForm1State({ ...form1State, [e.target.name]: e.target.value.trim() });
   };
-  const onChange2 = e => {
+  const onChange2 = (e: any) => {
     setForm2State({ ...form2State, [e.target.name]: e.target.value.trim() });
   };
 
-  const onSubmit = async e => {
+  const onSubmit = async (e: any) => {
     e.preventDefault();
 
     if (web3 === null) {

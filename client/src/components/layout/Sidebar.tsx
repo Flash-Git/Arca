@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { FC, Fragment, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import AppContext from "../../context/app/AppContext";
@@ -6,11 +6,17 @@ import UserContext from "../../context/user/UserContext";
 import Web3Context from "../../context/web3/Web3Context";
 import Spinner from "./Spinner";
 
-const Sidebar = () => {
+import {
+  AppContext as IAppContext,
+  UserContext as IUserContext,
+  Web3Context as IWeb3Context
+} from "context";
+
+const Sidebar: FC = () => {
   //TODO add search
-  const appContext = useContext(AppContext);
-  const userContext = useContext(UserContext);
-  const web3Context = useContext(Web3Context);
+  const appContext: IAppContext = useContext(AppContext);
+  const userContext: IUserContext = useContext(UserContext);
+  const web3Context: IWeb3Context = useContext(Web3Context);
 
   const { sidebar, toggleSidebar } = appContext;
   const { settings, user } = userContext;
@@ -19,7 +25,7 @@ const Sidebar = () => {
   const { web3 } = web3Context; //loading
   const loading = false;
 
-  const onClick = e => {
+  const onClick = () => {
     toggleSidebar();
   };
 

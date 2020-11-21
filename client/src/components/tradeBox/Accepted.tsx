@@ -1,11 +1,16 @@
-import React, { Fragment, useContext } from "react";
+import React, { FC, Fragment, useContext } from "react";
 import TradeContext from "../../context/trade/TradeContext";
-import PropTypes from "prop-types";
 
 import Spinner from "../layout/Spinner";
 
-const Accepted = ({ isUser }) => {
-  const tradeContext = useContext(TradeContext);
+import { TradeContext as ITradeContext } from "context";
+
+type Props = {
+  isUser: boolean;
+};
+
+const Accepted: FC<Props> = ({ isUser }) => {
+  const tradeContext: ITradeContext = useContext(TradeContext);
 
   const accepted = isUser
     ? tradeContext.user.accepted
@@ -14,7 +19,7 @@ const Accepted = ({ isUser }) => {
   const bord = accepted ? "bord-hori-green" : "bord-hori-red";
   const acceptMsg = accepted ? "Accepted" : "Not Accepted";
 
-  const onClick = e => {
+  const onClick = () => {
     if (accepted === null) return;
     tradeContext.toggleAccepted();
   };
@@ -35,10 +40,6 @@ const Accepted = ({ isUser }) => {
       )}
     </div>
   );
-};
-
-Accepted.propTypes = {
-  isUser: PropTypes.bool.isRequired
 };
 
 export default Accepted;
