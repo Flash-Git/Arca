@@ -2,9 +2,10 @@
 export const SET_LOCATION = "SET_LOCATION";
 export const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR";
 
-// Alerts
-export const SET_ALERT = "SET_ALERT";
-export const REMOVE_ALERT = "REMOVE_ALERT";
+// Alert
+export const ADD_ALERT: string = "ADD_ALERT";
+export const REMOVE_ALERT: string = "REMOVE_ALERT";
+export const CLEAR_ALERTS: string = "CLEAR_ALERTS";
 
 // Trade Items
 export const SET_USER_BOX = "SET_USER_BOX";
