@@ -28,7 +28,7 @@ import TradeState from "./context/trade/TradeState";
 import UserState from "./context/user/UserState";
 import Web3State from "./context/web3/Web3State";
 
-import setAuthToken from "./utils/setAuthToken.js";
+import setAuthToken from "./utils/setAuthToken";
 
 import "./App.css";
 
