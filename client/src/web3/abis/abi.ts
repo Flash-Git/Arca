@@ -1,4 +1,7 @@
-const abi = [
+import { AbiItem } from "web3-utils";
+
+
+const abi:AbiItem[] = [
 	{
 		"constant": false,
 		"inputs": [
