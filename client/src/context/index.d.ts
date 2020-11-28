@@ -306,8 +306,3 @@ declare module "context" {
     | "unacceptTrade";
   export type ErcSendMethod = "approve" | "setApprovalForAll";
 }
-
-// Does not come with @types TODO PR
-declare module "ethereum-ens" {
-  import { provider } from "web3-core";
-}
