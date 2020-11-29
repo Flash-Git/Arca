@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { FC, useContext, useEffect } from "react";
 
 import PropTypes from "prop-types";
 
@@ -8,8 +8,14 @@ import EnsForm from "./itemTypes/EnsForm";
 
 import TradeContext from "../../context/trade/TradeContext";
 
-const Items = ({ isUser }) => {
-  const tradeContext = useContext(TradeContext);
+import { TradeContext as ITradeContext, TradeItem } from "context";
+
+type Props = {
+  isUser?: boolean;
+};
+
+const Items: FC<Props> = ({ isUser }) => {
+  const tradeContext: ITradeContext = useContext(TradeContext);
 
   const { getTradeItems } = tradeContext;
 
@@ -21,7 +27,7 @@ const Items = ({ isUser }) => {
     getTradeItems();
   }, []);
 
-  const internal = item => {
+  const internal = (item: TradeItem) => {
     switch (item.data.type) {
       case "erc20":
         return <Erc20 item={item} isUser={isUser} />;
@@ -50,10 +56,6 @@ const Items = ({ isUser }) => {
         )}
     </div>
   );
-};
-
-Items.propTypes = {
-  isUser: PropTypes.bool.isRequired
 };
 
 export default Items;

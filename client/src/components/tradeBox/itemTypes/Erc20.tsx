@@ -1,4 +1,4 @@
-import React, { Fragment, useContext } from "react";
+import React, { FC, Fragment, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 
@@ -7,14 +7,26 @@ import RemoveButton from "./RemoveButton";
 
 import UserContext from "../../../context/user/UserContext";
 
-const Erc20 = ({ item, isUser }) => {
-  const userContext = useContext(UserContext);
+import { ArcaSendMethod, UserContext as IUserContext } from "context";
+
+type Props = {
+  item: any;
+  isUser?: boolean;
+};
+
+type TxData = {
+  method: ArcaSendMethod;
+  params: string[];
+};
+
+const Erc20: FC<Props> = ({ item, isUser }) => {
+  const userContext: IUserContext = useContext(UserContext);
   const { address } = userContext.tradePartner.addressObj;
 
   const { contractAdd, amount } = item.data;
   const { status } = item.network;
 
-  const txData = {
+  const txData: TxData = {
     method: "pushOfferErc20",
     params: [address, contractAdd, amount]
   };
@@ -29,10 +41,6 @@ const Erc20 = ({ item, isUser }) => {
       <SendBtn id={item.id} status={status} txData={txData} isUser={isUser} />
     </Fragment>
   );
-};
-
-Erc20.propTypes = {
-  item: PropTypes.object.isRequired
 };
 
 export default Erc20;

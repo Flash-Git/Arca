@@ -1,20 +1,38 @@
-import React, { useState, useContext, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext, useEffect, FC } from "react";
 
 import { SENT, UNSENT } from "../../../context/sentStatus";
 
 import Web3Context from "../../../context/web3/Web3Context";
 import TradeContext from "../../../context/trade/TradeContext";
 
-const SendBtn = ({ id, status, txData, isUser }) => {
+import {
+  Status,
+  Web3Context as IWeb3Context,
+  TradeContext as ITradeContext,
+  ArcaSendMethod
+} from "context";
+
+type TxData = {
+  method: ArcaSendMethod;
+  params: string[];
+};
+
+type Props = {
+  id: string;
+  isUser?: boolean;
+  status: Status;
+  txData: TxData;
+};
+
+const SendBtn: FC<Props> = ({ id, status, txData, isUser }) => {
   //txData{ method:"pushOfferErc20" }
   //erc - allow
   //arca - send
   //arca - remove
-  const web3Context = useContext(Web3Context);
-  const tradeContext = useContext(TradeContext);
+  const web3Context: IWeb3Context = useContext(Web3Context);
+  const tradeContext: ITradeContext = useContext(TradeContext);
 
-  const { connected, ArcaSends } = web3Context;
+  const { connected, arcaSends } = web3Context;
   const { modifyTradeItemStatus } = tradeContext;
 
   const [content, setContent] = useState("Loading");
@@ -38,9 +56,10 @@ const SendBtn = ({ id, status, txData, isUser }) => {
     }
   }, [status]);
 
-  const onClick = e => {
+  const onClick = (e: any) => {
     if (!connected) return;
-    ArcaSends(txData.method, txData.params);
+
+    arcaSends(txData.method, txData.params);
     modifyTradeItemStatus(id, status === SENT ? UNSENT : SENT);
   };
 
@@ -57,13 +76,6 @@ const SendBtn = ({ id, status, txData, isUser }) => {
   };
 
   return button();
-};
-
-SendBtn.propTypes = {
-  id: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
-  txData: PropTypes.object,
-  isUser: PropTypes.bool.isRequired
 };
 
 export default SendBtn;

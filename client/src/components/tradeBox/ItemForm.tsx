@@ -1,16 +1,18 @@
-import React, { Fragment, useContext, useState } from "react";
-import uuid from "uuid";
+import React, { FC, Fragment, useContext, useState } from "react";
+import { v4 as uuid } from "uuid";
 
 import TradeContext from "../../context/trade/TradeContext";
 
 import { UNSENT } from "../../context/sentStatus";
 
-const ItemForm = () => {
-  const tradeContext = useContext(TradeContext);
+import { Data, TradeContext as ITradeContext, TradeItem } from "context";
+
+const ItemForm: FC = () => {
+  const tradeContext: ITradeContext = useContext(TradeContext);
 
   const { addTradeItem } = tradeContext;
 
-  const emptyData = {
+  const emptyData: Data = {
     type: "ens",
     contractAdd: "",
     id: "", //erc721
@@ -20,14 +22,16 @@ const ItemForm = () => {
     verified: false //ens
   };
 
-  const [item, setItem] = useState({
-    id: uuid.v4(),
+  const [item, setItem] = useState<TradeItem>({
+    id: uuid(),
     network: {
       status: UNSENT,
       txHash: null,
       web3Loading: false,
       dbLoading: false,
-      synced: false
+      synced: false,
+      slot: 0,
+      tab: 0
     },
     data: emptyData
   });
@@ -35,18 +39,18 @@ const ItemForm = () => {
   const { type, contractAdd, id, amount, name, namehash, verified } = item.data;
 
   //Input
-  const onChange = e => {
+  const onChange = (e: any) => {
     setItem({
       ...item,
       data: { ...item.data, [e.target.name]: e.target.value }
     });
   };
 
-  const onSubmit = e => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
 
     addTradeItem(item);
-    setItem({ ...item, id: uuid.v4(), data: emptyData });
+    setItem({ ...item, id: uuid(), data: emptyData });
   };
 
   const erc = () => (
@@ -134,7 +138,8 @@ const ItemForm = () => {
   return (
     <form className="shadow-top ptop" onSubmit={onSubmit}>
       <div className="flex-row">
-        <select type="text" name="type" value={type} onChange={onChange}>
+        <select name="type" value={type} onChange={onChange}>
+          {/* type=select */}
           <option value={"ens"}>ENS</option>
           <option value={"erc20"}>ERC20</option>
           <option value={"erc721"}>ERC721</option>

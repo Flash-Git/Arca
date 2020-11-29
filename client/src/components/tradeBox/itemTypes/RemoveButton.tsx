@@ -1,13 +1,19 @@
-import React, { useState, useContext, useEffect } from "react";
-import PropTypes from "prop-types";
+import React, { useState, useContext, useEffect, FC } from "react";
 
 import TradeContext from "../../../context/trade/TradeContext";
 
-const RemoveButton = ({ id, isUser }) => {
-  const tradeContext = useContext(TradeContext);
+import { TradeContext as ITradeContext } from "context";
+
+type Props = {
+  id: string;
+  isUser?: boolean;
+};
+
+const RemoveButton: FC<Props> = ({ id, isUser }) => {
+  const tradeContext: ITradeContext = useContext(TradeContext);
   const { cancelTradeItem } = tradeContext;
 
-  const onClick = e => {
+  const onClick = (e: any) => {
     cancelTradeItem(id);
   };
 
@@ -19,11 +25,6 @@ const RemoveButton = ({ id, isUser }) => {
       </span>
     </button>
   );
-};
-
-RemoveButton.propTypes = {
-  id: PropTypes.string.isRequired,
-  isUser: PropTypes.bool.isRequired
 };
 
 export default RemoveButton;

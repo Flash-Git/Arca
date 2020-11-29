@@ -1,6 +1,5 @@
-import React, { Fragment, useState, useEffect, useContext } from "react";
+import React, { Fragment, useState, useEffect, useContext, FC } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PropTypes from "prop-types";
 
 import SendBtn from "./SendBtn";
 import RemoveButton from "./RemoveButton";
@@ -8,11 +7,27 @@ import RemoveButton from "./RemoveButton";
 import Web3Context from "../../../context/web3/Web3Context";
 import UserContext from "../../../context/user/UserContext";
 
+import {
+  Web3Context as IWeb3Context,
+  UserContext as IUserContext,
+  ArcaSendMethod
+} from "context";
+
+type Props = {
+  item: any;
+  isUser?: boolean;
+};
+
+type TxData = {
+  method: ArcaSendMethod;
+  params: string[];
+};
+
 let offset = 0;
 
-const EnsForm = ({ item, isUser }) => {
-  const web3Context = useContext(Web3Context);
-  const userContext = useContext(UserContext);
+const EnsForm: FC<Props> = ({ item, isUser }) => {
+  const web3Context: IWeb3Context = useContext(Web3Context);
+  const userContext: IUserContext = useContext(UserContext);
 
   const { ens } = web3Context;
   const { address } = isUser
@@ -54,13 +69,13 @@ const EnsForm = ({ item, isUser }) => {
   };
 
   //Input
-  const onChange = e => {
+  const onChange = (e: any) => {
     setEnsItem({ ...ensItem, [e.target.name]: e.target.value });
     //name => namehash => id
     //if ids match then verify
   };
 
-  const txData = {
+  const txData: TxData = {
     method: "pushOfferErc721",
     params: [tradePartnerAdd, contractAdd, id]
   };
@@ -84,10 +99,6 @@ const EnsForm = ({ item, isUser }) => {
       <SendBtn id={item.id} status={status} txData={txData} isUser={isUser} />
     </Fragment>
   );
-};
-
-EnsForm.propTypes = {
-  item: PropTypes.object.isRequired
 };
 
 export default EnsForm;

@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React, { FC, useContext, useEffect, useState } from "react";
 
 import ItemForm from "./ItemForm";
 import Items from "./Items";
@@ -8,9 +7,19 @@ import Accepted from "./Accepted";
 import UserContext from "../../context/user/UserContext";
 import TradeContext from "../../context/trade/TradeContext";
 
-const Box = ({ isUser }) => {
-  const userContext = useContext(UserContext);
-  const tradeContext = useContext(TradeContext);
+import {
+  UserContext as IUserContext,
+  TradeContext as ITradeContext,
+  AddressObj
+} from "context";
+
+type Props = {
+  isUser?: boolean;
+};
+
+const Box: FC<Props> = ({ isUser }) => {
+  const userContext: IUserContext = useContext(UserContext);
+  const tradeContext: ITradeContext = useContext(TradeContext);
 
   const addressObj = isUser
     ? userContext.user.addressObj
@@ -25,7 +34,7 @@ const Box = ({ isUser }) => {
     ? "bord-hori-green"
     : "";
 
-  const [trader, setTrader] = useState({
+  const [trader, setTrader] = useState<AddressObj>({
     address: "initialAdd",
     ens: "ens"
   });
@@ -50,14 +59,6 @@ const Box = ({ isUser }) => {
       {isUser && <ItemForm />}
     </div>
   );
-};
-
-Box.defaultProps = {
-  isUser: false
-};
-
-Box.propTypes = {
-  isUser: PropTypes.bool.isRequired
 };
 
 export default Box;
