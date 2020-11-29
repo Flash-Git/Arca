@@ -1,5 +1,5 @@
 import React, { useReducer, useContext, FC } from "react";
-import uuid from "uuid";
+import { v4 as uuid } from "uuid";
 
 import TradeContext from "./TradeContext";
 import TradeReducer from "./TradeReducer";
@@ -26,7 +26,6 @@ import { SENT, UNSENT } from "../sentStatus";
 import {
   UserContext as IUserContext,
   TradeState as ITradeState,
-  User,
   AddTradeItem,
   CancelTradeItem,
   GetTradeItems,
@@ -50,7 +49,7 @@ const TradeState: FC = props => {
     user: {
       tradeItems: [
         {
-          id: uuid.v4(),
+          id: uuid(),
           network: {
             status: UNSENT,
             txHash: null,
@@ -67,7 +66,7 @@ const TradeState: FC = props => {
           }
         },
         {
-          id: uuid.v4(),
+          id: uuid(),
           network: {
             status: UNSENT,
             txHash: null,
@@ -84,7 +83,7 @@ const TradeState: FC = props => {
           }
         },
         {
-          id: uuid.v4(),
+          id: uuid(),
           network: {
             status: SENT,
             txHash: "0x",
@@ -101,7 +100,7 @@ const TradeState: FC = props => {
           }
         },
         {
-          id: uuid.v4(),
+          id: uuid(),
           network: {
             status: SENT,
             txHash: "0x",
@@ -121,7 +120,7 @@ const TradeState: FC = props => {
           }
         },
         {
-          id: uuid.v4(),
+          id: uuid(),
           network: {
             status: SENT,
             txHash: "0x2",
@@ -146,7 +145,7 @@ const TradeState: FC = props => {
     tradePartner: {
       tradeItems: [
         {
-          id: uuid.v4(),
+          id: uuid(),
           network: {
             status: UNSENT,
             txHash: null,
