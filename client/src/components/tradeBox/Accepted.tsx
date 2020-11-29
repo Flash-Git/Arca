@@ -6,7 +6,7 @@ import Spinner from "../layout/Spinner";
 import { TradeContext as ITradeContext } from "context";
 
 type Props = {
-  isUser: boolean;
+  isUser?: boolean;
 };
 
 const Accepted: FC<Props> = ({ isUser }) => {
