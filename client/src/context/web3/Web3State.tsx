@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, FC } from "react";
+import { useReducer, useEffect, FC } from "react";
 import Web3 from "web3";
 import { provider } from "web3-core";
 import { AbiItem } from "web3-utils";
@@ -17,7 +17,6 @@ import {
   AddErc721,
   Connnect,
   NetworkNum,
-  Erc,
   ErcType,
   ArcaCalls as IArcaCalls,
   ErcCalls as IErcCalls,
@@ -34,6 +33,12 @@ import {
   CONNECT_ENS,
   DISCONNECT
 } from "../types";
+
+interface Window {
+  web3: any;
+  ethereum: any;
+}
+declare var window: Window;
 
 const Web3State: FC = props => {
   const initialState: IWeb3State = {
@@ -69,6 +74,7 @@ const Web3State: FC = props => {
 
   useEffect(() => {
     if (!window.web3) return;
+
     const web3 = new Web3(Web3.givenProvider);
     connectWeb3(web3);
     connectEns(web3.currentProvider);
@@ -77,8 +83,9 @@ const Web3State: FC = props => {
   useEffect(() => {
     if (!state.web3) return;
 
-    const network = +state.web3.currentProvider.networkVersion;
-    network !== state.network && updateNetwork(network);
+    // const network = +state.web3.currentProvider.networkVersion;
+    // network !== state.network && updateNetwork(4);
+    updateNetwork(4);
   }, [state.web3]);
 
   useEffect(() => {
@@ -87,14 +94,14 @@ const Web3State: FC = props => {
     setArca();
   }, [state.network]);
 
-  window.ethereum.on("accountsChanged", accounts => {
+  window.ethereum.on("accountsChanged", (accounts: any) => {
     //Update User TODO
     // Time to reload your interface with accounts[0]!
   });
 
-  window.ethereum.on("networkChanged", network => {
-    network = +network;
-    network !== state.network && updateNetwork(network);
+  window.ethereum.on("networkChanged", (network: number | null) => {
+    // network = +network;
+    // network !== state.network && updateNetwork(network);
   });
 
   const getErc = (address: string) =>
@@ -105,7 +112,7 @@ const Web3State: FC = props => {
    */
 
   const ArcaCalls: IArcaCalls = async (_method, _params) => {
-    const contract = await getArcaContract();
+    const contract: any = await getArcaContract();
     if (!contract) return;
 
     try {
@@ -199,7 +206,7 @@ const Web3State: FC = props => {
   };
 
   const ArcaSends: IArcaSends = async (_method, _params) => {
-    const contract = await getArcaContract();
+    const contract: any = await getArcaContract();
 
     try {
       switch (_method) {
@@ -313,7 +320,7 @@ const Web3State: FC = props => {
     }
   };
 
-  const Tx = _promise => {
+  const Tx = (_promise: any) => {
     return new Promise((resolve, reject) => {
       _promise.on("transactionHash", (hash: string) => {
         alert("Tx Sent");
@@ -330,7 +337,7 @@ const Web3State: FC = props => {
         }
         if (confirmation > 1) {
           console.log("Receipt received");
-          return resolve();
+          return resolve(0);
         }
       });
       _promise.on("error", (e: Error) => {
@@ -346,8 +353,8 @@ const Web3State: FC = props => {
     });
   };
 
-  const NewContract = (_abi: AbiItem, _add: string) => {
-    if (!state.connected) return null;
+  const NewContract = (_abi: AbiItem[], _add: string) => {
+    if (!state.connected || state.web3 === null) return null;
     return new state.web3.eth.Contract(_abi, _add);
   };
 
@@ -383,6 +390,7 @@ const Web3State: FC = props => {
 
   const connectEns = async (provider: provider) => {
     const ens = new ENS(provider);
+
     dispatch({
       type: CONNECT_ENS,
       payload: ens
@@ -403,7 +411,7 @@ const Web3State: FC = props => {
   };
 
   const setArca = async () => {
-    const arca: Contract | null = await ArcaContract();
+    const arca: any = await ArcaContract();
     dispatch({
       type: SET_ARCA,
       payload: arca
