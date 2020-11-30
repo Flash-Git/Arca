@@ -65,3 +65,6 @@ config/keys.js
 .vscode/
 
 client/src/res/
+
+# production
+build/
