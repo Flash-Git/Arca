@@ -47,24 +47,22 @@ localStorage.token && setAuthToken(localStorage.token);
 
 const App: FC = () => (
   <AppState>
-    <TradeState>
-      <UserState>
-        <AlertState>
-          <Web3State>
-            <Router>
-              <Navbar />
-              <Alerts />
-              <Switch>
-                <Route exact path="/" component={Home} />
-                <Route exact path="/about" component={About} />
-                <Route component={NotFound} />
-              </Switch>
-              <Footer />
-            </Router>
-          </Web3State>
-        </AlertState>
-      </UserState>
-    </TradeState>
+    <UserState>
+      <AlertState>
+        <Web3State>
+          <Router>
+            <Navbar />
+            <Alerts />
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route exact path="/about" component={About} />
+              <Route component={NotFound} />
+            </Switch>
+            <Footer />
+          </Router>
+        </Web3State>
+      </AlertState>
+    </UserState>
   </AppState>
 );
 
