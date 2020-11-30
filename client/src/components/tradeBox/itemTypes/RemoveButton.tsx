@@ -19,8 +19,8 @@ const RemoveButton: FC<Props> = ({ id, isUser }) => {
 
   if (!isUser) return <div className="mx-1 btn-sm"></div>; //invisidiv
   return (
-    <button className="btn mx btn-sm" onClick={onClick}>
-      <span role="img" aria-label="cross">
+    <button className="btn mx btn-sm nobg" onClick={onClick}>
+      <span role="button" aria-label="cross">
         &#10060;
       </span>
     </button>

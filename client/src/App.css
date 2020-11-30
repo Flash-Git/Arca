@@ -675,6 +675,10 @@ select {
   grid-column: auto;
 }
 
+.nobg {
+  background-color: rgba(0, 0, 0, 0);
+}
+
 /* Mobile Styles */
 @media (max-width: 700px) {
   .hide-sm {

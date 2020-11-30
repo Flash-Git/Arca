@@ -66,12 +66,12 @@ const SendBtn: FC<Props> = ({ id, status, txData, isUser }) => {
   const button = () => {
     if (isUser) {
       return (
-        <button className="btn btn-sm w-5" onClick={onClick}>
+        <button className="btn btn-sm btn-dark w-5" onClick={onClick}>
           {content}
         </button>
       );
     } else {
-      return <button className="btn btn-sm w-5">{content}</button>;
+      return <button className="btn btn-sm btn-dark w-5">{content}</button>;
     }
   };
 
