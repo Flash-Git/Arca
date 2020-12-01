@@ -217,69 +217,57 @@ declare module "context" {
    */
 
   // State
+  import { Provider, Signer, Contract, Transaction } from "ethers";
 
   export type ErcType = "erc20" | "erc721" | "ens";
 
   export type NetworkNum = 1 | 4 | 5;
 
-  export type Erc = {
-    address: string;
-    type: string;
-    contract: any; // Contract
-  };
-
-  export type ArcaContract = {
-    address: string;
-    arca: null | any;
-    ercs: Erc[];
-  };
-
   export type Web3State = {
     connected: boolean;
-    web3: Web3 | null;
-    ens: string | null;
-    network: NetworkNum | null;
-    address: string;
-    arca: null;
-    ercs: Erc[];
-    main: ArcaContract;
-    rinkeby: ArcaContract;
-    goerli: ArcaContract;
+    providers: Provider[];
+    signers: Signer[];
+    arcaAddress: string;
+    arcaContract: null | Contract;
+    erc20Addresses: string[];
+    erc721Addresses: string[];
   };
 
   // Actions
 
-  export type Connnect = () => void;
   export type AddErc20 = (erc: Erc) => void;
+
   export type AddErc721 = (erc: Erc) => void;
-  export type ArcaCalls = (
+
+  export type ArcaCall = (
+    contract: Contract,
     method: ArcaCallMethod,
     params: string[]
   ) => Promise<string>;
-  export type ErcCalls = (
+
+  export type ErcCall = (
+    signer: Signer,
     method: ErcCallMethod,
-    address: string,
+    userAddress: address,
+    arcaAddress: address,
+    ercAddress: address,
     type: ErcType
   ) => Promise<string>;
-  export type ArcaSends = (method: ArcaSendMethod, params: string[]) => void;
-  export type ErcSends = (method: ErcSendMethod, address: string) => void;
 
-  // Not extending state
-  export interface Web3Context {
-    connected: boolean;
-    arca: null;
-    web3: null | Web3;
-    ens: any | null;
-    network: NetworkNum | null;
-    connect: Connnect;
-    addErc20: AddErc20;
-    addErc721: AddErc721;
-    arcaCalls: ArcaCalls;
-    ercCalls: ErcCalls;
-    ercCalls: ErcCalls;
-    arcaSends: ArcaSends;
-    ercSends: ErcSends;
-  }
+  export type ArcaSend = (
+    contract: Contract,
+    method: ArcaSendMethod,
+    params: string[]
+  ) => Promise<Transaction>;
+
+  export type ErcSend = (
+    signer: Signer,
+    method: ErcSendMethod,
+    arcaAddress: string,
+    ercAddress: string
+  ) => Promise<Transaction>;
+
+  export interface Web3Context {}
 
   // Arca Methods
 
