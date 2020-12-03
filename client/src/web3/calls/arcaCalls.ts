@@ -1,10 +1,11 @@
-import { Contract, ContractInterface, Signer } from "ethers";
+import { Contract, Signer } from "ethers";
 
 import { ArcaCall, ArcaSend } from "context";
 
+import abi from "../abis/abi";
+
 export const newArcaContract = (
   arcaAddress: string,
-  abi: ContractInterface,
   signer: Signer
 ): Contract => {
   return new Contract(arcaAddress, abi, signer);
