@@ -146,11 +146,13 @@ declare module "context" {
   // State
 
   type Erc20 = {
+    address: string;
     balance: string;
     value: string;
   };
 
   type Erc721 = {
+    address: string;
     id: string;
     value: string;
   };
@@ -184,47 +186,32 @@ declare module "context" {
     tradeItems: TradeItem[];
   };
 
-  export interface UserContext extends UserState {}
-
   export type PartnerState = {
     address: string;
     balance: string;
     tradeItems: TradeItem[];
   };
 
-  export interface PartnerContext extends PartnerState {}
-
   // Actions
 
-  export type ClearUser = () => void;
-  export type ClearTradePartner = () => void;
-  export type SetAddresses = (
-    userAddressObj: AddressObj,
-    tradePartnerAddressObj: AddressObj
+  export type LoadAddress = (signer: Signer) => void;
+  export type LoadBalance = (signer: Signer) => void;
+  export type LoadErcs = (
+    signer: Signer,
+    erc20Addresses: string[],
+    arcaAddress: string
   ) => void;
-  export type ClearAddresses = () => void;
-  export type GetBalance = (id: Box) => void;
-  export type ClearBalance = (id: Box) => void;
-  export type GetOwnedTokens = (id: Box) => void;
-  export type GetRequestedTokens = (id: Box) => void;
-  export type AddRequestedToken = (id: Box) => void;
-  export type GetSettings = () => void;
-  export type UpdateSettings = (settings: Settings) => void;
-  export type ClearSettings = () => void;
 
   export interface UserContext extends UserState {
-    clearUser: ClearUser;
-    clearTradePartner: ClearTradePartner;
-    setAddresses: SetAddresses;
-    clearAddresses: ClearAddresses;
-    getBalance: GetBalance;
-    clearBalance: ClearBalance;
-    getOwnedTokens: GetOwnedTokens;
-    getRequestedTokens: GetRequestedTokens;
-    addRequestedToken: AddRequestedToken;
-    getSettings: GetSettings;
-    updateSettings: UpdateSettings;
-    clearSettings: ClearSettings;
+    loadAddress: LoadAddress;
+    loadBalance: LoadBalance;
+    loadErc20s: LoadErcs;
+    loadErc721s: LoadErcs;
+  }
+
+  export interface PartnerContext extends PartnerState {
+    loadAddress: LoadAddress;
+    loadBalance: LoadBalance;
   }
 
   /*
@@ -232,6 +219,7 @@ declare module "context" {
    */
 
   // State
+
   import { Signer, Contract, Transaction } from "ethers";
 
   export type ErcType = "erc20" | "erc721" | "ens";
