@@ -67,45 +67,45 @@ declare module "context" {
 
   export type Box = 0 | 1;
 
-  export type Status = SENT | UNSENT;
+  // export type Status = SENT | UNSENT;
 
-  export type Network = {
-    status: Status;
-    txHash: string | null;
-    web3Loading: boolean;
-    dbLoading: boolean;
-    synced: boolean;
-    slot: number;
-    tab: number;
-  };
+  // export type Network = {
+  //   status: Status;
+  //   txHash: string | null;
+  //   web3Loading: boolean;
+  //   dbLoading: boolean;
+  //   synced: boolean;
+  //   slot: number;
+  //   tab: number;
+  // };
 
-  export type Data = {
-    type: ErcType;
-    contractAdd: string;
-    amount?: string;
-    id?: string;
-    name?: string;
-    namehash?: string;
-    verified?: boolean;
-  };
+  // export type Data = {
+  //   type: ErcType;
+  //   contractAdd: string;
+  //   amount?: string;
+  //   id?: string;
+  //   name?: string;
+  //   namehash?: string;
+  //   verified?: boolean;
+  // };
 
-  export type TradeItem = {
-    id: v4;
-    network: Network;
-    data: Data;
-  };
+  // export type TradeItem = {
+  //   id: v4;
+  //   network: Network;
+  //   data: Data;
+  // };
 
-  export type UserBox = {
-    tradeItems: TradeItem[];
-    accepted: boolean | null;
-  };
+  // export type UserBox = {
+  //   tradeItems: TradeItem[];
+  //   accepted: boolean | null;
+  // };
 
-  export type TradeState = {
-    userBox: Box;
-    currentItem: TradeItem | null;
-    user: UserBox;
-    tradePartner: UserBox;
-  };
+  // export type TradeState = {
+  //   userBox: Box;
+  //   currentItem: TradeItem | null;
+  //   user: UserBox;
+  //   tradePartner: UserBox;
+  // };
 
   // Actions
 
@@ -140,44 +140,59 @@ declare module "context" {
   }
 
   /*
-   * User
+   * User / Partner
    */
 
   // State
 
-  export type Token = {
-    name: string;
+  type Erc20 = {
+    balance: string;
+    value: string;
   };
 
-  export type Tokens = {
-    web3Loading: boolean;
-    dbLoading: boolean;
-    synced: boolean;
-    erc20Tokens: Token[];
-    erc721Tokens: Token[];
+  type Erc721 = {
+    id: string;
+    value: string;
   };
 
-  export type AddressObj = {
+  type TradeItemData = {
+    type: ErcType;
     address: string;
-    ens: null | string;
+    id?: string;
+    amount?: string;
   };
 
-  export type User = {
-    addressObj: AddressObj;
-    balance: string | null;
-    ownedTokens: Tokens;
-    requestedTokens: Tokens;
+  type SendStatus = SENT | UNSENT;
+
+  type TradeItemStatus = {
+    slot: number;
+    state: SendStatus;
+    hash: string;
   };
 
-  export type Settings = {
-    nickname: string | null;
+  type TradeItem = {
+    id: string;
+    data: TradeItemData;
+    status: TradeItemStatus;
   };
 
   export type UserState = {
-    user: User;
-    tradePartner: User;
-    settings: Settings;
+    address: string;
+    balance: string;
+    erc20s: Erc20[];
+    erc721s: Erc721[];
+    tradeItems: TradeItem[];
   };
+
+  export interface UserContext extends UserState {}
+
+  export type PartnerState = {
+    address: string;
+    balance: string;
+    tradeItems: TradeItem[];
+  };
+
+  export interface PartnerContext extends PartnerState {}
 
   // Actions
 
@@ -224,7 +239,7 @@ declare module "context" {
   export type NetworkNum = 1 | 4 | 5;
 
   export type Web3State = {
-    // providers: Provider[];
+    providers: Provider[];
     signers: Signer[];
     arcaAddress: string;
     arcaContract: null | Contract;
