@@ -217,15 +217,14 @@ declare module "context" {
    */
 
   // State
-  import { Provider, Signer, Contract, Transaction } from "ethers";
+  import { Signer, Contract, Transaction } from "ethers";
 
   export type ErcType = "erc20" | "erc721" | "ens";
 
   export type NetworkNum = 1 | 4 | 5;
 
   export type Web3State = {
-    connected: boolean;
-    providers: Provider[];
+    // providers: Provider[];
     signers: Signer[];
     arcaAddress: string;
     arcaContract: null | Contract;
@@ -235,9 +234,48 @@ declare module "context" {
 
   // Actions
 
-  export type AddErc20 = (erc: Erc) => void;
+  export type LoadProvider = () => void;
+  export type LoadArcaAddress = () => void;
+  export type LoadArcaContract = (signer: Signer) => void;
+  export type LoadErc20Addresses = () => void;
+  export type LoadErc721Addresses = () => void;
 
-  export type AddErc721 = (erc: Erc) => void;
+  export interface Web3Context extends Web3State {
+    loadProvider: LoadProvider;
+    loadArcaAddress: LoadArcaAddress;
+    loadArcaContract: LoadArcaContract;
+    loadErc20Addresses: LoadErc20Addresses;
+    loadErc721Addresses: LoadErc721Addresses;
+  }
+
+  // Arca Methods
+
+  export type ArcaCallMethod =
+    | "getErc20Count"
+    | "getErc721Count"
+    | "getNonce"
+    | "getPartnerNonce"
+    | "getOfferErc20"
+    | "getOfferErc721";
+  export type ErcCallMethod =
+    | "decimals"
+    | "balanceOf"
+    | "symbol"
+    | "name"
+    | "allowance"
+    | "isApprovedForAll";
+  export type ArcaSendMethod =
+    | "pushOfferErc20"
+    | "pushOfferErc721"
+    | "removeOfferErc20"
+    | "removeOfferErc721"
+    | "acceptTrade"
+    | "unacceptTrade";
+  export type ErcSendMethod = "approve" | "setApprovalForAll";
+
+  /*
+   * Calls
+   */
 
   export type ArcaCall = (
     contract: Contract,
@@ -266,31 +304,4 @@ declare module "context" {
     arcaAddress: string,
     ercAddress: string
   ) => Promise<Transaction>;
-
-  export interface Web3Context {}
-
-  // Arca Methods
-
-  export type ArcaCallMethod =
-    | "getErc20Count"
-    | "getErc721Count"
-    | "getNonce"
-    | "getPartnerNonce"
-    | "getOfferErc20"
-    | "getOfferErc721";
-  export type ErcCallMethod =
-    | "decimals"
-    | "balanceOf"
-    | "symbol"
-    | "name"
-    | "allowance"
-    | "isApprovedForAll";
-  export type ArcaSendMethod =
-    | "pushOfferErc20"
-    | "pushOfferErc721"
-    | "removeOfferErc20"
-    | "removeOfferErc721"
-    | "acceptTrade"
-    | "unacceptTrade";
-  export type ErcSendMethod = "approve" | "setApprovalForAll";
 }
