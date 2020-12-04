@@ -36,7 +36,7 @@ const Web3State: FC = props => {
   const { addAlert } = alertContext;
 
   const initialState: IWeb3State = {
-    // providers: [],
+    providers: [],
     signers: [],
     arcaAddress: "",
     arcaContract: null,
