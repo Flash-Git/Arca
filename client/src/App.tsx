@@ -24,8 +24,8 @@ import Footer from "./components/layout/Footer";
 
 import AppState from "./context/app/AppState";
 import AlertState from "./context/alert/AlertState";
-import TradeState from "./context/trade/TradeState";
 import UserState from "./context/user/UserState";
+import PartnerState from "./context/partner/PartnerState";
 import Web3State from "./context/web3/Web3State";
 
 import setAuthToken from "./utils/setAuthToken";
@@ -48,20 +48,22 @@ localStorage.token && setAuthToken(localStorage.token);
 const App: FC = () => (
   <AppState>
     <UserState>
-      <AlertState>
-        <Web3State>
-          <Router>
-            <Navbar />
-            <Alerts />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/about" component={About} />
-              <Route component={NotFound} />
-            </Switch>
-            <Footer />
-          </Router>
-        </Web3State>
-      </AlertState>
+      <PartnerState>
+        <AlertState>
+          <Web3State>
+            <Router>
+              <Navbar />
+              <Alerts />
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route exact path="/about" component={About} />
+                <Route component={NotFound} />
+              </Switch>
+              <Footer />
+            </Router>
+          </Web3State>
+        </AlertState>
+      </PartnerState>
     </UserState>
   </AppState>
 );
