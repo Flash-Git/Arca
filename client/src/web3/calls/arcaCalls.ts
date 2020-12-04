@@ -27,6 +27,7 @@ export const arcaCall: ArcaCall = async (contract, method, params) => {
       return contract.getOfferErc721(params[0], params[1], "0", params[2]);
     default:
       console.log("Invalid method name: " + method);
+      return null;
   }
 };
 
@@ -46,5 +47,6 @@ export const arcaSend: ArcaSend = async (contract, method, params) => {
       return contract.unacceptTrade(params[0], "0");
     default:
       console.log("Invalid method name: " + method);
+      return null;
   }
 };

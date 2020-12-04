@@ -50,6 +50,7 @@ export const ercCall: ErcCall = async (
 
     default:
       console.log("Invalid method name: " + method);
+      return null;
   }
 };
 
@@ -72,5 +73,6 @@ export const ercSend: ErcSend = async (
       );
     default:
       console.log("Invalid method name: " + method);
+      return null;
   }
 };
