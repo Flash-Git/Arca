@@ -1,30 +1,35 @@
-import React, { FC, useContext, useEffect } from "react";
-
-import PropTypes from "prop-types";
+import { FC, useContext, useEffect } from "react";
 
 import Erc20 from "./itemTypes/Erc20";
 import Erc721 from "./itemTypes/Erc721";
 import EnsForm from "./itemTypes/EnsForm";
 
-import TradeContext from "../../context/trade/TradeContext";
+import UserContext from "../../context/user/UserContext";
+import PartnerContext from "../../context/partner/PartnerContext";
+import Web3Context from "../../context/web3/Web3Context";
 
-import { TradeContext as ITradeContext, TradeItem } from "context";
+import {
+  UserContext as IUserContext,
+  PartnerContext as IPartnerContext,
+  Web3Context as IWeb3Context,
+  TradeItem
+} from "context";
 
 type Props = {
   isUser?: boolean;
 };
 
 const Items: FC<Props> = ({ isUser }) => {
-  const tradeContext: ITradeContext = useContext(TradeContext);
+  const userContext: IUserContext = useContext(UserContext);
+  const partnerContext: IPartnerContext = useContext(PartnerContext);
+  const web3Context: IWeb3Context = useContext(Web3Context);
 
-  const { getTradeItems } = tradeContext;
-
-  const items = isUser
-    ? tradeContext.user.tradeItems
-    : tradeContext.tradePartner.tradeItems;
+  const items = isUser ? userContext.tradeItems : partnerContext.tradeItems;
+  const loadItems = isUser ? userContext.loadItems : partnerContext.loadItems;
+  const { signers } = web3Context;
 
   useEffect(() => {
-    getTradeItems();
+    loadItems(signers[signers.length - 1]);
   }, []);
 
   const internal = (item: TradeItem) => {
