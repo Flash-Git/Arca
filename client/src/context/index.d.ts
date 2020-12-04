@@ -1,9 +1,9 @@
 declare module "context" {
   import Web3 from "web3";
-  import { provider } from "web3-core";
+  import { Signer, Contract, Transaction } from "ethers";
   import { v4 } from "uuid";
 
-  import { SENT, UNSENT } from "./sentStatus";
+  import { SENT, SENDING, UNSENT } from "./sentStatus";
 
   export type Action = {
     payload?: any;
@@ -60,86 +60,6 @@ declare module "context" {
   }
 
   /*
-   * Trade
-   */
-
-  // State
-
-  export type Box = 0 | 1;
-
-  // export type Status = SENT | UNSENT;
-
-  // export type Network = {
-  //   status: Status;
-  //   txHash: string | null;
-  //   web3Loading: boolean;
-  //   dbLoading: boolean;
-  //   synced: boolean;
-  //   slot: number;
-  //   tab: number;
-  // };
-
-  // export type Data = {
-  //   type: ErcType;
-  //   contractAdd: string;
-  //   amount?: string;
-  //   id?: string;
-  //   name?: string;
-  //   namehash?: string;
-  //   verified?: boolean;
-  // };
-
-  // export type TradeItem = {
-  //   id: v4;
-  //   network: Network;
-  //   data: Data;
-  // };
-
-  // export type UserBox = {
-  //   tradeItems: TradeItem[];
-  //   accepted: boolean | null;
-  // };
-
-  // export type TradeState = {
-  //   userBox: Box;
-  //   currentItem: TradeItem | null;
-  //   user: UserBox;
-  //   tradePartner: UserBox;
-  // };
-
-  // Actions
-
-  export type AddTradeItem = (tradeItem: TradeItem) => void;
-  export type SetUserAccepted = (id: number) => void;
-  export type SetPartnerAccepted = (id: number) => void;
-  export type SetUserItems = (tradeItems: TradeItem[]) => void;
-  export type SetPartnerItems = (tradeItems: TradeItem[]) => void;
-  export type CancelTradeItem = (id: v4) => void;
-  export type ModifyTradeItemStatus = (id: v4, status: Status) => void;
-  export type SetUserBox = (id: Box) => void;
-  export type SetCurrentItem = (currentItem: TradeItem) => void;
-  export type ClearCurrentItem = () => void;
-  export type GetAccepted = (id: v4) => void;
-  export type ToggleAccepted = () => void;
-  export type GetTradeItems = () => void;
-
-  export interface TradeContext extends TradeState {
-    addTradeItem: AddTradeItem;
-    setUserAccepted: SetUserAccepted;
-    setPartnerAccepted: SetPartnerAccepted;
-    setUserItems: SetUserItems;
-    setPartnerItems: SetPartnerItems;
-    cancelTradeItem: CancelTradeItem;
-    modifyTradeItemStatus: ModifyTradeItemStatus;
-    setUserBox: SetUserBox;
-    setCurrentItem: SetCurrentItem;
-    clearCurrentItem: ClearCurrentItem;
-    getAccepted: GetAccepted;
-    toggleAccepted: ToggleAccepted;
-    getTradeItems: GetTradeItems;
-  }
-
-  /*
    * User / Partner
    */
 
@@ -164,11 +84,11 @@ declare module "context" {
     amount?: string;
   };
 
-  type SendStatus = SENT | UNSENT;
+  export type SendState = SENT | SENDING | UNSENT;
 
   type TradeItemStatus = {
     slot: number;
-    state: SendStatus;
+    state: SendState;
     hash: string;
   };
 
@@ -184,13 +104,23 @@ declare module "context" {
     erc20s: Erc20[];
     erc721s: Erc721[];
     tradeItems: TradeItem[];
+    accepted: boolean;
   };
 
   export type PartnerState = {
     address: string;
     balance: string;
     tradeItems: TradeItem[];
+    accepted: boolean;
   };
+
+  // Methods
+
+  export type ArcaMethod = (
+    contract: Contract,
+    method: ArcaSendMethod,
+    params: string[]
+  ) => Promise<Transaction> | null;
 
   // Actions
 
@@ -201,17 +131,35 @@ declare module "context" {
     erc20Addresses: string[],
     arcaAddress: string
   ) => void;
+  export type SetAddress = (address: string) => void;
+  export type AddTradeItem = (item: TradeItem) => void;
+  export type SendTradeItem = (
+    id: string,
+    contract: Contract,
+    method: ArcaSendMethod,
+    params: string[]
+  ) => void;
+  export type CancelTradeItem = (
+    id: string,
+    contract: Contract,
+    method: ArcaSendMethod,
+    params: string[]
+  ) => void;
 
   export interface UserContext extends UserState {
     loadAddress: LoadAddress;
     loadBalance: LoadBalance;
     loadErc20s: LoadErcs;
     loadErc721s: LoadErcs;
+    setAddress: SetAddress;
+    addItem: AddTradeItem;
+    sendItem: SendTradeItem;
+    cancelItem: CancelTradeItem;
   }
 
   export interface PartnerContext extends PartnerState {
-    loadAddress: LoadAddress;
     loadBalance: LoadBalance;
+    setAddress: SetAddress;
   }
 
   /*
@@ -219,8 +167,6 @@ declare module "context" {
    */
 
   // State
-
-  import { Signer, Contract, Transaction } from "ethers";
 
   export type ErcType = "erc20" | "erc721" | "ens";
 
@@ -284,7 +230,7 @@ declare module "context" {
     contract: Contract,
     method: ArcaCallMethod,
     params: string[]
-  ) => Promise<string>;
+  ) => Promise<string> | null;
 
   export type ErcCall = (
     signer: Signer,
@@ -299,7 +245,7 @@ declare module "context" {
     contract: Contract,
     method: ArcaSendMethod,
     params: string[]
-  ) => Promise<Transaction>;
+  ) => Promise<Transaction> | null;
 
   export type ErcSend = (
     signer: Signer,
