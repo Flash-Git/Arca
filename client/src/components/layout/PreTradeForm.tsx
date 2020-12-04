@@ -1,100 +1,48 @@
-import React, { useState, useEffect, useContext, FC } from "react";
-import Utils from "web3-utils";
-
-import enable from "../loading/enable";
+import { useState, useEffect, useContext, FC } from "react";
+import { utils } from "ethers";
 
 import UserContext from "../../context/user/UserContext";
-import Web3Context from "../../context/web3/Web3Context";
+import PartnerContext from "../../context/partner/PartnerContext";
 
 import {
   UserContext as IUserContext,
-  Web3Context as IWeb3Context
+  PartnerContext as IPartnerContext
 } from "context";
 
 type FormState = {
   input: string;
-  address: null | string;
-  ens: null | string;
+  address: boolean;
 };
 
 const PreTradeForm: FC = () => {
   const userContext: IUserContext = useContext(UserContext);
-  const web3Context: IWeb3Context = useContext(Web3Context);
-
-  const { setAddresses } = userContext;
-  const { connected, web3, ens, connect } = web3Context;
+  const { setAddress: setAddress1 } = userContext;
+  const partnerContext: IPartnerContext = useContext(PartnerContext);
+  const { setAddress: setAddress2 } = partnerContext;
 
   // FORM STATE
   const [form1State, setForm1State] = useState<FormState>({
     input: "",
-    address: null,
-    ens: null
+    address: false
   });
 
   const [form2State, setForm2State] = useState<FormState>({
     input: "",
-    address: null,
-    ens: null
+    address: false
   });
 
-  const { input: input1, address: address1, ens: ens1 } = form1State;
-  const { input: input2, address: address2, ens: ens2 } = form2State;
+  const { input: input1, address: address1 } = form1State;
+  const { input: input2, address: address2 } = form2State;
 
-  //Inputs
   useEffect(() => {
-    if (Utils.isAddress(input1.toUpperCase())) {
-      setForm1State({ ...form1State, address: input1, ens: null });
-    } else {
-      setForm1State({ ...form1State, address: null, ens: null });
-    }
+    setForm1State({ input: input1, address: utils.isAddress(input1) });
   }, [input1]);
 
   useEffect(() => {
-    if (Utils.isAddress(input2.toUpperCase())) {
-      setForm2State({ ...form2State, address: input2, ens: null });
-    } else {
-      setForm2State({ ...form2State, address: null, ens: null });
-    }
+    setForm2State({ input: input2, address: utils.isAddress(input2) });
   }, [input2]);
 
-  const checkInput1 = async () => {
-    if (Utils.isAddress(input1.toUpperCase())) {
-      setForm1State({ ...form1State, address: input1, ens: null });
-      return;
-    }
-
-    if (ens === null) return;
-
-    const input = input1;
-    try {
-      const add: string = await ens.resolver(input1).addr();
-      setForm1State({ input: input1, address: add, ens: input1 });
-      return;
-    } catch (e) {
-      console.log(e);
-      if (input !== input1) return;
-      setForm1State({ input: input1, address: null, ens: null });
-    }
-  };
-
-  const checkInput2 = async () => {
-    if (Utils.isAddress(input2.toUpperCase())) {
-      setForm2State({ ...form2State, address: input2, ens: null });
-      return;
-    }
-    if (ens === null) return;
-
-    const input = input2;
-    try {
-      const add = await ens.resolver(input2).addr();
-      setForm2State({ input: input2, address: add, ens: input2 });
-      return;
-    } catch (e) {
-      console.log(e);
-      if (input !== input2) return;
-      setForm2State({ input: input2, address: null, ens: null });
-    }
-  };
+  //Inputs
 
   const onChange1 = (e: any) => {
     setForm1State({ ...form1State, [e.target.name]: e.target.value.trim() });
@@ -106,30 +54,10 @@ const PreTradeForm: FC = () => {
   const onSubmit = async (e: any) => {
     e.preventDefault();
 
-    if (web3 === null) {
-      //TODO Alert
-      return;
-    }
-    if (ens === null) {
-      //TODO Alert
-      return;
-    }
+    if (!address1 || !address2) return;
 
-    if (!connected) {
-      const enabled = await enable();
-      if (!enabled) return;
-      connect();
-      return;
-    }
-
-    await Promise.all([checkInput1(), checkInput2()]);
-
-    if (address1 && address2) {
-      setAddresses(
-        { address: address1, ens: ens1 },
-        { address: address2, ens: ens2 }
-      );
-    }
+    setAddress1(input1);
+    setAddress2(input2);
   };
 
   return (
