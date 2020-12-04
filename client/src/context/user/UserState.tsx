@@ -5,6 +5,10 @@ import UserReducer from "./UserReducer";
 
 import AlertContext from "../alert/AlertContext";
 
+import { ercCall } from "../../web3/calls/ercCalls";
+import { arcaSend } from "../../web3/calls/arcaCalls";
+import { SENDING, CANCELLING } from "../sendState";
+
 import {
   AlertContext as IAlertContext,
   UserState as IUserState,
@@ -12,11 +16,22 @@ import {
   LoadBalance,
   LoadErcs,
   Erc20,
-  Erc721
+  Erc721,
+  ArcaMethod,
+  SetAddress,
+  SendTradeItem,
+  CancelTradeItem,
+  AddTradeItem
 } from "context";
 
-import { SET_ADDRESS, SET_BALANCE, SET_ERC20S, SET_ERC721S } from "../types";
-import { ercCall } from "../../web3/calls/ercCalls";
+import {
+  ADD_ITEM,
+  SET_ADDRESS,
+  SET_BALANCE,
+  SET_ERC20S,
+  SET_ERC721S,
+  SET_ITEM_STATE
+} from "../types";
 
 const UserState: FC = props => {
   const alertContext: IAlertContext = useContext(AlertContext);
@@ -27,10 +42,25 @@ const UserState: FC = props => {
     balance: "",
     erc20s: [],
     erc721s: [],
-    tradeItems: []
+    tradeItems: [],
+    accepted: false
   };
 
   const [state, dispatch] = useReducer(UserReducer, initialState);
+
+  /*
+   * Methods
+   */
+
+  const arcaMethod: ArcaMethod = (contract, method, params) => {
+    // TODO callback param to undo tradeItem send state
+    try {
+      return arcaSend(contract, method, params);
+    } catch (e) {
+      addAlert(`Failed to send Transaction: ${e}`, "danger");
+      return null;
+    }
+  };
 
   /*
    * Actions
@@ -130,7 +160,41 @@ const UserState: FC = props => {
     }
   };
 
+  const setAddress: SetAddress = address => {
+    dispatch({
+      type: SET_ADDRESS,
+      payload: address
+    });
+  };
+
   // Trade Items
+
+  const addItem: AddTradeItem = async item => {
+    dispatch({
+      type: ADD_ITEM,
+      payload: item
+    });
+  };
+
+  const sendItem: SendTradeItem = async (id, contract, method, params) => {
+    const tx = await arcaMethod(contract, method, params);
+    if (tx === null) return;
+
+    dispatch({
+      type: SET_ITEM_STATE,
+      payload: { id, SENDING }
+    });
+  };
+
+  const cancelItem: CancelTradeItem = async (id, contract, method, params) => {
+    const tx = await arcaMethod(contract, method, params);
+    if (tx === null) return;
+
+    dispatch({
+      type: SET_ITEM_STATE,
+      payload: { id, CANCELLING }
+    });
+  };
 
   return (
     <UserContext.Provider
@@ -140,10 +204,15 @@ const UserState: FC = props => {
         erc20s: state.erc20s,
         erc721s: state.erc721s,
         tradeItems: state.tradeItems,
+        accepted: state.accepted,
         loadAddress,
         loadBalance,
         loadErc20s,
-        loadErc721s
+        loadErc721s,
+        setAddress,
+        addItem,
+        sendItem,
+        cancelItem
       }}
     >
       {props.children}

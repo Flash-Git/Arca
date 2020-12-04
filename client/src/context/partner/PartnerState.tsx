@@ -21,7 +21,8 @@ const PartnerState: FC = props => {
   const initialState: IPartnerState = {
     address: "",
     balance: "",
-    tradeItems: []
+    tradeItems: [],
+    accepted: false
   };
 
   const [state, dispatch] = useReducer(PartnerReducer, initialState);
@@ -58,6 +59,7 @@ const PartnerState: FC = props => {
         address: state.address,
         balance: state.balance,
         tradeItems: state.tradeItems,
+        accepted: state.accepted,
         loadBalance,
         setAddress
       }}
