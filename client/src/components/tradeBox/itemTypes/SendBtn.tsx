@@ -19,18 +19,19 @@ type TxData = {
 
 type Props = {
   id: string;
-  isUser?: boolean;
   status: SendState;
   txData: TxData;
+  txCancel: TxData;
+  isUser?: boolean;
 };
 
-const SendBtn: FC<Props> = ({ id, status, txData, isUser }) => {
+const SendBtn: FC<Props> = ({ id, status, txData, txCancel, isUser }) => {
   //txData{ method:"pushOfferErc20" }
   //erc - allow
   //arca - send
   //arca - remove
   const userContext: IUserContext = useContext(UserContext);
-  const { sendItem } = userContext;
+  const { sendItem, cancelItem } = userContext;
 
   const web3Context: IWeb3Context = useContext(Web3Context);
   const { arcaContract } = web3Context;
@@ -59,8 +60,9 @@ const SendBtn: FC<Props> = ({ id, status, txData, isUser }) => {
   const onClick = (e: any) => {
     if (arcaContract === null) return;
 
-    // TODO cancel
-    sendItem(id, arcaContract, txData.method, txData.params);
+    if (content === "Cancel")
+      cancelItem(id, arcaContract, txCancel.method, txCancel.params);
+    else sendItem(id, arcaContract, txData.method, txData.params);
   };
 
   const button = () => {
