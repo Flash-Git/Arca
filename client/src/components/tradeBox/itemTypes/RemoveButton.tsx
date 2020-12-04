@@ -1,8 +1,12 @@
-import React, { useState, useContext, useEffect, FC } from "react";
+import { useContext, FC } from "react";
 
-import TradeContext from "../../../context/trade/TradeContext";
+import UserContext from "../../../context/user/UserContext";
+import Web3Context from "../../../context/web3/Web3Context";
 
-import { TradeContext as ITradeContext } from "context";
+import {
+  UserContext as IUserContext,
+  Web3Context as IWeb3Context
+} from "context";
 
 type Props = {
   id: string;
@@ -10,14 +14,20 @@ type Props = {
 };
 
 const RemoveButton: FC<Props> = ({ id, isUser }) => {
-  const tradeContext: ITradeContext = useContext(TradeContext);
-  const { cancelTradeItem } = tradeContext;
+  const web3Context: IWeb3Context = useContext(Web3Context);
+  const { arcaContract } = web3Context;
+
+  const userContext: IUserContext = useContext(UserContext);
+  const { cancelItem } = userContext;
 
   const onClick = (e: any) => {
-    cancelTradeItem(id);
+    if (arcaContract === null) return;
+
+    cancelItem(id, arcaContract);
   };
 
   if (!isUser) return <div className="mx-1 btn-sm"></div>; //invisidiv
+
   return (
     <button className="btn mx btn-sm nobg" onClick={onClick}>
       <span role="button" aria-label="cross">

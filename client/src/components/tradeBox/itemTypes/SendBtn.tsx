@@ -1,15 +1,15 @@
-import React, { useState, useContext, useEffect, FC } from "react";
+import { useState, useContext, useEffect, FC } from "react";
 
-import { SENT, UNSENT } from "../../../context/sentStatus";
+import { SENT, SENDING, UNSENT } from "../../../context/sendState";
 
+import UserContext from "../../../context/user/UserContext";
 import Web3Context from "../../../context/web3/Web3Context";
-import TradeContext from "../../../context/trade/TradeContext";
 
 import {
-  Status,
+  UserContext as IUserContext,
   Web3Context as IWeb3Context,
-  TradeContext as ITradeContext,
-  ArcaSendMethod
+  ArcaSendMethod,
+  SendState
 } from "context";
 
 type TxData = {
@@ -20,7 +20,7 @@ type TxData = {
 type Props = {
   id: string;
   isUser?: boolean;
-  status: Status;
+  status: SendState;
   txData: TxData;
 };
 
@@ -29,11 +29,11 @@ const SendBtn: FC<Props> = ({ id, status, txData, isUser }) => {
   //erc - allow
   //arca - send
   //arca - remove
-  const web3Context: IWeb3Context = useContext(Web3Context);
-  const tradeContext: ITradeContext = useContext(TradeContext);
+  const userContext: IUserContext = useContext(UserContext);
+  const { sendItem } = userContext;
 
-  const { connected, arcaSends } = web3Context;
-  const { modifyTradeItemStatus } = tradeContext;
+  const web3Context: IWeb3Context = useContext(Web3Context);
+  const { arcaContract } = web3Context;
 
   const [content, setContent] = useState("Loading");
 
@@ -57,10 +57,10 @@ const SendBtn: FC<Props> = ({ id, status, txData, isUser }) => {
   }, [status]);
 
   const onClick = (e: any) => {
-    if (!connected) return;
+    if (arcaContract === null) return;
 
-    arcaSends(txData.method, txData.params);
-    modifyTradeItemStatus(id, status === SENT ? UNSENT : SENT);
+    // TODO cancel
+    sendItem(id, arcaContract, txData.method, txData.params);
   };
 
   const button = () => {
