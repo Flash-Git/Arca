@@ -9,10 +9,12 @@ import {
   AlertContext as IAlertContext,
   PartnerState as IPartnerState,
   LoadBalance,
-  SetAddress
+  SetAddress,
+  LoadTradeItems,
+  TradeItem
 } from "context";
 
-import { SET_ADDRESS, SET_BALANCE } from "../types";
+import { SET_ITEMS, SET_ADDRESS, SET_BALANCE } from "../types";
 
 const PartnerState: FC = props => {
   const alertContext: IAlertContext = useContext(AlertContext);
@@ -44,6 +46,19 @@ const PartnerState: FC = props => {
     }
   };
 
+  const loadItems: LoadTradeItems = async signer => {
+    try {
+      const items: TradeItem[] = [];
+
+      dispatch({
+        type: SET_ITEMS,
+        payload: items
+      });
+    } catch (e) {
+      addAlert(e, "danger");
+    }
+  };
+
   const setAddress: SetAddress = address => {
     dispatch({
       type: SET_ADDRESS,
@@ -61,6 +76,7 @@ const PartnerState: FC = props => {
         tradeItems: state.tradeItems,
         accepted: state.accepted,
         loadBalance,
+        loadItems,
         setAddress
       }}
     >

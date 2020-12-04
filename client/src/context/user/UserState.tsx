@@ -21,13 +21,16 @@ import {
   SetAddress,
   SendTradeItem,
   CancelTradeItem,
-  AddTradeItem
+  AddTradeItem,
+  LoadTradeItems,
+  TradeItem
 } from "context";
 
 import {
   ADD_ITEM,
   SET_ADDRESS,
   SET_BALANCE,
+  SET_ITEMS,
   SET_ERC20S,
   SET_ERC721S,
   SET_ITEM_STATE
@@ -160,6 +163,19 @@ const UserState: FC = props => {
     }
   };
 
+  const loadItems: LoadTradeItems = async signer => {
+    try {
+      const items: TradeItem[] = [];
+
+      dispatch({
+        type: SET_ITEMS,
+        payload: items
+      });
+    } catch (e) {
+      addAlert(e, "danger");
+    }
+  };
+
   const setAddress: SetAddress = address => {
     dispatch({
       type: SET_ADDRESS,
@@ -209,6 +225,7 @@ const UserState: FC = props => {
         loadBalance,
         loadErc20s,
         loadErc721s,
+        loadItems,
         setAddress,
         addItem,
         sendItem,

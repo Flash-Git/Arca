@@ -1,27 +1,39 @@
 import React, { FC, Fragment, useContext } from "react";
-import TradeContext from "../../context/trade/TradeContext";
+
+import PartnerContext from "../../context/partner/PartnerContext";
+import UserContext from "../../context/user/UserContext";
+import Web3Context from "../../context/web3/Web3Context";
 
 import Spinner from "../layout/Spinner";
 
-import { TradeContext as ITradeContext } from "context";
+import {
+  UserContext as IUserContext,
+  PartnerContext as IPartnerContext,
+  Web3Context as IWeb3Context
+} from "context";
 
 type Props = {
   isUser?: boolean;
 };
 
 const Accepted: FC<Props> = ({ isUser }) => {
-  const tradeContext: ITradeContext = useContext(TradeContext);
+  const userContext: IUserContext = useContext(UserContext);
+  const partnerContext: IPartnerContext = useContext(PartnerContext);
+  const web3Context: IWeb3Context = useContext(Web3Context);
 
-  const accepted = isUser
-    ? tradeContext.user.accepted
-    : tradeContext.tradePartner.accepted;
+  const accepted = isUser ? userContext.accepted : partnerContext.accepted;
+  const toggleAccepted = isUser
+    ? userContext.toggleAccepted
+    : partnerContext.toggleAccepted;
+  const { signers } = web3Context;
 
   const bord = accepted ? "bord-hori-green" : "bord-hori-red";
   const acceptMsg = accepted ? "Accepted" : "Not Accepted";
 
   const onClick = () => {
     if (accepted === null) return;
-    tradeContext.toggleAccepted();
+
+    toggleAccepted(signers[signers.length - 1]);
   };
 
   return (
