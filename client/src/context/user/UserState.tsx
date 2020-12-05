@@ -14,8 +14,6 @@ import {
   UserState as IUserState,
   LoadBalance,
   LoadErcs,
-  Erc20,
-  Erc721,
   ArcaMethod,
   SetAddress,
   SendTradeItem,
@@ -26,7 +24,9 @@ import {
   LoadTradeAccepted,
   ToggleAccepted,
   Erc20Offer,
-  Erc721Offer
+  Erc721Offer,
+  TradeItemDataErc20,
+  TradeItemDataErc721
 } from "context";
 
 import {
@@ -153,12 +153,13 @@ const UserState: FC = props => {
       const erc721Offers = await Promise.all(erc721Promises);
 
       const items: TradeItem[] = [
-        ...erc20Offers.map(([address, amount], i) => ({
+        ...erc20Offers.map(([address, balance], i) => ({
           id: `0-${i}`,
           data: {
             type: ERC20,
             address,
-            amount
+            value: "unknown",
+            balance
           },
           status: {
             slot: i,
@@ -169,6 +170,7 @@ const UserState: FC = props => {
           id: `1-${i}`,
           data: {
             type: ERC721,
+            value: "unknown",
             address,
             id
           },
@@ -207,8 +209,9 @@ const UserState: FC = props => {
         )
       );
 
-      const erc20s: Erc20[] = balances.map((balance, id) => ({
-        address: erc20Addresses[id],
+      const erc20s: TradeItemDataErc20[] = balances.map((balance, i) => ({
+        type: ERC20,
+        address: erc20Addresses[i],
         balance,
         value: "unknown"
       }));
@@ -243,9 +246,10 @@ const UserState: FC = props => {
         )
       );
 
-      const erc721s: Erc721[] = balances.map((balance, id) => ({
-        address: erc721Addresses[id],
-        id: balance,
+      const erc721s: TradeItemDataErc721[] = balances.map((id, i) => ({
+        type: ERC721,
+        address: erc721Addresses[i],
+        id,
         value: "unknown"
       }));
 

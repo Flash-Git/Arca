@@ -1,16 +1,9 @@
-import React, { FC, Fragment, useContext } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FC, Fragment, useContext } from "react";
 
 import SendBtn from "./SendBtn";
 import RemoveButton from "./RemoveBtn";
 
-import UserContext from "../../../context/user/UserContext";
-
-import {
-  ArcaSendMethod,
-  UserContext as IUserContext,
-  PartnerContext as IPartnerContext
-} from "context";
+import { ArcaSendMethod, PartnerContext as IPartnerContext } from "context";
 import PartnerContext from "../../../context/partner/PartnerContext";
 
 type Props = {
