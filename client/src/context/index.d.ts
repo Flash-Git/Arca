@@ -131,6 +131,7 @@ declare module "context" {
     erc20Addresses: string[],
     arcaAddress: string
   ) => void;
+  export type LoadTradeItems = (signer: Signer) => void;
   export type SetAddress = (address: string) => void;
   export type AddTradeItem = (item: TradeItem) => void;
   export type SendTradeItem = (
@@ -145,21 +146,26 @@ declare module "context" {
     method: ArcaSendMethod,
     params: string[]
   ) => void;
+  export type ToggleAccepted = (signer: Signer) => void;
 
   export interface UserContext extends UserState {
     loadAddress: LoadAddress;
     loadBalance: LoadBalance;
+    loadItems: LoadTradeItems;
     loadErc20s: LoadErcs;
     loadErc721s: LoadErcs;
     setAddress: SetAddress;
     addItem: AddTradeItem;
     sendItem: SendTradeItem;
     cancelItem: CancelTradeItem;
+    toggleAccepted: ToggleAccepted;
   }
 
   export interface PartnerContext extends PartnerState {
     loadBalance: LoadBalance;
+    loadItems: LoadTradeItems;
     setAddress: SetAddress;
+    toggleAccepted: ToggleAccepted;
   }
 
   /*
