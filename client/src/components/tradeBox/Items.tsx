@@ -24,12 +24,16 @@ const Items: FC<Props> = ({ isUser }) => {
   const partnerContext: IPartnerContext = useContext(PartnerContext);
   const web3Context: IWeb3Context = useContext(Web3Context);
 
-  const items = isUser ? userContext.tradeItems : partnerContext.tradeItems;
-  const loadItems = isUser ? userContext.loadItems : partnerContext.loadItems;
-  const { signers } = web3Context;
+  const { items } = isUser ? userContext : partnerContext;
+  const { address: add1, loadItems } = isUser ? userContext : partnerContext;
+  const { address: add2 } = !isUser ? userContext : partnerContext;
+
+  const { arcaContract } = web3Context;
 
   useEffect(() => {
-    loadItems(signers[signers.length - 1]);
+    if (arcaContract === null) return;
+
+    loadItems(arcaContract, [add1, add2]);
   }, []);
 
   const internal = (item: TradeItem) => {
