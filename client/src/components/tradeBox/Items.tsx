@@ -2,7 +2,7 @@ import { FC, useContext, useEffect } from "react";
 
 import Erc20 from "./itemTypes/Erc20";
 import Erc721 from "./itemTypes/Erc721";
-import EnsForm from "./itemTypes/EnsForm";
+// import EnsForm from "./itemTypes/EnsForm";
 
 import UserContext from "../../context/user/UserContext";
 import PartnerContext from "../../context/partner/PartnerContext";
@@ -42,8 +42,8 @@ const Items: FC<Props> = ({ isUser }) => {
         return <Erc20 item={item} isUser={isUser} />;
       case "erc721":
         return <Erc721 item={item} isUser={isUser} />;
-      case "ens":
-        return <EnsForm item={item} isUser={isUser} />;
+      // case "ens":
+      //   return <EnsForm item={item} isUser={isUser} />;
       default:
         return "";
     }
@@ -52,17 +52,14 @@ const Items: FC<Props> = ({ isUser }) => {
   return (
     <div className="items">
       {items.length > 0 &&
-        items.map((item, i) =>
-          i < items.length - 1 ? (
-            <div className="item shadow-bot" key={item.id}>
-              {internal(item)}
-            </div>
-          ) : (
-            <div className="item" key={item.id}>
-              {internal(item)}
-            </div>
-          )
-        )}
+        items.map((item, i) => (
+          <div
+            className={`item ${i < items.length - 1 && "shadow-bot"}`}
+            key={item.id}
+          >
+            {internal(item)}
+          </div>
+        ))}
     </div>
   );
 };

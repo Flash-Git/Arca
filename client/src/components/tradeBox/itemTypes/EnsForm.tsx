@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect, useContext, FC } from "react";
+import { Fragment, useState, useEffect, useContext, FC } from "react";
 
 import SendBtn from "./SendBtn";
 import RemoveButton from "./RemoveBtn";
@@ -31,7 +31,7 @@ const EnsForm: FC<Props> = ({ item, isUser }) => {
   const partnerContext: IPartnerContext = useContext(PartnerContext);
   const web3Context: IWeb3Context = useContext(Web3Context);
 
-  const { ens } = web3Context;
+  // const { ens } = web3Context;
   const { address } = isUser ? userContext : partnerContext;
 
   const { address: tradePartnerAdd } = partnerContext;
@@ -53,18 +53,17 @@ const EnsForm: FC<Props> = ({ item, isUser }) => {
   }, [name]);
 
   const validate = async () => {
-    offset--;
-    if (offset !== 0) return;
-
-    if (!ens) return;
-    try {
-      const owner = await ens.owner(name);
-      if (owner === address) {
-        setEnsItem({ ...ensItem, verified: true });
-      } else {
-        setEnsItem({ ...ensItem, verified: false });
-      }
-    } catch (e) {}
+    // offset--;
+    // if (offset !== 0) return;
+    // if (!ens) return;
+    // try {
+    //   const owner = await ens.owner(name);
+    //   if (owner === address) {
+    //     setEnsItem({ ...ensItem, verified: true });
+    //   } else {
+    //     setEnsItem({ ...ensItem, verified: false });
+    //   }
+    // } catch (e) {}
   };
 
   //Input
