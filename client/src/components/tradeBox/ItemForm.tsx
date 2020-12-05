@@ -1,55 +1,107 @@
 import React, { FC, Fragment, useContext, useState } from "react";
-import { v4 as uuid } from "uuid";
 
-import { UNSENT } from "../../context/sendState";
+import { ErcType, SendState } from "../../context/Enums";
 
 import UserContext from "../../context/user/UserContext";
 
-import { UserContext as IUserContext, TradeItem, TradeItemData } from "context";
+import {
+  UserContext as IUserContext,
+  TradeItemDataErc20,
+  TradeItemDataErc721
+} from "context";
+
+const { UNSENT } = SendState;
+const { ERC20, ERC721 } = ErcType;
 
 const ItemForm: FC = () => {
   const userContext: IUserContext = useContext(UserContext);
+  const { addItem, items } = userContext;
 
-  const { addItem } = userContext;
+  const [type, setType] = useState<ErcType>(ERC20);
 
-  const emptyData: TradeItemData = {
-    type: "erc20",
+  const [baseErc, setBaseErc] = useState({
     address: "",
-    id: "", //erc721
-    amount: "" //erc20
-    // name: "", //ens
-    // namehash: "", //ens
-    // verified: false //ens
-  };
-
-  const [item, setItem] = useState<TradeItem>({
-    id: uuid(),
-    data: emptyData,
-    status: {
-      slot: 0,
-      state: UNSENT,
-      hash: ""
-    }
+    value: ""
   });
 
-  const { type, address, id, amount } = item.data;
+  const [erc20Data, setErc20Data] = useState<TradeItemDataErc20>({
+    type: ERC20,
+    ...baseErc,
+    balance: ""
+  });
 
-  //Input
+  const [erc721Data, setErc721Data] = useState<TradeItemDataErc721>({
+    type: ERC721,
+    ...baseErc,
+    id: ""
+  });
+
+  const { address } = baseErc;
+  const { balance } = erc20Data;
+  const { id } = erc721Data;
+
+  // Input
+  const onChangeType = (e: any) => {
+    setType(e.target.value);
+  };
+
+  const onChangeBase = (e: any) => {
+    setBaseErc({ ...baseErc, [e.target.name]: e.target.value });
+  };
+
   const onChange = (e: any) => {
-    setItem({
-      ...item,
-      data: { ...item.data, [e.target.name]: e.target.value }
-    });
+    switch (type) {
+      case ERC20:
+        setErc20Data({
+          ...erc20Data,
+          [e.target.name]: e.target.value,
+          ...baseErc
+        });
+        return;
+      case ERC20:
+        setErc721Data({
+          ...erc721Data,
+          [e.target.name]: e.target.value,
+          ...baseErc
+        });
+        return;
+      default:
+      // addAlert()
+    }
   };
 
   const onSubmit = (e: any) => {
     e.preventDefault();
 
-    addItem(item);
-    setItem({ ...item, id: uuid(), data: emptyData });
+    // TODO Seperate erc20s and erc721s in state so that the id can be set properly
+    switch (type) {
+      case ERC20:
+        addItem({
+          id: `2-${items.length + 1}`,
+          data: erc20Data,
+          status: {
+            slot: -1,
+            state: UNSENT
+          }
+        });
+        break;
+      case ERC721:
+        addItem({
+          id: `2-${items.length + 1}`,
+          data: erc721Data,
+          status: {
+            slot: -1,
+            state: UNSENT
+          }
+        });
+        break;
+      default:
+        break;
+      // addAlert()
+    }
   };
 
-  const erc = () => (
+  const erc = (
     <input
       className={
         address
@@ -60,51 +112,51 @@ const ItemForm: FC = () => {
       placeholder="Contract Address"
       name="address"
       value={address}
-      onChange={onChange}
+      onChange={onChangeBase}
     />
   );
 
   const form = () => {
     switch (type) {
-      case "ens":
-        return (
-          <Fragment>
-            {/* <input
-              className={
-                name ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
-              }
-              type="text"
-              placeholder="Name"
-              name="name"
-              value={name}
-              onChange={onChange}
-            />
-            {verified && (
-              <strong
-                className="grow-1 mx"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center"
-                }}
-              >
-                VERIFIED
-              </strong>
-            )} */}
-          </Fragment>
-        );
+      // case "ens":
+      //  return (
+      //    <Fragment>
+      //      <input
+      //       className={
+      //         name ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
+      //       }
+      //       type="text"
+      //       placeholder="Name"
+      //       name="name"
+      //       value={name}
+      //       onChange={onChange}
+      //     />
+      //     {verified && (
+      //       <strong
+      //         className="grow-1 mx"
+      //         style={{
+      //           display: "flex",
+      //           alignItems: "center",
+      //           justifyContent: "center"
+      //         }}
+      //       >
+      //         VERIFIED
+      //       </strong>
+      //     )}
+      //    </Fragment>)
+
       case "erc20":
         return (
           <Fragment>
-            {erc()}
+            {erc}
             <input
               className={
-                amount ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
+                balance ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
               }
               type="text"
-              placeholder="Token Amount"
-              name="amount"
-              value={amount}
+              placeholder="Token Balance"
+              name="balance"
+              value={balance}
               onChange={onChange}
             />
           </Fragment>
@@ -112,7 +164,7 @@ const ItemForm: FC = () => {
       case "erc721":
         return (
           <Fragment>
-            {erc()}
+            {erc}
             <input
               className={
                 id ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
@@ -126,7 +178,7 @@ const ItemForm: FC = () => {
           </Fragment>
         );
       default:
-        return "";
+        return <Fragment></Fragment>;
     }
   };
 
@@ -134,9 +186,9 @@ const ItemForm: FC = () => {
   return (
     <form className="shadow-top ptop" onSubmit={onSubmit}>
       <div className="flex-row">
-        <select name="type" value={type} onChange={onChange}>
+        <select name="type" value={type} onChange={onChangeType}>
           {/* type=select */}
-          <option value={"ens"}>ENS</option>
+          {/* <option value={"ens"}>ENS</option> */}
           <option value={"erc20"}>ERC20</option>
           <option value={"erc721"}>ERC721</option>
         </select>
