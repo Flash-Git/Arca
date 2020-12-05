@@ -7,27 +7,17 @@ export const ADD_ALERT: string = "ADD_ALERT";
 export const REMOVE_ALERT: string = "REMOVE_ALERT";
 export const CLEAR_ALERTS: string = "CLEAR_ALERTS";
 
-// Trade Items
-export const SET_USER_BOX = "SET_USER_BOX";
-export const ADD_TRADE_ITEM = "ADD_TRADE_ITEM";
-
-export const SET_USER_ACCEPTED = "SET_USER_ACCEPTED";
-export const SET_PARTNER_ACCEPTED = "SET_PARTNER_ACCEPTED";
-export const SET_USER_TRADE_ITEMS = "SET_USER_TRADE_ITEMS";
-export const SET_PARTNER_TRADE_ITEMS = "SET_PARTNER_TRADE_ITEMS";
-export const REMOVE_TRADE_ITEM = "REMOVE_TRADE_ITEM";
-export const MODIFY_TRADE_ITEM_STATUS = "MODIFY_TRADE_ITEM_STATUS";
-export const SET_CURRENT_ITEM = "SET_CURRENT_ITEM";
-export const CLEAR_CURRENT_ITEM = "CLEAR_CURRENT_ITEM";
-
-export const UPDATE_ACCEPTED = "UPDATE_ACCEPTED";
-export const TOGGLE_ACCEPTED = "TOGGLE_ACCEPTED";
-
 // User / Partner
 export const SET_ADDRESS = "SET_ADDRESS";
 export const SET_BALANCE = "SET_BALANCE";
 export const SET_ERC20S = "SET_ERC20S";
 export const SET_ERC721S = "SET_ERC721S";
+export const SET_ACCEPTED = "SET_ACCEPTED";
+export const SET_ITEMS = "SET_ITEMS";
+export const SET_ITEM_STATE = "SET_ITEM_STATE";
+export const ADD_ITEM = "ADD_ITEM";
+export const UPDATE_ACCEPTED = "UPDATE_ACCEPTED";
+export const TOGGLE_ACCEPTED = "TOGGLE_ACCEPTED";
 
 // Web3
 export const ADD_PROVIDER = "ADD_PROVIDER";
