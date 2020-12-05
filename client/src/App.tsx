@@ -24,8 +24,8 @@ import Footer from "./components/layout/Footer";
 
 import AppState from "./context/app/AppState";
 import AlertState from "./context/alert/AlertState";
-import TradeState from "./context/trade/TradeState";
 import UserState from "./context/user/UserState";
+import PartnerState from "./context/partner/PartnerState";
 import Web3State from "./context/web3/Web3State";
 
 import setAuthToken from "./utils/setAuthToken";
@@ -47,8 +47,8 @@ localStorage.token && setAuthToken(localStorage.token);
 
 const App: FC = () => (
   <AppState>
-    <TradeState>
-      <UserState>
+    <UserState>
+      <PartnerState>
         <AlertState>
           <Web3State>
             <Router>
@@ -63,8 +63,8 @@ const App: FC = () => (
             </Router>
           </Web3State>
         </AlertState>
-      </UserState>
-    </TradeState>
+      </PartnerState>
+    </UserState>
   </AppState>
 );
 

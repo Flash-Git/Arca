@@ -1,16 +1,15 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext } from "react";
 
 import ItemForm from "./ItemForm";
 import Items from "./Items";
 import Accepted from "./Accepted";
 
 import UserContext from "../../context/user/UserContext";
-import TradeContext from "../../context/trade/TradeContext";
+import PartnerContext from "../../context/partner/PartnerContext";
 
 import {
   UserContext as IUserContext,
-  TradeContext as ITradeContext,
-  AddressObj
+  PartnerContext as IPartnerContext
 } from "context";
 
 type Props = {
@@ -19,37 +18,24 @@ type Props = {
 
 const Box: FC<Props> = ({ isUser }) => {
   const userContext: IUserContext = useContext(UserContext);
-  const tradeContext: ITradeContext = useContext(TradeContext);
+  const partnerContext: IPartnerContext = useContext(PartnerContext);
 
-  const addressObj = isUser
-    ? userContext.user.addressObj
-    : userContext.tradePartner.addressObj;
+  const address = isUser ? userContext.address : partnerContext.address;
 
-  //TODO make this a flash animation
+  // TODO make this a flash animation
   const bord = isUser
-    ? tradeContext.user.accepted
+    ? userContext.accepted
       ? "bord-hori-green"
       : ""
-    : tradeContext.tradePartner.accepted
+    : partnerContext.accepted
     ? "bord-hori-green"
     : "";
-
-  const [trader, setTrader] = useState<AddressObj>({
-    address: "initialAdd",
-    ens: "ens"
-  });
-
-  const { address, ens } = trader;
-
-  useEffect(() => {
-    setTrader(addressObj);
-  }, [isUser, addressObj]); // Might need userContext.user, userContext.tradePartner
 
   return (
     <div className={"box shadow"}>
       <div>
         <h2 className="text-center shadow-bot-7 mbot">
-          {ens ? ens : address ? address : "Box"}
+          {address ? address : "Box"}
         </h2>
         <div className="inner-box">
           <Items isUser={isUser} />

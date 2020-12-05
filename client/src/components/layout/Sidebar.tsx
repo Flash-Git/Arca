@@ -16,14 +16,8 @@ const Sidebar: FC = () => {
   //TODO add search
   const appContext: IAppContext = useContext(AppContext);
   const userContext: IUserContext = useContext(UserContext);
-  const web3Context: IWeb3Context = useContext(Web3Context);
 
   const { sidebar, toggleSidebar } = appContext;
-  const { settings, user } = userContext;
-  const { nickname } = settings;
-
-  const { web3 } = web3Context; //loading
-  const loading = false;
 
   const onClick = () => {
     toggleSidebar();
@@ -32,21 +26,21 @@ const Sidebar: FC = () => {
   const tokens = () => (
     <ul>
       <h3>Erc20s</h3>
-      {user.ownedTokens.erc20Tokens.length > 0 ? (
+      {/* {user.ownedTokens.erc20Tokens.length > 0 ? (
         user.ownedTokens.erc20Tokens.map(token => <li>{token.name}</li>)
       ) : loading ? (
         <Spinner />
       ) : (
         "No erc20s found"
-      )}
+      )} */}
       <h3>Erc721s</h3>
-      {user.ownedTokens.erc721Tokens.length > 0 ? (
+      {/* {user.ownedTokens.erc721Tokens.length > 0 ? (
         user.ownedTokens.erc721Tokens.map(token => <li>{token.name}</li>)
       ) : loading ? (
         <Spinner />
       ) : (
         "No erc721s found"
-      )}
+      )} */}
     </ul>
   );
 
@@ -57,8 +51,8 @@ const Sidebar: FC = () => {
       </button>
       {sidebar && (
         <Fragment>
-          <h2>{nickname && nickname}</h2>
-          <div>{web3 !== null ? tokens() : <span>Not Connected</span>}</div>
+          {/* <h2>{nickname && nickname}</h2>
+          <div>{web3 !== null ? tokens() : <span>Not Connected</span>}</div> */}
         </Fragment>
       )}
     </div>

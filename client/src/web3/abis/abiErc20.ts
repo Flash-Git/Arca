@@ -1,6 +1,6 @@
-import { AbiItem } from "web3-utils";
+import { ContractInterface } from "ethers";
 
-const abiErc20: AbiItem[] = [
+const abiErc20: ContractInterface = [
   {
     constant: true,
     inputs: [],

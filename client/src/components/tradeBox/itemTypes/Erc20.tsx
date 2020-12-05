@@ -1,13 +1,11 @@
 import React, { FC, Fragment, useContext } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import PropTypes from "prop-types";
 
 import SendBtn from "./SendBtn";
-import RemoveButton from "./RemoveButton";
+import RemoveButton from "./RemoveBtn";
 
-import UserContext from "../../../context/user/UserContext";
+import PartnerContext from "../../../context/partner/PartnerContext";
 
-import { ArcaSendMethod, UserContext as IUserContext } from "context";
+import { ArcaSendMethod, PartnerContext as IPartnerContext } from "context";
 
 type Props = {
   item: any;
@@ -20,8 +18,8 @@ type TxData = {
 };
 
 const Erc20: FC<Props> = ({ item, isUser }) => {
-  const userContext: IUserContext = useContext(UserContext);
-  const { address } = userContext.tradePartner.addressObj;
+  const partnerContext: IPartnerContext = useContext(PartnerContext);
+  const { address } = partnerContext;
 
   const { contractAdd, amount } = item.data;
   const { status } = item.network;
@@ -31,14 +29,25 @@ const Erc20: FC<Props> = ({ item, isUser }) => {
     params: [address, contractAdd, amount]
   };
 
+  const cancelData: TxData = {
+    method: "removeOfferErc20",
+    params: [address, contractAdd, amount]
+  };
+
   return (
     <Fragment>
-      <RemoveButton id={item.id} isUser={isUser} />
+      <RemoveButton id={item.id} txData={cancelData} isUser={isUser} />
       <h3 className="item-text-1">ERC20</h3>
       <span className="item-text-2">{contractAdd}</span>
       <span className="item-text-1">{amount}</span>
 
-      <SendBtn id={item.id} status={status} txData={txData} isUser={isUser} />
+      <SendBtn
+        id={item.id}
+        status={status}
+        txData={txData}
+        txCancel={cancelData}
+        isUser={isUser}
+      />
     </Fragment>
   );
 };

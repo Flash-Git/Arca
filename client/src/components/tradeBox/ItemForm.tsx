@@ -1,42 +1,38 @@
 import React, { FC, Fragment, useContext, useState } from "react";
 import { v4 as uuid } from "uuid";
 
-import TradeContext from "../../context/trade/TradeContext";
+import { UNSENT } from "../../context/sendState";
 
-import { UNSENT } from "../../context/sentStatus";
+import UserContext from "../../context/user/UserContext";
 
-import { Data, TradeContext as ITradeContext, TradeItem } from "context";
+import { UserContext as IUserContext, TradeItem, TradeItemData } from "context";
 
 const ItemForm: FC = () => {
-  const tradeContext: ITradeContext = useContext(TradeContext);
+  const userContext: IUserContext = useContext(UserContext);
 
-  const { addTradeItem } = tradeContext;
+  const { addItem } = userContext;
 
-  const emptyData: Data = {
-    type: "ens",
-    contractAdd: "",
+  const emptyData: TradeItemData = {
+    type: "erc20",
+    address: "",
     id: "", //erc721
-    amount: "", //erc20
-    name: "", //ens
-    namehash: "", //ens
-    verified: false //ens
+    amount: "" //erc20
+    // name: "", //ens
+    // namehash: "", //ens
+    // verified: false //ens
   };
 
   const [item, setItem] = useState<TradeItem>({
     id: uuid(),
-    network: {
-      status: UNSENT,
-      txHash: null,
-      web3Loading: false,
-      dbLoading: false,
-      synced: false,
+    data: emptyData,
+    status: {
       slot: 0,
-      tab: 0
-    },
-    data: emptyData
+      state: UNSENT,
+      hash: ""
+    }
   });
 
-  const { type, contractAdd, id, amount, name, namehash, verified } = item.data;
+  const { type, address, id, amount } = item.data;
 
   //Input
   const onChange = (e: any) => {
@@ -49,21 +45,21 @@ const ItemForm: FC = () => {
   const onSubmit = (e: any) => {
     e.preventDefault();
 
-    addTradeItem(item);
+    addItem(item);
     setItem({ ...item, id: uuid(), data: emptyData });
   };
 
   const erc = () => (
     <input
       className={
-        contractAdd
+        address
           ? "grow-2 address is-valid valid"
           : "grow-2 address is-valid invalid"
       }
       type="text"
       placeholder="Contract Address"
-      name="contractAdd"
-      value={contractAdd}
+      name="address"
+      value={address}
       onChange={onChange}
     />
   );
@@ -73,7 +69,7 @@ const ItemForm: FC = () => {
       case "ens":
         return (
           <Fragment>
-            <input
+            {/* <input
               className={
                 name ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
               }
@@ -94,7 +90,7 @@ const ItemForm: FC = () => {
               >
                 VERIFIED
               </strong>
-            )}
+            )} */}
           </Fragment>
         );
       case "erc20":

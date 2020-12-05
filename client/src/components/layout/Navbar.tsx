@@ -1,37 +1,54 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import AppContext from "../../context/app/AppContext";
+import AlertContext from "../../context/alert/AlertContext";
 import Web3Context from "../../context/web3/Web3Context";
 
 import {
   AppContext as IAppContext,
+  AlertContext as IAlertContext,
   Web3Context as IWeb3Context
 } from "context";
 
 const Navbar: FC = () => {
   const appContext: IAppContext = useContext(AppContext);
+  const alertContext: IAlertContext = useContext(AlertContext);
   const web3Context: IWeb3Context = useContext(Web3Context);
 
   const { location } = appContext;
-  const { web3, network } = web3Context;
+  const { addAlert } = alertContext;
+  const { signers } = web3Context;
 
-  const networkText = () => {
-    if (web3 === null) {
-      return "Not Connected";
-    }
+  const [networkText, setNetworkText] = useState<string>("Disconnected");
 
-    switch (network) {
-      case 1:
-        return "LIVE";
-      case 4:
-        return "RINKEBY";
-      case 5:
-        return "GOERLI";
-      default:
-        return "UNSUPPORTED";
+  useEffect(() => {
+    if (signers.length === 0) return;
+
+    const updateNetwork = async () => {
+      const chainId = await signers[signers.length - 1].getChainId();
+      switch (chainId) {
+        case 1:
+          setNetworkText("LIVE");
+          break;
+        case 4:
+          setNetworkText("RINKEBY");
+          break;
+        case 5:
+          setNetworkText("GOERLI");
+          break;
+        default:
+          setNetworkText("UNSUPPORTED");
+          addAlert("This network is not supported", "danger");
+      }
+    };
+
+    try {
+      updateNetwork();
+    } catch (e) {
+      addAlert(e, "danger");
     }
-  };
+  }, [signers]);
 
   return (
     <nav className="navbar bg-dark">
@@ -42,7 +59,7 @@ const Navbar: FC = () => {
         <li>
           <Link to="/">
             <strong>
-              {location === "home" ? networkText() : "Trade Window"}
+              {location === "home" ? networkText : "Trade Window"}
             </strong>
           </Link>
         </li>

@@ -1,15 +1,16 @@
 import React, { Fragment, useState, useEffect, useContext, FC } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import SendBtn from "./SendBtn";
-import RemoveButton from "./RemoveButton";
+import RemoveButton from "./RemoveBtn";
 
-import Web3Context from "../../../context/web3/Web3Context";
 import UserContext from "../../../context/user/UserContext";
+import PartnerContext from "../../../context/partner/PartnerContext";
+import Web3Context from "../../../context/web3/Web3Context";
 
 import {
-  Web3Context as IWeb3Context,
   UserContext as IUserContext,
+  PartnerContext as IPartnerContext,
+  Web3Context as IWeb3Context,
   ArcaSendMethod
 } from "context";
 
@@ -26,16 +27,14 @@ type TxData = {
 let offset = 0;
 
 const EnsForm: FC<Props> = ({ item, isUser }) => {
-  const web3Context: IWeb3Context = useContext(Web3Context);
   const userContext: IUserContext = useContext(UserContext);
+  const partnerContext: IPartnerContext = useContext(PartnerContext);
+  const web3Context: IWeb3Context = useContext(Web3Context);
 
   const { ens } = web3Context;
-  const { address } = isUser
-    ? userContext.user.addressObj
-    : userContext.tradePartner.addressObj;
+  const { address } = isUser ? userContext : partnerContext;
 
-  const { addressObj } = userContext.tradePartner;
-  const tradePartnerAdd = addressObj.address;
+  const { address: tradePartnerAdd } = partnerContext;
 
   const { status } = item.network;
   const { id, contractAdd } = item.data;
@@ -80,10 +79,15 @@ const EnsForm: FC<Props> = ({ item, isUser }) => {
     params: [tradePartnerAdd, contractAdd, id]
   };
 
+  const cancelData: TxData = {
+    method: "removeOfferErc721",
+    params: [tradePartnerAdd, contractAdd, id]
+  };
+
   //Render
   return (
     <Fragment>
-      <RemoveButton id={item.id} isUser={isUser} />
+      <RemoveButton id={item.id} txData={cancelData} isUser={isUser} />
       <h3 className="item-text-1">ENS</h3>
       <form className="item-input">
         <input
@@ -96,7 +100,13 @@ const EnsForm: FC<Props> = ({ item, isUser }) => {
         />
       </form>
       <span className="item-text-1">{verified && "ICON"}</span>
-      <SendBtn id={item.id} status={status} txData={txData} isUser={isUser} />
+      <SendBtn
+        id={item.id}
+        status={status}
+        txData={txData}
+        txCancel={cancelData}
+        isUser={isUser}
+      />
     </Fragment>
   );
 };
