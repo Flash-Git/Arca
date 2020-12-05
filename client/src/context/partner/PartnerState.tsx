@@ -119,12 +119,13 @@ const PartnerState: FC = props => {
       const erc721Offers = await Promise.all(erc721Promises);
 
       const items: TradeItem[] = [
-        ...erc20Offers.map(([address, amount], i) => ({
+        ...erc20Offers.map(([address, balance], i) => ({
           id: `0-${i}`,
           data: {
             type: ERC20,
             address,
-            amount
+            value: "unknown",
+            balance
           },
           status: {
             slot: i,
@@ -135,6 +136,7 @@ const PartnerState: FC = props => {
           id: `1-${i}`,
           data: {
             type: ERC721,
+            value: "unknown",
             address,
             id
           },
