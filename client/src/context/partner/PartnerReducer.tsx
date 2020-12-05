@@ -1,4 +1,4 @@
-import { SET_ADDRESS, SET_BALANCE } from "../types";
+import { SET_ADDRESS, SET_BALANCE, SET_ITEMS, SET_ACCEPTED } from "../types";
 
 import { Action, PartnerState } from "context";
 
@@ -11,6 +11,10 @@ const PartnerReducer = (
       return { ...state, address: payload };
     case SET_BALANCE:
       return { ...state, balance: payload };
+    case SET_ACCEPTED:
+      return { ...state, accepted: payload };
+    case SET_ITEMS:
+      return { ...state, items: payload };
     default:
       return state;
   }

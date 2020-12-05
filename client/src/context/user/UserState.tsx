@@ -258,12 +258,16 @@ const UserState: FC = props => {
     }
   };
 
+  // Local
+
   const addItem: AddTradeItem = async item => {
     dispatch({
       type: ADD_ITEM,
       payload: item
     });
   };
+
+  // Send
 
   const toggleAccepted: ToggleAccepted = async (contract, method, params) => {
     const tx = await arcaMethod(contract, method, params);
@@ -282,7 +286,7 @@ const UserState: FC = props => {
 
     dispatch({
       type: SET_ITEM_STATE,
-      payload: { id, SENDING }
+      payload: { id, newState: SENDING }
     });
   };
 
@@ -292,7 +296,7 @@ const UserState: FC = props => {
 
     dispatch({
       type: SET_ITEM_STATE,
-      payload: { id, CANCELLING }
+      payload: { id, newState: CANCELLING }
     });
   };
 
