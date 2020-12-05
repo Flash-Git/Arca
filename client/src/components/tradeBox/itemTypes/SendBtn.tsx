@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect, FC } from "react";
 
-import { SENT, SENDING, UNSENT } from "../../../context/sendState";
+import { SendState } from "../../../context/Enums";
 
 import UserContext from "../../../context/user/UserContext";
 import Web3Context from "../../../context/web3/Web3Context";
@@ -8,9 +8,10 @@ import Web3Context from "../../../context/web3/Web3Context";
 import {
   UserContext as IUserContext,
   Web3Context as IWeb3Context,
-  ArcaSendMethod,
-  SendState
+  ArcaSendMethod
 } from "context";
+
+const { SENT, UNSENT, CANCELLING, SENDING } = SendState;
 
 type TxData = {
   method: ArcaSendMethod;
@@ -38,6 +39,8 @@ const SendBtn: FC<Props> = ({ id, status, txData, txCancel, isUser }) => {
 
   const [content, setContent] = useState("Loading");
 
+  const [disabled, setDisabled] = useState(false);
+
   useEffect(() => {
     if (!isUser) {
       setContent("Sent");
@@ -51,6 +54,14 @@ const SendBtn: FC<Props> = ({ id, status, txData, txCancel, isUser }) => {
       case UNSENT:
         setContent("Send");
         return;
+      case CANCELLING:
+        setContent("Loading");
+        setDisabled(true);
+        return;
+      case SENDING:
+        setContent("Loading");
+        setDisabled(true);
+        return;
       default:
         setContent("Error");
         return;
@@ -62,7 +73,8 @@ const SendBtn: FC<Props> = ({ id, status, txData, txCancel, isUser }) => {
 
     if (content === "Cancel")
       cancelItem(id, arcaContract, txCancel.method, txCancel.params);
-    else sendItem(id, arcaContract, txData.method, txData.params);
+    else if (content === "Send")
+      sendItem(id, arcaContract, txData.method, txData.params);
   };
 
   const button = () => {
