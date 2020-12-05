@@ -41,6 +41,7 @@ const PartnerState: FC = props => {
   /*
    * Actions
    */
+
   const setAddress: SetAddress = address => {
     dispatch({
       type: SET_ADDRESS,
