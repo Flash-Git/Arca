@@ -15,7 +15,9 @@ export const SET_ERC721S = "SET_ERC721S";
 export const SET_ACCEPTED = "SET_ACCEPTED";
 export const SET_ITEMS = "SET_ITEMS";
 export const SET_ITEM_STATE = "SET_ITEM_STATE";
-export const ADD_ITEM = "ADD_ITEM";
+export const ADD_ERC20_ITEM = "ADD_ERC20_ITEM";
+export const ADD_ERC721_ITEM = "ADD_ERC721_ITEM";
+export const REMOVE_ITEM = "REMOVE_ITEM";
 export const UPDATE_ACCEPTED = "UPDATE_ACCEPTED";
 export const TOGGLE_ACCEPTED = "TOGGLE_ACCEPTED";
 
