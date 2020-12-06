@@ -3,11 +3,16 @@ import { FC, Fragment, useContext } from "react";
 import SendBtn from "./SendBtn";
 import RemoveButton from "./RemoveBtn";
 
-import { ArcaSendMethod, PartnerContext as IPartnerContext } from "context";
 import PartnerContext from "../../../context/partner/PartnerContext";
 
+import {
+  ArcaSendMethod,
+  PartnerContext as IPartnerContext,
+  TradeItemErc721
+} from "context";
+
 type Props = {
-  item: any;
+  item: TradeItemErc721;
   isUser?: boolean;
 };
 
@@ -18,30 +23,30 @@ type TxData = {
 
 const Erc721: FC<Props> = ({ item, isUser }) => {
   const partnerContext: IPartnerContext = useContext(PartnerContext);
-  const { address } = partnerContext;
+  const { address: partnerAdd } = partnerContext;
 
-  const { contractAdd, id } = item.data;
-  const { status } = item.network;
+  const { address, id } = item.data;
+  const { state } = item.status;
 
   const txData: TxData = {
     method: "pushOfferErc721",
-    params: [address, contractAdd, id]
+    params: [partnerAdd, address, id]
   };
 
   const cancelData: TxData = {
     method: "removeOfferErc721",
-    params: [address, contractAdd, id]
+    params: [partnerAdd, address, id]
   };
 
   return (
     <Fragment>
       <RemoveButton id={item.id} txData={cancelData} isUser={isUser} />
       <h3 className="item-text-1">ERC721</h3>
-      <span className="item-text-2">{contractAdd}</span>
+      <span className="item-text-2">{address}</span>
       <span className="item-text-1">{id}</span>
       <SendBtn
         id={item.id}
-        status={status}
+        state={state}
         txData={txData}
         txCancel={cancelData}
         isUser={isUser}

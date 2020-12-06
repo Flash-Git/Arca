@@ -11,11 +11,12 @@ import {
   UserContext as IUserContext,
   PartnerContext as IPartnerContext,
   Web3Context as IWeb3Context,
-  ArcaSendMethod
+  ArcaSendMethod,
+  TradeItemErc721
 } from "context";
 
 type Props = {
-  item: any;
+  item: TradeItemErc721;
   isUser?: boolean;
 };
 
@@ -32,12 +33,12 @@ const EnsForm: FC<Props> = ({ item, isUser }) => {
   const web3Context: IWeb3Context = useContext(Web3Context);
 
   // const { ens } = web3Context;
-  const { address } = isUser ? userContext : partnerContext;
+  // const { address } = isUser ? userContext : partnerContext;
 
   const { address: tradePartnerAdd } = partnerContext;
 
-  const { status } = item.network;
-  const { id, contractAdd } = item.data;
+  const { state } = item.status;
+  const { id, address } = item.data;
 
   const [ensItem, setEnsItem] = useState({
     name: "",
@@ -75,12 +76,12 @@ const EnsForm: FC<Props> = ({ item, isUser }) => {
 
   const txData: TxData = {
     method: "pushOfferErc721",
-    params: [tradePartnerAdd, contractAdd, id]
+    params: [tradePartnerAdd, address, id]
   };
 
   const cancelData: TxData = {
     method: "removeOfferErc721",
-    params: [tradePartnerAdd, contractAdd, id]
+    params: [tradePartnerAdd, address, id]
   };
 
   //Render
@@ -101,7 +102,7 @@ const EnsForm: FC<Props> = ({ item, isUser }) => {
       <span className="item-text-1">{verified && "ICON"}</span>
       <SendBtn
         id={item.id}
-        status={status}
+        state={state}
         txData={txData}
         txCancel={cancelData}
         isUser={isUser}
