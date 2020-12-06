@@ -15,7 +15,7 @@ const { ERC20, ERC721 } = ErcType;
 
 const ItemForm: FC = () => {
   const userContext: IUserContext = useContext(UserContext);
-  const { addItem, items } = userContext;
+  const { addErc20Item, addErc721Item, erc20Items, erc721Items } = userContext;
 
   const [type, setType] = useState<ErcType>(ERC20);
 
@@ -54,15 +54,13 @@ const ItemForm: FC = () => {
       case ERC20:
         setErc20Data({
           ...erc20Data,
-          [e.target.name]: e.target.value,
-          ...baseErc
+          [e.target.name]: e.target.value
         });
         return;
-      case ERC20:
+      case ERC721:
         setErc721Data({
           ...erc721Data,
-          [e.target.name]: e.target.value,
-          ...baseErc
+          [e.target.name]: e.target.value
         });
         return;
       default:
@@ -76,9 +74,9 @@ const ItemForm: FC = () => {
     // TODO Seperate erc20s and erc721s in state so that the id can be set properly
     switch (type) {
       case ERC20:
-        addItem({
-          id: `2-${items.length + 1}`,
-          data: erc20Data,
+        addErc20Item({
+          id: `2-${erc20Items.length + 1}`,
+          data: { ...erc20Data, ...baseErc },
           status: {
             slot: -1,
             state: UNSENT
@@ -86,9 +84,9 @@ const ItemForm: FC = () => {
         });
         break;
       case ERC721:
-        addItem({
-          id: `2-${items.length + 1}`,
-          data: erc721Data,
+        addErc721Item({
+          id: `2-${erc721Items.length + 1}`,
+          data: { ...erc721Data, ...baseErc },
           status: {
             slot: -1,
             state: UNSENT
@@ -103,11 +101,7 @@ const ItemForm: FC = () => {
 
   const erc = (
     <input
-      className={
-        address
-          ? "grow-2 address is-valid valid"
-          : "grow-2 address is-valid invalid"
-      }
+      className={`grow-2 address is-valid ${address ? "valid" : "invalid"}`}
       type="text"
       placeholder="Contract Address"
       name="address"
@@ -116,36 +110,35 @@ const ItemForm: FC = () => {
     />
   );
 
+  // case "ens":
+  //  return (
+  //    <Fragment>
+  //      <input
+  //       className={
+  //         name ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
+  //       }
+  //       type="text"
+  //       placeholder="Name"
+  //       name="name"
+  //       value={name}
+  //       onChange={onChange}
+  //     />
+  //     {verified && (
+  //       <strong
+  //         className="grow-1 mx"
+  //         style={{
+  //           display: "flex",
+  //           alignItems: "center",
+  //           justifyContent: "center"
+  //         }}
+  //       >
+  //         VERIFIED
+  //       </strong>
+  //     )}
+  //    </Fragment>)
   const form = () => {
     switch (type) {
-      // case "ens":
-      //  return (
-      //    <Fragment>
-      //      <input
-      //       className={
-      //         name ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
-      //       }
-      //       type="text"
-      //       placeholder="Name"
-      //       name="name"
-      //       value={name}
-      //       onChange={onChange}
-      //     />
-      //     {verified && (
-      //       <strong
-      //         className="grow-1 mx"
-      //         style={{
-      //           display: "flex",
-      //           alignItems: "center",
-      //           justifyContent: "center"
-      //         }}
-      //       >
-      //         VERIFIED
-      //       </strong>
-      //     )}
-      //    </Fragment>)
-
-      case "erc20":
+      case ERC20:
         return (
           <Fragment>
             {erc}
@@ -161,7 +154,7 @@ const ItemForm: FC = () => {
             />
           </Fragment>
         );
-      case "erc721":
+      case ERC721:
         return (
           <Fragment>
             {erc}
@@ -187,10 +180,8 @@ const ItemForm: FC = () => {
     <form className="shadow-top ptop" onSubmit={onSubmit}>
       <div className="flex-row">
         <select name="type" value={type} onChange={onChangeType}>
-          {/* type=select */}
-          {/* <option value={"ens"}>ENS</option> */}
-          <option value={"erc20"}>ERC20</option>
-          <option value={"erc721"}>ERC721</option>
+          <option value={ERC20}>ERC20</option>
+          <option value={ERC721}>ERC721</option>
         </select>
         {form()}
         <input type="submit" value="Add Trade Item" className="btn btn-dark" />

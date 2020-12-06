@@ -89,17 +89,27 @@ declare module "context" {
     hash?: string; // Only exists when sent this session
   };
 
-  type TradeItem = {
+  type TradeItemBase = {
     id: string;
-    data: TradeItemData;
     status: TradeItemStatus;
   };
+
+  interface TradeItemErc20 extends TradeItemBase {
+    data: TradeItemDataErc20;
+  }
+
+  interface TradeItemErc721 extends TradeItemBase {
+    data: TradeItemDataErc721;
+  }
+
+  type TradeItem = TradeItemErc20 | TradeItemErc721;
 
   export type PartnerState = {
     address: string;
     balance: string;
     accepted: boolean;
-    items: TradeItem[];
+    erc20Items: TradeItemErc20[];
+    erc721Items: TradeItemErc721[];
   };
 
   export interface UserState extends PartnerState {
@@ -132,7 +142,9 @@ declare module "context" {
     arcaAddress: string
   ) => void;
 
-  export type AddTradeItem = (item: TradeItem) => void;
+  export type AddErc20TradeItem = (item: TradeItemErc20) => void;
+  export type AddErc721TradeItem = (item: TradeItemErc721) => void;
+  export type RemoveTradeItem = (id: string) => void;
 
   export type ToggleAccepted = (
     contract: Contract,
@@ -166,7 +178,8 @@ declare module "context" {
     loadItems: LoadTradeItems;
     loadErc20s: LoadErcs;
     loadErc721s: LoadErcs;
-    addItem: AddTradeItem;
+    addErc20Item: AddErc20TradeItem;
+    addErc721Item: AddErc721TradeItem;
     toggleAccepted: ToggleAccepted;
     sendItem: SendTradeItem;
     cancelItem: CancelTradeItem;

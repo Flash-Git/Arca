@@ -32,7 +32,8 @@ const PartnerState: FC = props => {
   const initialState: IPartnerState = {
     address: "",
     balance: "",
-    items: [],
+    erc20Items: [],
+    erc721Items: [],
     accepted: false
   };
 
@@ -162,7 +163,9 @@ const PartnerState: FC = props => {
         address: state.address,
         balance: state.balance,
         accepted: state.accepted,
-        items: state.items,
+        // items: [...state.erc20Items, ...state.erc721Items],
+        erc20Items: state.erc20Items,
+        erc721Items: state.erc721Items,
         setAddress,
         loadBalance,
         loadAccepted,

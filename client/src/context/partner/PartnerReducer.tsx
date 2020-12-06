@@ -14,7 +14,11 @@ const PartnerReducer = (
     case SET_ACCEPTED:
       return { ...state, accepted: payload };
     case SET_ITEMS:
-      return { ...state, items: payload };
+      return {
+        ...state,
+        erc20Items: payload.erc20Items,
+        erc721Items: payload.erc721Items
+      };
     default:
       return state;
   }

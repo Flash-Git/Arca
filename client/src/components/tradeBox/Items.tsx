@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect } from "react";
+import { FC, Fragment, useContext, useEffect } from "react";
 
 import Erc20 from "./itemTypes/Erc20";
 import Erc721 from "./itemTypes/Erc721";
@@ -11,8 +11,7 @@ import Web3Context from "../../context/web3/Web3Context";
 import {
   UserContext as IUserContext,
   PartnerContext as IPartnerContext,
-  Web3Context as IWeb3Context,
-  TradeItem
+  Web3Context as IWeb3Context
 } from "context";
 
 type Props = {
@@ -22,12 +21,13 @@ type Props = {
 const Items: FC<Props> = ({ isUser }) => {
   const userContext: IUserContext = useContext(UserContext);
   const partnerContext: IPartnerContext = useContext(PartnerContext);
-  const web3Context: IWeb3Context = useContext(Web3Context);
 
-  const { items } = isUser ? userContext : partnerContext;
-  const { address: add1, loadItems } = isUser ? userContext : partnerContext;
+  const { address: add1, loadItems, erc20Items, erc721Items } = isUser
+    ? userContext
+    : partnerContext;
   const { address: add2 } = !isUser ? userContext : partnerContext;
 
+  const web3Context: IWeb3Context = useContext(Web3Context);
   const { arcaContract } = web3Context;
 
   useEffect(() => {
@@ -35,31 +35,22 @@ const Items: FC<Props> = ({ isUser }) => {
 
     loadItems(arcaContract, [add1, add2]);
   }, []);
-
-  const internal = (item: TradeItem) => {
-    switch (item.data.type) {
-      case "erc20":
-        return <Erc20 item={item} isUser={isUser} />;
-      case "erc721":
-        return <Erc721 item={item} isUser={isUser} />;
-      // case "ens":
-      //   return <EnsForm item={item} isUser={isUser} />;
-      default:
-        return "";
-    }
-  };
-
   return (
     <div className="items">
-      {items.length > 0 &&
-        items.map((item, i) => (
-          <div
-            className={`item ${i < items.length - 1 && "shadow-bot"}`}
-            key={item.id}
-          >
-            {internal(item)}
-          </div>
-        ))}
+      {erc20Items.length + erc721Items.length > 0 && (
+        <Fragment>
+          {erc20Items.map(item => (
+            <div className="item shadow-bot" key={item.id}>
+              <Erc20 item={item} isUser={isUser} />
+            </div>
+          ))}
+          {erc721Items.map(item => (
+            <div className="item shadow-bot" key={item.id}>
+              <Erc721 item={item} isUser={isUser} />
+            </div>
+          ))}
+        </Fragment>
+      )}
     </div>
   );
 };
