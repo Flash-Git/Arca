@@ -1,6 +1,7 @@
 declare module "context" {
   import Web3 from "web3";
   import { Signer, Contract, Transaction } from "ethers";
+  import { TransactionResponse } from "@ethersproject/abstract-provider";
   import { v4 } from "uuid";
 
   import { ErcType, SendState } from "./Enums";
@@ -123,7 +124,7 @@ declare module "context" {
     contract: Contract,
     method: ArcaSendMethod,
     params: string[]
-  ) => Promise<Transaction> | null;
+  ) => Promise<TransactionResponse> | null;
 
   // Actions
 
@@ -266,14 +267,14 @@ declare module "context" {
     contract: Contract,
     method: ArcaSendMethod,
     params: string[]
-  ) => Promise<Transaction> | null;
+  ) => Promise<TransactionResponse> | null;
 
   export type ErcSend = (
     signer: Signer,
     method: ErcSendMethod,
     arcaAddress: string,
     ercAddress: string
-  ) => Promise<Transaction>;
+  ) => Promise<TransactionResponse>;
 
   /*
    * Arca Call Responses
