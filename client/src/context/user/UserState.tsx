@@ -38,6 +38,7 @@ import {
   SET_ITEMS,
   ADD_ERC20_ITEM,
   ADD_ERC721_ITEM,
+  REMOVE_ITEM,
   SET_ERC20S,
   SET_ERC721S,
   SET_ITEM_STATE
@@ -71,7 +72,7 @@ const UserState: FC = props => {
     try {
       return arcaSend(contract, method, params);
     } catch (e) {
-      addAlert(`Failed to send Transaction: ${e}`, "danger");
+      addAlert(`Failed to send Transaction: ${e.toString()}`, "danger");
       return null;
     }
   };
@@ -96,7 +97,8 @@ const UserState: FC = props => {
         payload: balance
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -119,7 +121,8 @@ const UserState: FC = props => {
         payload: accepted
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -190,7 +193,8 @@ const UserState: FC = props => {
         payload: items
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -225,7 +229,8 @@ const UserState: FC = props => {
         payload: erc20s
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -262,7 +267,8 @@ const UserState: FC = props => {
         payload: erc721s
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -284,7 +290,7 @@ const UserState: FC = props => {
 
   const removeItem: RemoveTradeItem = id => {
     dispatch({
-      type: ADD_ERC721_ITEM,
+      type: REMOVE_ITEM,
       payload: id
     });
   };
@@ -292,37 +298,49 @@ const UserState: FC = props => {
   // Send
 
   const toggleAccepted: ToggleAccepted = async (contract, method, params) => {
-    const tx = await arcaMethod(contract, method, params);
+    try {
+      const tx = await arcaMethod(contract, method, params);
+      if (tx === null) return;
 
-    if (tx === null) return;
-
-    dispatch({
-      type: SET_ACCEPTED,
-      payload: !state.accepted
-    });
+      dispatch({
+        type: SET_ACCEPTED,
+        payload: !state.accepted
+      });
+    } catch (e) {
+      console.log(e);
+      addAlert(e.toString(), "danger");
+    }
   };
 
   const sendItem: SendTradeItem = async (id, contract, method, params) => {
-    const tx = await arcaMethod(contract, method, params);
-    if (tx === null) return;
+    try {
+      const tx = await arcaMethod(contract, method, params);
+      if (tx === null) return;
 
-    dispatch({
-      type: SET_ITEM_STATE,
-      payload: { id, newState: SENDING }
-    });
+      dispatch({
+        type: SET_ITEM_STATE,
+        payload: { id, newState: SENDING }
+      });
+    } catch (e) {
+      console.log(e);
+      addAlert(e.toString(), "danger");
+    }
   };
 
   const cancelItem: CancelTradeItem = async (id, contract, method, params) => {
-    // const tx = await arcaMethod(contract, method, params);
-    // if (tx === null) return;
+    try {
+      const tx = await arcaMethod(contract, method, params);
+      if (tx === null) return;
 
-    // dispatch({
-    //   type: SET_ITEM_STATE,
-    //   payload: { id, newState: CANCELLING }
-    // });
-
-    console.log(method);
-    removeItem(id);
+      dispatch({
+        type: SET_ITEM_STATE,
+        payload: { id, newState: CANCELLING }
+      });
+      removeItem(id);
+    } catch (e) {
+      console.log(e);
+      addAlert(e.toString().slice(0, 5), "danger");
+    }
   };
 
   return (
@@ -344,7 +362,7 @@ const UserState: FC = props => {
         loadErc721s,
         addErc20Item,
         addErc721Item,
-        removeItem,
+        // removeItem,
         toggleAccepted,
         sendItem,
         cancelItem

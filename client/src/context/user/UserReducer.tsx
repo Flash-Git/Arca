@@ -48,10 +48,14 @@ const UserReducer = (
       return {
         ...state,
         erc20Items: state.erc20Items.map(item =>
-          item.id === payload.id ? (item.status.state = payload.newState) : item
+          item.id === payload.id
+            ? { ...item, status: { ...item.status, state: payload.newState } }
+            : item
         ),
         erc721Items: state.erc721Items.map(item =>
-          item.id === payload.id ? (item.status.state = payload.newState) : item
+          item.id === payload.id
+            ? { ...item, status: { ...item.status, state: payload.newState } }
+            : item
         )
       };
 
