@@ -20,13 +20,13 @@ type TxData = {
 
 type Props = {
   id: string;
-  status: SendState;
+  state: SendState;
   txData: TxData;
   txCancel: TxData;
   isUser?: boolean;
 };
 
-const SendBtn: FC<Props> = ({ id, status, txData, txCancel, isUser }) => {
+const SendBtn: FC<Props> = ({ id, state, txData, txCancel, isUser }) => {
   //txData{ method:"pushOfferErc20" }
   //erc - allow
   //arca - send
