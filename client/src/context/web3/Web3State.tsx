@@ -57,7 +57,6 @@ const Web3State: FC = props => {
   const loadSigner = (provider: any) => {
     try {
       const signer = provider.getSigner();
-
       dispatch({
         type: ADD_SIGNER,
         payload: signer
@@ -72,12 +71,16 @@ const Web3State: FC = props => {
    */
 
   // Load provider from page
-  const loadProvider: LoadProvider = () => {
+  const loadProvider: LoadProvider = async () => {
     try {
       const windowEth: any = window;
+
+      await windowEth.ethereum.enable();
+
       const provider = new providers.Web3Provider(windowEth.ethereum);
 
-      provider.on("error", e => addAlert(e, "danger"));
+      // TODO TEST
+      provider.on("error", e => addAlert(e.toString(), "danger"));
 
       loadSigner(provider); // This should be moved to when it's necessary
 
@@ -108,7 +111,6 @@ const Web3State: FC = props => {
 
     try {
       const arcaContract = await newArcaContract(state.arcaAddress, signer);
-
       dispatch({
         type: SET_ARCA_CONTRACT,
         payload: arcaContract
