@@ -35,9 +35,17 @@ declare module "context" {
    * Alerts
    */
 
+  export type AlertType =
+    | "primary"
+    | "light"
+    | "dark"
+    | "danger"
+    | "success"
+    | "white";
+
   export type Alert = {
     msg: string;
-    type: string;
+    type: AlertType;
     id: string;
   };
 
@@ -45,7 +53,7 @@ declare module "context" {
 
   export type AddAlert = (
     msg: string,
-    type: "primary" | "light" | "dark" | "danger" | "success" | "white",
+    type: AlertType,
     timeout?: number
   ) => void;
 
