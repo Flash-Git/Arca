@@ -31,10 +31,11 @@ const Items: FC<Props> = ({ isUser }) => {
   const { arcaContract } = web3Context;
 
   useEffect(() => {
-    if (arcaContract === null) return;
+    if (arcaContract === null || add1 === "" || add2 === "") return;
 
     loadItems(arcaContract, [add1, add2]);
-  }, []);
+  }, [arcaContract, add1, add2]);
+
   return (
     <div className="items">
       {erc20Items.length + erc721Items.length > 0 && (
