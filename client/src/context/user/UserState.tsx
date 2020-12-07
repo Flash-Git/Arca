@@ -14,27 +14,31 @@ import {
   UserState as IUserState,
   LoadBalance,
   LoadErcs,
-  Erc20,
-  Erc721,
   ArcaMethod,
   SetAddress,
   SendTradeItem,
   CancelTradeItem,
-  AddTradeItem,
+  AddErc20TradeItem,
+  AddErc721TradeItem,
+  RemoveTradeItem,
   LoadTradeItems,
   TradeItem,
   LoadTradeAccepted,
   ToggleAccepted,
   Erc20Offer,
-  Erc721Offer
+  Erc721Offer,
+  TradeItemDataErc20,
+  TradeItemDataErc721
 } from "context";
 
 import {
-  ADD_ITEM,
   SET_ADDRESS,
   SET_BALANCE,
   SET_ACCEPTED,
   SET_ITEMS,
+  ADD_ERC20_ITEM,
+  ADD_ERC721_ITEM,
+  REMOVE_ITEM,
   SET_ERC20S,
   SET_ERC721S,
   SET_ITEM_STATE
@@ -52,7 +56,8 @@ const UserState: FC = props => {
     balance: "",
     erc20s: [],
     erc721s: [],
-    items: [],
+    erc20Items: [],
+    erc721Items: [],
     accepted: false
   };
 
@@ -67,7 +72,7 @@ const UserState: FC = props => {
     try {
       return arcaSend(contract, method, params);
     } catch (e) {
-      addAlert(`Failed to send Transaction: ${e}`, "danger");
+      addAlert(`Failed to send Transaction: ${e.toString()}`, "danger");
       return null;
     }
   };
@@ -92,7 +97,8 @@ const UserState: FC = props => {
         payload: balance
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -115,7 +121,8 @@ const UserState: FC = props => {
         payload: accepted
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -153,12 +160,13 @@ const UserState: FC = props => {
       const erc721Offers = await Promise.all(erc721Promises);
 
       const items: TradeItem[] = [
-        ...erc20Offers.map(([address, amount], i) => ({
+        ...erc20Offers.map(([address, balance], i) => ({
           id: `0-${i}`,
           data: {
             type: ERC20,
             address,
-            amount
+            value: "unknown",
+            balance
           },
           status: {
             slot: i,
@@ -169,6 +177,7 @@ const UserState: FC = props => {
           id: `1-${i}`,
           data: {
             type: ERC721,
+            value: "unknown",
             address,
             id
           },
@@ -184,7 +193,8 @@ const UserState: FC = props => {
         payload: items
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -207,8 +217,9 @@ const UserState: FC = props => {
         )
       );
 
-      const erc20s: Erc20[] = balances.map((balance, id) => ({
-        address: erc20Addresses[id],
+      const erc20s: TradeItemDataErc20[] = balances.map((balance, i) => ({
+        type: ERC20,
+        address: erc20Addresses[i],
         balance,
         value: "unknown"
       }));
@@ -218,7 +229,8 @@ const UserState: FC = props => {
         payload: erc20s
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -243,9 +255,10 @@ const UserState: FC = props => {
         )
       );
 
-      const erc721s: Erc721[] = balances.map((balance, id) => ({
-        address: erc721Addresses[id],
-        id: balance,
+      const erc721s: TradeItemDataErc721[] = balances.map((id, i) => ({
+        type: ERC721,
+        address: erc721Addresses[i],
+        id,
         value: "unknown"
       }));
 
@@ -254,50 +267,80 @@ const UserState: FC = props => {
         payload: erc721s
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
   // Local
 
-  const addItem: AddTradeItem = async item => {
+  const addErc20Item: AddErc20TradeItem = async item => {
     dispatch({
-      type: ADD_ITEM,
+      type: ADD_ERC20_ITEM,
       payload: item
+    });
+  };
+
+  const addErc721Item: AddErc721TradeItem = async item => {
+    dispatch({
+      type: ADD_ERC721_ITEM,
+      payload: item
+    });
+  };
+
+  const removeItem: RemoveTradeItem = id => {
+    dispatch({
+      type: REMOVE_ITEM,
+      payload: id
     });
   };
 
   // Send
 
   const toggleAccepted: ToggleAccepted = async (contract, method, params) => {
-    const tx = await arcaMethod(contract, method, params);
+    try {
+      const tx = await arcaMethod(contract, method, params);
+      if (tx === null) return;
 
-    if (tx === null) return;
-
-    dispatch({
-      type: SET_ACCEPTED,
-      payload: !state.accepted
-    });
+      dispatch({
+        type: SET_ACCEPTED,
+        payload: !state.accepted
+      });
+    } catch (e) {
+      console.log(e);
+      addAlert(e.toString(), "danger");
+    }
   };
 
   const sendItem: SendTradeItem = async (id, contract, method, params) => {
-    const tx = await arcaMethod(contract, method, params);
-    if (tx === null) return;
+    try {
+      const tx = await arcaMethod(contract, method, params);
+      if (tx === null) return;
 
-    dispatch({
-      type: SET_ITEM_STATE,
-      payload: { id, newState: SENDING }
-    });
+      dispatch({
+        type: SET_ITEM_STATE,
+        payload: { id, newState: SENDING }
+      });
+    } catch (e) {
+      console.log(e);
+      addAlert(e.toString(), "danger");
+    }
   };
 
   const cancelItem: CancelTradeItem = async (id, contract, method, params) => {
-    const tx = await arcaMethod(contract, method, params);
-    if (tx === null) return;
+    try {
+      const tx = await arcaMethod(contract, method, params);
+      if (tx === null) return;
 
-    dispatch({
-      type: SET_ITEM_STATE,
-      payload: { id, newState: CANCELLING }
-    });
+      dispatch({
+        type: SET_ITEM_STATE,
+        payload: { id, newState: CANCELLING }
+      });
+      removeItem(id);
+    } catch (e) {
+      console.log(e);
+      addAlert(e.toString().slice(0, 5), "danger");
+    }
   };
 
   return (
@@ -306,7 +349,9 @@ const UserState: FC = props => {
         address: state.address,
         balance: state.balance,
         accepted: state.accepted,
-        items: state.items,
+        // items: [...state.erc20Items, ...state.erc721Items],
+        erc20Items: state.erc20Items,
+        erc721Items: state.erc721Items,
         erc20s: state.erc20s,
         erc721s: state.erc721s,
         setAddress,
@@ -315,7 +360,9 @@ const UserState: FC = props => {
         loadItems,
         loadErc20s,
         loadErc721s,
-        addItem,
+        addErc20Item,
+        addErc721Item,
+        // removeItem,
         toggleAccepted,
         sendItem,
         cancelItem

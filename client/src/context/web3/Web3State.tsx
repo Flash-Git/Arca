@@ -26,11 +26,6 @@ import {
   SET_ERC721_ADDRESSES
 } from "../types";
 
-interface Window {
-  ethereum: any;
-}
-var window: Window;
-
 const Web3State: FC = props => {
   const alertContext: IAlertContext = useContext(AlertContext);
   const { addAlert } = alertContext;
@@ -38,7 +33,7 @@ const Web3State: FC = props => {
   const initialState: IWeb3State = {
     providers: [],
     signers: [],
-    arcaAddress: "",
+    arcaAddress: "0x255bca69542f6515af3b172223e903dfb302038b",
     arcaContract: null,
     erc20Addresses: [],
     erc721Addresses: []
@@ -58,6 +53,7 @@ const Web3State: FC = props => {
     });
   };
 
+  // Provider type does not provide getSigner
   const loadSigner = (provider: any) => {
     try {
       const signer = provider.getSigner();
@@ -78,7 +74,10 @@ const Web3State: FC = props => {
   // Load provider from page
   const loadProvider: LoadProvider = () => {
     try {
-      const provider = new providers.Web3Provider(window.ethereum);
+      const windowEth: any = window;
+      const provider = new providers.Web3Provider(windowEth.ethereum);
+
+      provider.on("error", e => addAlert(e, "danger"));
 
       loadSigner(provider); // This should be moved to when it's necessary
 
@@ -109,6 +108,7 @@ const Web3State: FC = props => {
 
     try {
       const arcaContract = await newArcaContract(state.arcaAddress, signer);
+
       dispatch({
         type: SET_ARCA_CONTRACT,
         payload: arcaContract

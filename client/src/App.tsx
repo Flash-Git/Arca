@@ -1,9 +1,11 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faBoxOpen,
+  faExclamationCircle,
+  faTimesCircle,
   faInfoCircle,
   faAt,
   faBars
@@ -22,8 +24,8 @@ import About from "./components/pages/About";
 import NotFound from "./components/pages/NotFound";
 import Footer from "./components/layout/Footer";
 
-import AppState from "./context/app/AppState";
 import AlertState from "./context/alert/AlertState";
+import AppState from "./context/app/AppState";
 import UserState from "./context/user/UserState";
 import PartnerState from "./context/partner/PartnerState";
 import Web3State from "./context/web3/Web3State";
@@ -34,6 +36,8 @@ import "./App.css";
 
 library.add(
   faBoxOpen,
+  faExclamationCircle,
+  faTimesCircle,
   faInfoCircle,
   faAt,
   faBars,
@@ -46,10 +50,10 @@ library.add(
 localStorage.token && setAuthToken(localStorage.token);
 
 const App: FC = () => (
-  <AppState>
-    <UserState>
-      <PartnerState>
-        <AlertState>
+  <AlertState>
+    <AppState>
+      <UserState>
+        <PartnerState>
           <Web3State>
             <Router>
               <Navbar />
@@ -62,10 +66,10 @@ const App: FC = () => (
               <Footer />
             </Router>
           </Web3State>
-        </AlertState>
-      </PartnerState>
-    </UserState>
-  </AppState>
+        </PartnerState>
+      </UserState>
+    </AppState>
+  </AlertState>
 );
 
 export default App;

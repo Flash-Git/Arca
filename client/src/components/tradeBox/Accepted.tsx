@@ -1,5 +1,7 @@
 import React, { FC, Fragment, useContext } from "react";
 
+import { arcaCall } from "../../web3/calls/arcaCalls";
+
 import PartnerContext from "../../context/partner/PartnerContext";
 import UserContext from "../../context/user/UserContext";
 import Web3Context from "../../context/web3/Web3Context";
@@ -22,18 +24,30 @@ const Accepted: FC<Props> = ({ isUser }) => {
   const web3Context: IWeb3Context = useContext(Web3Context);
 
   const accepted = isUser ? userContext.accepted : partnerContext.accepted;
-  const toggleAccepted = isUser
-    ? userContext.toggleAccepted
-    : partnerContext.toggleAccepted;
-  const { signers } = web3Context;
+
+  const { address: userAdd, toggleAccepted } = userContext;
+  const { address: partnerAdd } = partnerContext;
+
+  const { arcaContract } = web3Context;
 
   const bord = accepted ? "bord-hori-green" : "bord-hori-red";
   const acceptMsg = accepted ? "Accepted" : "Not Accepted";
 
-  const onClick = () => {
-    if (accepted === null) return;
+  const onClick = async () => {
+    if (accepted === null || arcaContract === null) return;
 
-    toggleAccepted(signers[signers.length - 1]);
+    const partnerNonce = await arcaCall(arcaContract, "getPartnerNonce", [
+      userAdd,
+      partnerAdd
+    ]);
+
+    const params = [partnerAdd, partnerNonce];
+
+    toggleAccepted(
+      arcaContract,
+      accepted ? "unacceptTrade" : "acceptTrade",
+      params
+    );
   };
 
   return (
