@@ -47,7 +47,7 @@ const SendBtn: FC<Props> = ({ id, state, txData, txCancel, isUser }) => {
       return;
     }
 
-    switch (status) {
+    switch (state) {
       case SENT:
         setContent("Cancel");
         return;
@@ -66,7 +66,7 @@ const SendBtn: FC<Props> = ({ id, state, txData, txCancel, isUser }) => {
         setContent("Error");
         return;
     }
-  }, [status]);
+  }, [state]);
 
   const onClick = (e: any) => {
     if (arcaContract === null) return;
