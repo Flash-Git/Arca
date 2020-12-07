@@ -14,13 +14,20 @@ import {
   LoadBalance,
   SetAddress,
   LoadTradeItems,
-  TradeItem,
   LoadTradeAccepted,
   Erc20Offer,
-  Erc721Offer
+  Erc721Offer,
+  TradeItemErc20,
+  TradeItemErc721
 } from "context";
 
-import { SET_ADDRESS, SET_BALANCE, SET_ACCEPTED, SET_ITEMS } from "../types";
+import {
+  SET_ADDRESS,
+  SET_BALANCE,
+  SET_ACCEPTED,
+  SET_ERC20_ITEMS,
+  SET_ERC721_ITEMS
+} from "../types";
 
 const { SENT } = SendState;
 const { ERC20, ERC721 } = ErcType;
@@ -34,7 +41,7 @@ const PartnerState: FC = props => {
     balance: "",
     erc20Items: [],
     erc721Items: [],
-    accepted: false
+    accepted: null
   };
 
   const [state, dispatch] = useReducer(PartnerReducer, initialState);
@@ -59,7 +66,8 @@ const PartnerState: FC = props => {
         payload: balance
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -82,7 +90,8 @@ const PartnerState: FC = props => {
         payload: accepted
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 
@@ -119,21 +128,24 @@ const PartnerState: FC = props => {
       const erc20Offers = await Promise.all(erc20Promises);
       const erc721Offers = await Promise.all(erc721Promises);
 
-      const items: TradeItem[] = [
-        ...erc20Offers.map(([address, balance], i) => ({
+      const erc20Items: TradeItemErc20[] = erc20Offers.map(
+        ([address, balance], i) => ({
           id: `0-${i}`,
           data: {
             type: ERC20,
             address,
             value: "unknown",
-            balance
+            balance: balance.toString()
           },
           status: {
             slot: i,
             state: SENT
           }
-        })),
-        ...erc721Offers.map(([address, id], i) => ({
+        })
+      );
+
+      const erc721Items: TradeItemErc721[] = erc721Offers.map(
+        ([address, id], i) => ({
           id: `1-${i}`,
           data: {
             type: ERC721,
@@ -145,15 +157,22 @@ const PartnerState: FC = props => {
             slot: i,
             state: SENT
           }
-        }))
-      ];
+        })
+      );
+      console.log(erc20Items);
 
       dispatch({
-        type: SET_ITEMS,
-        payload: items
+        type: SET_ERC20_ITEMS,
+        payload: erc20Items
+      });
+
+      dispatch({
+        type: SET_ERC721_ITEMS,
+        payload: erc721Items
       });
     } catch (e) {
-      addAlert(e, "danger");
+      console.log(e);
+      addAlert(e.toString(), "danger");
     }
   };
 

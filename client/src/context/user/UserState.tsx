@@ -22,20 +22,22 @@ import {
   AddErc721TradeItem,
   RemoveTradeItem,
   LoadTradeItems,
-  TradeItem,
   LoadTradeAccepted,
   ToggleAccepted,
   Erc20Offer,
   Erc721Offer,
   TradeItemDataErc20,
-  TradeItemDataErc721
+  TradeItemDataErc721,
+  TradeItemErc20,
+  TradeItemErc721
 } from "context";
 
 import {
   SET_ADDRESS,
   SET_BALANCE,
   SET_ACCEPTED,
-  SET_ITEMS,
+  SET_ERC20_ITEMS,
+  SET_ERC721_ITEMS,
   ADD_ERC20_ITEM,
   ADD_ERC721_ITEM,
   REMOVE_ITEM,
@@ -58,7 +60,7 @@ const UserState: FC = props => {
     erc721s: [],
     erc20Items: [],
     erc721Items: [],
-    accepted: false
+    accepted: null
   };
 
   const [state, dispatch] = useReducer(UserReducer, initialState);
@@ -90,7 +92,7 @@ const UserState: FC = props => {
 
   const loadBalance: LoadBalance = async signer => {
     try {
-      const balance = await signer.getBalance();
+      const balance = await signer.getBalance(state.address);
 
       dispatch({
         type: SET_BALANCE,
@@ -113,8 +115,7 @@ const UserState: FC = props => {
 
     try {
       const accepted = await getAccepted();
-
-      if (accepted === null) throw "Call Failed";
+      if (accepted === null) throw new Error("Call Failed");
 
       dispatch({
         type: SET_ACCEPTED,
@@ -137,7 +138,7 @@ const UserState: FC = props => {
       ]);
 
       const erc20Promises: Promise<Erc20Offer>[] = [];
-      for (let i = 0; i < erc20Count; i++) {
+      for (let i = 0; i < +erc20Count; i++) {
         const erc20Promise = arcaCall(contract, "getOfferErc20", [
           params[0],
           params[1],
@@ -147,7 +148,7 @@ const UserState: FC = props => {
       }
 
       const erc721Promises: Promise<Erc721Offer>[] = [];
-      for (let i = 0; i < erc721Count; i++) {
+      for (let i = 0; i < +erc721Count; i++) {
         const erc721Promise = arcaCall(contract, "getOfferErc721", [
           params[0],
           params[1],
@@ -156,24 +157,32 @@ const UserState: FC = props => {
         erc721Promise && erc721Promises.push(erc721Promise);
       }
 
+      // This should work?
+      // const [erc20Offers, erc721Offers]: [
+      //   Erc20Offer[],
+      //   Erc721Offer[]
+      // ] = await Promise.all([...erc20Promises, ...erc721Promises]);
       const erc20Offers = await Promise.all(erc20Promises);
       const erc721Offers = await Promise.all(erc721Promises);
 
-      const items: TradeItem[] = [
-        ...erc20Offers.map(([address, balance], i) => ({
+      const erc20Items: TradeItemErc20[] = erc20Offers.map(
+        ([address, balance], i) => ({
           id: `0-${i}`,
           data: {
             type: ERC20,
             address,
             value: "unknown",
-            balance
+            balance: balance.toString()
           },
           status: {
             slot: i,
             state: SENT
           }
-        })),
-        ...erc721Offers.map(([address, id], i) => ({
+        })
+      );
+
+      const erc721Items: TradeItemErc721[] = erc721Offers.map(
+        ([address, id], i) => ({
           id: `1-${i}`,
           data: {
             type: ERC721,
@@ -185,12 +194,17 @@ const UserState: FC = props => {
             slot: i,
             state: SENT
           }
-        }))
-      ];
+        })
+      );
 
       dispatch({
-        type: SET_ITEMS,
-        payload: items
+        type: SET_ERC20_ITEMS,
+        payload: erc20Items
+      });
+
+      dispatch({
+        type: SET_ERC721_ITEMS,
+        payload: erc721Items
       });
     } catch (e) {
       console.log(e);

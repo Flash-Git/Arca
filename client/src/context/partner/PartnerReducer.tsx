@@ -1,4 +1,10 @@
-import { SET_ADDRESS, SET_BALANCE, SET_ITEMS, SET_ACCEPTED } from "../types";
+import {
+  SET_ADDRESS,
+  SET_BALANCE,
+  SET_ERC20_ITEMS,
+  SET_ERC721_ITEMS,
+  SET_ACCEPTED
+} from "../types";
 
 import { Action, PartnerState } from "context";
 
@@ -13,11 +19,15 @@ const PartnerReducer = (
       return { ...state, balance: payload };
     case SET_ACCEPTED:
       return { ...state, accepted: payload };
-    case SET_ITEMS:
+    case SET_ERC20_ITEMS:
       return {
         ...state,
-        erc20Items: payload.erc20Items,
-        erc721Items: payload.erc721Items
+        erc20Items: payload
+      };
+    case SET_ERC721_ITEMS:
+      return {
+        ...state,
+        erc721Items: payload
       };
     default:
       return state;
