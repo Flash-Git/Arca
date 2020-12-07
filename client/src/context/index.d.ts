@@ -116,7 +116,7 @@ declare module "context" {
   export type PartnerState = {
     address: string;
     balance: string;
-    accepted: boolean;
+    accepted: boolean | null;
     erc20Items: TradeItemErc20[];
     erc721Items: TradeItemErc721[];
   };
