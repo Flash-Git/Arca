@@ -11,11 +11,6 @@ import {
   PartnerContext as IPartnerContext
 } from "context";
 
-type FormState = {
-  input: string;
-  address: boolean;
-};
-
 const PreTradeForm: FC = () => {
   const alertContext: IAlertContext = useContext(AlertContext);
   const { addAlert } = alertContext;
@@ -24,26 +19,25 @@ const PreTradeForm: FC = () => {
   const partnerContext: IPartnerContext = useContext(PartnerContext);
   const { setAddress: setAddress2 } = partnerContext;
 
-  // FORM STATE
-  const [form1State, setForm1State] = useState<FormState>({
-    input: "",
-    address: false
+  const [form1State, setForm1State] = useState({
+    input1: "",
+    address1: false
   });
 
-  const [form2State, setForm2State] = useState<FormState>({
-    input: "",
-    address: false
+  const [form2State, setForm2State] = useState({
+    input2: "",
+    address2: false
   });
 
-  const { input: input1, address: address1 } = form1State;
-  const { input: input2, address: address2 } = form2State;
+  const { input1, address1 } = form1State;
+  const { input2, address2 } = form2State;
 
   useEffect(() => {
-    setForm1State({ input: input1, address: utils.isAddress(input1) });
+    setForm1State({ input1, address1: utils.isAddress(input1) });
   }, [input1]);
 
   useEffect(() => {
-    setForm2State({ input: input2, address: utils.isAddress(input2) });
+    setForm2State({ input2, address2: utils.isAddress(input2) });
   }, [input2]);
 
   //Inputs
