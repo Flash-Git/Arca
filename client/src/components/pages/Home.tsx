@@ -1,4 +1,5 @@
-import { useEffect, useContext, FC } from "react";
+import { useEffect, useContext, useState, FC } from "react";
+import { v4 as uuid } from "uuid";
 
 import Sidebar from "../layout/Sidebar";
 import PreTradeForm from "../layout/PreTradeForm";
@@ -14,10 +15,12 @@ import {
   Web3Context as IWeb3Context
 } from "context";
 
+const windowEth: any = window;
+
 const Home: FC = () => {
   const alertContext: IAlertContext = useContext(AlertContext);
-  const { addAlert } = alertContext;
-  
+  const { addAlert, removeAlert } = alertContext;
+
   const appContext: IAppContext = useContext(AppContext);
   const { setLocation } = appContext;
 
@@ -29,20 +32,29 @@ const Home: FC = () => {
     loadArcaContract
   } = web3Context;
 
+  const [alertId, setAlertId] = useState("");
+
   useEffect(() => {
     setLocation("home");
+    setAlertId(uuid());
+  }, []);
 
-    const windowEth: any = window;
+  useEffect(() => {
     if (typeof windowEth.ethereum !== "undefined") {
       console.log("MetaMask is installed!");
       loadProvider();
+
+      removeAlert(alertId);
+      return;
     }
+
     addAlert(
       "You need a Web3 enabled browser to use this app",
       "danger",
-      50000
+      50000,
+      alertId
     );
-  }, []);
+  }, [windowEth.ethereum]);
 
   useEffect(() => {
     if (signers.length === 0) return;

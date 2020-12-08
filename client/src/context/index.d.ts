@@ -54,7 +54,8 @@ declare module "context" {
   export type AddAlert = (
     msg: string,
     type: AlertType,
-    timeout?: number
+    timeout?: number,
+    id?: string
   ) => void;
 
   export type RemoveAlert = (id: string) => void;
