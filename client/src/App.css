@@ -1,8 +1,8 @@
 /* Global Styles */
 :root {
-  --primary-color: #003699;
+  --primary-color: #333;
   --dark-color: #333333;
-  --light-color: #f0f0f0;
+  --light-color: #fff;
   --danger-color: #dc3545;
   --success-color: #28a745;
 }
@@ -24,7 +24,7 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   background-color: #fff;
-  color: var(--dark-color);
+  color: var(--primary-color);
   scroll-behavior: smooth;
 }
 
@@ -211,7 +211,7 @@ select {
 .badge-primary,
 .alert-primary {
   background: var(--primary-color);
-  color: #fff;
+  color: var(--light-color);
 }
 
 .btn-light,
@@ -219,7 +219,7 @@ select {
 .badge-light,
 .alert-light {
   background: var(--light-color);
-  color: #333;
+  color: var(--primary-color);
 }
 
 .btn-dark,
@@ -227,7 +227,7 @@ select {
 .badge-dark,
 .alert-dark {
   background: var(--dark-color);
-  color: #fff;
+  color: var(--light-color);
 }
 
 .btn-danger,
@@ -235,7 +235,7 @@ select {
 .badge-danger,
 .alert-danger {
   background: var(--danger-color);
-  color: #fff;
+  color: var(--light-color);
 }
 
 .btn-success,
@@ -243,15 +243,15 @@ select {
 .badge-success,
 .alert-success {
   background: var(--success-color);
-  color: #fff;
+  color: var(--light-color);
 }
 
 .btn-white,
 .bg-white,
 .badge-white,
 .alert-white {
-  background: #fff;
-  color: #333;
+  background: var(--light-color);
+  color: var(--dark-color);
   border: #ccc solid 1px;
 }
 
@@ -286,7 +286,7 @@ select {
 }
 
 .navbar a {
-  color: #fff;
+  color: var(--light-color);
   padding: 0.45rem;
   margin: 0 0.25rem;
 }
@@ -326,7 +326,7 @@ select {
 }
 
 .sidebar a {
-  color: #fff;
+  color: var(--light-color);
   padding: 0.45rem;
   margin: 0 0.25rem;
 }
@@ -362,7 +362,7 @@ select {
 }
 
 .footer a {
-  color: #fff;
+  color: var(--light-color);
   text-align: left;
   width: 6rem;
   text-decoration: none;
@@ -527,7 +527,6 @@ select {
 
 /* Box */
 .box {
-  min-height: 9rem;
   font-size: 80%;
   margin: 1rem;
 }
@@ -536,6 +535,7 @@ select {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  min-height: 10rem;
 }
 
 .items {
@@ -628,7 +628,9 @@ select {
   flex-direction: row;
   flex-wrap: wrap;
   margin: 0 auto;
-  max-width: 50em;
+  /* max-width: 60em; */
+  justify-content: space-evenly;
+  padding: 0.15rem 1.5rem;
 }
 
 .grow-1 {
@@ -644,7 +646,7 @@ select {
 }
 
 .address {
-  max-width: 22rem;
+  max-width: 23rem;
 }
 
 .shadow {
