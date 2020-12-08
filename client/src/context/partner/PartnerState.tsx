@@ -159,7 +159,6 @@ const PartnerState: FC = props => {
           }
         })
       );
-      console.log(erc20Items);
 
       dispatch({
         type: SET_ERC20_ITEMS,
