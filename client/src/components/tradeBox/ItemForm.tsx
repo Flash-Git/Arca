@@ -1,10 +1,13 @@
-import React, { FC, Fragment, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
+import { BigNumber, utils } from "ethers";
 
 import { ErcType, SendState } from "../../context/Enums";
 
+import AlertContext from "../../context/alert/AlertContext";
 import UserContext from "../../context/user/UserContext";
 
 import {
+  AlertContext as IAlertContext,
   UserContext as IUserContext,
   TradeItemDataErc20,
   TradeItemDataErc721
@@ -14,6 +17,9 @@ const { UNSENT } = SendState;
 const { ERC20, ERC721 } = ErcType;
 
 const ItemForm: FC = () => {
+  const alertContext: IAlertContext = useContext(AlertContext);
+  const { addAlert } = alertContext;
+
   const userContext: IUserContext = useContext(UserContext);
   const { addErc20Item, addErc721Item, erc20Items, erc721Items } = userContext;
 
@@ -36,11 +42,50 @@ const ItemForm: FC = () => {
     id: ""
   });
 
+  const [validation, setValidation] = useState({
+    address: false,
+    balance: false,
+    id: false
+  });
+
   const { address } = baseErc;
   const { balance } = erc20Data;
   const { id } = erc721Data;
 
-  // Input
+  useEffect(() => {
+    setValidation({ ...validation, address: utils.isAddress(address) });
+  }, [address]);
+
+  useEffect(() => {
+    try {
+      setValidation({
+        ...validation,
+        balance: BigNumber.isBigNumber(BigNumber.from(balance))
+      });
+    } catch (e) {
+      setValidation({
+        ...validation,
+        balance: false
+      });
+    }
+  }, [balance]);
+
+  useEffect(() => {
+    try {
+      setValidation({
+        ...validation,
+        id: BigNumber.isBigNumber(BigNumber.from(id))
+      });
+    } catch (e) {
+      setValidation({
+        ...validation,
+        id: false
+      });
+    }
+  }, [id]);
+
+  // Inputs
+
   const onChangeType = (e: any) => {
     setType(e.target.value);
   };
@@ -71,7 +116,20 @@ const ItemForm: FC = () => {
   const onSubmit = (e: any) => {
     e.preventDefault();
 
-    // TODO Seperate erc20s and erc721s in state so that the id can be set properly
+    if (
+      !validation.address || type === ERC20
+        ? !validation.balance
+        : !validation.id
+    ) {
+      addAlert(
+        `Please add a valid Contract Address and Token ${
+          type === ERC20 ? "Balance" : "Id"
+        }`,
+        "danger"
+      );
+      return;
+    }
+
     switch (type) {
       case ERC20:
         addErc20Item({
@@ -99,17 +157,6 @@ const ItemForm: FC = () => {
     }
   };
 
-  const erc = (
-    <input
-      className={`grow-2 address is-valid ${address ? "valid" : "invalid"}`}
-      type="text"
-      placeholder="Contract Address"
-      name="address"
-      value={address}
-      onChange={onChangeBase}
-    />
-  );
-
   // case "ens":
   //  return (
   //    <Fragment>
@@ -136,46 +183,7 @@ const ItemForm: FC = () => {
   //       </strong>
   //     )}
   //    </Fragment>)
-  const form = () => {
-    switch (type) {
-      case ERC20:
-        return (
-          <Fragment>
-            {erc}
-            <input
-              className={
-                balance ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
-              }
-              type="text"
-              placeholder="Token Balance"
-              name="balance"
-              value={balance}
-              onChange={onChange}
-            />
-          </Fragment>
-        );
-      case ERC721:
-        return (
-          <Fragment>
-            {erc}
-            <input
-              className={
-                id ? "grow-1 is-valid valid" : "grow-1 is-valid invalid"
-              }
-              type="text"
-              placeholder="Token ID"
-              name="id"
-              value={id}
-              onChange={onChange}
-            />
-          </Fragment>
-        );
-      default:
-        return <Fragment></Fragment>;
-    }
-  };
 
-  //Render
   return (
     <form className="shadow-top ptop" onSubmit={onSubmit}>
       <div className="flex-row">
@@ -183,7 +191,28 @@ const ItemForm: FC = () => {
           <option value={ERC20}>ERC20</option>
           <option value={ERC721}>ERC721</option>
         </select>
-        {form()}
+        <input
+          className={`grow-1 is-valid ${
+            type === ERC20
+              ? !validation.balance && "in"
+              : !validation.id && "in"
+          }valid`}
+          type="text"
+          placeholder={`Token ${type === ERC20 ? "Balance" : "ID"}`}
+          name={type === ERC20 ? "balance" : "id"}
+          value={type === ERC20 ? balance : id}
+          onChange={onChange}
+        />
+        <input
+          className={`grow-2 address is-valid ${
+            !validation.address && "in"
+          }valid`}
+          type="text"
+          placeholder="Token Contract Address"
+          name="address"
+          value={address}
+          onChange={onChangeBase}
+        />
         <input type="submit" value="Add Trade Item" className="btn btn-dark" />
       </div>
     </form>
