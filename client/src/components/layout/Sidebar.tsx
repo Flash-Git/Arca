@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useContext } from "react";
+import { FC, Fragment, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import AppContext from "../../context/app/AppContext";
