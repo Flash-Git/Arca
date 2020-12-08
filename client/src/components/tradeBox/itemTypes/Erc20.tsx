@@ -1,4 +1,6 @@
-import React, { FC, Fragment, useContext } from "react";
+import { FC, Fragment, useContext } from "react";
+
+import shortAddress from "../../../web3/help/address";
 
 import SendBtn from "./SendBtn";
 import RemoveButton from "./RemoveBtn";
@@ -42,7 +44,7 @@ const Erc20: FC<Props> = ({ item, isUser }) => {
     <Fragment>
       <RemoveButton id={item.id} txData={cancelData} isUser={isUser} />
       <h3 className="item-text-1">ERC20</h3>
-      <span className="item-text-2">{address}</span>
+      <span className="item-text-2">{shortAddress(address)}</span>
       <span className="item-text-1">{balance}</span>
       <SendBtn
         id={item.id}
