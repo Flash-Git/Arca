@@ -29,7 +29,8 @@ import {
   TradeItemDataErc20,
   TradeItemDataErc721,
   TradeItemErc20,
-  TradeItemErc721
+  TradeItemErc721,
+  TradeItem
 } from "context";
 
 import {
@@ -46,7 +47,7 @@ import {
   SET_ITEM_STATE
 } from "../types";
 
-const { SENDING, CANCELLING, SENT } = SendState;
+const { SENDING, CANCELLING, SENT, UNSENT } = SendState;
 const { ERC20, ERC721 } = ErcType;
 
 const UserState: FC = props => {
@@ -342,6 +343,14 @@ const UserState: FC = props => {
   };
 
   const cancelItem: CancelTradeItem = async (id, contract, method, params) => {
+    const item = [...state.erc20Items, ...state.erc721Items].find(
+      (item: TradeItem) => item.id === id
+    );
+    if (item?.status.state === UNSENT) {
+      removeItem(id);
+      return;
+    }
+
     try {
       const tx = await arcaMethod(contract, method, params);
       if (tx === null) return;
@@ -353,7 +362,7 @@ const UserState: FC = props => {
       removeItem(id);
     } catch (e) {
       console.log(e);
-      addAlert(e.toString().slice(0, 5), "danger");
+      addAlert(e.toString(), "danger");
     }
   };
 
