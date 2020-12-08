@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 import spinner from "./spinner.gif";
 
@@ -20,11 +20,8 @@ const Spinner: FC<Props> = ({ size }) => {
   });
 
   useEffect(() => {
-    if (size) {
-      setStyle({ ...style, width: size + "rem", height: size + "rem" });
-    } else {
-      setStyle({ ...style, width: "100%" });
-    }
+    if (size) setStyle({ ...style, width: size + "rem", height: size + "rem" });
+    else setStyle({ ...style, width: "100%" });
   }, [size]);
 
   return <img src={spinner} alt="Loading..." style={style} />;

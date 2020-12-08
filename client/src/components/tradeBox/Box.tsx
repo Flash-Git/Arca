@@ -20,7 +20,7 @@ const Box: FC<Props> = ({ isUser }) => {
   const userContext: IUserContext = useContext(UserContext);
   const partnerContext: IPartnerContext = useContext(PartnerContext);
 
-  const address = isUser ? userContext.address : partnerContext.address;
+  const { address } = isUser ? userContext : partnerContext;
 
   // TODO make this a flash animation
   const bord = isUser

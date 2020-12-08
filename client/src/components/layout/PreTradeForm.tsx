@@ -64,11 +64,7 @@ const PreTradeForm: FC = () => {
   return (
     <form onSubmit={onSubmit} className="pre-trade address">
       <input
-        className={
-          address1
-            ? "text-center is-valid valid"
-            : "text-center is-valid invalid"
-        }
+        className={`text-center is-valid ${!address1 && "in"}valid`}
         type="text"
         placeholder="Address/ENS 1"
         name="input1"
@@ -76,11 +72,7 @@ const PreTradeForm: FC = () => {
         onChange={onChange1}
       />
       <input
-        className={
-          address2
-            ? "text-center is-valid valid"
-            : "text-center is-valid invalid"
-        }
+        className={`text-center is-valid ${!address2 && "in"}valid`}
         type="text"
         placeholder="Address/ENS 2"
         name="input2"

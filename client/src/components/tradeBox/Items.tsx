@@ -1,4 +1,6 @@
-import { FC, Fragment, useContext, useEffect } from "react";
+import React, { FC, Fragment, useContext, useEffect } from "react";
+
+import Spinner from "../layout/Spinner";
 
 import Erc20 from "./itemTypes/Erc20";
 import Erc721 from "./itemTypes/Erc721";
@@ -38,7 +40,11 @@ const Items: FC<Props> = ({ isUser }) => {
 
   return (
     <div className="items">
-      {erc20Items.length + erc721Items.length > 0 && (
+      {erc20Items.length + erc721Items.length === 0 ? (
+        <div style={{ margin: "0.5rem" }}>
+          <Spinner size={9} />
+        </div>
+      ) : (
         <Fragment>
           {erc20Items.map(item => (
             <div className="item shadow-bot" key={item.id}>
