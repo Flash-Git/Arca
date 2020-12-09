@@ -1,13 +1,16 @@
 # Arca - The Ethereum Trading Platform
 
-Ethereum ÐApp ~~live~~ **UNDER MAINTENANCE** on the Rinkeby and Goerli testnets\*\* at [etharca.com.](https://etharca.com)
+Ethereum ÐApp ~~live~~ **UNDER MAINTENANCE** on the Rinkeby and Goerli testnets at [etharca.com.](https://etharca.com)
 
 Arca lets anyone open a trading box with any other Ethereum address and safely atomically trade multiple different tokens at a time directly from your wallet.
 Currently supports both ERC20 and ERC721 tokens.
 
 ## Ongoing Development
 
-- Arca's front end is currently being [rewritten](https://github.com/Flash-Git/Arca/tree/hooks). (400+ Commits)
+This was written as my first React project and hooks had not even been fully released yet.
+In response to this, a full rewrite of the front end is ongoing at my discretion.
+
+- Arca's front end is being [rewritten](https://github.com/Flash-Git/Arca/tree/hooks). (400+ Commits)
 - Arca's contract is being rewritten to support meta transactions following the Gas Station Network Alliance specification
 
 ## Usage Instructions
