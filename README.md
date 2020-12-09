@@ -1,30 +1,50 @@
-# ARCA - The Ethereum Trading Platform  
-##### [Ethereum ÐApp ~~live~~ UNDER MAINTENANCE on the Rinkeby and Goerli testnets](https://etharca.com)
+# Arca - The Ethereum Trading Platform
 
-Arca lets anyone open a trading box with any other Ethereum address and safely trade multiple different tokens at a time directly from your wallet.
+Ethereum ÐApp ~~live~~ **UNDER MAINTENANCE** on the Rinkeby and Goerli testnets** at [etharca.com.](https://etharca.com)
+
+Arca lets anyone open a trading box with any other Ethereum address and safely atomically trade multiple different tokens at a time directly from your wallet.
 Currently supports both ERC20 and ERC721 tokens.
-___
 
-## ONGOING DEVELOPMENT
-- Arca's front end is currently being rewritten using React hooks and context (Check the hooks branch ~ Over 200 commits)
+## Ongoing Development
+
+- Arca's front end is currently being [rewritten](https://github.com/Flash-Git/Arca/tree/hooks). (400+ Commits)
 - Arca's contract is being rewritten to support meta transactions following the Gas Station Network Alliance specification
-___
 
-## Instructions:
+## Usage Instructions
 
-### Step 1 - Connect  
--Go to https://etharca.com  
--Load up any 2 Ethereum addresses  
-![Image of Arca_1](https://i.imgur.com/6Hb5HhC.png)
+Find someone you want to trade tokens following the ERC20 or ERC721 standards with.
 
-### Step 2 - Add Orders  
--Use the sidebar to add a token to your box  
--Send the order to the Blockchain (the token(s) do not leave your account)  
-![Image of Arca_2](https://i.imgur.com/nlnC6Mz.png)
+- Add your address and theirs as inputs
 
-### Step 3 - Execute Trade  
--Accept the trade  
--Wait for your trade partner to accept  
--The Arca contract will execute the swap (make sure to have the tokens in your wallet)  
--Done  
-![Image of Arca_1](https://i.imgur.com/tLwVBVv.png)
+- Add the contract address and balance/id of a token you want to trade and repeat this until you have added them all
+
+- Approve the trade once both you and your trade partner are satisfied with the outcome
+
+The swap will happen atomically.
+
+## Developer Instructions
+
+Download the source code from the git repository:
+
+```bash
+git clone git@github.com:Flash-Git/Arca.git
+```
+
+Navigate to the root of the project and install the dependencies for both the client and server:
+
+```bash
+cd Arca
+yarn devInstall
+```
+
+Start both the client and server:
+
+```bash
+yarn dev
+```
+
+Open your browser and navigate to your local address on port 3000:
+
+<http://localhost:3000/>
+
+To interact with the Ethereum Blockchain you will need to inject a Web3 Provider into the page. This is most often done with [Metamask](https://metamask.io/download.html).
