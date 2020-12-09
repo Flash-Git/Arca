@@ -1,6 +1,6 @@
 # Arca - The Ethereum Trading Platform
 
-Ethereum ÐApp ~~live~~ **UNDER MAINTENANCE** on the Rinkeby and Goerli testnets** at [etharca.com.](https://etharca.com)
+Ethereum ÐApp ~~live~~ **UNDER MAINTENANCE** on the Rinkeby and Goerli testnets\*\* at [etharca.com.](https://etharca.com)
 
 Arca lets anyone open a trading box with any other Ethereum address and safely atomically trade multiple different tokens at a time directly from your wallet.
 Currently supports both ERC20 and ERC721 tokens.
@@ -48,3 +48,11 @@ Open your browser and navigate to your local address on port 3000:
 <http://localhost:3000/>
 
 To interact with the Ethereum Blockchain you will need to inject a Web3 Provider into the page. This is most often done with [Metamask](https://metamask.io/download.html).
+
+## Contributing
+
+Pull requests are welcome. Please open an issue first to discuss what you would like to change.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
