@@ -1,19 +1,24 @@
 import { useState, useEffect, useContext, FC } from "react";
+import { v4 as uuid } from "uuid";
 import { utils } from "ethers";
 
 import AlertContext from "../../context/alert/AlertContext";
 import UserContext from "../../context/user/UserContext";
 import PartnerContext from "../../context/partner/PartnerContext";
+import Web3Context from "../../context/web3/Web3Context";
 
 import {
   AlertContext as IAlertContext,
   UserContext as IUserContext,
-  PartnerContext as IPartnerContext
+  PartnerContext as IPartnerContext,
+  Web3Context as IWeb3Context
 } from "context";
+
+const windowEth: any = window;
 
 const PreTradeForm: FC = () => {
   const alertContext: IAlertContext = useContext(AlertContext);
-  const { addAlert } = alertContext;
+  const { addAlert, removeAlert } = alertContext;
   const userContext: IUserContext = useContext(UserContext);
   const { setAddress: setAddress1 } = userContext;
   const partnerContext: IPartnerContext = useContext(PartnerContext);
@@ -40,6 +45,45 @@ const PreTradeForm: FC = () => {
     setForm2State({ input2, address2: utils.isAddress(input2) });
   }, [input2]);
 
+  // Web3 Connect
+
+  const web3Context: IWeb3Context = useContext(Web3Context);
+  const {
+    signers,
+    loadProvider,
+    loadArcaAddress,
+    loadArcaContract
+  } = web3Context;
+
+  const [alertId] = useState(uuid());
+
+  useEffect(() => {
+    if (typeof windowEth.ethereum !== "undefined") {
+      console.log("MetaMask is installed!");
+      loadProvider();
+      removeAlert(alertId);
+      return;
+    }
+
+    addAlert(
+      "You need a Web3 enabled browser to use this app",
+      "danger",
+      50000,
+      alertId
+    );
+  }, [windowEth.ethereum]);
+
+  const connect = () => {
+    if (signers.length === 0) return;
+
+    loadArcaAddress();
+    loadArcaContract(signers[signers.length - 1]);
+  };
+
+  // useEffect(() => {
+  //   // reload contracts using ethers
+  // }, [signers]);
+
   //Inputs
 
   const onChange1 = (e: any) => {
@@ -51,6 +95,8 @@ const PreTradeForm: FC = () => {
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
+
+    connect();
 
     if (!address1 || !address2) {
       addAlert("Please enter valid addresses or ENS names", "primary");
