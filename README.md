@@ -2,7 +2,7 @@
 
 Ethereum ÐApp ~~live~~ **UNDER MAINTENANCE** on the Rinkeby and Goerli testnets at [etharca.com.](https://etharca.com)
 
-Arca lets anyone open a trading box with any other Ethereum address and safely atomically trade multiple different tokens at a time directly from your wallet.
+Arca is a P2P web application that lets anyone atomically trade multiple tokens simultaneously from their Ethereum wallet.
 Currently supports both ERC20 and ERC721 tokens.
 
 ## Ongoing Development
